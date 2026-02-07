@@ -1,136 +1,317 @@
 # ============================================================
-# MULTI-PRODUCT SITE BRIEF — Fill in and let Claude build
+# MULTI-PRODUCT SITE BRIEF — OffGrid Filters 2026
 # ============================================================
-# This file defines your product catalog, categories, and site
-# identity. Claude researches each product, builds category
-# roundups, comparison pages, buyer guides, and 70-90+ pages.
+# 29 unique products across 6 categories.
+# Prices are AUTHORITATIVE — do not guess from Amazon.
+# Duplicates removed: #13=#17, #10=#18, #11=#24=#30
 # ============================================================
 
 # --- REQUIRED: Site identity ---
 
-site_name: ""
-# Your site/brand name (this is NOT a product brand — it's your authority site)
-# Example: "OffGrid Filters", "TrailGear Pro", "FilterFinder"
-
-domain: ""
-# Your site domain
-# Example: "offgridfilters.com"
-
-affiliate_tag: ""
-# Your Amazon Associates tag — used for ALL product links
-# Example: "offgrid0a-20"
-
-niche: ""
-# The product niche in 2-4 words
-# Example: "water filters", "camping gear", "home espresso machines"
-
-tagline: ""
-# One-line site description (used in header, meta, footer)
-# Example: "Expert Water Filter Reviews & Guides"
+site_name: "OffGrid Filters"
+domain: "offgridfilters.com"
+affiliate_tag: "offgridfilters-20"
+niche: "water filters"
+tagline: "Expert Water Filter Reviews & Guides"
 
 # --- REQUIRED: Product categories ---
-# Define 4-8 categories that organize your product catalog.
-# Each category gets a roundup page ("Best [Category] 2026").
 
 categories:
-  - name: ""
-    slug: ""
-    # Example:
-    #   name: "Gravity Filters"
-    #   slug: "gravity-filters"
+  - name: "Countertop & Pitcher Filters"
+    slug: "countertop-filters"
 
-  - name: ""
-    slug: ""
+  - name: "Under-Sink Filters"
+    slug: "under-sink-filters"
 
-  - name: ""
-    slug: ""
+  - name: "Refrigerator Filters"
+    slug: "refrigerator-filters"
 
-  - name: ""
-    slug: ""
+  - name: "Pitcher & Dispenser Replacement Filters"
+    slug: "replacement-filters"
 
-# Add more categories as needed:
-#  - name: "Category Name"
-#    slug: "category-slug"
+  - name: "Survival & Portable Filters"
+    slug: "survival-filters"
 
-# --- REQUIRED: Product catalog ---
-# List all products to feature on the site (aim for 15-25).
-# Every product gets its own review page + appears in category roundups.
-# You earn affiliate commission on ALL products.
+  - name: "Whole House & Sediment Filters"
+    slug: "whole-house-filters"
+
+# --- REQUIRED: Product catalog (29 unique products) ---
 
 products:
-  - name: ""
-    brand: ""
-    asin: ""
-    price: ""
-    category: ""  # Must match a category slug above
-    # Example:
-    #   name: "Katadyn Hiker Pro Transparent Filter"
-    #   brand: "Katadyn"
-    #   asin: "B08MB2BNZR"
-    #   price: "74.95"
-    #   category: "pump-filters"
 
-  - name: ""
-    brand: ""
-    asin: ""
-    price: ""
-    category: ""
+  # ── Countertop & Pitcher Filters ──────────────────────────
 
-  - name: ""
-    brand: ""
-    asin: ""
-    price: ""
-    category: ""
+  - name: "Bluevua RO100ROPOT-UV Countertop Reverse Osmosis System"
+    brand: "Bluevua"
+    asin: "B0CNPMRFXS"
+    price: "317.00"
+    category: "countertop-filters"
+    notes: "6-stage RO with UV sterilization and remineralization, glass carafe, no installation, 2:1 pure-to-drain"
 
-# Add more products — copy this block:
-#  - name: "Product Full Name"
-#    brand: "Brand Name"
-#    asin: "BXXXXXXXXXX"
-#    price: "XX.XX"
-#    category: "category-slug"
+  - name: "Bluevua RO100ROPOT-Lite(UV) Countertop Reverse Osmosis System"
+    brand: "Bluevua"
+    asin: "B0CZ475FBC"
+    price: "219.00"
+    category: "countertop-filters"
+    notes: "7-stage RO with UV and remineralization, 3:1 pure-to-drain, smart LED display, glass carafe"
+
+  - name: "Amazon Basics 10-Cup Water Filter Pitcher"
+    brand: "Amazon Basics"
+    asin: "B07YT18P21"
+    price: "23.64"
+    category: "countertop-filters"
+    notes: "10-cup pitcher, NSF 42/53 certified, compatible with Brita filters, electronic filter indicator"
+
+  - name: "Brita UltraMax 27-Cup Water Filter Dispenser"
+    brand: "Brita"
+    asin: "B09WBL9HCS"
+    price: "34.99"
+    category: "countertop-filters"
+    notes: "27-cup large capacity dispenser, includes 1 Standard filter, precision-pour spigot"
+
+  # ── Under-Sink Filters ────────────────────────────────────
+
+  - name: "Pentair Everpure H-1200 Replacement Cartridge Set"
+    brand: "Pentair Everpure"
+    asin: "B002WDS3AW"
+    price: "390.00"
+    category: "under-sink-filters"
+    notes: "Twin replacement cartridge set for H-1200 system, 0.5 micron, 1000-gal capacity, NSF certified for lead/cysts/PFOA/PFOS"
+
+  - name: "Pentair Everpure H-300 Drinking Water System"
+    brand: "Pentair Everpure"
+    asin: "B0045LXJGC"
+    price: "505.00"
+    category: "under-sink-filters"
+    notes: "Complete under-sink system with filter head, cartridge, and hardware, 300-gal capacity, 0.5 micron, commercial-grade"
+
+  - name: "iSpring RCC7AK 6-Stage Reverse Osmosis System"
+    brand: "iSpring"
+    asin: "B005LJ8EXU"
+    price: "198.78"
+    category: "under-sink-filters"
+    notes: "75 GPD, alkaline remineralization, NSF 58 certified, reduces TDS 93-98%, PFAS 96-99%, lead >98.9%"
+
+  - name: "Waterdrop G3P600 Tankless Reverse Osmosis System"
+    brand: "Waterdrop"
+    asin: "B07P1XFYJP"
+    price: "429.00"
+    category: "under-sink-filters"
+    notes: "8-stage tankless RO, 600 GPD, smart LED faucet with TDS monitor, 2:1 pure-to-drain, NSF 42/53/58/372"
+
+  # ── Refrigerator Filters ──────────────────────────────────
+
+  - name: "everydrop by Whirlpool Refrigerator Filter 1 (EDR1RXD1)"
+    brand: "everydrop"
+    asin: "B00UXG4WR8"
+    price: "53.99"
+    category: "refrigerator-filters"
+    notes: "NSF 42/53/401, reduces 99% of lead, fits Whirlpool/Maytag/Amana/KitchenAid/JennAir, 200-gal capacity"
+
+  - name: "GE XWFE Refrigerator Water Filter"
+    brand: "GE Appliances"
+    asin: "B0882ZJ48W"
+    price: "49.49"
+    category: "refrigerator-filters"
+    notes: "RFID chip, NSF certified for 50+ impurities incl. lead/PFOA/PFOS/microplastics, 300-gal capacity"
+
+  - name: "GE RPWFE Refrigerator Water Filter"
+    brand: "GE Appliances"
+    asin: "B009PCI2JU"
+    price: "49.95"
+    category: "refrigerator-filters"
+    notes: "RFID chip, NSF 42/53, reduces lead/microplastics/PFOA/PFOS, 170-gal capacity, fits GE French door models"
+
+  - name: "Samsung HAF-QIN/EXP Refrigerator Water Filter (DA97-17376B)"
+    brand: "Samsung"
+    asin: "B071NFVVNG"
+    price: "37.52"
+    category: "refrigerator-filters"
+    notes: "Carbon block filtration, quarter-turn install, fits Samsung French 4-door/side-by-side/4-Door Flex models"
+
+  - name: "everydrop by Whirlpool Refrigerator Filter A (EDRARXD1)"
+    brand: "everydrop"
+    asin: "B0D8MFM6BK"
+    price: "48.00"
+    category: "refrigerator-filters"
+    notes: "NSF 42/53/401, rotating knob install, fits Whirlpool/Maytag/Amana/KitchenAid/JennAir, 200-gal capacity"
+
+  - name: "AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack)"
+    brand: "AQUACREST"
+    asin: "B08BZHQWXH"
+    price: "16.88"
+    category: "refrigerator-filters"
+    notes: "Aftermarket 6-pack, NSF 42 certified, coconut shell carbon block, compatible with Maytag UKF8001/Whirlpool EDR4RXD1"
+
+  # ── Pitcher & Dispenser Replacement Filters ───────────────
+
+  - name: "Amazon Basics Enhanced Replacement Water Filters (3-Pack)"
+    brand: "Amazon Basics"
+    asin: "B07YT16TMS"
+    price: "10.49"
+    category: "replacement-filters"
+    notes: "3-pack, NSF 42/53/401/372, compatible with Brita pitchers, 40-gal per filter, made in Europe"
+
+  - name: "Brita Standard Replacement Filters (3-Pack)"
+    brand: "Brita"
+    asin: "B00004SU18"
+    price: "17.98"
+    category: "replacement-filters"
+    notes: "3-pack, reduces chlorine/copper/cadmium/mercury, 40-gal per filter, fits all Brita except Stream"
+
+  - name: "Brita Standard Replacement Filters (4-Pack)"
+    brand: "Brita"
+    asin: "B0000CF98Q"
+    price: "18.49"
+    category: "replacement-filters"
+    notes: "4-pack, ion-exchange resin + activated carbon, 40-gal per filter, fits all Brita except Stream"
+
+  - name: "Brita Elite Replacement Filters (2-Pack)"
+    brand: "Brita"
+    asin: "B01MU7973W"
+    price: "29.78"
+    category: "replacement-filters"
+    notes: "2-pack (formerly Longlast), reduces 99% of lead + 30 contaminants, 120-gal per filter, 6-month life"
+
+  - name: "ZeroWater 5-Stage Replacement Filter (4-Pack)"
+    brand: "ZeroWater"
+    asin: "B00C7N7L1E"
+    price: "59.99"
+    category: "replacement-filters"
+    notes: "4-pack, 5-stage ion exchange, 0 TDS, IAPMO certified for lead/chromium/PFOA/PFOS"
+
+  - name: "ZeroWater 5-Stage Replacement Filter (6-Pack)"
+    brand: "ZeroWater"
+    asin: "B00OZIOLB2"
+    price: "80.99"
+    category: "replacement-filters"
+    notes: "6-pack, 5-stage ion exchange, 0 TDS, IAPMO certified for lead/chromium/PFOA/PFOS, ~15 gal per filter"
+
+  - name: "PUR Water Pitcher Replacement Filter (4-Pack)"
+    brand: "PUR"
+    asin: "B07WWB1MLN"
+    price: "23.22"
+    category: "replacement-filters"
+    notes: "4-pack, 2-in-1 filtration, NSF certified, LockFit design, 40-gal per filter, reduces 20+ substances"
+
+  - name: "Waterdrop WD-PF-01A Plus Replacement Filter (3-Pack)"
+    brand: "Waterdrop"
+    asin: "B08C7QNSKZ"
+    price: "33.99"
+    category: "replacement-filters"
+    notes: "3-pack, ACF technology, NSF 42/372, reduces PFAS/PFOA/PFOS/arsenic/fluoride, 200-gal per filter"
+
+  # ── Survival & Portable Filters ───────────────────────────
+
+  - name: "Timain 4-Stage Water Filter Straw (2-Pack)"
+    brand: "Timain"
+    asin: "B0CCD6BTVX"
+    price: "14.23"
+    category: "survival-filters"
+    notes: "2-pack, 0.1 micron ultrafiltration, 4-stage, removes 99.9999% bacteria, squeeze or suction use"
+
+  - name: "Membrane Solutions Portable Water Filter Straw (4-Pack)"
+    brand: "Membrane Solutions"
+    asin: "B07SYYQZDN"
+    price: "38.98"
+    category: "survival-filters"
+    notes: "4-pack, 0.1 micron hollow fiber membrane, 99.999999% bacteria removal, fits 28mm bottles"
+
+  - name: "NatureNova Personal Water Filter Straw (3-Pack)"
+    brand: "NatureNova"
+    asin: "B08YJHG8DQ"
+    price: "28.99"
+    category: "survival-filters"
+    notes: "3-pack, 4-stage filtration, 1500L per straw, includes foldable water bag and backwash syringe"
+
+  - name: "MSR Aquatabs Water Purification Tablets (30-Pack)"
+    brand: "MSR"
+    asin: "B007W5D13O"
+    price: "11.99"
+    category: "survival-filters"
+    notes: "30-pack, NaDCC chemical purification, EPA approved, treats 2 quarts per tablet in 30 min, no iodine"
+
+  # ── Whole House & Sediment Filters ────────────────────────
+
+  - name: "Membrane Solutions 5-Micron String Wound Sediment Filter (6-Pack)"
+    brand: "Membrane Solutions"
+    asin: "B082PXRJBZ"
+    price: "26.35"
+    category: "whole-house-filters"
+    notes: "6-pack, 10x2.5 inch standard, removes 99% sediment, universal fit for GE/DuPont/Culligan housings"
+
+  - name: "Universal 5-Micron Sediment Filter Cartridge"
+    brand: "Generic"
+    asin: "B0FYDWSKY2"
+    price: "32.88"
+    category: "whole-house-filters"
+    notes: "Standard 10x2.5 inch sediment cartridge, universal fit, first-stage prefilter for whole house systems"
+
+  - name: "Elkay 51300C WaterSentry Plus Replacement Filter"
+    brand: "Elkay"
+    asin: "B004PUCV3K"
+    price: "93.49"
+    category: "whole-house-filters"
+    notes: "For Elkay ezH2O bottle filling stations, 3000-gal capacity, NSF 42/53/401, reduces lead/microplastics/cysts"
 
 # --- REQUIRED: Key comparisons ---
-# Define 8-15 head-to-head comparison pairs.
-# These become "[Product A] vs [Product B]" pages.
-# Pick products that people actually compare when shopping.
 
 comparisons:
-  - product_a: ""
-    product_b: ""
-    # Example:
-    #   product_a: "Katadyn Hiker Pro"
-    #   product_b: "MSR MiniWorks EX"
+  # Countertop RO head-to-head
+  - product_a: "Bluevua RO100ROPOT-UV"
+    product_b: "Bluevua RO100ROPOT-Lite(UV)"
 
-  - product_a: ""
-    product_b: ""
+  # Under-sink RO showdowns
+  - product_a: "iSpring RCC7AK"
+    product_b: "Waterdrop G3P600"
 
-  - product_a: ""
-    product_b: ""
+  - product_a: "Pentair Everpure H-1200"
+    product_b: "Pentair Everpure H-300"
 
-# Add more:
-#  - product_a: "Product Name A"
-#    product_b: "Product Name B"
+  # Countertop vs Under-sink
+  - product_a: "Bluevua RO100ROPOT-UV"
+    product_b: "iSpring RCC7AK"
+
+  # Refrigerator filter battles
+  - product_a: "GE XWFE"
+    product_b: "GE RPWFE"
+
+  - product_a: "everydrop Filter 1 (EDR1RXD1)"
+    product_b: "GE XWFE"
+
+  - product_a: "Samsung HAF-QIN/EXP"
+    product_b: "everydrop Filter A (EDRARXD1)"
+
+  # Pitcher replacement filter wars
+  - product_a: "Brita Standard"
+    product_b: "Brita Elite"
+
+  - product_a: "Brita Elite"
+    product_b: "ZeroWater 5-Stage"
+
+  - product_a: "Brita Standard"
+    product_b: "PUR PPF900Z4"
+
+  - product_a: "ZeroWater 5-Stage"
+    product_b: "PUR PPF900Z4"
+
+  - product_a: "Waterdrop WD-PF-01A Plus"
+    product_b: "Brita Elite"
+
+  - product_a: "Amazon Basics Pitcher Filter"
+    product_b: "Brita Standard"
+
+  # Survival filter matchups
+  - product_a: "Timain Water Filter Straw"
+    product_b: "Membrane Solutions Water Filter Straw"
+
+  - product_a: "Timain Water Filter Straw"
+    product_b: "NatureNova Water Filter Straw"
 
 # --- OPTIONAL: Override defaults ---
 
-color_preference: ""
-# Example: "ocean blue", "earth tones", "clean modern blue-white"
-# Leave blank for Claude to decide based on niche research.
-
+color_preference: "clean ocean blue with earth tones"
 content_scope: "comprehensive"
-# Options: "standard" (40-60 pages), "comprehensive" (70-90+ pages)
-# Default is "comprehensive" — more pages = more SEO surface area.
-
-design_direction: ""
-# Example: "fresh best-in-class", "clean and trustworthy", "outdoorsy"
-# Leave blank for "fresh best-in-class".
-
-tone_override: ""
-# Example: "expert but approachable", "data-driven technical", "friendly outdoor guide"
-# Leave blank for Claude to decide based on niche research.
-
-additional_notes: ""
-# Any other context, preferences, or constraints.
-# Example: "Focus on backpacking and thru-hiking audience"
-# Example: "Include budget options under $30"
-# Example: "Site should feel like Wirecutter but for this niche"
+design_direction: "fresh best-in-class"
+tone_override: "expert but approachable outdoor guide"
+additional_notes: "Focus on off-grid, survival, and outdoor water filtration audience. Include budget options. Site should feel like Wirecutter but for water filters."
