@@ -1,0 +1,936 @@
+# CLAUDE.md — Multi-Product Authority Site Playbook
+
+> **Purpose:** This file contains everything Claude needs to autonomously research a product catalog,
+> make all design and content decisions, and build a complete multi-product affiliate authority site.
+>
+> **How to use:** Fill in `product-brief.yaml` with your site details and product catalog, then tell Claude:
+> *"Read CLAUDE.md and build the site."*
+>
+> **Template type:** Multi-Product Authority Site (v3) — for 15-25 products across 4-8 categories.
+> For single-product sites, use the Single-Product Template (v2) instead.
+
+---
+
+## PHASE 1: RESEARCH (Do this first, before any code)
+
+### 1.1 Product Catalog Research
+
+For EVERY product listed in `product-brief.yaml`:
+- Fetch the Amazon page or search: `"[product name] Amazon review features specifications"`
+- Extract: full product title, description, bullet points, features
+- Extract: dimensions, weight, materials, capacity, flow rate (niche-specific specs)
+- Extract: star rating, review count, color/size variations
+- Document strengths and weaknesses honestly
+- Note what makes this product unique vs others in its category
+
+**CRITICAL: Use the `price` from `product-brief.yaml` as the authoritative price for each product.**
+Do NOT guess prices from Amazon pages — they may be outdated. The brief is the source of truth.
+
+Document ALL product findings in `research/product-catalog-research.md`.
+
+### 1.2 Category Research
+
+For each category in `product-brief.yaml`:
+- Search: `"best [category name] [current year] review"`
+- Understand: what buyers prioritize in this category
+- Identify: key comparison criteria (specs that matter most)
+- Note: price ranges, entry-level vs premium positioning
+- Document: which products from the catalog are strongest in each category
+
+Document in `research/category-research.md`.
+
+### 1.3 Market & Audience Research
+
+Run web searches to understand:
+
+**Target audience:**
+- Search: `"[niche] buyer demographics target audience"`
+- Identify: primary segments (hobbyists, professionals, beginners, families)
+- Document: income level, buying triggers, seasonal patterns
+- Identify: the buyer journey (what do people search before buying?)
+
+**Competitor sites:**
+- Search: `"best [niche] review sites"`
+- Search: `"[niche] buying guide"`
+- Identify: top 5-10 authority sites in this niche
+- Note: what they do well, what they miss, content gaps to exploit
+- Study: their page structure, navigation, content depth
+
+**Content opportunities:**
+- Search: `"[niche] buying guide"`
+- Search: `"[niche] how to choose"`
+- Search: `"[niche] vs [niche] comparison"`
+- Search: `"[niche] for [activity]"` for relevant activities
+- Map: user intent across the buying journey (awareness → consideration → purchase)
+- Identify: question-based searches people ask about this niche
+
+**Use cases & activities:**
+- Build a comprehensive list of activity/use-case pages
+- Prioritize by search volume potential and relevance
+- Aim for 10-15 activity/use-case topics
+
+Document all findings in `research/market-research.md`.
+
+### 1.4 Design Research
+
+Run web searches to determine the right visual direction:
+
+- Search: `"[niche] website design color palette trends [current year]"`
+- Search: `"product review site design inspiration [current year]"`
+- Search: `"authority review site web design"`
+- Look at how top review sites (Wirecutter, RTINGS, etc.) present products
+
+Consider the niche when choosing:
+- Color associations (blue = trust, green = nature, orange = energy)
+- Authority vs approachability balance
+- Clean data presentation for comparison tables
+
+Document decisions in `research/design-decisions.md`.
+
+---
+
+## PHASE 2: DECISIONS (Document before building)
+
+After research, create `research/site-plan.md` with all decisions:
+
+### 2.1 Color Scheme
+
+Choose a color palette based on market research. Define these CSS custom property values (HSL format):
+
+| Token | Purpose | Example |
+|-------|---------|---------|
+| `--primary` | Brand accent, links, highlights | `210 70% 45%` (blue) |
+| `--primary-foreground` | Text ON primary bg (buttons) | `210 10% 98%` (near-white) |
+| `--primary-warm` | Hover/active variant of primary | `210 70% 38%` |
+| `--accent` | CTA buttons, urgency elements | `35 90% 50%` (amber) |
+| `--background` | Page background | `210 15% 6%` (dark) |
+| `--foreground` | Body text | `210 10% 95%` (light) |
+| `--card` | Card/section backgrounds | `210 12% 9%` |
+| `--border` | Borders and dividers | `210 10% 16%` |
+| `--muted` | Secondary backgrounds | `210 10% 11%` |
+| `--muted-foreground` | Secondary text | `210 10% 55%` |
+
+**CRITICAL: `--primary-foreground` must be LIGHT (near-white), not dark.**
+It's used for text on primary-colored buttons. If it's dark, button text is unreadable.
+For buttons with gradient primary backgrounds, also use `color: #fff !important` as a fallback.
+
+**Decision framework:**
+- Authority/review sites → clean, trustworthy blue or teal primary
+- Outdoor/adventure niche → earth tones, forest green
+- Technical/scientific niche → cool blues, data-forward
+- Lifestyle/home niche → warmer tones, approachable
+- Always ensure WCAG 4.5:1 contrast ratio for text
+
+### 2.2 Hero Statement
+
+The homepage hero is an AUTHORITY statement, not a product pitch:
+```
+[Niche] [Content Type] You Can Trust
+```
+
+Example: "Water Filter Reviews You Can Trust"
+
+Supporting copy: 1-2 sentences establishing expertise and what the site offers.
+
+### 2.3 Content Plan
+
+Organize pages into these content types:
+
+**1. Product Reviews (1 per product, 15-25 pages)**
+- In-depth review of each product in the catalog
+- URL: `/reviews/[product-slug]/`
+
+**2. Category Roundups (1 per category, 4-8 pages)**
+- "Best [Category] [Year]" — ranks all products in that category
+- URL: `/best-[category-slug]/`
+
+**3. Head-to-Head Comparisons (from brief, 8-15 pages)**
+- "[Product A] vs [Product B]: Which Is Better?"
+- URL: `/[product-a]-vs-[product-b]/`
+
+**4. Buyer Guides (6-10 pages)**
+- Educational content: "How to Choose a [Product Type]"
+- URL: `/guides/[guide-slug]/`
+- Topics: buying guide, maintenance, sizing, beginner guide, budget guide, common mistakes
+
+**5. Activity/Use-Case Guides (8-12 pages)**
+- "[Product Type] for [Activity]: Complete Guide"
+- URL: `/[niche]-for-[activity]/`
+- Topics: specific activities relevant to the niche
+
+**6. Knowledge Base (6-10 pages)**
+- Reference content: "What Is [Technical Term]?", history, types explained
+- URL: `/[topic-slug]/`
+
+**7. Resource Hub (1 page)**
+- Central index of ALL content organized by type
+- URL: `/guides/`
+
+**Target: 70-90+ pages for "comprehensive" scope.**
+
+### 2.4 Navigation Structure
+
+Header navigation for a multi-product authority site:
+
+| Nav Item | Content |
+|----------|---------|
+| Reviews | Dropdown: 5-7 most popular product reviews |
+| Best Of | Dropdown: all category roundup pages |
+| Compare | Dropdown: 5-7 most popular comparisons |
+| Guides | Dropdown: buyer guides + activity guides |
+| Learn | Dropdown: knowledge base articles |
+| All Guides | Link to resource hub |
+
+### 2.5 Tone & Voice
+
+Authority sites should sound like a **trusted expert friend** — knowledgeable but not condescending:
+- First person plural ("we tested", "we recommend")
+- Specific data and measurements over vague claims
+- Honest about weaknesses — builds trust for recommendations
+- No product is perfect — every review has pros AND cons
+- "Best for [use case]" framing instead of "best overall" for everything
+
+### 2.6 Review Philosophy
+
+**Credibility rules:**
+- Every product review must have genuine pros AND cons
+- No product gets a perfect score — find real weaknesses
+- Price-to-value analysis for every product
+- "Best for" recommendations (best for beginners, best for budget, best for performance)
+- Disclose affiliate relationship clearly
+- Never write content that reads like an ad
+
+---
+
+## PHASE 3: BUILD (Create all files)
+
+### 3.1 Infrastructure Files
+
+Create these files in this order:
+
+**1. `package.json`**
+```json
+{
+  "name": "[site-name]",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@vercel/analytics": "^1.6.1",
+    "astro": "^5.17.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/node": "^22.16.5",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.32.0",
+    "globals": "^15.15.0",
+    "postcss": "^8.5.6",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
+    "vitest": "^4.0.18"
+  }
+}
+```
+
+**2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind).
+
+**3. `tailwind.config.ts`** — Map CSS custom properties to Tailwind tokens. Use Inter font. Include tailwindcss-animate plugin.
+
+**4. `tsconfig.json`** — ES2020, ESNext modules, `@/*` path alias to `./src/*`.
+
+**5. `postcss.config.js`** — Tailwind + Autoprefixer.
+
+**6. `eslint.config.js`** — JS recommended + TypeScript ESLint.
+
+**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (1yr for assets, 24hr for sitemaps), redirect .html to trailing slash.
+
+**8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
+
+**9. `.github/workflows/ci.yml`** — Node 20, npm ci, lint, test, build, verify output.
+
+### 3.2 Source: Config & Utilities
+
+**`src/lib/config.ts`** — Central config file that exports all site-specific data:
+```typescript
+export const siteConfig = {
+  siteName: "",
+  tagline: "",
+  siteUrl: "",
+  affiliateTag: "",
+  niche: "",
+  // Product catalog
+  categories: [...],
+  products: [...],
+  // Navigation, social proof, etc.
+}
+```
+
+The config must include:
+- Full product catalog with all specs researched in Phase 1
+- Category definitions with descriptions
+- Navigation structure matching Phase 2 decisions
+- Social proof stats (total products reviewed, categories covered, etc.)
+
+This is the SINGLE SOURCE OF TRUTH. All components read from this.
+
+**`src/lib/schema.ts`** — Schema.org JSON-LD generators:
+- `generateArticleSchema(props)` — For content pages
+- `generateFAQSchema(faqs)` — For FAQ sections
+- `generateBreadcrumbSchema(items)` — For breadcrumb navigation
+- `generateProductSchema(product)` — For product review pages
+- `generateHowToSchema(steps)` — For how-to guides
+- `generateOrganizationSchema()` — For brand/site info
+- `generateWebSiteSchema()` — For site-level schema
+- `generateItemListSchema(items)` — For roundup/list pages
+
+**`src/lib/schema.test.ts`** — Vitest tests for all schema generators.
+
+### 3.3 Source: Global CSS
+
+**`src/index.css`** must include:
+- Tailwind directives (@tailwind base, components, utilities)
+- CSS custom properties for the color scheme (in `:root` — dark-only)
+- Custom utility classes: `.text-gradient`, `.card-[brand]`, `.container-[brand]`
+- Glassmorphism header styles
+- Skip navigation styles (`.skip-nav`)
+
+**Enhanced animations (world-class feel):**
+- 6 scroll reveal variants: `.reveal` (fade-up), `.reveal-left`, `.reveal-right`, `.reveal-blur`, `.reveal-scale`, `.stagger-grid`
+- 8 stagger delay classes: `.reveal-delay-1` through `.reveal-delay-8`
+- Scroll progress bar: `.scroll-progress` fixed at top with gradient
+- 3D tilt cards: `.card-3d` with perspective transform on hover
+- Animated counters: `.counter-value` with eased number animation
+- Magnetic buttons: `.btn-magnetic` with subtle follow-cursor effect
+- Parallax containers: `.parallax-container`, `.parallax-slow`
+- Glow effects: `.glow-primary`, `.glow-primary-hover`, `.glow-accent`
+- Text animations: `.text-reveal`, `.text-gradient-animated` with `gradient-shift` keyframe
+- Spotlight cards: `.spotlight-card` with CSS custom property mouse tracking
+- Floating orbs: `.orb`, `.orb-primary`, `.orb-accent` background decorations
+- Winner badges: `.winner-badge` for comparison/roundup page winners
+- Verdict card: `.verdict-card` with animated gradient top border
+- Rating stars: `.star-rating` visual display
+- `prefers-reduced-motion` media query disabling ALL animations
+- Noise texture overlay on body
+- Grid pattern overlay for hero section
+- Responsive typography scales
+- Button styles with hover transforms
+
+### 3.4 Source: Layouts
+
+**`src/layouts/BaseLayout.astro`** must include:
+- HTML shell with `lang="en"`, dark class
+- `<head>`: charset, viewport, title, meta description, canonical URL
+- Open Graph tags (og:title, og:description, og:image, og:url, og:type)
+- Twitter Card tags
+- Google Fonts link (Inter, weights 400-900)
+- DNS prefetch for Amazon (`dns-prefetch` + `preconnect`)
+- Favicon links (ico + png)
+- Schema.org JSON-LD slot
+- Vercel Analytics import
+- `<body>`: skip nav link, scroll progress bar div, slot for content, noise overlay div
+- `id="main-content"` on main element
+- **JavaScript (in `<script>` tag):**
+  - IntersectionObserver for all 6 reveal variants
+  - Scroll progress bar JS updating width on scroll via `requestAnimationFrame`
+  - Spotlight card mouse-tracking JS (updates CSS custom properties on mousemove)
+  - Animated counter JS (eased number animation on intersection, 1500ms duration)
+
+**`src/layouts/ContentLayout.astro`** must include:
+- Wraps BaseLayout
+- Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles
+- Renders: Header → Breadcrumbs → Main Content (slot) → Related Articles → Footer
+- Consistent max-width container
+- Article schema injection
+
+### 3.5 Source: Components
+
+**All 9 components must read brand/config data from `src/lib/config.ts`.**
+
+**`HeaderAstro.astro`:**
+- Site name/logo (text-based initially)
+- Desktop: horizontal nav with dropdown menus for each content type
+- Mobile: hamburger menu with expandable sections
+- Glassmorphism background (backdrop-blur)
+- Sticky positioning
+- Active page highlighting
+- NO "Buy on Amazon" CTA in nav — authority sites don't hard-sell from the header
+
+**`FooterAstro.astro`:**
+- Site name and tagline
+- Link grid organized by content type (mirrors nav)
+- Amazon affiliate disclosure (REQUIRED for compliance):
+  *"As an Amazon Associate, [site_name] earns from qualifying purchases."*
+- Copyright with current year
+- Links to legal pages (Privacy, Terms)
+
+**`BreadcrumbsAstro.astro`:**
+- Props: `items: Array<{label, url}>`, auto-generates BreadcrumbList schema
+- Home → Category → Current Page format
+
+**`RelatedArticlesAstro.astro`:**
+- Props: `articles: Array<{title, url, description}>`, `heading?: string`
+- 2-column grid on desktop, 1 on mobile
+- Card style with hover animation
+- Always 4 articles per page
+
+**`StatCard.astro`:**
+- Props: `value: string, label: string`
+- Large gradient-text value + small label below
+- Used for homepage stats (products reviewed, categories, etc.)
+
+**`ProTip.astro`:**
+- Props: `title?: string` (defaults to "Expert Tip")
+- Lightning bolt icon + accent border
+- Slot for content
+
+**`Callout.astro`:**
+- Props: `type?: 'info' | 'warning' | 'tip' | 'danger'`
+- Color-coded by type
+- Slot for content
+
+**`ProductImage.astro`:**
+- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string`
+- SVG-based placeholder system — no real images needed initially
+- 15+ contextual icons (filter, water, camping, hiking, gravity, pump, bottle, straw, uv, rv, backpack, compare, tools, shield, gear)
+- **EVERY content page MUST have at least one ProductImage** — no exceptions
+- Place after the intro paragraph on every page
+
+**`ComparisonTable.astro`:**
+- Props: `products: Product[], features?: Feature[]`
+- Product interface: name, asin, tag, rating, price, specs (niche-specific)
+- Responsive table with optional "Editor's Pick" badge
+- Specs rows with checkmarks and values
+- CTA row with "Check Price" buttons linking to Amazon with affiliate tag
+- **Button contrast CRITICAL:** Primary button uses `color: #fff !important` with `text-shadow`
+- All products use the SAME affiliate tag
+
+### 3.6 Source: Pages
+
+#### Homepage (`src/pages/index.astro`)
+
+The homepage is an **authority hub**, not a product landing page.
+
+**1. Hero Section**
+- Site name + tagline
+- Authority statement: "[Niche] Reviews You Can Trust"
+- Supporting copy: what the site offers, how many products reviewed
+- Dual CTA: "Browse Reviews" + "Read Buying Guide"
+- Stats bar: [X] Products Reviewed, [X] Categories, [X]+ Hours Testing
+- `.text-reveal` animation on headline
+- Grid pattern overlay + floating orbs for depth
+
+**2. Featured Picks Section ("Our Top Picks")**
+- 3-4 "Best for" cards linking to top products:
+  - "Best Overall" → top product review
+  - "Best Value" → best budget product review
+  - "Best for [Activity]" → best niche-specific product review
+  - "Best Premium" → best high-end product review
+- Each card: ProductImage + product name + price + star rating + 1-line verdict + "Read Review" link
+- `.spotlight-card` with cursor tracking
+- `.stagger-grid` reveal animation
+
+**3. Category Browser Section ("Find Your Perfect [Product]")**
+- Card grid with one card per category
+- Each card: icon + category name + product count + "View Best Of" link
+- Links to category roundup pages
+- `.reveal` animation with stagger delays
+
+**4. Latest Reviews Section**
+- 4-6 most recent/important product review cards
+- Each card: ProductImage + product name + star rating + excerpt + "Read Review" link
+- 2-column grid on desktop
+
+**5. How We Test Section (Trust Builder)**
+- 3-4 cards explaining the review methodology:
+  - "Real-World Testing" — how products are evaluated
+  - "Unbiased Reviews" — no sponsorships, affiliate-only
+  - "Data-Driven" — specs comparison, not just opinions
+  - "Updated Regularly" — prices and info kept current
+- Builds authority and trust
+
+**6. Popular Comparisons Section**
+- 3-4 most popular head-to-head comparison links
+- Card format: "[Product A] vs [Product B]" with thumbnail icons
+- Links to comparison pages
+
+**7. FAQ Section**
+- 5-7 FAQs about the niche (NOT about the site):
+  1. "What [product type] do I need for [common use case]?"
+  2. "How much should I spend on a [product type]?"
+  3. "[Technical question about the niche]?"
+  4. "[Safety/health question]?"
+  5. "What's the difference between [type A] and [type B]?"
+- FAQPage schema markup
+
+**8. Final CTA Section**
+- "Find Your Perfect [Product]" headline
+- CTA to buying guide or resource hub
+- Trust badges
+
+#### Product Review Pages (`src/pages/reviews/[product-slug].astro`)
+
+One page per product in the catalog. Follow this structure:
+
+**Section 1: Hero**
+- H1: `[Product Full Name] Review [Year]`
+- Quick verdict: 1-2 sentence summary + star rating
+- Key specs box: price, rating, best for, key feature
+- `<ProductImage>` with product icon
+
+**Section 2: Overview**
+- What this product is and who it's for
+- 2-3 paragraphs of honest positioning
+- "Best for" callout box
+
+**Section 3: Key Features & Specs**
+- Detailed specs table (niche-specific measurements)
+- Feature-by-feature breakdown
+- ProTip components for insider knowledge
+
+**Section 4: Pros & Cons**
+- Structured pros list (checkmarks)
+- Structured cons list (X marks)
+- **Every product MUST have real cons** — builds credibility
+
+**Section 5: Performance / Field Testing**
+- How the product performs in real-world scenarios
+- Specific test results and observations
+- Comparison to alternatives where relevant
+
+**Section 6: Value Analysis**
+- Price-to-value assessment
+- Cost comparison with similar products
+- "Worth it if..." / "Skip it if..." framing
+
+**Section 7: FAQ**
+- 4-6 product-specific questions
+- FAQPage schema
+
+**Section 8: Verdict & CTA**
+- Final rating (X/10 or X/5 stars)
+- 2-3 sentence verdict
+- "Check Price on Amazon" CTA
+- Link to category roundup: "See all [category] reviews"
+
+**Every review page also includes:**
+- ContentLayout wrapper with breadcrumbs (Home → Reviews → [Product])
+- Product schema with rating
+- 4 related articles: 2 similar products, 1 category roundup, 1 buyer guide
+
+#### Category Roundup Pages (`src/pages/best-[category-slug].astro`)
+
+One per category. These are high-value SEO pages.
+
+**Section 1: Hero**
+- H1: `Best [Category] [Year]: Expert Picks`
+- Intro: what this category is, who it's for, how many products tested
+- `<ProductImage>` with category-appropriate icon
+
+**Section 2: Quick Picks Summary**
+- Table/card grid with all products in this category
+- Each: name, price, rating, 1-line verdict, "Best for [X]" badge
+- `<ComparisonTable>` with all category products
+
+**Section 3: Individual Product Mini-Reviews**
+- For each product in the category (ordered by recommendation):
+  - H3: `[Rank]. [Product Name] — Best for [Use Case]`
+  - 2-3 paragraph review
+  - Pros/cons list
+  - `<ProductImage>`
+  - "Read Full Review" link + "Check Price" CTA
+
+**Section 4: How We Chose**
+- Methodology: what criteria were used to rank
+- Key comparison factors for this category
+
+**Section 5: Buying Guide for This Category**
+- What to look for when choosing a [category] product
+- Key specs explained
+- Budget ranges
+
+**Section 6: FAQ**
+- 5-7 category-specific questions
+- FAQPage schema
+
+**Section 7: CTA**
+- Link to #1 pick with "Check Price"
+- Link to full buying guide
+
+#### Head-to-Head Comparison Pages (`src/pages/[product-a]-vs-[product-b].astro`)
+
+**Section 1: Hero**
+- H1: `[Product A] vs [Product B]: Which Is Better in [Year]?`
+- Quick verdict box (`.verdict-card`): winner + 1-line summary
+- `<ProductImage>` with compare icon
+
+**Section 2: At a Glance**
+- `<ComparisonTable>` with both products
+- Side-by-side specs
+
+**Section 3: Category-by-Category Breakdown**
+- 5-6 comparison categories relevant to the niche
+- Each category has a clear winner with explanation
+- **Products must each win some categories** — no one-sided comparisons
+- Winner badges (`.winner-badge`) on each category
+
+**Section 4: Who Should Get Which?**
+- "Get [Product A] if..." scenarios
+- "Get [Product B] if..." scenarios
+- Honest, use-case-based recommendations
+
+**Section 5: FAQ**
+- 4-6 comparison-specific questions
+
+**Section 6: CTA**
+- "Check Price" buttons for BOTH products
+- Both use same affiliate tag
+
+#### Buyer Guide Pages (`src/pages/guides/[guide-slug].astro`)
+
+Educational content following the 8-section content page structure:
+
+**Section 1: Hero + ProductImage**
+- H1: `How to Choose a [Product Type]: Complete [Year] Guide`
+- Intro establishing the guide's value
+
+**Section 2: Why This Matters**
+- Why choosing the right product matters
+- Common pain points this guide solves
+
+**Section 3: Key Factors to Consider**
+- Detailed breakdown of decision criteria
+- Specs explained in plain language
+- Numbered or bulleted lists
+
+**Section 4: Deep Dive**
+- Detailed technical explanations
+- Scenario-based recommendations
+- ProTip and Callout components throughout
+
+**Section 5: Common Mistakes**
+- 4-5 mistakes with explanations
+
+**Section 6: Product Recommendations**
+- "Best for [scenario]" recommendations linking to reviews
+- Brief justification for each pick
+
+**Section 7: FAQ**
+- 5-7 guide-specific questions
+
+**Section 8: CTA**
+- Link to top-pick review
+- Link to category roundup
+
+#### Activity/Use-Case Guide Pages (`src/pages/[niche]-for-[activity].astro`)
+
+Similar to buyer guides but focused on a specific activity or use case.
+
+**Section 1: Hero + ProductImage**
+- H1: `Best [Product Type] for [Activity]: [Year] Guide`
+
+**Section 2: Why [Activity] Needs a [Product Type]**
+- Activity-specific justification
+
+**Section 3: What to Look For**
+- Activity-specific buying criteria
+
+**Section 4: Top Picks for [Activity]**
+- 3-5 recommended products from the catalog
+- Each with brief rationale and link to full review
+
+**Section 5: Activity-Specific Tips**
+- How to use the product in this specific context
+- ProTip components
+
+**Section 6: FAQ**
+- Activity-specific questions
+
+**Section 7: CTA**
+- Top pick for this activity + "Check Price"
+
+#### Knowledge Base Pages (`src/pages/[topic-slug].astro`)
+
+Educational/reference content. Follows the standard content page structure but leans informational.
+
+#### Resource Hub (`src/pages/guides/index.astro`)
+
+- Central index of ALL content organized by type
+- Sections: Reviews, Best Of, Comparisons, Guides, Knowledge Base
+- Card grid with hover effects
+- CollectionPage schema
+
+#### 404 Page (`src/pages/404.astro`)
+
+- On-brand error message
+- Link back to homepage
+- Browse suggestion
+
+### 3.7 Public Files
+
+**`public/robots.txt`:**
+```
+User-agent: *
+Allow: /
+Sitemap: [siteUrl]/sitemap-index.xml
+
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+```
+
+**`public/llms.txt`:**
+```
+# [Site Name]
+> [One-line description of the site]
+
+## About
+[2-3 sentences about the site's mission]
+
+## Product Reviews
+[List all review page URLs with product names]
+
+## Best Of / Roundups
+[List all category roundup URLs]
+
+## Comparisons
+[List all comparison page URLs]
+
+## Guides
+[List all guide URLs]
+
+## Knowledge Base
+[List all knowledge base URLs]
+```
+
+**`public/favicon.ico`** and **`public/favicon.png`:**
+- Generate text-based favicons using the site initial(s)
+
+### 3.8 IMAGE-GUIDE.md
+
+Generate an `IMAGE-GUIDE.md` at the project root that documents:
+- Every page that has a `<ProductImage>` placeholder
+- What real photo should replace each placeholder
+- Recommended image dimensions per aspect ratio
+- File naming convention: `[product-slug]-[context].webp`
+- Where to place real images: `public/assets/images/`
+
+### 3.9 Scripts
+
+**`scripts/convert-to-webp.mjs`:**
+- Uses Sharp library to convert JPG/PNG images to WebP
+- Creates responsive variants (small, medium, full)
+- Outputs to public/assets/
+
+---
+
+## PHASE 4: QUALITY (Verify everything works)
+
+### 4.1 Install & Build
+```bash
+npm install
+npm run lint
+npm run test
+npm run build
+```
+
+Fix any errors before proceeding.
+
+### 4.2 Verify Output
+- `dist/index.html` exists
+- `dist/sitemap-index.xml` exists
+- All page routes resolve
+- No broken internal links
+- No console errors
+
+### 4.3 Content Quality Checklist
+For every page, verify:
+- [ ] H1 contains target keyword naturally
+- [ ] Meta description is unique and under 160 characters
+- [ ] Breadcrumbs are correct
+- [ ] Related articles link to 4 relevant pages
+- [ ] At least 1 CTA with affiliate link
+- [ ] Schema markup is valid
+- [ ] No placeholder text remains
+- [ ] Affiliate disclosure is in footer
+- [ ] ProductImage is present
+- [ ] All links work
+
+---
+
+## COPYWRITING REFERENCE
+
+### Core Philosophy
+- **Authority + trust** (NOT sales pressure)
+- **Honest reviews** — every product has real pros AND cons
+- **Data-driven** — specs, measurements, comparisons
+- **User-first** — help the reader make the right decision, not just any purchase
+- **Specific** — exact numbers, times, measurements build credibility
+- **Amazon affiliate** leverages platform trust — you earn on all products
+
+### CTA Strategy (Different from single-product sites)
+- Product review pages: "Check Price on Amazon" (informational, not pushy)
+- Roundup pages: "Check Price" per product (let the reader decide)
+- Comparison pages: "Check Price" for both products
+- Guide pages: "See Our Top Pick" → links to review, not directly to Amazon
+- Homepage: "Browse Reviews" or "Read Buying Guide" (NO direct Amazon links)
+- **No floating CTAs** — authority sites earn trust through content, not pressure
+
+### Review Writing Pattern
+Every product review follows:
+1. **Hook:** What this product promises and who it's for
+2. **Reality:** How it actually performs (honest, specific)
+3. **Context:** How it compares to alternatives
+4. **Verdict:** Who should buy it and who shouldn't
+
+### FAQ Answer Pattern
+Every FAQ answer follows: **Direct answer** → **Technical explanation** → **Specific recommendation**
+
+### Related Articles Cross-Linking Strategy
+Every page links to 4 related articles:
+1. Similar product review
+2. Category roundup that includes this product
+3. Relevant buyer guide
+4. Related activity/use-case guide
+
+### SEO Patterns
+- Article schema on all content pages
+- Product schema with rating on review pages
+- FAQPage schema on pages with FAQ sections
+- BreadcrumbList schema on all pages
+- ItemList schema on roundup pages
+- Meta descriptions: Target keyword + value prop (under 160 chars)
+- Natural keyword integration (never stuffed)
+- Heading hierarchy: H1 → H2 → H3
+
+---
+
+## CRITICAL RULES (Common Mistakes to Avoid)
+
+### Pricing
+1. **NEVER guess prices.** Always use the `price` from `product-brief.yaml` per product.
+2. **Store all product data in config.ts** and reference from there.
+3. **Update narrative to match actual prices.** Don't call something "affordable" if it's the priciest option.
+
+### Images
+4. **EVERY content page must have a `<ProductImage>`** component. No exceptions.
+5. **Import ProductImage** at the top of every content page.
+6. **Homepage uses ProductImage** in featured picks section.
+
+### Button/Text Contrast
+7. **Never rely on CSS custom properties for button text color in Astro scoped styles.** Use `color: #fff !important` with `text-shadow` for text on primary-colored buttons.
+8. **`--primary-foreground` must be near-white.** If it's dark, all buttons become unreadable.
+
+### Reviews & Comparisons
+9. **Every product must have real cons.** A review with only pros reads as an ad.
+10. **Comparisons must be balanced.** Each product wins some categories.
+11. **No "best overall" that wins everything.** Use "best for [specific use case]" framing.
+12. **All products use the SAME affiliate tag.** You earn commission on every product.
+
+### Authority & Trust
+13. **No hard-sell language.** "Check Price" not "Buy Now." "We recommend" not "You need this."
+14. **Disclose affiliate relationship** in footer on every page.
+15. **No fake urgency.** No "limited time" or "selling fast" language.
+
+### Build
+16. **Always run `npm run build`** before committing. Fix all errors.
+17. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
+
+---
+
+## FILE CHECKLIST
+
+When complete, the project should contain:
+
+### Root (12 files)
+- [ ] `package.json`
+- [ ] `astro.config.mjs`
+- [ ] `tailwind.config.ts`
+- [ ] `tsconfig.json`
+- [ ] `postcss.config.js`
+- [ ] `eslint.config.js`
+- [ ] `vercel.json`
+- [ ] `.gitignore`
+- [ ] `product-brief.yaml`
+- [ ] `CLAUDE.md`
+- [ ] `TEMPLATE-GUIDE.md`
+- [ ] `IMAGE-GUIDE.md` (generated)
+
+### .github (1 file)
+- [ ] `.github/workflows/ci.yml`
+
+### Public (4+ files)
+- [ ] `public/robots.txt`
+- [ ] `public/llms.txt`
+- [ ] `public/favicon.ico`
+- [ ] `public/favicon.png`
+
+### Source: Lib (3 files)
+- [ ] `src/lib/config.ts`
+- [ ] `src/lib/schema.ts`
+- [ ] `src/lib/schema.test.ts`
+
+### Source: CSS (1 file)
+- [ ] `src/index.css`
+
+### Source: Layouts (2 files)
+- [ ] `src/layouts/BaseLayout.astro`
+- [ ] `src/layouts/ContentLayout.astro`
+
+### Source: Components (9 files)
+- [ ] `src/components/HeaderAstro.astro`
+- [ ] `src/components/FooterAstro.astro`
+- [ ] `src/components/BreadcrumbsAstro.astro`
+- [ ] `src/components/RelatedArticlesAstro.astro`
+- [ ] `src/components/StatCard.astro`
+- [ ] `src/components/ProTip.astro`
+- [ ] `src/components/Callout.astro`
+- [ ] `src/components/ProductImage.astro`
+- [ ] `src/components/ComparisonTable.astro`
+
+### Source: Pages
+- [ ] `src/pages/index.astro` (homepage — authority hub)
+- [ ] `src/pages/404.astro`
+- [ ] `src/pages/guides/index.astro` (resource hub)
+- [ ] `src/pages/reviews/[product-slug].astro` (1 per product, 15-25 pages)
+- [ ] `src/pages/best-[category-slug].astro` (1 per category, 4-8 pages)
+- [ ] `src/pages/[product-a]-vs-[product-b].astro` (8-15 comparison pages)
+- [ ] `src/pages/guides/[guide-slug].astro` (6-10 buyer guides)
+- [ ] `src/pages/[niche]-for-[activity].astro` (8-12 activity guides)
+- [ ] `src/pages/[topic-slug].astro` (6-10 knowledge base pages)
+
+### Research (5 files, generated during Phase 1)
+- [ ] `research/product-catalog-research.md`
+- [ ] `research/category-research.md`
+- [ ] `research/market-research.md`
+- [ ] `research/design-decisions.md`
+- [ ] `research/site-plan.md`
+
+### Scripts (1 file)
+- [ ] `scripts/convert-to-webp.mjs`

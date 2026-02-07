@@ -1,0 +1,136 @@
+# ============================================================
+# MULTI-PRODUCT SITE BRIEF — Fill in and let Claude build
+# ============================================================
+# This file defines your product catalog, categories, and site
+# identity. Claude researches each product, builds category
+# roundups, comparison pages, buyer guides, and 70-90+ pages.
+# ============================================================
+
+# --- REQUIRED: Site identity ---
+
+site_name: ""
+# Your site/brand name (this is NOT a product brand — it's your authority site)
+# Example: "OffGrid Filters", "TrailGear Pro", "FilterFinder"
+
+domain: ""
+# Your site domain
+# Example: "offgridfilters.com"
+
+affiliate_tag: ""
+# Your Amazon Associates tag — used for ALL product links
+# Example: "offgrid0a-20"
+
+niche: ""
+# The product niche in 2-4 words
+# Example: "water filters", "camping gear", "home espresso machines"
+
+tagline: ""
+# One-line site description (used in header, meta, footer)
+# Example: "Expert Water Filter Reviews & Guides"
+
+# --- REQUIRED: Product categories ---
+# Define 4-8 categories that organize your product catalog.
+# Each category gets a roundup page ("Best [Category] 2026").
+
+categories:
+  - name: ""
+    slug: ""
+    # Example:
+    #   name: "Gravity Filters"
+    #   slug: "gravity-filters"
+
+  - name: ""
+    slug: ""
+
+  - name: ""
+    slug: ""
+
+  - name: ""
+    slug: ""
+
+# Add more categories as needed:
+#  - name: "Category Name"
+#    slug: "category-slug"
+
+# --- REQUIRED: Product catalog ---
+# List all products to feature on the site (aim for 15-25).
+# Every product gets its own review page + appears in category roundups.
+# You earn affiliate commission on ALL products.
+
+products:
+  - name: ""
+    brand: ""
+    asin: ""
+    price: ""
+    category: ""  # Must match a category slug above
+    # Example:
+    #   name: "Katadyn Hiker Pro Transparent Filter"
+    #   brand: "Katadyn"
+    #   asin: "B08MB2BNZR"
+    #   price: "74.95"
+    #   category: "pump-filters"
+
+  - name: ""
+    brand: ""
+    asin: ""
+    price: ""
+    category: ""
+
+  - name: ""
+    brand: ""
+    asin: ""
+    price: ""
+    category: ""
+
+# Add more products — copy this block:
+#  - name: "Product Full Name"
+#    brand: "Brand Name"
+#    asin: "BXXXXXXXXXX"
+#    price: "XX.XX"
+#    category: "category-slug"
+
+# --- REQUIRED: Key comparisons ---
+# Define 8-15 head-to-head comparison pairs.
+# These become "[Product A] vs [Product B]" pages.
+# Pick products that people actually compare when shopping.
+
+comparisons:
+  - product_a: ""
+    product_b: ""
+    # Example:
+    #   product_a: "Katadyn Hiker Pro"
+    #   product_b: "MSR MiniWorks EX"
+
+  - product_a: ""
+    product_b: ""
+
+  - product_a: ""
+    product_b: ""
+
+# Add more:
+#  - product_a: "Product Name A"
+#    product_b: "Product Name B"
+
+# --- OPTIONAL: Override defaults ---
+
+color_preference: ""
+# Example: "ocean blue", "earth tones", "clean modern blue-white"
+# Leave blank for Claude to decide based on niche research.
+
+content_scope: "comprehensive"
+# Options: "standard" (40-60 pages), "comprehensive" (70-90+ pages)
+# Default is "comprehensive" — more pages = more SEO surface area.
+
+design_direction: ""
+# Example: "fresh best-in-class", "clean and trustworthy", "outdoorsy"
+# Leave blank for "fresh best-in-class".
+
+tone_override: ""
+# Example: "expert but approachable", "data-driven technical", "friendly outdoor guide"
+# Leave blank for Claude to decide based on niche research.
+
+additional_notes: ""
+# Any other context, preferences, or constraints.
+# Example: "Focus on backpacking and thru-hiking audience"
+# Example: "Include budget options under $30"
+# Example: "Site should feel like Wirecutter but for this niche"

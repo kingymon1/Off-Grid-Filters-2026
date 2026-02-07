@@ -1,0 +1,261 @@
+---
+interface Product {
+  name: string;
+  asin: string;
+  tag: string;
+  rating: string;
+  price: string;
+  packSize: string;
+  cordLength: string;
+  cordType: string;
+  tools: string[];
+  adjustable: string;
+  warranty: string;
+  highlight?: string;
+  isOurs?: boolean;
+}
+
+interface Props {
+  products: Product[];
+  features?: Array<{
+    label: string;
+    key: keyof Product;
+  }>;
+}
+
+const { products, features } = Astro.props;
+
+const defaultFeatures = [
+  { label: 'Price', key: 'price' as keyof Product },
+  { label: 'Pack Size', key: 'packSize' as keyof Product },
+  { label: 'Rating', key: 'rating' as keyof Product },
+  { label: 'Cord Length', key: 'cordLength' as keyof Product },
+  { label: 'Cord Type', key: 'cordType' as keyof Product },
+  { label: 'Adjustable', key: 'adjustable' as keyof Product },
+  { label: 'Warranty', key: 'warranty' as keyof Product },
+];
+
+const displayFeatures = features || defaultFeatures;
+---
+
+<div class="comparison-table-wrapper">
+  <div class="comparison-table-scroll">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th class="feature-col">Feature</th>
+          {products.map((product) => (
+            <th class:list={['product-col', { 'our-product': product.isOurs }]}>
+              <div class="product-header">
+                {product.isOurs && <span class="our-badge">Our Pick</span>}
+                <span class="product-name">{product.name}</span>
+              </div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {displayFeatures.map((feature) => (
+          <tr>
+            <td class="feature-label">{feature.label}</td>
+            {products.map((product) => {
+              const value = product[feature.key];
+              return (
+                <td class:list={[{ 'our-product': product.isOurs }]}>
+                  {Array.isArray(value) ? value.join(', ') : String(value || '—')}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+        <tr class="tools-row">
+          <td class="feature-label">Tools Included</td>
+          {products.map((product) => (
+            <td class:list={[{ 'our-product': product.isOurs }]}>
+              <ul class="tools-list">
+                {product.tools.map((tool) => (
+                  <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+            </td>
+          ))}
+        </tr>
+        <tr class="cta-row">
+          <td class="feature-label"></td>
+          {products.map((product) => (
+            <td class:list={[{ 'our-product': product.isOurs }]}>
+              <a
+                href={`https://www.amazon.com/dp/${product.asin}?tag=${product.tag}`}
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class:list={['table-cta', { 'table-cta-primary': product.isOurs }]}
+              >
+                Check Price
+              </a>
+            </td>
+          ))}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  .comparison-table-wrapper {
+    margin: 2rem 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    overflow: hidden;
+    background: hsl(var(--card));
+  }
+
+  .comparison-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    min-width: 600px;
+  }
+
+  .comparison-table thead {
+    background: hsl(var(--muted));
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .comparison-table th {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+  }
+
+  .feature-col {
+    text-align: left !important;
+    width: 140px;
+    min-width: 140px;
+  }
+
+  .product-col {
+    min-width: 160px;
+  }
+
+  .product-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .our-badge {
+    display: inline-block;
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.625rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary) / 0.12);
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  .product-name {
+    font-weight: 700;
+  }
+
+  .comparison-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    color: hsl(var(--muted-foreground));
+    vertical-align: top;
+  }
+
+  .feature-label {
+    text-align: left !important;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+  }
+
+  .our-product {
+    background: hsl(var(--primary) / 0.03);
+    border-left: 1px solid hsl(var(--primary) / 0.1);
+    border-right: 1px solid hsl(var(--primary) / 0.1);
+  }
+
+  thead .our-product {
+    border-top: 2px solid hsl(var(--primary) / 0.4);
+  }
+
+  .tools-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .tools-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .tools-list svg {
+    color: hsl(var(--primary));
+    flex-shrink: 0;
+  }
+
+  .cta-row td {
+    padding: 1.25rem 1rem;
+    border-bottom: none;
+  }
+
+  .table-cta {
+    display: inline-block;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.625rem;
+    font-weight: 700;
+    font-size: 0.875rem;
+    border: 1px solid hsl(160 10% 30%);
+    color: hsl(160 10% 90%);
+    background: hsl(160 10% 12%);
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .table-cta:hover {
+    border-color: hsl(160 65% 36%);
+    color: #fff;
+    background: hsl(160 15% 16%);
+  }
+
+  .table-cta-primary {
+    background: linear-gradient(135deg, hsl(160 65% 36%), hsl(160 65% 28%));
+    color: #fff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 12px -2px hsl(160 65% 36% / 0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .table-cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px -2px hsl(160 65% 36% / 0.4);
+    color: #fff !important;
+    background: linear-gradient(135deg, hsl(160 65% 40%), hsl(160 65% 32%));
+  }
+</style>

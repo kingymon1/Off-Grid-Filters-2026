@@ -1,0 +1,18 @@
+---
+interface Props {
+  type?: 'info' | 'warning' | 'tip' | 'danger';
+}
+
+const { type = 'info' } = Astro.props;
+
+const styles = {
+  info: 'bg-primary/10 border-primary/20 text-foreground',
+  warning: 'bg-yellow-500/10 border-yellow-500/30 text-foreground',
+  tip: 'bg-primary/10 border-primary/20 text-foreground',
+  danger: 'bg-destructive/10 border-destructive/30 text-foreground',
+};
+---
+
+<div class={`p-6 rounded-lg border ${styles[type]} mb-6`}>
+  <slot />
+</div>

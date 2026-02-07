@@ -1,0 +1,211 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import HeaderAstro from '../components/HeaderAstro.astro';
+import FooterAstro from '../components/FooterAstro.astro';
+import BreadcrumbsAstro from '../components/BreadcrumbsAstro.astro';
+import RelatedArticlesAstro from '../components/RelatedArticlesAstro.astro';
+import { generateBreadcrumbSchema, combineSchemas, SITE_URL } from '../lib/schema';
+import { siteConfig } from '../lib/config';
+
+interface Article {
+  title: string;
+  url: string;
+  description: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  category?: string;
+  currentPage: string;
+  schema?: object | object[];
+  relatedArticles?: Article[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogTitle,
+  ogDescription,
+  category,
+  currentPage,
+  schema,
+  relatedArticles = []
+} = Astro.props;
+
+// Build breadcrumb schema automatically from category/currentPage props
+const breadcrumbItems = [
+  { name: 'Home', url: SITE_URL + '/' }
+];
+if (category) {
+  breadcrumbItems.push({ name: category, url: SITE_URL + siteConfig.navigation.hubUrl });
+}
+breadcrumbItems.push({ name: currentPage || title, url: canonical.startsWith('http') ? canonical : SITE_URL + canonical });
+
+const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
+
+// Combine page schema with breadcrumb schema
+let fullSchema;
+if (schema) {
+  if (schema && typeof schema === 'object' && '@graph' in schema) {
+    const existingGraph = (schema as any)['@graph'] as object[];
+    fullSchema = combineSchemas(...existingGraph, breadcrumbSchema);
+  } else if (schema && typeof schema === 'object' && '@context' in schema) {
+    const { '@context': _, ...rest } = schema as any;
+    fullSchema = combineSchemas(rest, breadcrumbSchema);
+  } else {
+    fullSchema = combineSchemas(schema as object, breadcrumbSchema);
+  }
+} else {
+  fullSchema = combineSchemas(breadcrumbSchema);
+}
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  ogTitle={ogTitle}
+  ogDescription={ogDescription}
+  schema={fullSchema}
+>
+  <HeaderAstro />
+  <BreadcrumbsAstro category={category} currentPage={currentPage} />
+
+  <main id="main-content" class="content-main">
+    <div class="container">
+      <article class="content-card">
+        <slot />
+
+        {relatedArticles.length > 0 && (
+          <RelatedArticlesAstro articles={relatedArticles} />
+        )}
+      </article>
+    </div>
+  </main>
+
+  <FooterAstro />
+</BaseLayout>
+
+<style>
+  .content-main {
+    padding: 1.5rem 0 4rem;
+  }
+
+  .content-card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0 0 1px hsl(var(--border) / 0.3), 0 4px 24px -4px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (min-width: 768px) {
+    .content-card {
+      padding: 2.5rem 3rem;
+    }
+  }
+
+  /* Typography */
+  .content-card :global(h1) {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .content-card :global(h1) {
+      font-size: 2.75rem;
+    }
+  }
+
+  .content-card :global(h2) {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .content-card :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(var(--primary));
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .content-card :global(p) {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+
+  .content-card :global(.lead) {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    color: hsl(var(--foreground) / 0.75);
+  }
+
+  .content-card :global(ul),
+  .content-card :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .content-card :global(li) {
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+
+  .content-card :global(li::marker) {
+    color: hsl(var(--primary) / 0.6);
+  }
+
+  .content-card :global(strong) {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+
+  .content-card :global(a:not(.btn-primary):not(.related-card)) {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: hsl(var(--primary) / 0.3);
+    transition: text-decoration-color 0.2s;
+  }
+
+  .content-card :global(a:not(.btn-primary):not(.related-card):hover) {
+    text-decoration-color: hsl(var(--primary));
+  }
+
+  .content-card :global(.faq-section) {
+    margin-top: 2rem;
+  }
+
+  .content-card :global(.faq-item) {
+    margin-bottom: 0.75rem;
+  }
+
+  .content-card :global(.faq-item summary) {
+    font-weight: 600;
+    padding: 1.125rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  .content-card :global(.faq-item .faq-answer) {
+    padding: 0 1.25rem 1.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9375rem;
+  }
+</style>

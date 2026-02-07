@@ -1,0 +1,347 @@
+---
+import '../index.css';
+import { siteConfig } from '../lib/config';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  schema?: object | object[];
+  preloadHero?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogTitle,
+  ogDescription,
+  ogImage = `${siteConfig.siteUrl}${siteConfig.seo.defaultOgImage}`,
+  noindex = false,
+  schema,
+  preloadHero = false
+} = Astro.props;
+
+const siteUrl = siteConfig.siteUrl;
+const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${canonical}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={fullCanonical}>
+  <meta name="author" content={siteConfig.brand}>
+
+  <link rel="icon" href="/favicon.png" type="image/png">
+
+  <!-- Inter font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://www.amazon.com">
+  <link rel="preconnect" href="https://www.amazon.com">
+
+  {noindex && (
+    <>
+      <meta name="robots" content="noindex, nofollow">
+      <meta name="googlebot" content="noindex, nofollow">
+    </>
+  )}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={ogTitle || title}>
+  <meta property="og:description" content={ogDescription || description}>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={fullCanonical}>
+  <meta property="og:image" content={ogImage}>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={ogTitle || title}>
+  <meta name="twitter:description" content={ogDescription || description}>
+  <meta name="twitter:image" content={ogImage}>
+
+  <!-- Schema.org JSON-LD -->
+  {schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )}
+
+  <style is:global>
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 2rem;
+      }
+    }
+
+    /* Button system */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+      color: hsl(var(--primary-foreground));
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow:
+        0 0 0 0 hsl(var(--primary) / 0),
+        0 8px 24px -4px hsl(var(--primary) / 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, hsl(var(--primary-warm)), hsl(var(--primary)));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 20px 0 hsl(var(--primary) / 0.2),
+        0 16px 40px -4px hsl(var(--primary) / 0.4);
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Card styles */
+    .card {
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover {
+      border-color: hsl(var(--border) / 0.8);
+      box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Section spacing */
+    .section {
+      padding: 5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 3rem 0;
+      }
+    }
+
+    /* Keyframes */
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px 0 hsl(var(--primary) / 0.15); }
+      50% { box-shadow: 0 0 40px 0 hsl(var(--primary) / 0.25); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.6s ease-out;
+    }
+
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    /* Details/Summary for FAQs */
+    details {
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    details:hover {
+      border-color: hsl(var(--primary) / 0.4);
+    }
+
+    summary {
+      font-weight: 600;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary:hover {
+      background-color: hsl(var(--muted) / 0.5);
+    }
+
+    details[open] summary {
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .details-content {
+      padding: 1.5rem;
+      color: hsl(var(--muted-foreground));
+      line-height: 1.7;
+    }
+
+    /* Skip navigation */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      padding: 0.75rem 1.5rem;
+      z-index: 100;
+      font-weight: 600;
+      border-radius: 0 0 0.5rem 0;
+    }
+
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* Noise texture overlay for depth */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <a class="skip-nav" href="#main-content">Skip to main content</a>
+  <slot />
+
+  <!-- Scroll reveal + progress + spotlight + counter scripts -->
+  <script>
+    // Scroll reveal observer (handles .reveal, .reveal-left, .reveal-right, .reveal-blur, .reveal-scale, .stagger-grid)
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-blur, .reveal-scale, .stagger-grid').forEach((el) => revealObserver.observe(el));
+
+    // Scroll progress bar
+    const scrollProgress = document.getElementById('scroll-progress');
+    if (scrollProgress) {
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+            scrollProgress.style.transform = `scaleX(${progress})`;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    // Spotlight card effect (mouse-following glow)
+    document.querySelectorAll('.spotlight-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = (card as HTMLElement).getBoundingClientRect();
+        const x = ((e as MouseEvent).clientX - rect.left) + 'px';
+        const y = ((e as MouseEvent).clientY - rect.top) + 'px';
+        (card as HTMLElement).style.setProperty('--mouse-x', x);
+        (card as HTMLElement).style.setProperty('--mouse-y', y);
+      });
+    });
+
+    // Animated counters
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const target = el.dataset.target || el.textContent || '0';
+            const isDecimal = target.includes('.');
+            const suffix = target.replace(/[\d.]/g, '');
+            const numericTarget = parseFloat(target);
+            if (isNaN(numericTarget)) return;
+            const duration = 1500;
+            const startTime = performance.now();
+            const animate = (currentTime: number) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = numericTarget * eased;
+              el.textContent = (isDecimal ? current.toFixed(1) : Math.floor(current).toLocaleString()) + suffix;
+              if (progress < 1) requestAnimationFrame(animate);
+            };
+            requestAnimationFrame(animate);
+            counterObserver.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    document.querySelectorAll('[data-counter]').forEach((el) => counterObserver.observe(el));
+  </script>
+</body>
+</html>

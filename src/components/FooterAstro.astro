@@ -1,0 +1,72 @@
+---
+import { siteConfig } from '../lib/config';
+
+// TEMPLATE: Footer links are derived from navigation categories.
+// During build, these will be populated from siteConfig.
+const footerLinks = siteConfig.navigation.categories;
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-accent"></div>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="footer-logo">
+          <div class="footer-logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+          </div>
+          <div>
+            <span class="footer-name">{siteConfig.siteName}</span>
+            <span class="footer-tagline">{siteConfig.brandTagline}</span>
+          </div>
+        </a>
+        <p class="footer-desc">{siteConfig.productDescription}</p>
+      </div>
+    </div>
+
+    <div class="footer-grid">
+      {Object.entries(footerLinks).map(([category, links]) => (
+        <div class="footer-column">
+          <h3 class="footer-heading">{category}</h3>
+          <ul class="footer-list">
+            {links.map((link) => (
+              <li>
+                <a href={link.url} class="footer-link">{link.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">&copy; {currentYear} {siteConfig.siteName}. All rights reserved.</p>
+      <p class="affiliate-disclosure">As an Amazon Associate, {siteConfig.brand} earns from qualifying purchases.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { position: relative; border-top: 1px solid hsl(var(--border) / 0.3); background-color: hsl(var(--muted) / 0.2); margin-top: 0; padding: 3rem 0 2rem; }
+  .footer-accent { position: absolute; top: -1px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.2), transparent); }
+  .footer-top { margin-bottom: 2.5rem; }
+  .footer-brand { max-width: 320px; }
+  .footer-logo { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 0.75rem; }
+  .footer-logo-icon { background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.08)); padding: 0.5rem; border-radius: 0.5rem; color: hsl(var(--primary)); }
+  .footer-name { display: block; font-size: 1.125rem; font-weight: 800; letter-spacing: -0.02em; }
+  .footer-tagline { display: block; font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.1em; color: hsl(var(--muted-foreground)); margin-top: -2px; }
+  .footer-desc { font-size: 0.8125rem; color: hsl(var(--muted-foreground)); line-height: 1.6; margin: 0; }
+  .footer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem 1.5rem; margin-bottom: 2.5rem; }
+  @media (min-width: 768px) { .footer-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1024px) { .footer-grid { grid-template-columns: repeat(5, 1fr); } }
+  .footer-heading { font-weight: 700; color: hsl(var(--foreground)); margin-bottom: 0.75rem; font-size: 0.8125rem; letter-spacing: -0.01em; }
+  .footer-list { list-style: none; padding: 0; margin: 0; }
+  .footer-list li { margin-bottom: 0.375rem; }
+  .footer-link { font-size: 0.8125rem; color: hsl(var(--muted-foreground)); transition: color 0.2s; }
+  .footer-link:hover { color: hsl(var(--primary)); }
+  .footer-bottom { border-top: 1px solid hsl(var(--border) / 0.3); padding-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+  @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+  .copyright { font-size: 0.75rem; color: hsl(var(--muted-foreground)); margin: 0; }
+  .affiliate-disclosure { font-size: 0.6875rem; color: hsl(var(--muted-foreground) / 0.7); margin: 0; }
+</style>
