@@ -1,0 +1,159 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filter-types-explained')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'What is the best type of water filter for home use?',
+    answer: 'It depends on your specific needs. For most households concerned about basic taste and chlorine: an activated carbon pitcher or faucet filter is sufficient. For comprehensive contaminant removal including lead, PFAS, and TDS: a reverse osmosis system is best. For well water with bacteria concerns: UV purification combined with sediment filtration. For maximum portability: filter straws with hollow fiber membranes. There is no single "best" — only the best for your situation.',
+  },
+  {
+    question: 'What is the difference between GAC and carbon block filters?',
+    answer: 'Granular activated carbon (GAC) uses loose carbon granules — water flows around and between the granules. Carbon block uses compressed carbon powder formed into a solid block — water must pass through the block. Carbon block is superior because it has smaller pore sizes (0.5 to 1 micron vs 20 to 50 microns for GAC), longer contact time with the water, and more consistent filtration. Carbon block can remove cysts and fine particles that GAC cannot. However, carbon block filters have slower flow rates and cost more.',
+  },
+  {
+    question: 'Can any water filter remove viruses?',
+    answer: 'Most mechanical filters (carbon, ceramic, hollow fiber) cannot remove viruses because viruses are too small (0.02 to 0.3 microns). Technologies that do remove or inactivate viruses include: UV purification (kills viruses by destroying DNA), reverse osmosis (blocks viruses at the membrane), chemical purification (chlorine or iodine kills viruses), and distillation (heat destroys viruses). For international travel or suspect water sources, UV or chemical purification is essential.',
+  },
+  {
+    question: 'How often should I change my water filter?',
+    answer: 'It varies by filter type. Pitcher filters: every 2 months or 40 gallons (Brita Standard), 6 months or 120 gallons (Brita Elite). Refrigerator filters: every 6 months or at stated capacity. RO pre-filters: every 6 to 12 months. RO membranes: every 2 to 3 years. Under-sink carbon: every 6 to 12 months or at stated gallon capacity. Survival straws: per manufacturer capacity rating. Always follow the manufacturer recommended schedule — an exhausted filter can be worse than no filter at all.',
+  },
+  {
+    question: 'Do water filters remove fluoride?',
+    answer: 'Most carbon filters do NOT remove fluoride. Reverse osmosis systems remove 90% to 95% of fluoride. Activated alumina filters specifically target fluoride. Distillation removes fluoride. Ion exchange (like ZeroWater) removes fluoride as part of total TDS reduction. If fluoride removal is important to you, an RO system is the most practical and comprehensive solution.',
+  },
+  {
+    question: 'Is filtered water better than bottled water?',
+    answer: 'In most cases, yes. Home-filtered water from an RO system or quality carbon filter is equal or superior to most bottled water in purity. It costs a fraction per gallon ($0.02 to $0.10 vs $1 to $3 for bottled), eliminates plastic waste, and you control the filtration quality. Bottled water is regulated less strictly than tap water in some respects, and some bottled brands are simply filtered municipal water. The main advantage of bottled water is portability.',
+  },
+  {
+    question: 'What water filter removes the most contaminants?',
+    answer: 'Reverse osmosis removes the broadest spectrum of contaminants — including dissolved solids, heavy metals, PFAS, fluoride, bacteria, viruses, and pharmaceuticals. A multi-stage RO system with carbon pre-filters and UV sterilization (like the Bluevua RO100ROPOT-UV) provides the most comprehensive residential treatment. However, you may not need this level of filtration if your water is already clean.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'Deep dive into the most powerful filtration technology.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Match filter types to your specific needs.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'How to verify filter performance claims.' },
+  { title: 'RO vs Carbon Filters', url: '/guides/reverse-osmosis-vs-carbon-filters/', description: 'Head-to-head comparison of the two most popular technologies.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">There are six major water filtration technologies used in residential and portable water treatment. Each has distinct strengths, limitations, and ideal use cases. Understanding how they work helps you choose the right filter for your water quality, budget, and lifestyle — rather than relying on marketing claims.</p>
+
+  <ProductImage alt="Water filter types and technologies compared" icon="filter" aspect="hero" />
+
+  <h2>1. Activated Carbon Filtration</h2>
+  <p>Activated carbon is the most widely used water filtration technology, found in everything from pitcher filters to whole-house systems. Carbon works through a process called adsorption — contaminants chemically bond to the surface of the carbon material as water passes through.</p>
+
+  <h3>Granular Activated Carbon (GAC)</h3>
+  <p>GAC filters contain loose carbon granules, typically derived from coconut shells, wood, or coal. Water flows around and between the granules, allowing contaminants to adsorb onto the carbon surfaces. GAC is the technology behind most basic pitcher filters like the <a href="/reviews/brita-standard-3pack/">Brita Standard</a>.</p>
+  <p><strong>Strengths:</strong> Inexpensive, widely available, excellent chlorine taste and odor removal, good flow rate, easy to use.</p>
+  <p><strong>Limitations:</strong> Large pore size (20 to 50 microns) means limited particulate removal, does not remove dissolved solids or TDS, less effective for lead and PFAS, water can channel through gaps between granules reducing effectiveness.</p>
+
+  <h3>Carbon Block</h3>
+  <p>Carbon block filters compress powdered activated carbon into a solid block, typically with a pore size of 0.5 to 1 micron. Water must pass through the entire block, providing longer contact time and more consistent filtration. The <a href="/reviews/brita-elite-2pack/">Brita Elite</a>, <a href="/reviews/ge-xwfe/">GE XWFE</a>, and <a href="/reviews/pentair-everpure-h1200/">Pentair Everpure</a> filters use carbon block technology.</p>
+  <p><strong>Strengths:</strong> Much finer filtration than GAC (0.5 microns vs 20+ microns), can remove cysts (Giardia, Cryptosporidium), better lead reduction, more consistent performance, can be NSF 53 certified for health contaminants.</p>
+  <p><strong>Limitations:</strong> Slower flow rate than GAC, higher cost, does not remove dissolved solids or significantly reduce TDS, limited PFAS removal (better than GAC but not as good as RO).</p>
+
+  <h3>Activated Carbon Fiber (ACF)</h3>
+  <p>A newer variant using carbon processed into fine fibers rather than granules or blocks. ACF has extremely high surface area per unit weight, providing faster adsorption kinetics. The <a href="/reviews/waterdrop-wd-pf01a-plus-3pack/">Waterdrop WD-PF-01A Plus</a> pitcher filters use ACF technology for enhanced PFAS reduction.</p>
+  <p><strong>Strengths:</strong> Higher adsorption rate than traditional carbon, better PFAS reduction, longer filter life (200 gallons vs 40 for standard filters).</p>
+  <p><strong>Limitations:</strong> Newer technology with a smaller track record, available in fewer products, proprietary to specific pitcher systems.</p>
+
+  <ProTip>When comparing carbon filters, the key metric is the micron rating. A 0.5-micron carbon block filter provides far more protection than a 20-micron GAC filter. The <a href="/reviews/pentair-everpure-h1200/">Pentair Everpure H-1200</a> at 0.5 microns removes cysts, lead, and fine particles that no pitcher filter can catch.</ProTip>
+
+  <h2>2. Reverse Osmosis (RO)</h2>
+  <p>Reverse osmosis forces water through a semipermeable membrane with pores of approximately 0.0001 microns — 5,000 times smaller than a carbon block filter. This is the most thorough residential filtration technology available. For a complete explanation, see our dedicated <a href="/what-is-reverse-osmosis/">What Is Reverse Osmosis?</a> guide.</p>
+  <p><strong>Strengths:</strong> Removes 93% to 99% of dissolved solids (TDS), lead, PFAS, fluoride, bacteria, viruses, pharmaceuticals, and virtually all contaminants. Measurable performance with a TDS meter. Proven technology used in municipal treatment and desalination worldwide.</p>
+  <p><strong>Limitations:</strong> Wastes water (2:1 to 4:1 pure-to-drain ratios), slow production for tank systems, removes beneficial minerals (addressed by remineralization stages), higher upfront cost, requires more maintenance with multiple filter stages.</p>
+  <p><strong>Best for:</strong> Households with high TDS, lead contamination, PFAS concerns, well water, or anyone wanting maximum contaminant removal. Our top picks: <a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> ($198.78 for best value), <a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a> ($429 for premium tankless), <a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a> ($317 for countertop convenience).</p>
+
+  <h2>3. UV (Ultraviolet) Purification</h2>
+  <p>UV purification uses ultraviolet light at 254 nanometers wavelength to inactivate microorganisms. The UV light damages the DNA of bacteria, viruses, and protozoa, preventing them from reproducing and causing illness. UV does not remove any physical or chemical contaminants — it only addresses biological threats.</p>
+  <p><strong>Strengths:</strong> Kills 99.99% of bacteria and viruses without adding chemicals, no change to water taste, fast treatment speed, no wastewater produced, effective against chlorine-resistant organisms like Cryptosporidium.</p>
+  <p><strong>Limitations:</strong> Does not remove any chemical contaminants, dissolved solids, or physical particles. Requires clear water — turbidity and sediment can shield organisms from UV exposure. Requires electricity. Does not provide residual disinfection (treated water can be recontaminated).</p>
+  <p><strong>Best for:</strong> Well water with biological contamination risk, as a complement to other filtration (not standalone), international travel. The <a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a> combines RO with UV for the most comprehensive countertop treatment.</p>
+
+  <h2>4. Ceramic Filtration</h2>
+  <p>Ceramic filters use porous ceramic material (typically with pore sizes of 0.2 to 0.5 microns) to physically strain out bacteria, protozoa, and sediment. The ceramic can be impregnated with silver to provide bacteriostatic properties, preventing bacterial growth within the filter element itself.</p>
+  <p><strong>Strengths:</strong> Long-lasting (can be cleaned and reused many times), no electricity or water pressure required, effective against bacteria and protozoa, works with gravity-feed systems, excellent for off-grid and emergency use.</p>
+  <p><strong>Limitations:</strong> Does not remove viruses (too small for ceramic pores), does not remove dissolved chemicals, TDS, or heavy metals, slow flow rate, fragile — can crack if dropped or frozen, does not remove chlorine taste.</p>
+  <p><strong>Best for:</strong> Gravity-feed systems for off-grid living, emergency preparedness, developing world applications. Often combined with activated carbon for chemical and taste improvement.</p>
+
+  <h2>5. Ion Exchange</h2>
+  <p>Ion exchange filtration works by swapping undesirable ions in water with more desirable ones. The filter contains a resin bed loaded with replacement ions — as contaminated water passes through, target ions (like lead, calcium, or magnesium) are captured and replacement ions (typically sodium or hydrogen) are released. <a href="/reviews/zerowater-5stage-4pack/">ZeroWater filters</a> use a deionization variant that achieves near-complete TDS removal.</p>
+  <p><strong>Strengths:</strong> Very effective for specific targeted contaminants (lead, heavy metals, calcium, magnesium), can achieve 0 TDS (ZeroWater), good for water softening, removes fluoride.</p>
+  <p><strong>Limitations:</strong> Resin exhausts relatively quickly (ZeroWater filters last only 15 to 25 gallons), does not remove bacteria or biological contaminants, does not remove sediment, can produce flat-tasting water when all minerals are removed, higher per-gallon cost than other technologies.</p>
+  <p><strong>Best for:</strong> Very hard water, maximum TDS removal in pitcher format, targeted heavy metal removal. The <a href="/reviews/zerowater-5stage-4pack/">ZeroWater 5-Stage</a> is the primary consumer ion exchange product.</p>
+
+  <ProTip>ZeroWater's 0 TDS filtration sounds impressive, but the trade-off is significant: filter life of only 15 to 25 gallons means you may be replacing filters every 2 to 3 weeks in hard water areas. An RO system achieves similar purity at a fraction of the per-gallon cost. ZeroWater makes most sense for people who cannot install an RO system but need maximum TDS reduction.</ProTip>
+
+  <h2>6. Distillation</h2>
+  <p>Distillation is the oldest water purification method — it works by boiling water to produce steam, then condensing the steam back into liquid water. Contaminants with higher boiling points than water (most minerals, salts, metals, and biological organisms) are left behind in the boiling chamber.</p>
+  <p><strong>Strengths:</strong> Removes virtually all dissolved solids, heavy metals, and biological contaminants. Simple, proven process with thousands of years of history. No filter replacements — just periodic cleaning of the boiling chamber.</p>
+  <p><strong>Limitations:</strong> Very slow (produces 1 to 6 gallons per day for countertop units), high energy consumption, does not remove volatile organic compounds (VOCs) that have lower boiling points than water and evaporate with the steam, produces flat-tasting water, countertop units are large and hot.</p>
+  <p><strong>Best for:</strong> Laboratory and medical applications, areas with extremely contaminated water, users who prefer a chemical-free process with no filter replacements.</p>
+
+  <h2>7. Hollow Fiber Membrane (Portable/Survival)</h2>
+  <p>Hollow fiber membrane filters use bundles of tiny hollow tubes with pore sizes typically around 0.1 microns. Water is forced through the tube walls, and anything larger than 0.1 microns is trapped. This technology is the backbone of most portable survival filters.</p>
+  <p><strong>Strengths:</strong> Ultralight and packable, removes 99.9999% of bacteria and 99.99% of protozoa, no electricity needed, long life (1,000 to 4,000 liters), can be backwashed to restore flow rate, fast flow compared to ceramic.</p>
+  <p><strong>Limitations:</strong> Does not remove viruses (0.1 microns is too large), does not remove chemicals, dissolved solids, or heavy metals, does not improve taste, membrane can be damaged by freezing.</p>
+  <p><strong>Best for:</strong> Hiking, backpacking, camping, emergency kits. Our top picks: <a href="/reviews/timain-filter-straw-2pack/">Timain Filter Straw</a> ($14.23 for 2-pack, best budget), <a href="/reviews/membrane-solutions-filter-straw-4pack/">Membrane Solutions 4-Pack</a> ($38.98 for family preparedness), <a href="/reviews/naturenova-filter-straw-3pack/">NatureNova 3-Pack</a> ($28.99 with included accessories).</p>
+
+  <h2>8. Chemical Purification (Tablets)</h2>
+  <p>Chemical purification uses chlorine, iodine, or chlorine dioxide compounds dissolved in water to kill biological contaminants. <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs</a> use NaDCC (sodium dichloroisocyanurate), a stable chlorine compound recommended by the WHO.</p>
+  <p><strong>Strengths:</strong> Virtually weightless, kills viruses (which most filters cannot), EPA-registered effectiveness, excellent backup to filter straws, long shelf life, inexpensive.</p>
+  <p><strong>Limitations:</strong> 30-minute wait time for treatment, does not remove sediment or chemicals, slight chlorine taste, does not reduce TDS, limited effectiveness against Cryptosporidium (chlorine-resistant).</p>
+  <p><strong>Best for:</strong> Emergency backup to filter straws, international travel (virus protection), ultralight backpacking where every gram matters. Best used in combination with a hollow fiber filter: the filter removes bacteria, protozoa, and sediment, and the tablets kill viruses.</p>
+
+  <h2>Technology Comparison Summary</h2>
+  <p>Here is how the major technologies compare across key criteria:</p>
+  <ul>
+    <li><strong>Broadest contaminant removal:</strong> Reverse Osmosis</li>
+    <li><strong>Best for taste improvement:</strong> Activated Carbon (block or GAC)</li>
+    <li><strong>Best for biological threats:</strong> UV Purification or Chemical Purification</li>
+    <li><strong>Best for portability:</strong> Hollow Fiber Membrane + Chemical Tablets</li>
+    <li><strong>Best for TDS reduction:</strong> Reverse Osmosis or Ion Exchange</li>
+    <li><strong>Best for lead removal:</strong> Reverse Osmosis or NSF 53 Carbon Block</li>
+    <li><strong>Lowest ongoing cost:</strong> Activated Carbon (pitcher filters)</li>
+    <li><strong>No installation required:</strong> Pitcher Filters, Countertop RO, Portable Filters</li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

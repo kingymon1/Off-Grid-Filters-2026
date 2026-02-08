@@ -1,0 +1,180 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('everydrop-filter-1-edr1rxd1')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Which refrigerator models are compatible with the everydrop Filter 1 (EDR1RXD1)?', answer: 'The everydrop Filter 1 fits Whirlpool, Maytag, Amana, KitchenAid, and JennAir refrigerators that use the Filter 1 / W10295370A cartridge type. Check your refrigerator manual or the inside of the current filter compartment for the part number. Common compatible models include Whirlpool WRS325SDHZ, Maytag MFI2570FEZ, and KitchenAid KRMF706ESS. If your fridge uses Filter 2, 3, 4, or Filter A, this cartridge will not fit.' },
+  { question: 'Is the everydrop Filter 1 worth the price over aftermarket alternatives?', answer: 'For most households, yes. The triple NSF 42/53/401 certification guarantees reduction of lead, pharmaceuticals, and pesticides — certifications that most aftermarket filters lack. The OEM guarantee means zero compatibility issues and no risk of leaks or warning lights. If your primary concern is taste only, an aftermarket NSF 42 filter will do. If you want verified contaminant reduction, the everydrop is worth the premium.' },
+  { question: 'How do I know when to replace the everydrop Filter 1?', answer: 'Most Whirlpool-family refrigerators have a built-in filter status indicator that turns from green to yellow to red as the filter approaches its 200-gallon or 6-month limit. When the indicator turns red or the water flow noticeably slows, it is time to replace. For households of 1-2 people, the filter may last the full 6 months. Families of 4+ who use the water dispenser and ice maker heavily may reach 200 gallons in 4-5 months.' },
+  { question: 'Does the everydrop Filter 1 remove PFAS and forever chemicals?', answer: 'The NSF 401 certification covers emerging contaminants including certain pharmaceuticals and pesticides. While PFAS is not explicitly listed under NSF 401, the activated carbon block technology in the everydrop Filter 1 has been shown in independent testing to reduce some PFAS compounds. For verified PFAS reduction, consider supplementing with an under-sink RO system, which is the most effective technology for PFAS removal.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Capacity</span>
+      <span class="spec-value">{product.specs.capacity}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Certifications</span>
+      <span class="spec-value">{product.specs.certifications}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="fridge" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The everydrop Filter 1 (EDR1RXD1) is the OEM gold standard for Whirlpool-family refrigerator water filtration. Made by the same company that manufactures your Whirlpool, Maytag, KitchenAid, Amana, or JennAir refrigerator, this filter is guaranteed to fit, function, and deliver the contaminant reduction that the triple NSF 42/53/401 certification promises. At $53.99, it costs more than aftermarket alternatives, but the peace of mind of verified lead reduction (99%), pharmaceutical removal, and guaranteed compatibility is what you are paying for.</p>
+  <p>The activated carbon block technology inside the EDR1RXD1 is specifically engineered for the push-in filter compartment design used across Whirlpool's brand family. When you install it, the refrigerator recognizes the genuine filter and resets the replacement indicator automatically. This seamless integration is something aftermarket filters often struggle with — many trigger persistent "replace filter" warnings or fail to seat properly, leading to water bypass that defeats the purpose of filtration entirely.</p>
+  <p>With 32,000+ Amazon reviews and a 4.6-star average, the everydrop Filter 1 has one of the largest and most consistent review histories of any refrigerator filter. The most common praise centers on water taste improvement, easy installation, and the reassurance of OEM quality. The most common complaint is the price — and honestly, that is a fair criticism. But the certification gap between this filter and budget aftermarket options is real and measurable.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Compatibility</strong></td><td>{product.specs.compatibility}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The triple NSF certification is the critical differentiator. NSF 42 covers chlorine taste and odor — this is what most aftermarket filters also achieve. NSF 53 covers health-related contaminants including lead (99% reduction) and waterborne parasites like cysts. NSF 401 covers emerging contaminants including pharmaceuticals and pesticides — a certification that very few refrigerator filters carry. Together, these three certifications mean the everydrop Filter 1 has been independently tested and verified to reduce a comprehensive range of contaminants that cheaper filters simply do not address.</p>
+
+  <ProTip>Set a calendar reminder for 5 months after installation rather than waiting for the fridge indicator to turn red. By the time the indicator changes, the filter may already be operating at reduced effectiveness. Proactive replacement ensures you always have peak filtration. If you go through a lot of ice in summer, the filter may reach its 200-gallon capacity even faster — ice production uses more filtered water than most people realize.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Installation takes about 60 seconds: open the filter compartment (usually in the upper right corner of the fridge interior), push in the new cartridge until it clicks, and close the door. The first 2-3 gallons should be flushed to clear carbon fines — the water may appear gray initially, which is normal and harmless. After flushing, the water runs clear with a noticeably improved taste. Chlorine odor is completely eliminated, and the slight metallic edge common in municipal tap water is substantially reduced.</p>
+  <p>Over a typical 6-month filter cycle, water quality remains consistent through the first 4-5 months. In the final month, some users notice a subtle change in taste as the activated carbon begins to saturate, though the filter remains safe to use until the full 200-gallon capacity is reached. Flow rate through the dispenser is strong and consistent — no noticeable difference between a fresh filter and one at mid-life. The ice maker produces clear, taste-neutral ice throughout the filter's lifespan, which is particularly appreciated in homes where unfiltered ice carries noticeable chlorine flavor.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $53.99, the everydrop Filter 1 is one of the pricier refrigerator filters in our catalog. Replacing it every 6 months means an annual cost of approximately $108. By comparison, the AQUACREST UKF8001 6-pack runs $16.88 for six filters — theoretically covering 3 years for the same amount you would spend on one year of everydrop. The difference is certification: the AQUACREST carries only NSF 42, while the everydrop has NSF 42/53/401. If your water source has known lead or pharmaceutical contamination concerns, the everydrop premium is justified by measurably better filtration.</p>
+  <p>For homes with already-clean municipal water where lead and PFAS are not concerns, an aftermarket NSF 42 filter will provide equivalent taste improvement at a fraction of the cost. The honest recommendation: if you live in a home built before 1986 (when lead solder was banned), have older plumbing, or live in an area with known water quality issues, invest in the everydrop. If your water tests clean and you just want better-tasting water and ice, a quality aftermarket filter is a reasonable choice.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

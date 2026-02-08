@@ -1,0 +1,126 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-camping')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+const membrane = getProductBySlug('membrane-solutions-filter-straw-4pack')!;
+const naturenova = getProductBySlug('naturenova-filter-straw-3pack')!;
+const aquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+
+const recommendedProducts = [timain, membrane, naturenova, aquatabs];
+
+const faqs = [
+  { question: 'Can I drink directly from a lake using a filter straw?', answer: 'Yes, filter straws like the Timain and Membrane Solutions are designed for exactly this. Submerge the intake end in the water source and drink through the mouthpiece. The 0.1-micron membrane removes 99.9999% of bacteria and 99.99% of protozoa on the spot. Just make sure you avoid stagnant water with chemical contamination, which filters cannot remove.' },
+  { question: 'Do camping water filters remove viruses?', answer: 'Most portable filter straws use 0.1-micron hollow fiber membranes, which remove bacteria and protozoa but not viruses. Viruses are too small (0.02-0.3 microns) for these membranes. For complete protection, pair a filter straw with chemical purification tablets like MSR Aquatabs, which kill viruses, bacteria, and Giardia in 30 minutes.' },
+  { question: 'How long do camping water filters last?', answer: 'Most filter straws are rated for 1,000 to 1,500 liters. For a typical camping trip where you filter 3-4 liters per day, a single straw can last hundreds of days. However, flow rate decreases as the filter collects contaminants. Backwashing (if your model supports it) helps restore flow. Replace the straw when water no longer passes through even after backwashing.' },
+  { question: 'Is it safe to drink from mountain streams without filtering?', answer: 'No. Even crystal-clear mountain streams can harbor Giardia, Cryptosporidium, E. coli, and other pathogens from animal waste upstream. These parasites are invisible and can cause severe gastrointestinal illness lasting weeks. Always filter or purify water from any natural source, no matter how clean it looks.' },
+  { question: 'What is the best water filter for a group camping trip?', answer: 'For groups of 4 or more, the Membrane Solutions 4-pack is ideal because everyone gets their own straw. Alternatively, the NatureNova kit includes a foldable water bag that enables gravity filtering, which works well for filling group water containers at a base camp. For large groups, combine filter straws for individual use with Aquatabs for treating bulk water in a large container.' },
+  { question: 'Should I bring water purification tablets as a backup?', answer: 'Absolutely. Tablets are an essential backup because they handle what filters cannot: viruses. They also weigh virtually nothing and serve as a fail-safe if your filter gets damaged or clogged beyond repair. We recommend carrying both a filter straw for convenience and a pack of MSR Aquatabs for situations requiring virus protection or bulk water treatment.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Water Filters for Hiking & Backpacking', url: '/water-filters-for-hiking/', description: 'Ultralight water filtration picks for day hikes and thru-hikes.' },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'Our complete ranking of portable water filters for the outdoors.' },
+  { title: 'Best Water Filters for Emergency Preparedness', url: '/water-filters-for-emergencies/', description: 'Build a water purification kit for natural disasters and emergencies.' },
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'New to water filtration? Start here for a clear overview of every technology.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Whether you are car camping at an established site or setting up a remote backcountry base camp, access to clean water is the single most important element of any camping trip. We tested the top portable water filters to find the best options for every camping style and group size.</p>
+
+  <ProductImage alt="Water filters for camping trips" icon="camping" aspect="hero" />
+
+  <h2>Why Camping Demands Proper Water Filtration</h2>
+  <p>Natural water sources at campgrounds and in the backcountry carry risks that are invisible to the naked eye. Bacteria like E. coli and Campylobacter, protozoan parasites like Giardia and Cryptosporidium, and sediment from erosion all contaminate lakes, rivers, and streams. Even designated campgrounds with access to well water or spring water cannot guarantee the absence of pathogens.</p>
+  <p>The consequences of drinking untreated water range from mild stomach upset to weeks of debilitating gastrointestinal illness. Giardiasis alone affects an estimated 1 million Americans annually, with many cases traced to recreational water exposure. A compact, reliable water filter weighing just a few ounces eliminates this risk entirely.</p>
+  <p>Beyond health concerns, carrying enough bottled water for a multi-day camping trip is impractical. A single person needs a minimum of 2 liters per day for drinking alone, and more in hot weather. A lightweight filter straw rated for 1,500 liters replaces hundreds of plastic bottles and pays for itself after a single trip.</p>
+
+  <h2>What to Look For in a Camping Water Filter</h2>
+  <p>Choosing the right filter depends on your camping style. Here are the key criteria we evaluate:</p>
+  <ul>
+    <li><strong>Portability and weight:</strong> For backpacking and remote camping, every ounce counts. Filter straws weigh 2-3 ounces and fit in a pocket. Gravity systems are heavier but better for base camps.</li>
+    <li><strong>Filtration level:</strong> Look for 0.1-micron or finer filtration. This removes 99.9999% of bacteria and 99.99% of protozoa. For virus protection, add chemical purification tablets.</li>
+    <li><strong>Flow rate and convenience:</strong> Suction-based straws require you to drink directly. Squeeze-compatible straws can fill containers. Gravity filters are hands-free but slower.</li>
+    <li><strong>Capacity:</strong> Most filter straws handle 1,000-1,500 liters before replacement. For a weekend trip, any straw will last. For extended trips, capacity matters more.</li>
+    <li><strong>Group size:</strong> Solo campers need one straw. Families and groups benefit from multi-packs or gravity-feed setups that can fill communal water containers.</li>
+  </ul>
+
+  <ProTip title="Car Camping vs. Backpacking">
+    For car camping where weight is not an issue, bring a gravity-feed system like the NatureNova kit with its foldable water bag. You can fill a large container at camp and let gravity do the work. For backpacking, stick with ultralight filter straws — the Timain 2-pack at just 2.1 oz per straw is the lightest option we tested.
+  </ProTip>
+
+  <h2>Top Picks for Camping</h2>
+
+  <h3>1. {timain.name} — Best Budget Option</h3>
+  <p>At just ${timain.price} for two straws, the Timain is the most affordable way to guarantee safe drinking water on any camping trip. Each straw weighs only 2.1 ounces and features 4-stage filtration with a 0.1-micron ultrafiltration membrane. You can drink directly from a stream by suction or use it as a squeeze filter with a compatible water bottle.</p>
+  <p>The dual-use design is a real advantage at camp. When you want a quick drink at the creek, use it as a straw. When you need to fill a pot for cooking, attach it to a squeeze bag and filter into your container. The 1,500-liter capacity per straw means a pair will last an entire camping season for most people.</p>
+  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {membrane.name} — Best for Groups and Families</h3>
+  <p>When you are camping with family or a group of friends, the Membrane Solutions 4-pack ensures everyone has their own dedicated filter straw. At ${membrane.price} for four straws, it works out to under $10 per person — a small price for guaranteed water safety. The 0.1-micron hollow fiber membrane technology is the same proven filtration used in premium backpacking filters costing three times as much.</p>
+  <p>Each straw fits standard 28mm water bottles, which means you can thread it onto a disposable plastic bottle and use it as an on-the-go filtration system. This is especially convenient for kids who might struggle with direct suction from a creek. The 4.5-star rating across 8,500+ reviews gives us confidence in the quality consistency.</p>
+  <p><strong>Price:</strong> ${membrane.price} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {naturenova.name} — Best Complete Camping Kit</h3>
+  <p>The NatureNova stands out as the only filter straw package that comes ready to use in the field without any additional purchases. Each of the three straws includes a foldable water bag and a backwash syringe. The water bag enables gravity filtering — fill it at the river, hang it from a tree branch, and let filtered water drip into your camp container while you set up the tent.</p>
+  <p>The backwash syringe is a genuinely useful accessory that extends filter life. When flow rate drops after heavy use, a quick reverse flush clears accumulated sediment and restores performance. At ${naturenova.price} for the complete 3-pack kit, it is more expensive per straw than the Timain, but the included accessories make it a better out-of-the-box value for camping-specific use.</p>
+  <p><strong>Price:</strong> ${naturenova.price} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {aquatabs.name} — Essential Chemical Backup</h3>
+  <p>No camping water purification kit is complete without chemical tablets as a backup. MSR Aquatabs use NaDCC (sodium dichloroisocyanurate), an EPA-registered chlorine-based purifier that kills viruses, bacteria, and Giardia cysts in 30 minutes. Unlike iodine tablets, Aquatabs leave minimal taste and are safe for most users.</p>
+  <p>The critical advantage of tablets over filters is virus removal. Filter straws with 0.1-micron membranes physically cannot capture viruses, which are as small as 0.02 microns. In contaminated waters where viral threats exist, Aquatabs provide the protection that filters miss. At just ${aquatabs.price} for 30 tablets and weighing under an ounce, there is no good reason to leave camp without them.</p>
+  <p><strong>Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <ProTip title="The Filter + Tablet Combo">
+    We recommend carrying both a filter straw and Aquatabs on every camping trip. Use the filter straw for convenient, on-demand drinking from clear water sources. Use Aquatabs when you suspect viral contamination, when water is turbid (pre-filter sediment through a bandana first), or as a backup if your filter straw gets damaged. This two-layer approach covers every biological threat.
+  </ProTip>
+
+  <h2>Camping Water Filtration Tips</h2>
+  <p>Choosing the right filter is only half the equation. How you use it matters just as much:</p>
+  <ul>
+    <li><strong>Collect water from flowing sources:</strong> Moving water in streams and rivers is generally cleaner than stagnant ponds. Look for sources above campsites, not below them where contamination collects.</li>
+    <li><strong>Pre-filter turbid water:</strong> If water is visibly murky, strain it through a bandana or coffee filter before running it through your filter straw. This prevents premature clogging and extends filter life significantly.</li>
+    <li><strong>Keep your filter from freezing:</strong> In cold weather, sleep with your filter straw in your sleeping bag. Ice crystals can damage hollow fiber membranes, causing invisible cracks that let pathogens through. A compromised filter looks normal but offers no protection.</li>
+    <li><strong>Backwash regularly:</strong> If your filter supports backwashing (like the NatureNova kit), do it after every heavy-use day. Reversing the flow clears trapped sediment and restores flow rate.</li>
+    <li><strong>Dry filters before long-term storage:</strong> After your trip, remove the caps and let the filter air dry completely before storing. Damp filters stored in sealed bags can grow mold internally.</li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Camping</h2>
+  <p>For most campers, the <strong>{naturenova.name}</strong> offers the best combination of value, convenience, and field-readiness. The included water bag and backwash syringe mean you can set up a complete gravity-feed filtration system at camp without purchasing anything extra. For budget-conscious campers or those who just need a simple straw to toss in their pack, the <a href={`/reviews/${timain.slug}/`}>Timain 2-pack at ${timain.price}</a> is an unbeatable deal. And regardless of which filter you choose, always carry a pack of <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for virus protection and backup.</p>
+</ContentLayout>

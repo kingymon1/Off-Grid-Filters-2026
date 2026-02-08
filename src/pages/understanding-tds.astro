@@ -1,0 +1,176 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'understanding-tds')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'What is a good TDS level for drinking water?',
+    answer: 'The EPA sets a secondary (non-enforceable) guideline of 500 ppm for TDS in drinking water. The World Health Organization considers water below 300 ppm "excellent" and 300 to 600 ppm "good." Most municipal water falls between 100 and 400 ppm. However, low TDS does not automatically mean safe — and high TDS does not automatically mean dangerous. The specific dissolved substances matter more than the total number.',
+  },
+  {
+    question: 'Does a lower TDS number mean healthier water?',
+    answer: 'Not necessarily. TDS measures the total amount of dissolved substances, including beneficial minerals like calcium and magnesium. Water with a TDS of 200 ppm from natural mineral content is perfectly healthy, while water at 200 ppm from lead and industrial chemicals is not. TDS is a useful screening tool, not a health assessment. You need a water quality report or lab test to know what specific substances are in your water.',
+  },
+  {
+    question: 'How accurate are handheld TDS meters?',
+    answer: 'Consumer TDS meters are typically accurate to within 2% to 5% of the actual TDS value. They work well for monitoring RO system performance, comparing tap water vs filtered water, and detecting major changes in water quality. However, they cannot identify specific contaminants — a reading of 150 ppm tells you nothing about whether those dissolved solids are calcium, lead, or sodium. For identifying specific contaminants, you need a comprehensive lab test.',
+  },
+  {
+    question: 'Why does ZeroWater advertise 0 TDS?',
+    answer: 'ZeroWater uses a 5-stage ion exchange filtration process that strips virtually all dissolved solids from water, achieving near-zero TDS readings. While this is technically impressive, 0 TDS water can taste flat or slightly acidic because beneficial minerals have been removed. It is most useful for people with very high TDS source water or specific health concerns. For most households, a TDS of 20 to 50 ppm (typical RO output) provides excellent water without the flat taste.',
+  },
+  {
+    question: 'What TDS should I expect from a reverse osmosis system?',
+    answer: 'A well-functioning RO system should reduce TDS by 90% to 99%. If your tap water is 200 ppm, expect RO output of 2 to 20 ppm. If your input is 400 ppm, output should be 4 to 40 ppm. Systems with remineralization stages like the iSpring RCC7AK will read slightly higher (30 to 60 ppm) because they intentionally add minerals back. If your RO output exceeds 10% of your input TDS, the membrane likely needs replacement.',
+  },
+  {
+    question: 'Can TDS meters detect lead or PFAS?',
+    answer: 'TDS meters detect dissolved solids in aggregate but cannot identify specific substances. Lead and PFAS can contribute to TDS readings, but you cannot determine their presence or absence with a TDS meter. Even water reading 0 TDS could theoretically contain trace amounts of certain organic chemicals. For lead and PFAS detection, use a certified laboratory test ($30 to $200 depending on contaminants tested).',
+  },
+  {
+    question: 'Does boiling water reduce TDS?',
+    answer: 'No — boiling water actually increases TDS. When you boil water, pure water evaporates as steam while dissolved solids remain behind, concentrating them in the remaining water. Boiling is effective for killing bacteria and viruses but does not remove dissolved chemicals, minerals, or heavy metals. Reverse osmosis, distillation, and ion exchange are the primary technologies that reduce TDS.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'RO is the most effective technology for reducing TDS.' },
+  { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Which filter technologies reduce TDS and which do not.' },
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'Our top value RO system reduces TDS by 93-98%.' },
+  { title: 'ZeroWater Replacement Filter Review', url: '/reviews/zerowater-5stage-4pack/', description: 'The only pitcher filter that achieves 0 TDS.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">TDS — total dissolved solids — is one of the most commonly cited water quality metrics, but also one of the most misunderstood. A TDS reading tells you how much stuff is dissolved in your water, but not what that stuff is. Understanding TDS helps you evaluate water filter performance, but relying on it as the sole measure of water safety is a mistake we see too often.</p>
+
+  <ProductImage alt="Understanding total dissolved solids in water" icon="water" aspect="hero" />
+
+  <h2>What Are Total Dissolved Solids?</h2>
+  <p>Total dissolved solids (TDS) is a measurement of all inorganic and organic substances dissolved in water. These include minerals, salts, metals, cations (positively charged ions), and anions (negatively charged ions) that pass through a 2-micron filter.</p>
+  <p>TDS is measured in parts per million (ppm) or milligrams per liter (mg/L) — these units are effectively interchangeable for water. A TDS reading of 300 ppm means there are approximately 300 milligrams of dissolved substances per liter of water.</p>
+
+  <h3>Common Substances That Contribute to TDS:</h3>
+  <ul>
+    <li><strong>Beneficial minerals:</strong> Calcium, magnesium, potassium, sodium, bicarbonates — these are the minerals that give water its taste and provide trace nutrition.</li>
+    <li><strong>Harmless salts:</strong> Sodium chloride, calcium carbonate, and other naturally occurring salts from geological sources.</li>
+    <li><strong>Potentially harmful substances:</strong> Lead, arsenic, nitrates, fluoride (at high levels), hexavalent chromium — contaminants from industrial, agricultural, or plumbing sources.</li>
+    <li><strong>Organic compounds:</strong> Dissolved organic carbon from decomposing plant matter and agricultural runoff.</li>
+  </ul>
+  <p>This is why TDS alone does not tell you whether water is safe. Water with 250 ppm of calcium and magnesium from a natural spring is perfectly healthy. Water with 250 ppm dominated by lead, arsenic, and industrial chemicals is dangerous. The number is the same, but the composition is completely different.</p>
+
+  <h2>How to Measure TDS</h2>
+  <p>The most practical way to measure TDS at home is with a handheld TDS meter. These devices cost $10 to $20 and are widely available on Amazon. They work by measuring the electrical conductivity of water — dissolved ions conduct electricity, so higher conductivity indicates higher TDS.</p>
+
+  <h3>How TDS Meters Work:</h3>
+  <ol>
+    <li>The meter has two electrodes that contact the water sample.</li>
+    <li>A small electrical current is passed between the electrodes.</li>
+    <li>The meter measures how easily the current flows (conductivity).</li>
+    <li>A conversion factor (typically 0.5 to 0.7) translates conductivity to an estimated TDS reading in ppm.</li>
+  </ol>
+  <p>Important limitation: TDS meters measure ionic conductivity, not actual dissolved solids by weight. They cannot detect non-ionic substances (like certain organic chemicals and some PFAS compounds) because those substances do not conduct electricity. A TDS meter might read 0 ppm while organic contaminants are still present.</p>
+
+  <ProTip>When testing your water filter's performance, always measure both the input (tap water) and output (filtered water) TDS at the same time. The difference tells you the rejection rate. For example, if your tap reads 300 ppm and your RO output reads 15 ppm, that is a 95% rejection rate — within normal operating range for a healthy RO membrane.</ProTip>
+
+  <h2>TDS Ranges and What They Mean</h2>
+  <p>Here is a general framework for interpreting TDS readings, keeping in mind that the specific substances matter more than the total number:</p>
+
+  <h3>0 to 50 ppm: Very Low TDS</h3>
+  <p>Typical of RO-filtered water, distilled water, and rainwater. <a href="/reviews/zerowater-5stage-4pack/">ZeroWater filters</a> achieve near-0 TDS through ion exchange. Water at this range may taste flat because minerals that contribute to taste have been removed. Some RO systems add minerals back through a remineralization stage to reach 30 to 60 ppm.</p>
+
+  <h3>50 to 170 ppm: Low to Moderate TDS</h3>
+  <p>Common in areas with soft water or effective municipal treatment. Generally excellent drinking water. Many bottled water brands fall in this range. This is also the typical output of RO systems with remineralization.</p>
+
+  <h3>170 to 300 ppm: Moderate TDS</h3>
+  <p>The most common range for US municipal water. The World Health Organization classifies this as "excellent" to "good" quality. Most people find water in this range tastes fine. A basic carbon filter for chlorine taste improvement is usually sufficient at these levels.</p>
+
+  <h3>300 to 500 ppm: Elevated TDS</h3>
+  <p>Still within the EPA's secondary guideline of 500 ppm. Water may taste slightly mineral-heavy. Common in areas with hard water, limestone geology, or agricultural influence. At this level, an RO system provides noticeable improvement in taste and reduces dissolved contaminants.</p>
+
+  <h3>500+ ppm: High TDS</h3>
+  <p>Exceeds the EPA's recommended guideline. Water often has a noticeable mineral or salty taste. May cause scale buildup in pipes and appliances. An RO system or whole-house treatment is recommended. Well water in certain regions routinely exceeds 500 ppm.</p>
+
+  <h3>1,000+ ppm: Very High TDS</h3>
+  <p>The EPA classifies water above 1,000 ppm as unacceptable for drinking. Common in brackish groundwater and some well water sources. Requires reverse osmosis treatment before consumption.</p>
+
+  <h2>TDS and Water Safety: Common Misconceptions</h2>
+
+  <h3>Misconception 1: Low TDS = Safe Water</h3>
+  <p>A TDS meter cannot detect many dangerous contaminants. PFAS at harmful levels contribute negligibly to TDS readings. Bacteria and viruses are not measured by TDS. Even water reading 0 ppm could contain harmful organic compounds. TDS is useful but incomplete.</p>
+
+  <h3>Misconception 2: High TDS = Dangerous Water</h3>
+  <p>Water with 400 ppm of calcium and magnesium is perfectly safe — it is just hard water. Many natural mineral waters sold as premium products have TDS readings of 500 to 1,500+ ppm. The TDS level tells you something about the water but not everything.</p>
+
+  <h3>Misconception 3: 0 TDS Is Ideal</h3>
+  <p>Extremely low TDS water is not inherently better for health. The World Health Organization has noted that very low mineral content water may not be optimal for long-term consumption because you lose the trace mineral contribution from drinking water. Water at 30 to 150 ppm with natural mineral content is considered ideal by most health authorities.</p>
+
+  <ProTip title="Expert Tip">Your annual Consumer Confidence Report (CCR) from your water utility provides far more useful information than a TDS reading. It lists specific contaminants detected in your water and their levels. You can also search the Environmental Working Group's tap water database at ewg.org/tapwater for a more critical analysis of your local water quality.</ProTip>
+
+  <h2>Which Water Filters Reduce TDS?</h2>
+  <p>Not all water filters affect TDS. Here is how different technologies compare:</p>
+
+  <h3>Significant TDS Reduction (90%+):</h3>
+  <ul>
+    <li><strong>Reverse osmosis:</strong> 93% to 99% TDS reduction. The <a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> is independently tested at 93-98% TDS reduction.</li>
+    <li><strong>Distillation:</strong> 95%+ TDS reduction through evaporation and condensation.</li>
+    <li><strong>Ion exchange (deionization):</strong> <a href="/reviews/zerowater-5stage-4pack/">ZeroWater</a> uses 5-stage ion exchange to reach 0 TDS.</li>
+  </ul>
+
+  <h3>Minimal TDS Reduction (0-15%):</h3>
+  <ul>
+    <li><strong>Activated carbon (pitcher filters):</strong> <a href="/reviews/brita-standard-3pack/">Brita</a>, <a href="/reviews/pur-pitcher-filter-4pack/">PUR</a>, and similar filters remove chlorine and some organic compounds but do not significantly reduce TDS.</li>
+    <li><strong>Carbon block (refrigerator filters):</strong> <a href="/reviews/ge-xwfe/">GE XWFE</a>, <a href="/reviews/everydrop-filter-1-edr1rxd1/">everydrop</a>, and similar filters target specific contaminants but leave most dissolved minerals intact.</li>
+    <li><strong>Sediment filters:</strong> Remove particles but have zero effect on dissolved solids.</li>
+    <li><strong>UV purification:</strong> Kills bacteria and viruses but does not affect TDS at all.</li>
+  </ul>
+
+  <h2>Using TDS to Monitor Filter Performance</h2>
+  <p>Where TDS meters truly shine is monitoring RO system performance over time. Here is how to use TDS readings effectively:</p>
+  <ol>
+    <li><strong>Baseline your tap water:</strong> Measure your unfiltered tap water TDS. This is your reference point. It may fluctuate seasonally by 10% to 20%.</li>
+    <li><strong>Measure RO output when new:</strong> Record the TDS of your RO-filtered water when the membrane is new. This is your "best case" number.</li>
+    <li><strong>Monitor monthly:</strong> Test your RO output TDS once a month. A gradual increase is normal over the membrane's 2 to 3 year life.</li>
+    <li><strong>Replace when output exceeds 10% of input:</strong> If your tap is 250 ppm and your RO output creeps above 25 ppm, the membrane is losing effectiveness and should be replaced.</li>
+    <li><strong>Check after filter changes:</strong> Always test TDS after replacing pre-filters or the membrane to confirm the system is working correctly.</li>
+  </ol>
+
+  <h2>TDS in Well Water vs. Municipal Water</h2>
+  <p>Well water and municipal water have fundamentally different TDS profiles:</p>
+  <p><strong>Municipal water</strong> typically ranges from 100 to 400 ppm. Treatment plants control TDS to some extent, and the EPA's secondary guideline of 500 ppm provides a soft cap. TDS is relatively consistent throughout the year.</p>
+  <p><strong>Well water</strong> TDS varies enormously by geology and location — from under 100 ppm in some areas to over 2,000 ppm in others. TDS can change seasonally based on rainfall, drought, and aquifer conditions. Well water with high TDS often contains elevated levels of minerals like iron, manganese, calcium, and sometimes problematic contaminants like arsenic or nitrates. If you are on well water, a comprehensive lab test (not just TDS) is essential before choosing a filtration system.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

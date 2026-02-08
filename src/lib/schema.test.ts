@@ -7,6 +7,7 @@ import {
   generateProductSchema,
   generateOrganizationSchema,
   generateWebSiteSchema,
+  generateItemListSchema,
   combineSchemas,
   createPageSchema,
   SITE_URL,
@@ -132,14 +133,61 @@ describe('generateHowToSchema', () => {
 });
 
 describe('generateProductSchema', () => {
-  it('generates valid Product schema', () => {
+  it('generates valid Product schema without product argument', () => {
     const result = generateProductSchema();
 
     expect(result['@type']).toBe('Product');
     expect(result.brand['@type']).toBe('Brand');
-    expect(result.offers['@type']).toBe('Offer');
-    expect(result.offers.priceCurrency).toBe('USD');
     expect(result.aggregateRating['@type']).toBe('AggregateRating');
+  });
+
+  it('generates valid Product schema with a product argument', () => {
+    const product = {
+      name: 'Test Filter',
+      slug: 'test-filter',
+      brand: 'TestBrand',
+      asin: 'B000TEST',
+      price: '49.99',
+      category: 'countertop-filters',
+      categoryName: 'Countertop Filters',
+      notes: '',
+      rating: '4.5',
+      reviewCount: '100',
+      bestFor: 'Testing',
+      pros: ['Good'],
+      cons: ['Bad'],
+      verdict: 'A test product.',
+      specs: {},
+      publishDate: '2026-02-11',
+    };
+
+    const result = generateProductSchema(product);
+
+    expect(result['@type']).toBe('Product');
+    expect(result.name).toBe('Test Filter');
+    expect(result.brand.name).toBe('TestBrand');
+    expect(result.offers['@type']).toBe('Offer');
+    expect(result.offers.price).toBe('49.99');
+    expect(result.offers.priceCurrency).toBe('USD');
+    expect(result.aggregateRating.ratingValue).toBe('4.5');
+    expect(result.aggregateRating.reviewCount).toBe('100');
+  });
+});
+
+describe('generateItemListSchema', () => {
+  it('generates valid ItemList schema', () => {
+    const items = [
+      { name: 'Item 1', url: `${SITE_URL}/item-1/` },
+      { name: 'Item 2', url: `${SITE_URL}/item-2/` },
+    ];
+
+    const result = generateItemListSchema(items);
+
+    expect(result['@type']).toBe('ItemList');
+    expect(result.itemListElement).toHaveLength(2);
+    expect(result.itemListElement[0].position).toBe(1);
+    expect(result.itemListElement[0].name).toBe('Item 1');
+    expect(result.itemListElement[1].position).toBe(2);
   });
 });
 

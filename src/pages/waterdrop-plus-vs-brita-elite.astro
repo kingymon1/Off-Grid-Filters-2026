@@ -1,0 +1,153 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'waterdrop-plus-vs-brita-elite')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Is the Waterdrop WD-PF-01A Plus better than Brita Elite?', answer: 'It depends on your priorities. The Waterdrop Plus has a longer filter life (200 gallons vs 120), superior PFAS reduction with ACF technology, and a lower cost per gallon. The Brita Elite has stronger NSF certifications (42/53/401 vs 42/372), better lead reduction (99%), and compatibility with the massive Brita pitcher ecosystem. For PFAS concerns, Waterdrop wins. For certified lead removal and brand trust, Brita Elite wins.' },
+  { question: 'What is ACF technology in the Waterdrop Plus filter?', answer: 'ACF stands for Activated Carbon Fiber. Unlike traditional granulated or block activated carbon, ACF uses a fiber-based carbon medium that has higher surface area and better adsorption properties for certain contaminants, particularly PFAS, fluoride, and arsenic. This is what gives the Waterdrop Plus its advantage in PFAS and fluoride reduction over conventional carbon filters.' },
+  { question: 'Can I use Waterdrop Plus filters in a Brita pitcher?', answer: 'No. Waterdrop Plus filters are designed exclusively for Waterdrop pitchers and dispensers. They are not compatible with Brita pitchers. If you want to use Waterdrop filters, you need to purchase a Waterdrop pitcher as well.' },
+  { question: 'Does the Waterdrop Plus remove lead like the Brita Elite?', answer: 'The Waterdrop Plus is not specifically NSF 53 certified for lead reduction, which is a significant gap compared to the Brita Elite\'s 99% lead removal. The Waterdrop has NSF 42/372 (chlorine and lead-free materials), but this is not the same as certifying the filter removes lead from water. If lead in your water supply is a concern, the Brita Elite is the safer choice.' },
+  { question: 'Which filter is cheaper per gallon — Waterdrop Plus or Brita Elite?', answer: 'The Waterdrop Plus 3-pack at $33.99 provides 600 total gallons at $0.057/gallon. The Brita Elite 2-pack at $29.78 provides 240 total gallons at $0.12/gallon. The Waterdrop Plus is roughly half the per-gallon cost, making it one of the most economical pitcher filters available. However, you need to factor in the cost of a Waterdrop pitcher if you do not already own one.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `Waterdrop WD-PF-01A Plus vs Brita Elite: Which Is Better?`,
+  description: `Waterdrop Plus vs Brita Elite replacement filter comparison. We compare PFAS reduction, filter life, cost per gallon, certifications, and overall value.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Pitcher & Dispenser Replacement Filters', url: '/best-replacement-filters/', description: 'Our expert picks for pitcher and dispenser replacement filters.' },
+  { title: 'PFAS in Drinking Water', url: '/pfas-in-drinking-water/', description: 'Forever chemicals explained and which filters remove them.' },
+];
+---
+
+<ContentLayout
+  title={`Waterdrop Plus vs Brita Elite: Which Pitcher Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`Waterdrop WD-PF-01A Plus vs Brita Elite filter comparison. We compare PFAS removal, filter life, certifications, and cost per gallon.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Waterdrop Plus vs Brita Elite"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Waterdrop Plus vs Brita Elite: Which Pitcher Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>Waterdrop Plus ($33.99/3-pack)</strong> offers exceptional long-term value with 200-gallon filter life, superior PFAS reduction, and the lowest cost per gallon ($0.057) in our catalog. The <strong>Brita Elite ($29.78/2-pack)</strong> has stronger NSF certifications (42/53/401), proven 99% lead reduction, and compatibility with the world's largest pitcher ecosystem. Choose Waterdrop for PFAS and value; choose Brita for lead protection and brand trust.</p>
+  </div>
+
+  <ProductImage alt="Waterdrop WD-PF-01A Plus vs Brita Elite filter comparison" icon="pitcher" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">The Waterdrop Plus is the hidden gem of the pitcher filter market, while the Brita Elite is the established premium choice. Each excels in different areas — this comparison breaks down where each one wins and who should buy which.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>PFAS &amp; Specialized Contaminant Removal</h3>
+  <p>The Waterdrop Plus uses ACF (Activated Carbon Fiber) technology specifically engineered for PFAS, PFOA, and PFOS removal. It also reduces fluoride and arsenic — two contaminants that most pitcher filters cannot touch. The Brita Elite removes 30+ contaminants including pharmaceuticals and pesticides, but does not specifically target PFAS or fluoride. For households with PFAS concerns, the Waterdrop Plus is the more targeted solution.</p>
+  <div class="winner-badge">Winner: Waterdrop Plus (PFAS, fluoride, arsenic)</div>
+
+  <h3>Lead Reduction &amp; NSF Certifications</h3>
+  <p>The Brita Elite carries NSF 42/53/401 — the premium triple certification covering chlorine, health contaminants (lead, cysts), and emerging contaminants (pharmaceuticals, pesticides). It reduces 99% of lead, which is critical for homes with older plumbing. The Waterdrop Plus has NSF 42/372 — covering chlorine taste/odor and lead-free materials, but the 372 certification means the filter itself is lead-free, not that it removes lead from water. This is an important distinction.</p>
+  <div class="winner-badge">Winner: Brita Elite (NSF 42/53/401, 99% lead removal)</div>
+
+  <h3>Filter Life &amp; Capacity</h3>
+  <p>The Waterdrop Plus delivers 200 gallons per filter — 67% more than the Brita Elite's 120 gallons. This translates to roughly 6 months of use per filter for both, but the Waterdrop Plus maintains performance longer in heavy-use households. With a 3-pack, the Waterdrop Plus provides 600 total gallons versus 240 for the Brita Elite 2-pack. Fewer replacements mean less hassle and less plastic waste.</p>
+  <div class="winner-badge">Winner: Waterdrop Plus (200 gal vs 120 gal per filter)</div>
+
+  <h3>Cost Per Gallon</h3>
+  <p>The Waterdrop Plus 3-pack at $33.99 for 600 total gallons costs just $0.057 per gallon — the lowest in our entire replacement filter catalog. The Brita Elite 2-pack at $29.78 for 240 gallons costs $0.12 per gallon. The Waterdrop Plus is more than half the per-gallon cost. Over a year filtering 3 gallons daily, the Waterdrop Plus costs roughly $62 versus $131 for Brita Elite — a $69 annual savings.</p>
+  <div class="winner-badge">Winner: Waterdrop Plus ($0.057/gal vs $0.12/gal)</div>
+
+  <h3>Brand Ecosystem &amp; Availability</h3>
+  <p>Brita is the world's most recognized pitcher filter brand. Brita pitchers are available everywhere, and the Elite filter fits all Brita pitchers (except Stream). With 38,000+ reviews, it is a proven quantity. The Waterdrop Plus requires a Waterdrop pitcher, which is a smaller ecosystem — less widely available and with fewer pitcher options (8,500 reviews). Switching to Waterdrop means committing to a less mainstream brand with a smaller retail presence.</p>
+  <div class="winner-badge">Winner: Brita Elite (massive ecosystem, 38K reviews)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>PFAS/PFOA/PFOS reduction is a priority for your household</li>
+        <li>You want fluoride or arsenic removal from a pitcher filter</li>
+        <li>You want the absolute lowest cost per gallon ($0.057)</li>
+        <li>You already own or are willing to buy a Waterdrop pitcher</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>Lead reduction is your top priority (99% certified)</li>
+        <li>You want the broadest NSF certification (42/53/401)</li>
+        <li>You already own a Brita pitcher and want a seamless upgrade</li>
+        <li>You prefer the reliability and availability of a mainstream brand</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

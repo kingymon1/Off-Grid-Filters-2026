@@ -4,7 +4,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://example.com', // UPDATE: Replace with your domain from product-brief.yaml,
+  site: 'https://offgridfilters.com',
   output: 'static',
   trailingSlash: 'always',
   integrations: [

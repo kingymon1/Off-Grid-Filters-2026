@@ -1,0 +1,93 @@
+# OffGrid Filters
+> Expert water filter reviews and buying guides for every need and budget.
+
+## About
+OffGrid Filters is an independent authority site dedicated to testing, comparing, and reviewing water filtration products. We cover everything from countertop RO systems to survival filter straws, helping readers find the right water filter for their home, outdoor adventures, or emergency preparedness needs.
+
+## Product Reviews
+- /reviews/bluevua-ro100ropot-uv/ — Bluevua RO100ROPOT-UV Countertop RO System
+- /reviews/bluevua-ro100ropot-lite-uv/ — Bluevua RO100ROPOT-Lite(UV) Countertop RO
+- /reviews/amazon-basics-10-cup-pitcher/ — Amazon Basics 10-Cup Water Filter Pitcher
+- /reviews/brita-ultramax-27-cup-dispenser/ — Brita UltraMax 27-Cup Dispenser
+- /reviews/pentair-everpure-h1200/ — Pentair Everpure H-1200 Cartridge Set
+- /reviews/pentair-everpure-h300/ — Pentair Everpure H-300 System
+- /reviews/ispring-rcc7ak/ — iSpring RCC7AK 6-Stage RO System
+- /reviews/waterdrop-g3p600/ — Waterdrop G3P600 Tankless RO System
+- /reviews/everydrop-filter-1-edr1rxd1/ — everydrop Filter 1 (EDR1RXD1)
+- /reviews/ge-xwfe/ — GE XWFE Refrigerator Filter
+- /reviews/ge-rpwfe/ — GE RPWFE Refrigerator Filter
+- /reviews/samsung-haf-qin/ — Samsung HAF-QIN/EXP Filter
+- /reviews/everydrop-filter-a-edrarxd1/ — everydrop Filter A (EDRARXD1)
+- /reviews/aquacrest-ukf8001-6pack/ — AQUACREST UKF8001 6-Pack
+- /reviews/amazon-basics-replacement-3pack/ — Amazon Basics Enhanced Filters 3-Pack
+- /reviews/brita-standard-3pack/ — Brita Standard Filters 3-Pack
+- /reviews/brita-standard-4pack/ — Brita Standard Filters 4-Pack
+- /reviews/brita-elite-2pack/ — Brita Elite Filters 2-Pack
+- /reviews/zerowater-5stage-4pack/ — ZeroWater 5-Stage 4-Pack
+- /reviews/zerowater-5stage-6pack/ — ZeroWater 5-Stage 6-Pack
+- /reviews/pur-pitcher-filter-4pack/ — PUR Pitcher Filter 4-Pack
+- /reviews/waterdrop-wd-pf01a-plus-3pack/ — Waterdrop WD-PF-01A Plus 3-Pack
+- /reviews/timain-filter-straw-2pack/ — Timain Filter Straw 2-Pack
+- /reviews/membrane-solutions-filter-straw-4pack/ — Membrane Solutions Straw 4-Pack
+- /reviews/naturenova-filter-straw-3pack/ — NatureNova Filter Straw 3-Pack
+- /reviews/msr-aquatabs-30pack/ — MSR Aquatabs 30-Pack
+- /reviews/membrane-solutions-sediment-6pack/ — Membrane Solutions Sediment 6-Pack
+- /reviews/universal-5micron-sediment-filter/ — Universal 5-Micron Sediment Filter
+- /reviews/elkay-51300c-watersentry-plus/ — Elkay 51300C WaterSentry Plus
+
+## Best Of / Roundups
+- /best-countertop-filters/ — Best Countertop & Pitcher Filters
+- /best-under-sink-filters/ — Best Under-Sink Filters
+- /best-refrigerator-filters/ — Best Refrigerator Filters
+- /best-replacement-filters/ — Best Pitcher & Dispenser Replacement Filters
+- /best-survival-filters/ — Best Survival & Portable Filters
+- /best-whole-house-filters/ — Best Whole House & Sediment Filters
+
+## Comparisons
+- /bluevua-ro100ropot-uv-vs-bluevua-ro100ropot-lite-uv/ — Bluevua UV vs Lite UV
+- /ispring-rcc7ak-vs-waterdrop-g3p600/ — iSpring RCC7AK vs Waterdrop G3P600
+- /pentair-everpure-h1200-vs-pentair-everpure-h300/ — Everpure H-1200 vs H-300
+- /bluevua-ro100ropot-uv-vs-ispring-rcc7ak/ — Bluevua UV vs iSpring RCC7AK
+- /ge-xwfe-vs-ge-rpwfe/ — GE XWFE vs RPWFE
+- /everydrop-filter-1-vs-ge-xwfe/ — everydrop Filter 1 vs GE XWFE
+- /samsung-haf-qin-vs-everydrop-filter-a/ — Samsung vs everydrop Filter A
+- /brita-standard-vs-brita-elite/ — Brita Standard vs Elite
+- /brita-elite-vs-zerowater/ — Brita Elite vs ZeroWater
+- /brita-standard-vs-pur/ — Brita Standard vs PUR
+- /zerowater-vs-pur/ — ZeroWater vs PUR
+- /waterdrop-plus-vs-brita-elite/ — Waterdrop Plus vs Brita Elite
+- /amazon-basics-vs-brita-standard/ — Amazon Basics vs Brita Standard
+- /timain-vs-membrane-solutions-straw/ — Timain vs Membrane Solutions Straw
+- /timain-vs-naturenova-straw/ — Timain vs NatureNova Straw
+
+## Guides
+- /guides/how-to-choose-water-filter/ — How to Choose a Water Filter
+- /guides/water-filtration-beginner-guide/ — Beginner Guide to Water Filtration
+- /guides/best-water-filters-under-50/ — Best Water Filters Under $50
+- /guides/water-filter-maintenance/ — Water Filter Maintenance Guide
+- /guides/water-filter-sizing-guide/ — Water Filter Sizing Guide
+- /guides/reverse-osmosis-vs-carbon-filters/ — RO vs Carbon Filters
+- /guides/water-filter-mistakes/ — Common Water Filter Mistakes
+- /guides/water-filter-cost-analysis/ — Water Filter Cost Analysis
+
+## Activity Guides
+- /water-filters-for-camping/ — Water Filters for Camping
+- /water-filters-for-hiking/ — Water Filters for Hiking & Backpacking
+- /water-filters-for-emergencies/ — Water Filters for Emergency Preparedness
+- /water-filters-for-well-water/ — Water Filters for Well Water
+- /water-filters-for-apartments/ — Water Filters for Apartments & Renters
+- /water-filters-for-rv/ — Water Filters for RV & Van Life
+- /water-filters-for-baby/ — Water Filters for Baby Formula
+- /water-filters-for-travel/ — Water Filters for Travel
+- /water-filters-for-off-grid/ — Water Filters for Off-Grid Living
+- /water-filters-for-hard-water/ — Water Filters for Hard Water
+
+## Knowledge Base
+- /what-is-reverse-osmosis/ — What Is Reverse Osmosis?
+- /nsf-certifications-explained/ — NSF Certifications Explained
+- /understanding-tds/ — Understanding TDS
+- /pfas-in-drinking-water/ — PFAS in Drinking Water
+- /lead-in-drinking-water/ — Lead in Drinking Water
+- /water-filter-types-explained/ — Water Filter Types Explained
+- /is-tap-water-safe/ — Is Tap Water Safe to Drink?
+- /history-of-water-filtration/ — History of Water Filtration

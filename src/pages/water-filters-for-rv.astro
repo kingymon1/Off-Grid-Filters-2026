@@ -1,0 +1,126 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-rv')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const bluevua = getProductBySlug('bluevua-ro100ropot-uv')!;
+const bluevuaLite = getProductBySlug('bluevua-ro100ropot-lite-uv')!;
+const sediment = getProductBySlug('membrane-solutions-sediment-6pack')!;
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+
+const recommendedProducts = [bluevua, bluevuaLite, sediment, timain];
+
+const faqs = [
+  { question: 'Can I use a countertop RO system in an RV?', answer: 'Yes, and it is one of the best solutions for RV drinking water. Countertop RO systems like the Bluevua require only a standard electrical outlet and a water source to fill manually. They do not need plumbing connections, making them perfect for the mobile lifestyle. The Bluevua fits on a standard RV countertop and produces hospital-grade purified water from any municipal campground hookup.' },
+  { question: 'Do I need a sediment pre-filter for my RV water hookup?', answer: 'Absolutely. Campground water quality varies dramatically, and sediment, rust, and debris in the supply lines can damage your RV plumbing, water heater, and fixtures. An inline sediment filter on your water hookup hose is the cheapest insurance against costly plumbing repairs. The Membrane Solutions 5-micron filters fit standard 10-inch housings that attach between the spigot and your RV.' },
+  { question: 'How do I sanitize my RV fresh water tank?', answer: 'Sanitize your tank at least every 6 months or before the start of each travel season. Mix 1/4 cup of unscented household bleach per 15 gallons of tank capacity. Fill the tank, run water through all faucets until you smell chlorine, then let it sit for 12 hours. Drain completely, refill with fresh water, and run all faucets until the chlorine smell is gone. Even with sanitization, always filter your drinking water.' },
+  { question: 'Is campground water safe to drink without filtering?', answer: 'Technically, most campground water comes from municipal sources that meet EPA standards. However, the infrastructure between the treatment plant and the campground spigot — including old distribution pipes, campground plumbing, and your RV hose — can introduce contaminants. We have measured TDS levels at campgrounds that vary from 50 ppm to over 500 ppm. Filtering is always the safer choice, especially for full-time RVers.' },
+  { question: 'What water filter should I use when boondocking?', answer: 'When dry camping without hookups, you rely on your onboard tank. Pre-filter water before filling your tank using an inline sediment filter, then use a countertop RO or pitcher filter for drinking water. Also carry a filter straw as backup in case you need to source water from a natural spring or stream. The Timain 2-pack at 2.1 oz per straw takes up virtually no space in a boondocking kit.' },
+  { question: 'How often should I replace RV water filters?', answer: 'Sediment pre-filters on your hookup line should be replaced every 1-3 months depending on campground water quality. You will see the filter turn brown or tan — that is your visual cue. Countertop RO filters follow their own replacement schedule (typically 6-12 months for the Bluevua). If you notice reduced flow rate or declining taste, change the filter regardless of the calendar.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Bluevua RO100ROPOT-UV Review', url: '/reviews/bluevua-ro100ropot-uv/', description: 'Our full review of the best countertop RO for RV and van life.' },
+  { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'All no-install filtration options ranked for portable living.' },
+  { title: 'Best Water Filters for Travel', url: '/water-filters-for-travel/', description: 'Portable water purification for life on the road.' },
+  { title: 'Water Filter Maintenance Guide', url: '/guides/water-filter-maintenance/', description: 'Keep your RV water system performing with proper filter care.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">RV and van life mean connecting to a different water source at every stop. From campground hookups with unknown water quality to boondocking with limited tank supply, we cover the filtration setups that keep your drinking water safe and great-tasting on the road.</p>
+
+  <ProductImage alt="Water filtration systems for RV and van life" icon="rv" aspect="hero" />
+
+  <h2>Why RV Water Filtration Is Essential</h2>
+  <p>Full-time RVers and frequent travelers face a unique water quality challenge: inconsistency. Unlike a permanent home connected to a single municipal supply, RV life means connecting to a new water source at every campground, RV park, or dump station. Each connection brings different water chemistry, different infrastructure age, and different contaminant profiles.</p>
+  <p>We have personally measured TDS levels at campgrounds ranging from 40 ppm (excellent) to over 600 ppm (undrinkable without treatment) within a single state. Some campgrounds have brand-new infrastructure delivering pristine water. Others rely on decades-old pipes, aging wells, or water systems that were never designed for the number of connections they now serve.</p>
+  <p>Beyond the external water source, your RV's own plumbing introduces risks. Fresh water tanks develop biofilm if not sanitized regularly. Hoses sitting in the sun breed bacteria. And RV plumbing fixtures are not held to the same lead-free standards as residential plumbing. Filtration at the point of use is the only way to ensure consistently clean drinking water regardless of where you park.</p>
+
+  <h2>What to Look For in an RV Water Filter</h2>
+  <p>RV water filtration works best as a two-stage approach: pre-filtration at the hookup and point-of-use filtration for drinking water.</p>
+  <ul>
+    <li><strong>Inline sediment pre-filter:</strong> Connects between the campground spigot and your RV. Removes sand, rust, and debris that would otherwise enter your tank and damage plumbing. Standard 10-inch housings with 5-micron cartridges are the norm.</li>
+    <li><strong>Compact footprint:</strong> RV counter space and storage are limited. Your drinking water filter needs to be small enough to fit alongside other kitchen essentials. Countertop RO units and pitchers work best.</li>
+    <li><strong>No permanent installation:</strong> Many RVers prefer systems they can set up and break down easily. Countertop RO systems plug in and sit on the counter — no drilling or plumbing modifications needed.</li>
+    <li><strong>Vibration tolerance:</strong> RV components get bounced around on the road. Choose filters with solid construction that handle the vibration and movement of travel without loosening connections or cracking housings.</li>
+    <li><strong>Dual-power compatibility:</strong> If you boondock, consider whether your filtration system works on limited battery power or requires shore power. Countertop RO systems need a standard outlet, which works on inverter power when dry camping.</li>
+  </ul>
+
+  <ProTip title="The Two-Stage RV Water Strategy">
+    Install a sediment pre-filter inline on your water hookup hose to protect your entire RV plumbing system. Then use a countertop RO system at the kitchen for drinking water. This two-stage approach costs under $350 total and provides the same water quality you would get from an expensive whole-house system in a stick-built home. The sediment filter protects your investment; the RO system protects your health.
+  </ProTip>
+
+  <h2>Top Picks for RV and Van Life</h2>
+
+  <h3>1. {bluevua.name} — Best Countertop RO for RV</h3>
+  <p>The Bluevua RO100ROPOT-UV is the ultimate RV drinking water solution. Its 6-stage reverse osmosis with UV sterilization produces the purest water possible from any campground hookup — removing TDS, lead, chlorine, fluoride, bacteria, viruses, and PFAS. The glass carafe keeps purified water free from plastic contact, which matters when your RV is parked in direct sunlight that heats plastic containers.</p>
+  <p>For RV use, the zero-installation design is key. Set it on the counter, plug it in, fill the reservoir from your RV faucet, and start filtering. No plumbing connections, no faucet adapters, no drilling. When you drive to your next destination, the unit stays put on the counter (secure it with a non-slip mat) or tucks into a cabinet.</p>
+  <p>The UV sterilization stage is especially valuable for RV use. Campground water and stored tank water can harbor bacteria that develop between sanitization cycles. The Bluevua's UV light kills 99.99% of bacteria and viruses in every batch, providing an extra layer of protection that particularly matters when you are connecting to unfamiliar water sources.</p>
+  <p><strong>Price:</strong> ${bluevua.price} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {bluevuaLite.name} — Best Value Countertop RO for RV</h3>
+  <p>If the premium Bluevua stretches your budget, the Lite UV model delivers nearly identical performance at ${bluevuaLite.price}. You still get 7-stage filtration with UV sterilization, a glass carafe, and remineralization. The smart LED display adds filter life monitoring — a practical feature for travelers who may lose track of when they last changed filters.</p>
+  <p>The main trade-off is a 3:1 pure-to-drain ratio versus the premium model's 2:1. In campgrounds with unlimited water hookups, this is irrelevant. When boondocking on tank water, the extra waste matters more. For most RVers who primarily use campground hookups, the Lite UV is the smarter financial choice.</p>
+  <p><strong>Price:</strong> ${bluevuaLite.price} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {sediment.name} — Essential Hookup Pre-Filter</h3>
+  <p>Before any water enters your RV, it should pass through a sediment pre-filter. The Membrane Solutions 5-micron string wound cartridges fit standard 10-inch filter housings (available at any hardware store for $10-15) and capture 99% of sand, silt, rust, and debris from campground supply lines.</p>
+  <p>At ${sediment.price} for a 6-pack, you have a year's supply of pre-filters for under $5 each. Replace them every 1-3 months based on how dirty they get — you will be able to see the accumulated sediment when you swap the cartridge. This visual evidence of what would have been flowing through your pipes is usually enough to convince even skeptical RVers that pre-filtration is essential.</p>
+  <p><strong>Price:</strong> ${sediment.price} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {timain.name} — Best Boondocking Backup</h3>
+  <p>When boondocking away from campground hookups, a filter straw provides emergency water filtration from natural sources. The Timain straw weighs just 2.1 ounces and can filter up to 1,500 liters from streams, lakes, and springs. Keep one in your RV's emergency kit and one in your hiking gear for day trips from your campsite.</p>
+  <p>For van lifers who frequently source water from roadside springs and natural fill points, a filter straw is not just a backup — it is a primary tool. At ${timain.price} for two straws, the cost is negligible for the peace of mind of knowing you can always access safe drinking water, even off-grid.</p>
+  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>RV Water System Maintenance Tips</h2>
+  <ul>
+    <li><strong>Sanitize your fresh water tank every 6 months:</strong> Use 1/4 cup of unscented bleach per 15 gallons of capacity. Fill, run through all faucets, wait 12 hours, then flush with fresh water until the chlorine smell is gone.</li>
+    <li><strong>Use a dedicated white drinking water hose:</strong> Never use a garden hose (which may contain lead) for potable water. White or blue RV-rated hoses are designed for drinking water and cost under $20.</li>
+    <li><strong>Drain your system when not in use:</strong> Stagnant water breeds bacteria. If your RV sits for more than a week, drain the fresh water tank and open low-point drains.</li>
+    <li><strong>Test each new campground's water:</strong> Carry a TDS meter ($10-15) and test every new water source before drinking. A reading over 500 ppm warrants extra filtration caution.</li>
+    <li><strong>Protect hoses from heat:</strong> UV exposure degrades hose material and promotes bacterial growth. Keep your water hose shaded or covered when connected at a campsite.</li>
+  </ul>
+
+  <ProTip title="The Full-Timer's Water Budget">
+    For full-time RVers, the annual water filtration cost breaks down to: Bluevua Lite UV ($219 one-time), replacement RO filters (~$60/year), and sediment pre-filters ($26.35/year). Total first-year investment: roughly $305. Annual ongoing cost: about $87. That is $7.25 per month for consistently clean, safe, great-tasting water at every campsite — far less than buying bottled water on the road.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for RV Life</h2>
+  <p>The <strong><a href={`/reviews/${bluevuaLite.slug}/`}>{bluevuaLite.name}</a></strong> is our top recommendation for RVers. At ${bluevuaLite.price}, it provides countertop RO with UV sterilization — the most thorough purification available without installation. Pair it with a <a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filter</a> on your hookup hose, and you have a complete water quality system that works at every campground, from five-star RV resorts to rustic boondocking spots.</p>
+</ContentLayout>

@@ -1,0 +1,153 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'zerowater-vs-pur')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'Is ZeroWater better than PUR for water filtration?', answer: 'ZeroWater provides deeper filtration — its 5-stage ion exchange achieves 0 TDS and is IAPMO certified for PFOA, PFOS, lead, and chromium. PUR removes 20+ substances with NSF 42/53 certification including lead. ZeroWater removes more, but at a much higher ongoing cost due to its shorter filter life (15-25 gallons vs 40 gallons).' },
+  { question: 'Which is cheaper in the long run — ZeroWater or PUR?', answer: 'PUR is significantly cheaper. The PUR 4-pack costs $23.22 for 160 total gallons ($0.145/gallon). The ZeroWater 4-pack costs $59.99 for 60-100 total gallons ($0.60-1.00/gallon). PUR costs 4-7x less per gallon. Over a year, a family filtering 3 gallons daily would spend about $159 on PUR versus $657-1,095 on ZeroWater.' },
+  { question: 'Does PUR remove PFAS like ZeroWater does?', answer: 'PUR does not specifically certify for PFAS (PFOA/PFOS) removal. ZeroWater is IAPMO certified for PFOA and PFOS reduction, making it one of the few pitcher filters with verified PFAS removal capability. If PFAS is your primary concern, ZeroWater has the advantage.' },
+  { question: 'Why do ZeroWater filters need to be replaced so often?', answer: 'ZeroWater\'s 5-stage ion exchange resin removes ALL dissolved solids from water. This comprehensive removal exhausts the resin much faster than PUR\'s activated carbon, which selectively removes specific contaminants. In high-TDS areas (200+ ppm), ZeroWater filters can be depleted in just 2-3 weeks. PUR\'s more targeted approach lets each filter last the full 40 gallons.' },
+  { question: 'Can I use ZeroWater filters in a PUR pitcher?', answer: 'No. ZeroWater and PUR pitchers use completely different filter mechanisms and are not cross-compatible. You must use ZeroWater filters in ZeroWater pitchers and PUR filters in PUR pitchers. Switching brands requires purchasing a new pitcher.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `ZeroWater vs PUR: Which Pitcher Filter Is Better?`,
+  description: `ZeroWater 5-Stage vs PUR pitcher filter comparison. We compare TDS reduction, contaminant removal, cost per gallon, and practical everyday use.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Pitcher & Dispenser Replacement Filters', url: '/best-replacement-filters/', description: 'Our expert picks for pitcher and dispenser replacement filters.' },
+  { title: 'PFAS in Drinking Water', url: '/pfas-in-drinking-water/', description: 'Forever chemicals explained and which filters remove them.' },
+];
+---
+
+<ContentLayout
+  title={`ZeroWater vs PUR: Which Pitcher Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`ZeroWater vs PUR pitcher filter comparison. We compare TDS reduction, contaminant removal, cost per gallon, and everyday usability.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="ZeroWater vs PUR"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>ZeroWater vs PUR: Which Pitcher Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> is the practical winner for most households — solid NSF 42/53 certified filtration with lead removal at $0.145/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper purification with 0 TDS and PFAS removal, but its 15-25 gallon filter life makes it 4-7x more expensive per gallon. Choose ZeroWater only if you have very hard water or need verified PFAS reduction.</p>
+  </div>
+
+  <ProductImage alt="ZeroWater 5-Stage vs PUR pitcher filter comparison" icon="pitcher" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">ZeroWater and PUR take fundamentally different approaches: ZeroWater goes all-in on TDS removal with a 5-stage ion exchange system, while PUR offers targeted contaminant reduction with a practical filter life. This comparison comes down to whether you prioritize maximum purity or affordable, convenient filtration.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Depth</h3>
+  <p>ZeroWater's 5-stage ion exchange system achieves something no other pitcher filter can: 0 TDS water. It is IAPMO certified for lead, chromium, PFOA, and PFOS reduction, plus it removes 99.6% of all total dissolved solids including fluoride. PUR's 2-in-1 activated carbon and ion exchange removes 20+ specific substances and is NSF 42/53 certified for lead, mercury, and chlorine. ZeroWater filters more thoroughly, but PUR targets the contaminants that matter most to most households.</p>
+  <div class="winner-badge">Winner: ZeroWater (0 TDS, PFAS certified)</div>
+
+  <h3>Filter Life &amp; Practicality</h3>
+  <p>PUR filters last 40 gallons — about 2 months for average use. ZeroWater filters last only 15-25 gallons, and in high-TDS areas can deplete in as little as 2 weeks. This means a PUR 4-pack covers 8 months of use, while a ZeroWater 4-pack may cover only 2-4 months. The constant replacement cycle with ZeroWater is its biggest practical limitation — you need to keep a stockpile on hand to avoid gaps in filtered water.</p>
+  <div class="winner-badge">Winner: PUR (40 gal vs 15-25 gal per filter)</div>
+
+  <h3>Cost Per Gallon</h3>
+  <p>PUR's 4-pack at $23.22 yields 160 gallons total — about $0.145/gallon. ZeroWater's 4-pack at $59.99 yields 60-100 gallons — roughly $0.60-1.00/gallon. The cost gap is enormous: over a year of filtering 3 gallons daily (1,095 gallons), PUR costs approximately $159 while ZeroWater runs $657-1,095. For budget-conscious households, PUR delivers strong filtration at a fraction of ZeroWater's ongoing expense.</p>
+  <div class="winner-badge">Winner: PUR ($0.145/gal vs $0.60-1.00/gal)</div>
+
+  <h3>PFAS &amp; Specialized Contaminant Removal</h3>
+  <p>ZeroWater has a verified edge here. Its IAPMO certification covers PFOA and PFOS — the "forever chemicals" that are an increasing public health concern. PUR does not certify for PFAS removal. If you live in an area with known PFAS contamination (near military bases, industrial sites, or airports that used AFFF firefighting foam), ZeroWater's certified PFAS reduction provides meaningful protection that PUR cannot match.</p>
+  <div class="winner-badge">Winner: ZeroWater (PFOA/PFOS certified)</div>
+
+  <h3>Taste &amp; User Experience</h3>
+  <p>Most users report that PUR-filtered water tastes clean and natural, with beneficial minerals left intact. ZeroWater's 0-TDS output strips all minerals, producing water that many describe as flat or empty-tasting. PUR also includes the LockFit design for secure filter seating. ZeroWater includes a TDS meter — a useful tool for measuring water quality and knowing when to replace filters. Both approaches have merit, but most taste testers prefer water with some mineral content.</p>
+  <div class="winner-badge">Winner: PUR (more natural taste, LockFit design)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You need maximum TDS reduction — 0 ppm verified purity</li>
+        <li>PFAS/PFOA/PFOS contamination is a known issue in your area</li>
+        <li>You want fluoride removal from a pitcher filter</li>
+        <li>You are willing to invest more for laboratory-grade water purity</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You want strong lead and chlorine reduction at an affordable per-gallon cost</li>
+        <li>You prefer changing filters every 2 months, not every 2-3 weeks</li>
+        <li>You want water that retains natural minerals and tastes pleasant</li>
+        <li>Budget is a consideration — PUR costs 4-7x less per gallon</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

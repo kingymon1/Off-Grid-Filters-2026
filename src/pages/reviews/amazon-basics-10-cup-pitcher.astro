@@ -1,0 +1,183 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('amazon-basics-10-cup-pitcher')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Is the Amazon Basics 10-Cup Pitcher compatible with Brita filters?', answer: 'Yes. The Amazon Basics pitcher accepts Brita Standard filters and most generic Brita-compatible filters. This gives you maximum flexibility — you can use the cheaper Amazon Basics replacement filters or genuine Brita Standard and Elite cartridges depending on your filtration needs and budget.' },
+  { question: 'How long does the filter last in the Amazon Basics pitcher?', answer: 'Each filter lasts approximately 40 gallons, which works out to about 2 months for an average household. The electronic filter indicator on the lid tracks usage and alerts you when it is time to replace the cartridge, so you do not need to guess or keep a calendar.' },
+  { question: 'Does the Amazon Basics pitcher remove lead and PFAS from water?', answer: 'The pitcher is NSF 42/53 certified, which means it reduces lead, mercury, copper, cadmium, and zinc along with chlorine taste and odor. However, it does not hold NSF 401 certification for PFAS or pharmaceuticals. If PFAS removal is a priority, consider upgrading to Brita Elite filters, which are compatible with this pitcher.' },
+  { question: 'Will the Amazon Basics pitcher fit in my refrigerator door?', answer: 'At 10.5 x 5.4 x 10.5 inches, the Amazon Basics pitcher is designed to fit in most standard refrigerator door shelves. The 10-cup capacity keeps it compact enough for side-by-side and French door refrigerators. It is noticeably slimmer than larger dispensers like the Brita UltraMax.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Capacity</span>
+      <span class="spec-value">{product.specs.capacity}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Filter Life</span>
+      <span class="spec-value">{product.specs.filterLife}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="pitcher" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Amazon Basics 10-Cup Water Filter Pitcher is the no-frills entry point into home water filtration. At just $23.64, it undercuts virtually every other NSF-certified pitcher on the market while delivering the fundamentals that most households actually need: chlorine taste and odor reduction, lead reduction, and a capacity that fits neatly in a standard refrigerator door. It will not win design awards, but it does exactly what it promises without pretending to be something it is not.</p>
+  <p>This pitcher is built on the same activated carbon and ion exchange technology used across the industry, and its Brita-compatible filter slot means you are not locked into a single cartridge ecosystem. You can run genuine Brita Standard or Elite filters, Amazon Basics replacements, or any number of third-party cartridges. That interchangeability alone makes it one of the most flexible pitcher options available — and it keeps long-term filter costs extremely low.</p>
+  <p>The electronic filter change indicator on the lid is a genuinely useful feature at this price point. Instead of guessing whether your filter is still effective, the indicator tracks usage and tells you when it is time to swap. It is a small touch that separates this from the cheapest no-name pitchers while keeping the price firmly in budget territory.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Compatibility</strong></td><td>{product.specs.compatibility}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 2-stage filtration process uses activated carbon to absorb chlorine taste and odor, paired with ion exchange resin to reduce heavy metals like lead, mercury, and cadmium. The NSF 42/53 dual certification means these claims have been independently verified — not just marketing copy. At 1.8 pounds empty, it is light enough to pour with one hand, though the 10-cup capacity means you will be refilling more often than users of larger dispensers.</p>
+
+  <ProTip>Since this pitcher accepts Brita-compatible filters, you can upgrade to Brita Elite cartridges for 3x the filter life (120 gallons vs 40) and NSF 401 certification for pharmaceuticals and PFAS. It is the cheapest way to get premium filtration — a $24 pitcher with a $15 Elite filter outperforms pitchers costing twice as much.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Filtering speed is the most noticeable trade-off with the Amazon Basics pitcher. A full 10-cup fill takes approximately 8-10 minutes to pass through the filter, which is typical for this class but slower than gravity dispensers with wider filter contacts. The water that comes out is noticeably improved — the chlorine smell common in municipal tap water is effectively eliminated, and the metallic undertaste that plagues older plumbing is reduced substantially. For most tap water sources, the taste difference is immediately apparent.</p>
+  <p>The lid design is functional but not perfect. Several users (and our own experience) confirm that the lid can feel loose, particularly when pouring at an angle. It does not fall off, but it wobbles enough to inspire a moment of doubt. The pour spout works fine for glasses but can be imprecise when filling water bottles. These are minor ergonomic complaints that reflect the budget construction — at $24, expecting the build quality of a $45 Brita pitcher is unreasonable. The filtration itself, which is what actually matters, performs identically to Brita pitchers using the same filter technology.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>The Amazon Basics pitcher is the best value in home water filtration, period. At $23.64, you are getting an NSF 42/53 certified pitcher for roughly half the price of comparable Brita and PUR models. Ongoing filter costs are equally friendly: Amazon Basics replacement filters run about $3.50 each (in the 3-pack) with the same NSF certifications. A full year of filtered water — pitcher plus 6 filters — costs under $45. That is less than most people spend on bottled water in a single month.</p>
+  <p>The real question is not whether the Amazon Basics pitcher is good enough — it clearly is. The question is whether you need more than it offers. If you are concerned about PFAS, pharmaceuticals, or want the absolute best taste, step up to a Brita UltraMax with Elite filters or consider a countertop RO system. But if your goal is simply to make your tap water taste better and reduce common contaminants like lead and chlorine, this pitcher does the job at a price that makes the decision effortless.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

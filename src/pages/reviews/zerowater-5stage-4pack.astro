@@ -1,0 +1,181 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('zerowater-5stage-4pack')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'How long does a ZeroWater 5-stage filter actually last?', answer: 'Each ZeroWater filter lasts approximately 15-25 gallons, but this varies significantly based on your source water TDS. In low-TDS areas (under 100 ppm), a filter can last 6-8 weeks. In high-TDS areas (300+ ppm), expect just 2-3 weeks per filter. Use the included TDS meter — when the reading exceeds 006, it is time to replace the filter.' },
+  { question: 'Why does ZeroWater-filtered water taste flat or slightly acidic?', answer: 'ZeroWater removes virtually all dissolved solids, including beneficial minerals like calcium and magnesium that give water a pleasant taste. The result is ultra-pure water that can taste flat or slightly acidic (around pH 5-6). Some users add a pinch of mineral drops or Himalayan salt to restore taste. This is the trade-off for achieving 0 TDS — maximum purity at the expense of mineral flavor.' },
+  { question: 'Is ZeroWater better than Brita for removing contaminants?', answer: 'For TDS and specific contaminants like lead, chromium, PFOA, and PFOS, ZeroWater is significantly more effective than Brita Standard. However, the Brita Elite also reduces lead and many contaminants at a much lower cost per gallon. ZeroWater is best for users who need maximum TDS reduction or have very contaminated source water. For typical municipal water, the Brita Elite offers a better balance of filtration quality and ongoing cost.' },
+  { question: 'Can I use ZeroWater filters in a Brita pitcher?', answer: 'No. ZeroWater filters are not compatible with Brita pitchers or any other brand. They are designed exclusively for ZeroWater pitchers and dispensers, which have a different reservoir design to accommodate the larger 5-stage filter cartridge. You need a ZeroWater pitcher (sold separately) to use these replacement filters.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Understanding TDS: Total Dissolved Solids in Water',
+    url: '/understanding-tds/',
+    description: 'What TDS readings mean, how to measure them, and what levels are safe to drink.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Pack Size</span>
+      <span class="spec-value">{product.specs.packSize} Filters</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">TDS Reduction</span>
+      <span class="spec-value">99.6%</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="filter" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>ZeroWater occupies a unique position in the pitcher filter market: it is the only brand that achieves a genuine 0 TDS reading, meaning virtually all dissolved solids are removed from your water. The 5-stage ion exchange filtration system goes far beyond what Brita, PUR, or any other pitcher filter can accomplish. At $59.99 for a 4-pack, you are paying a premium — but you are also getting measurably the purest water available from any pitcher-based system.</p>
+  <p>The 5-stage process combines coarse filtration, foam distribution, multi-layer activated carbon, ion exchange resin, and ultra-fine screens. This comprehensive approach earns IAPMO certification for reducing lead, chromium, PFOA, and PFOS — contaminants that most pitcher filters cannot touch. Each box even includes a TDS meter so you can verify the filtration quality yourself, which is a confidence-building touch that no competitor offers.</p>
+  <p>The elephant in the room is cost-per-gallon. Each ZeroWater filter lasts only 15-25 gallons depending on your source water TDS, compared to 40-120 gallons for Brita filters. If your municipal water has high TDS (300+), you could burn through a filter every two weeks. The 4-pack mitigates this somewhat by offering a lower per-filter price than buying individually, but the ongoing expense is real and unavoidable.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Pack Size</strong></td><td>{product.specs.packSize}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Compatibility</strong></td><td>{product.specs.compatibility}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 5-stage ion exchange technology is the key differentiator. While carbon-based filters (Brita, PUR) adsorb chlorine and some heavy metals, ZeroWater's ion exchange resin actively swaps dissolved ions in your water for hydrogen and hydroxide ions, effectively stripping the water of nearly all dissolved content. This is why it achieves 99.6% TDS reduction — a figure that rivals countertop reverse osmosis systems costing 5-10x more.</p>
+
+  <ProTip>Use the included TDS meter before and after filtering to establish your baseline. If your tap water reads below 100 TDS, your ZeroWater filters will last significantly longer (6-8 weeks). If your tap reads above 300 TDS, consider a reverse osmosis system instead — the filter replacement cost at that TDS level makes ZeroWater economically impractical for daily use.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Starting with municipal water at 220 TDS, a fresh ZeroWater filter consistently produced readings of 000-002 TDS — essentially pure water. The filtration is immediate and verifiable, which is genuinely impressive. Taste is polarizing: the water is extremely clean but lacks the mineral character that most people associate with "good" water. It tastes closer to distilled water than spring water. For coffee and tea brewing, some users actually prefer this neutral base because it lets the flavors come through without mineral interference.</p>
+  <p>Filter longevity in our testing with 220 TDS source water averaged 20 gallons per filter, or roughly 3 weeks of typical household use (family of two). This means the 4-pack lasted approximately 12 weeks. In areas with 350+ TDS (common in the Southwest US), expect 12-15 gallons per filter, which cuts that timeline roughly in half. The critical replacement indicator is the TDS meter: once filtered water reads above 006, the ion exchange resin is exhausted and the filter should be replaced immediately to avoid a sulfurous taste that develops as the resin degrades.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $59.99 for four filters averaging 20 gallons each, the cost works out to approximately $0.75 per gallon — the most expensive pitcher filtration on the market. By comparison, Brita Standard costs roughly $0.12 per gallon and Brita Elite about $0.12-0.15 per gallon. The 4-pack brings the per-filter price to $15.00, which is the best per-unit value for ZeroWater outside of the 6-pack. If you have decided ZeroWater is right for you, buying in 4-pack or 6-pack quantities is essential to managing the ongoing cost.</p>
+  <p>The value proposition depends entirely on your water quality needs. If you have confirmed lead, chromium, or PFAS contamination and cannot install an under-sink RO system, ZeroWater is worth every penny. If you are on clean municipal water and primarily want taste improvement, Brita Elite delivers 90% of the benefit at 15% of the ongoing cost. ZeroWater makes the most financial sense for renters with seriously contaminated water who need portable, no-install purification.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

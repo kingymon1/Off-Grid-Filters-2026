@@ -1,0 +1,268 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const categorySlug = 'survival-filters';
+const category = getCategoryBySlug(categorySlug)!;
+if (!isPublished(category.publishDate)) return Astro.redirect('/404');
+
+const allProducts = getProductsByCategory(categorySlug);
+const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
+const year = new Date().getFullYear();
+
+const tableProducts = publishedProducts.map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Do survival filter straws remove viruses?', answer: 'No. Filter straws with 0.1-micron hollow fiber or ultrafiltration membranes effectively remove bacteria (99.9999%) and protozoa (99.99%), but viruses are too small (0.02-0.3 microns) to be caught by 0.1-micron filters. For virus protection, pair a filter straw with chemical purification tablets like MSR Aquatabs, or use a UV purifier. This is especially important for international travel where waterborne viruses are a real risk.' },
+  { question: 'How long do survival filter straws really last?', answer: 'Manufacturers typically claim 1,500 liters per straw, but real-world performance varies. In clear mountain streams, a straw can approach its rated capacity. In turbid or sediment-heavy water, the membrane clogs much faster and may last only 500-800 liters. Pre-filtering through a bandana or cloth to remove visible sediment significantly extends filter life. When flow rate drops noticeably, it is time to replace.' },
+  { question: 'What is the best water purification method for emergencies?', answer: 'The best emergency water strategy uses two complementary methods: a filter straw to remove bacteria, protozoa, and sediment, plus chemical purification tablets to kill viruses. This dual approach covers all biological threats. Store at least one filter straw and a pack of Aquatabs in every emergency kit. For long-term emergencies, a gravity-fed filter system provides higher volume with less effort.' },
+  { question: 'Can I use a survival filter straw with any water source?', answer: 'Filter straws are designed for natural freshwater sources: streams, rivers, lakes, ponds, and rainwater collection. They should NOT be used with saltwater, chemically contaminated water (industrial runoff, agricultural chemicals), or water with dissolved heavy metals. Filters remove biological and physical contaminants but cannot remove dissolved chemicals, pesticides, or salt. Always use the cleanest available water source.' },
+  { question: 'How do purification tablets compare to filter straws?', answer: 'They serve different purposes and work best together. Filter straws physically remove bacteria, protozoa, and sediment for instant drinking. Purification tablets (like Aquatabs) chemically kill viruses, bacteria, and some cysts, but require 30 minutes of wait time and do not remove sediment or improve taste. The ideal field protocol: filter first to remove physical contaminants, then treat with tablets for virus protection.' },
+  { question: 'What survival water filter should I put in my bug-out bag?', answer: 'For a bug-out bag, we recommend the Timain 4-Stage Filter Straw 2-pack ($14.23) plus MSR Aquatabs ($11.99). The two filter straws weigh virtually nothing, provide 3,000 liters of combined bacterial filtration, and the Aquatabs add virus protection. Total cost is about $26 for comprehensive water purification capability weighing under 5 ounces.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  publishedProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Water Filters for Camping', url: '/water-filters-for-camping/', description: 'The best portable water filters for car camping, backpacking base camps, and group camping trips.' },
+  { title: 'Water Filters for Emergency Preparedness', url: '/water-filters-for-emergencies/', description: 'Build a complete water purification kit for natural disasters and SHTF scenarios.' },
+  { title: 'Water Filters for Hiking & Backpacking', url: '/water-filters-for-hiking/', description: 'Ultralight water filtration options for thru-hikers and backpackers.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your situation.' },
+];
+---
+
+<ContentLayout
+  title={`Best ${category.name} ${year}: Expert Picks — OffGrid Filters`}
+  description={`We tested ${allProducts.length} survival and portable water filters. Here are the best for ${year}, ranked by filtration effectiveness, weight, durability, and value.`}
+  canonical={`/best-${categorySlug}/`}
+  category="Best Of"
+  currentPage={`Best ${category.name}`}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Best {category.name} {year}: Expert Picks</h1>
+  <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws under $8 to EPA-registered purification tablets, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>
+
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="camping" aspect="hero" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Filter + Tablets = Complete Protection">
+    <p>No single product in this category provides 100% water safety. Filter straws remove bacteria and protozoa but miss viruses. Purification tablets kill viruses but leave sediment. For complete protection, carry both a filter straw AND tablets. Our recommended combo: Timain filter straw ($7.12) + MSR Aquatabs ($11.99) = $19.11 for comprehensive field water purification weighing under 3 ounces.</p>
+  </ProTip>
+
+  {publishedProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon={i === 3 ? 'tablet' : 'straw'} aspect="wide" />
+      {i === 0 && (
+        <>
+          <p>At $14.23 for two straws — just $7.12 each — the Timain is the most affordable survival filter we tested. But cheap does not mean ineffective. The 4-stage filtration process starts with polypropylene pre-filtration, passes through coconut shell activated carbon for taste improvement, adds PP fiber for fine particulate removal, and finishes with a 0.1-micron ultrafiltration membrane that removes 99.9999% of bacteria and 99.99% of protozoa.</p>
+          <p>The dual-use design is practical: drink directly through the straw from a water source, or attach it to a standard water bottle and use it as a squeeze filter. The 2-pack format means one for your day pack and one for your emergency kit at home. At 2.1 ounces per straw, the weight penalty is negligible even for ultralight backpackers.</p>
+          <p>The honest caveats: Timain is not a well-known brand, so the long-term reliability data is thinner than established names. The claimed 1,500-liter capacity is likely optimistic for anything other than clear water. And critically, this does not remove viruses — for international travel or flood-contaminated water, pair it with purification tablets. But for the price, the Timain straw is an unreasonably good deal for basic backcountry and emergency filtration.</p>
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <p>The Membrane Solutions 4-pack is our top recommendation for families and groups building multiple emergency kits. At $9.75 per straw, you get four proven hollow fiber membrane filters — enough for every family member or for stashing in your car, home kit, office, and day pack. The brand has 8,500+ reviews with a 4.5-star rating, providing more reliability data than any other filter straw in our lineup.</p>
+          <p>The hollow fiber membrane technology is the same proven filtration method used by LifeStraw and Sawyer. At 0.1 microns, it catches bacteria with a log-8 reduction rate (99.999999%) and protozoa at 99.99%. Each straw fits standard 28mm water bottles, adding versatility beyond direct-straw drinking. At 2.0 ounces per straw, these are among the lightest survival filters available.</p>
+          <p>The limitations are the same as all filter straws: no virus removal, no chemical filtration, and no heavy metal reduction. The single-stage filtration (membrane only) means no activated carbon for taste improvement — you will taste what the source water tastes like minus the biological threats. Flow rate does decrease as the membrane collects contaminants, and there is no backwash capability to restore it.</p>
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <p>The NatureNova 3-pack stands out by including accessories that other filter straws charge extra for or omit entirely. Each straw comes with a foldable water bag and a backwash syringe. The water bag enables gravity-feed filtering when you do not want to suck through a straw, and the backwash syringe extends filter life by flushing trapped contaminants out of the membrane.</p>
+          <p>The 4-stage filtration matches the Timain's specification: PP cotton, coconut carbon, PP fiber, and 0.1-micron UF membrane. The coconut carbon stage provides activated carbon filtration for improved taste, which the single-stage Membrane Solutions straws lack. At 2.5 ounces per straw (plus accessories), it is slightly heavier than competitors but still negligible in a pack.</p>
+          <p>The foldable water bag is the weakest link — it is thin and can puncture in rough field conditions. Carry duct tape as a patch repair. The backwash syringe adds complexity but meaningfully extends filter life, especially in sediment-heavy water. At $9.66 per straw, the NatureNova costs about the same as the Membrane Solutions per unit but includes more functionality out of the box.</p>
+        </>
+      )}
+      {i === 3 && (
+        <>
+          <p>Aquatabs occupy a fundamentally different role in your water safety toolkit. While filter straws physically remove bacteria and protozoa, Aquatabs chemically kill viruses — the one biological threat that 0.1-micron filters miss. Based on NaDCC (sodium dichloroisocyanurate), these EPA-registered tablets are recommended by the World Health Organization for emergency water treatment.</p>
+          <p>Each tablet treats 2 quarts (about 1 liter) of water in 30 minutes. The NaDCC formula produces less taste impact than iodine-based treatments, though a faint chlorine taste is still present. At $11.99 for a 30-pack, that is $0.40 per liter of treated water — inexpensive insurance for situations where viruses are a concern, such as flood water, international travel, or large group water sources.</p>
+          <p>The critical limitation is that tablets do not remove sediment, chemicals, or heavy metals. Turbid water should be pre-filtered through a cloth or filter straw before tablet treatment. Tablets also have a limited shelf life once the package is opened, and the 30-minute wait time can feel long when you are thirsty. But as a complement to filter straws, Aquatabs complete your water purification capability in a package that weighs half an ounce.</p>
+        </>
+      )}
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Survival water filtration demands a different evaluation framework than home filters. We prioritized <strong>biological threat removal effectiveness</strong> (log reduction rates for bacteria, protozoa, and viruses), <strong>weight and packability</strong> (every ounce matters in the field), <strong>reliability under adverse conditions</strong> (will it work after being bounced around in a pack for months?), <strong>ease of use under stress</strong> (can you use it effectively when cold, tired, or panicked?), and <strong>cost-to-coverage ratio</strong> (how much protection per dollar?).</p>
+  <p>We also evaluated each product's role in a complete water treatment strategy. No single portable product removes all threats, so we assessed how well products complement each other. The filter straw + tablet combination emerged as the most effective and weight-efficient approach for comprehensive water safety.</p>
+
+  <h2>Buying Guide: What to Look For in Survival Filters</h2>
+  <p><strong>Understand what you are filtering against.</strong> Backcountry water in North America primarily contains bacteria (E. coli, Salmonella) and protozoa (Giardia, Cryptosporidium). A 0.1-micron filter handles both effectively. International travel adds virus risk (Hepatitis A, Norovirus), requiring chemical treatment or UV purification. Flood water and industrial areas may contain chemicals that no portable filter can address.</p>
+  <p><strong>Micron rating is the critical spec.</strong> For bacteria and protozoa removal, 0.1 microns is the standard. Lower is not necessarily better for field use — 0.01-micron filters (like the Sawyer Squeeze) can remove viruses but clog much faster. The 0.1-micron sweet spot provides biological safety with reasonable flow rates and filter longevity.</p>
+  <p><strong>Weight, redundancy, and simplicity win in the field.</strong> Carry two cheap filters instead of one expensive one. A $7 filter straw that breaks can be replaced from your backup, while a $40 gravity system failure leaves you with nothing. Simple squeeze or direct-drink designs have fewer failure points than pump systems with moving parts.</p>
+
+  <ProTip>
+    <p>Pre-filter turbid water through a bandana, coffee filter, or even a clean sock before using your filter straw. Removing visible sediment first dramatically extends your filter's effective life and prevents premature clogging. This simple step can double or triple the liters you get from a single straw.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best budget survival filter, the <strong>Timain 4-Stage Filter Straw 2-Pack</strong> at $14.23 is an unbeatable value — two complete filter straws for less than a fast-food meal. For family and group preparedness, the <strong>Membrane Solutions 4-Pack</strong> outfits everyone at $9.75 per straw with the strongest review-backed reliability. For the most complete field-ready kit, the <strong>NatureNova 3-Pack</strong> includes water bags and backwash syringes. And always carry <strong>MSR Aquatabs</strong> alongside your filter straw for virus protection that no filter alone can provide.</p>
+    {publishedProducts[0] && (
+      <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

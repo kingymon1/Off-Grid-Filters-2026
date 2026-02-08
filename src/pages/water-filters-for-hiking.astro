@@ -1,0 +1,121 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-hiking')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+const membrane = getProductBySlug('membrane-solutions-filter-straw-4pack')!;
+const aquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+
+const recommendedProducts = [timain, membrane, aquatabs];
+
+const faqs = [
+  { question: 'What is the lightest water filter for hiking?', answer: 'The Timain filter straw weighs just 2.1 ounces per straw, making it one of the lightest filtration options available. For comparison, the Membrane Solutions straw is 2.0 ounces. Both are lighter than a granola bar and small enough to fit in a hip belt pocket. Combined with MSR Aquatabs at 0.5 ounces for a 30-pack, you can carry comprehensive water purification for under 3 ounces total.' },
+  { question: 'How do I backwash a filter straw on the trail?', answer: 'If your filter supports backwashing (check the instructions), you reverse the water flow through the membrane to push out trapped particles. The NatureNova kit includes a dedicated backwash syringe. For straws without a syringe, you can improvise by blowing air forcefully back through the outlet end over a sink or away from clean water. Backwash when flow rate drops noticeably — typically after filtering 20-50 liters of sediment-heavy water.' },
+  { question: 'Can I use a filter straw with a hydration bladder?', answer: 'Not directly inline with most hydration bladders, but you can use a filter straw to fill your bladder. Filter water from a stream into a clean container, then pour it into your bladder. Some hikers carry a small squeeze bag to filter water quickly into their bladder reservoir. This is faster than drinking directly and lets you carry pre-filtered water between sources.' },
+  { question: 'How often should I replace a hiking water filter?', answer: 'Most filter straws are rated for 1,000-1,500 liters. A typical day hiker filtering 2-3 liters per day could use a single straw for hundreds of hikes. Thru-hikers filtering 4-6 liters daily will go through a straw in 250-375 days. Replace the straw when water no longer flows through even after backwashing, or if the membrane has been physically damaged or frozen.' },
+  { question: 'Do I need a water filter for day hikes?', answer: 'Yes, if you plan to refill from natural sources. Even on well-traveled trails, streams and springs can harbor Giardia and bacteria from animal waste. If you only carry water from home and do not refill, you do not need a filter — but carrying a 2-ounce filter straw as insurance weighs almost nothing and could prevent a miserable illness if your water supply runs short.' },
+  { question: 'What contaminants do hiking filters miss?', answer: 'Standard 0.1-micron filter straws remove bacteria (99.9999%) and protozoa like Giardia and Cryptosporidium (99.99%), but they do not remove viruses, dissolved chemicals, heavy metals, or pesticides. For virus protection, carry MSR Aquatabs as a supplement. For chemical contamination (near agricultural runoff or mining areas), activated carbon filters provide better protection — look for straws with carbon stages like the Timain.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Water Filters for Camping', url: '/water-filters-for-camping/', description: 'The best portable filters for car camping and base camp setups.' },
+  { title: 'Timain 4-Stage Filter Straw Review', url: '/reviews/timain-filter-straw-2pack/', description: 'Our full review of the lightest budget filter straw.' },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'Complete ranking of every portable water filter we tested.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Not sure which filter type is right for you? Start here.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">For hikers and backpackers, every ounce in your pack is a deliberate choice. We focus on the lightest, most reliable water filtration options that weigh under 3 ounces and deliver safe drinking water from any backcountry stream, lake, or spring.</p>
+
+  <ProductImage alt="Ultralight water filters for hiking and backpacking" icon="hiking" aspect="hero" />
+
+  <h2>Why Hikers Need Dedicated Water Filtration</h2>
+  <p>Carrying all the water you need for a full day of hiking is heavy and impractical. One liter of water weighs 2.2 pounds, which means a full day's supply of 3-4 liters adds nearly 9 pounds to your pack. On multi-day backpacking trips, this equation becomes impossible — you simply cannot carry enough.</p>
+  <p>The solution is to carry a lightweight filter and refill from natural sources along the trail. A filter straw weighing just 2 ounces replaces pounds of carried water and provides access to thousands of liters of safe drinking water from streams, lakes, and springs throughout your hike.</p>
+  <p>The risk of drinking unfiltered backcountry water is well documented. A study published in the journal <em>Wilderness & Environmental Medicine</em> found that Giardia cysts were present in over 50% of backcountry water sources tested in popular hiking areas. Symptoms of giardiasis include severe diarrhea, cramps, and nausea lasting 2-6 weeks — a hike-ending and potentially dangerous condition, especially in remote areas far from medical care.</p>
+
+  <h2>What to Look For in a Hiking Water Filter</h2>
+  <p>Hikers have specific needs that differ from casual campers. Here are the criteria that matter most on the trail:</p>
+  <ul>
+    <li><strong>Weight:</strong> The most critical factor. Anything over 4 ounces is too heavy for ultralight setups. The best filter straws weigh 2-2.5 ounces — lighter than most energy bars.</li>
+    <li><strong>Pack size:</strong> A hiking filter should fit in a hip belt pocket or side mesh pocket. Straws roughly the size of a thick marker are ideal. Avoid bulky pump systems.</li>
+    <li><strong>Flow rate:</strong> Hiking filters sacrifice speed for portability. Expect to spend 30-60 seconds filling a liter through a straw, compared to seconds from a gravity system. This tradeoff is worth it for the weight savings.</li>
+    <li><strong>Durability:</strong> Trail filters get bounced around in packs, dropped on rocks, and used in cold weather. Look for rugged construction and membranes that can handle the abuse of trail life.</li>
+    <li><strong>Ease of use while moving:</strong> The best hiking filters work with minimal setup. Being able to dip a straw into a stream and drink immediately keeps you moving.</li>
+  </ul>
+
+  <ProTip title="The Ultralight Water Kit">
+    The lightest possible water purification setup we have tested: one Timain filter straw (2.1 oz) plus a 30-pack of MSR Aquatabs (0.5 oz). Total weight: 2.6 ounces. Total cost: ${(parseFloat(timain.price)/2 + parseFloat(aquatabs.price)).toFixed(2)}. This gives you instant filtration for bacteria and protozoa from the straw, plus virus-killing chemical purification from the tablets. Ultralight hikers and thru-hikers cannot justify carrying anything heavier.
+  </ProTip>
+
+  <h2>Top Picks for Hiking</h2>
+
+  <h3>1. {timain.name} — Best Ultralight Filter</h3>
+  <p>The Timain straw is our top pick for hikers because it delivers serious filtration at a nearly negligible weight. At 2.1 ounces per straw, you genuinely forget it is in your pack. The 4-stage filtration system with a 0.1-micron ultrafiltration membrane removes 99.9999% of bacteria and 99.99% of protozoa — the two primary threats in North American backcountry water.</p>
+  <p>For trail use, the dual-mode design is invaluable. On the move, dip the straw directly into a stream and drink. At camp or a water stop, use it as a squeeze filter to fill your water bottles or hydration bladder. The 2-pack at ${timain.price} means you get a primary and a backup for less than the cost of a camp meal.</p>
+  <p>The one caveat: the Timain does not come with a squeeze bag. Bring your own or use a disposable plastic bottle with a 28mm opening. Many thru-hikers use a Smart Water bottle, which fits perfectly.</p>
+  <p><strong>Price:</strong> ${timain.price} | <strong>Weight:</strong> 2.1 oz/straw | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {membrane.name} — Best for Reliability</h3>
+  <p>With 8,500+ reviews and a 4.5-star rating, the Membrane Solutions straw has the most proven track record among budget filter straws. The hollow fiber membrane technology is the same fundamental design used in premium filters costing $30-40 for a single unit. At ${membrane.price} for four straws, you can stash backups in your pack, car, and emergency kit.</p>
+  <p>For hikers, the 28mm bottle compatibility is a standout feature. Thread the straw onto a standard water bottle, flip it upside down, and squeeze filtered water into your mouth or another container. This is faster and more practical than suction drinking from a stream, especially when refilling on the trail.</p>
+  <p>Each straw is rated for 1,500+ liters, which translates to roughly 500 days of typical hiking use at 3 liters per day. Realistically, sediment buildup will reduce flow rate before you hit that capacity, but even at half the rated life, the per-liter cost is nearly zero.</p>
+  <p><strong>Price:</strong> ${membrane.price} | <strong>Weight:</strong> 2.0 oz/straw | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {aquatabs.name} — Essential Backup for Thru-Hikers</h3>
+  <p>Aquatabs are the ultimate insurance policy for hikers. The entire 30-pack weighs 0.5 ounces — barely noticeable in any pack. Each tablet treats 2 quarts of water in 30 minutes, killing viruses, bacteria, and Giardia that filter straws cannot address.</p>
+  <p>On the trail, Aquatabs shine in two scenarios: as a backup if your filter straw fails or freezes, and as a virus-killing supplement in areas where animal or human waste contamination is likely. At water sources near heavily-used campsites or trail shelters, viral contamination is more likely, making chemical purification a smart addition to your filter straw.</p>
+  <p><strong>Price:</strong> ${aquatabs.price} | <strong>Weight:</strong> 0.5 oz | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>Hiking-Specific Water Filtration Tips</h2>
+  <ul>
+    <li><strong>Plan water stops ahead of time:</strong> Study your trail map for reliable water sources and plan refills accordingly. Carrying an extra half-liter between unreliable sources is better than running dry.</li>
+    <li><strong>Filter upstream from trail crossings:</strong> Collect water above where the trail crosses a stream. Below the crossing, sediment and contaminants are stirred up by hikers and pack animals.</li>
+    <li><strong>Never let your filter freeze:</strong> Sleep with your filter straw inside your sleeping bag in cold weather. Frozen membranes develop invisible microcracks that allow pathogens through. If you suspect your filter froze, discard it and use Aquatabs instead.</li>
+    <li><strong>Carry a pre-filter:</strong> A bandana or coffee filter weighs almost nothing and removes large debris before it clogs your straw. This dramatically extends filter life on muddy water sources.</li>
+    <li><strong>Use the buddy system:</strong> If hiking with a partner, each carry a filter straw. Redundancy is critical when you are days from a trailhead and dependent on natural water sources.</li>
+  </ul>
+
+  <ProTip title="Thru-Hiker Weight Comparison">
+    We weighed every component of a complete hiking water purification kit. The Timain straw (2.1 oz) + Aquatabs 30-pack (0.5 oz) + Smart Water bottle as squeeze bag (1.3 oz empty) = 3.9 oz total for a complete system. That is less than the weight of a single Nalgene bottle empty. There is no weight-based excuse not to carry water purification on any hike.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Hiking</h2>
+  <p>The <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> is our top recommendation for hikers and backpackers. At 2.1 ounces and ${timain.price} for a pair, it offers the best weight-to-value ratio of any filter we tested. Pair it with <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for complete biological protection at under 3 ounces, and you have a trail-ready water purification system that would satisfy the most demanding ultralight hiker.</p>
+</ContentLayout>

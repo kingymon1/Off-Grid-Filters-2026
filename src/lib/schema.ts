@@ -1,7 +1,8 @@
 // Schema.org structured data utilities for SEO and AI search
-// Product-agnostic — reads from config
+// Multi-product authority site — supports per-product schemas
 
 import { SITE_URL, SITE_NAME, siteConfig } from './config';
+import type { Product } from './config';
 
 export { SITE_URL, SITE_NAME };
 
@@ -115,23 +116,46 @@ export function generateHowToSchema(
   };
 }
 
-// Generate Product schema — reads from config
-export function generateProductSchema() {
+// Generate Product schema for a specific product
+export function generateProductSchema(product?: Product) {
+  if (!product) {
+    return {
+      "@type": "Product",
+      name: SITE_NAME,
+      description: siteConfig.productDescription,
+      brand: { "@type": "Brand", name: SITE_NAME },
+      image: `${SITE_URL}${siteConfig.seo.defaultOgImage}`,
+      offers: {
+        "@type": "Offer",
+        url: SITE_URL,
+        priceCurrency: 'USD',
+        availability: "https://schema.org/InStock",
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: siteConfig.socialProof.rating,
+        reviewCount: siteConfig.socialProof.reviewCount,
+        bestRating: "5",
+        worstRating: "1",
+      },
+    };
+  }
+
   return {
     "@type": "Product",
-    name: `${siteConfig.brand} ${siteConfig.product}`,
-    description: siteConfig.productDescription,
+    name: product.name,
+    description: product.verdict,
     brand: {
       "@type": "Brand",
-      name: siteConfig.brand,
+      name: product.brand,
     },
     image: `${SITE_URL}${siteConfig.seo.defaultOgImage}`,
-    sameAs: `https://www.amazon.com/dp/${siteConfig.amazonAsin}`,
+    sameAs: `https://www.amazon.com/dp/${product.asin}`,
     offers: {
       "@type": "Offer",
-      url: siteConfig.affiliateUrl,
-      price: siteConfig.productDetails.price,
-      priceCurrency: siteConfig.productDetails.currency,
+      url: `https://www.amazon.com/dp/${product.asin}?tag=${siteConfig.affiliateTag}`,
+      price: product.price,
+      priceCurrency: 'USD',
       priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
@@ -142,11 +166,24 @@ export function generateProductSchema() {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: siteConfig.socialProof.rating,
-      reviewCount: siteConfig.socialProof.reviewCount,
+      ratingValue: product.rating,
+      reviewCount: product.reviewCount,
       bestRating: "5",
       worstRating: "1",
     },
+  };
+}
+
+// Generate ItemList schema for roundup/list pages
+export function generateItemListSchema(items: Array<{ name: string; url: string; position?: number }>) {
+  return {
+    "@type": "ItemList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: item.position || index + 1,
+      name: item.name,
+      url: item.url,
+    })),
   };
 }
 
@@ -178,12 +215,12 @@ export function generateWebSiteSchema() {
   };
 }
 
-// Generate SportsActivityLocation schema
+// Generate Activity schema
 export function generateActivitySchema(activityName: string) {
   return {
     "@type": "SportsActivityLocation",
-    name: `${activityName}`,
-    description: `Use ${siteConfig.product} for ${activityName.toLowerCase()}.`,
+    name: activityName,
+    description: `Water filtration solutions for ${activityName.toLowerCase()}.`,
   };
 }
 
@@ -202,6 +239,7 @@ export function createPageSchema({
   url,
   faqs,
   breadcrumbs,
+  product,
   includeProduct = false,
   datePublished,
   dateModified,
@@ -211,6 +249,7 @@ export function createPageSchema({
   url: string;
   faqs?: FAQItem[];
   breadcrumbs?: BreadcrumbItem[];
+  product?: Product;
   includeProduct?: boolean;
   datePublished?: string;
   dateModified?: string;
@@ -234,7 +273,7 @@ export function createPageSchema({
   }
 
   if (includeProduct) {
-    schemas.push(generateProductSchema());
+    schemas.push(generateProductSchema(product));
   }
 
   return combineSchemas(...schemas);

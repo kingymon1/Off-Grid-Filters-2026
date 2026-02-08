@@ -1,0 +1,186 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filter-sizing-guide')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const amazonPitcher = products.find(p => p.slug === 'amazon-basics-10-cup-pitcher')!;
+const britaUltramax = products.find(p => p.slug === 'brita-ultramax-27-cup-dispenser')!;
+const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
+const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
+const bluevua = products.find(p => p.slug === 'bluevua-ro100ropot-uv')!;
+const membraneSediment = products.find(p => p.slug === 'membrane-solutions-sediment-6pack')!;
+
+const faqs = [
+  { question: 'How many gallons of water does a family of 4 use per day for drinking?', answer: 'A family of 4 typically uses 2-4 gallons per day for drinking and cooking. The USGS estimates about 0.5-1 gallon per person per day for direct consumption. If you include water for coffee, tea, cooking pasta, and filling pet bowls, 3-4 gallons daily is a reasonable planning number.' },
+  { question: 'Is a 10-cup pitcher big enough for two people?', answer: 'Yes, a 10-cup pitcher like the Amazon Basics model holds about 2.4 liters (0.63 gallons). For two people drinking the recommended amount, you would fill the pitcher 2-3 times per day. This is manageable, but if you find constant refilling annoying, step up to a larger dispenser.' },
+  { question: 'What GPD rating do I need for my under-sink RO system?', answer: 'GPD (gallons per day) measures the system\'s maximum production capacity. For a household of 1-4 people, 50-75 GPD is adequate — the iSpring RCC7AK at 75 GPD handles this comfortably with a storage tank. For larger families or high-demand use, the Waterdrop G3P600 at 600 GPD produces water on-demand without a tank.' },
+  { question: 'How do I calculate replacement filter cost per gallon?', answer: 'Divide the filter cost by its rated gallon capacity. For example, a Brita Standard filter ($6) rated at 40 gallons costs $0.15 per gallon. A Brita Elite ($14.89) rated at 120 gallons costs $0.12 per gallon. An iSpring RCC7AK pre-filter set (~$30) rated at roughly 1,500 gallons costs about $0.02 per gallon. The more expensive the system, the cheaper each gallon typically is.' },
+  { question: 'Do I need a different size filter for well water vs city water?', answer: 'Not necessarily a different size, but you will likely go through filters faster with well water because of higher sediment and mineral content. Well water users should add a whole-house sediment pre-filter to protect their drinking water filter, and plan for more frequent replacement cycles — roughly 30-50% more often than municipal water users.' },
+  { question: 'Can I use a pitcher filter for a household of 5 or more?', answer: 'Technically yes, but practically it becomes frustrating. A 27-cup dispenser like the Brita UltraMax would need refilling 4-5 times daily for a family of 5, and you would exhaust a 40-gallon filter in about 2-3 weeks instead of 2 months. At that point, an under-sink system is more practical and cost-effective.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/guides/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Our master buying guide covering all filter types and decisions.' },
+  { title: 'Water Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/', description: 'Beyond the purchase price — true cost of ownership for every filter type.' },
+  { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'Our ranked picks for the best no-install filters.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Our top-rated under-sink systems for permanent installation.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/guides/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Buying the wrong size water filter means either constant refilling and premature filter changes (too small) or wasted money on capacity you never use (too large). This guide helps you calculate exactly how much filtered water your household actually needs, then match that number to the right product category and model.</p>
+
+  <ProductImage alt="Water filter sizing and capacity guide" icon="water" aspect="hero" />
+
+  <h2>How Much Water Does Your Household Actually Use?</h2>
+  <p>The first step is understanding your actual consumption. We are talking about <strong>drinking and cooking water</strong> only — the water that passes through your filter. Showering, laundry, and toilet water do not go through point-of-use filters (that is whole-house territory).</p>
+
+  <h3>Per-Person Consumption Estimates</h3>
+  <p>The commonly cited guideline is 8 cups (0.5 gallons) of water per person per day, but real household usage is higher when you factor in:</p>
+  <ul>
+    <li><strong>Direct drinking:</strong> 0.5 gallons per person per day</li>
+    <li><strong>Coffee and tea:</strong> 0.1-0.25 gallons per coffee/tea drinker</li>
+    <li><strong>Cooking (pasta, rice, soups, steaming):</strong> 0.25-0.5 gallons per household per day</li>
+    <li><strong>Pet water bowls:</strong> 0.1-0.25 gallons per pet per day</li>
+    <li><strong>Baby formula preparation:</strong> 0.15-0.25 gallons per infant per day</li>
+  </ul>
+  <p><strong>Realistic planning number:</strong> 0.75-1 gallon per person per day. A family of four should plan for 3-4 gallons of filtered water daily.</p>
+
+  <ProTip>Track your actual water pitcher refills for one week before buying. Count how many times you fill a pitcher or water bottle. This real-world data is more accurate than any formula.</ProTip>
+
+  <h2>Sizing by Household: Quick Reference</h2>
+  <p>Based on our consumption estimates, here is how each household size maps to filter recommendations:</p>
+
+  <h3>1-2 People (1.5-2 Gallons/Day)</h3>
+  <p><strong>Monthly consumption:</strong> ~45-60 gallons</p>
+  <p><strong>Best filter type:</strong> Pitcher filter or countertop system</p>
+  <ul>
+    <li><a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher (${amazonPitcher.price})</a> — At 40-gallon filter capacity, you will replace filters roughly monthly. The 10-cup size is perfectly adequate for a couple.</li>
+    <li><a href="/reviews/bluevua-ro100ropot-lite-uv/">Bluevua RO100ROPOT-Lite UV ($219.00)</a> — If you want serious filtration without plumbing, the 0.75-gallon batch capacity handles a couple's needs with 2-3 batches per day.</li>
+  </ul>
+
+  <h3>3-4 People (2.5-4 Gallons/Day)</h3>
+  <p><strong>Monthly consumption:</strong> ~75-120 gallons</p>
+  <p><strong>Best filter type:</strong> Large dispenser, countertop RO, or under-sink system</p>
+  <ul>
+    <li><a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser (${britaUltramax.price})</a> — The 27-cup (6.3 liter) capacity means one fill covers most of a day's drinking water. With a Brita Standard filter (40-gallon capacity), you are replacing monthly. Upgrade to Elite filters (120 gallons) to replace just every 6 weeks.</li>
+    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK Under-Sink RO (${ispring.price})</a> — At 75 GPD capacity, a family of 4 uses less than 6% of the system's daily capacity. The tank refills continuously so filtered water is always ready.</li>
+  </ul>
+
+  <h3>5-6 People (4-6 Gallons/Day)</h3>
+  <p><strong>Monthly consumption:</strong> ~120-180 gallons</p>
+  <p><strong>Best filter type:</strong> Under-sink RO system. Pitcher filters become impractical at this scale.</p>
+  <ul>
+    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> — Still handles this load comfortably at 75 GPD with tank storage.</li>
+    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> — The 600 GPD tankless design delivers on-demand filtered water even during peak usage. No waiting for a tank to refill.</li>
+  </ul>
+
+  <h3>7+ People or High-Demand Use</h3>
+  <p><strong>Monthly consumption:</strong> 200+ gallons</p>
+  <p><strong>Best filter type:</strong> Tankless under-sink RO or commercial-grade under-sink system</p>
+  <ul>
+    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> — 600 GPD is overkill for most families, but perfect for large households or homes that host frequently.</li>
+    <li><a href="/reviews/pentair-everpure-h300/">Pentair Everpure H-300 ($505.00)</a> — Commercial-grade single cartridge system designed for continuous use.</li>
+  </ul>
+
+  <ProTip>If you are torn between sizes, go one size up. A slightly oversized filter costs marginally more upfront but reduces refill frequency and extends filter cartridge life — saving you money on replacements over time.</ProTip>
+
+  <h2>Pitcher Capacity Math: How Often Will You Refill?</h2>
+  <p>Pitchers and dispensers require manual refilling. Here is the math on daily refills based on household size:</p>
+  <ul>
+    <li><strong>Amazon Basics 10-Cup (2.4 liters / 0.63 gallons):</strong> 1-2 person household = 2-3 refills/day. 4-person household = 5-6 refills/day.</li>
+    <li><strong>Brita UltraMax 27-Cup (6.3 liters / 1.67 gallons):</strong> 1-2 person household = 1 refill/day. 4-person household = 2-3 refills/day.</li>
+  </ul>
+  <p>If refilling more than 3 times per day annoys you, step up to a larger dispenser or an under-sink system that provides unlimited on-demand water.</p>
+
+  <h2>GPD Ratings: What They Mean for Under-Sink Systems</h2>
+  <p>GPD stands for Gallons Per Day and measures the maximum water production rate of an RO system. Here is what the numbers actually mean in practice:</p>
+  <ul>
+    <li><strong>50 GPD:</strong> Produces about 2 gallons per hour. Sufficient for 1-3 people with a storage tank. The tank holds 2-3 gallons of ready-to-use water.</li>
+    <li><strong>75 GPD ({ispring.name}):</strong> Produces about 3 gallons per hour. Handles a typical family of 4-5 easily. The most common residential rating.</li>
+    <li><strong>100 GPD:</strong> Mid-range systems. Good for households of 4-6 or homes with moderate demand.</li>
+    <li><strong>400-600 GPD ({waterdrop.name}):</strong> Tankless on-demand systems. These produce water as fast as you draw it, eliminating wait times. The 600 GPD rating is effectively unlimited for any residential use.</li>
+  </ul>
+
+  <h2>Well Water vs Municipal Water: Sizing Adjustments</h2>
+  <p>If your home is on well water, standard sizing calculations need adjustment because well water typically contains more sediment, minerals, and potential contaminants than treated municipal water.</p>
+
+  <h3>Well Water Considerations</h3>
+  <ul>
+    <li><strong>Filter lifespan is shorter.</strong> Expect filters to last 30-50% less time than rated for municipal water. A 40-gallon pitcher filter may only last 25-30 gallons on well water.</li>
+    <li><strong>Pre-filtration is essential.</strong> A whole-house sediment filter like the <a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions 5-Micron String Wound (${membraneSediment.price} for 6-pack)</a> protects downstream filters from premature clogging.</li>
+    <li><strong>TDS is typically higher.</strong> Well water often has TDS readings of 200-500+ ppm versus 50-200 ppm for municipal water. RO membranes work harder and may need earlier replacement.</li>
+    <li><strong>Biological contamination risk is higher.</strong> Unlike municipal water, well water is not chlorinated. UV sterilization or chemical treatment may be needed in addition to filtration.</li>
+  </ul>
+
+  <h3>Municipal Water Considerations</h3>
+  <ul>
+    <li><strong>Chlorine is the primary concern.</strong> Any carbon filter handles chlorine taste and odor effectively.</li>
+    <li><strong>Lead risk depends on your plumbing.</strong> Homes built before 1986 may have lead pipes or solder. Get tested — if lead is detected, you need NSF 53 or NSF 58 certified filtration.</li>
+    <li><strong>Standard filter lifespans are accurate.</strong> Manufacturer ratings for filter lifespan are typically based on average municipal water quality.</li>
+  </ul>
+
+  <ProTip>Well water users should always have their water tested by a certified lab before choosing a filter system. The specific contaminants present determine whether you need basic sediment removal, carbon filtration, RO, or UV sterilization — or a combination.</ProTip>
+
+  <h2>Replacement Filter Cost by Household Size</h2>
+  <p>Bigger households use more water and go through filters faster. Here is what to expect in annual replacement filter costs:</p>
+
+  <h3>Pitcher Filters (Brita Standard)</h3>
+  <ul>
+    <li><strong>1-2 people:</strong> ~6 filters/year = ~$36/year</li>
+    <li><strong>3-4 people:</strong> ~10-12 filters/year = ~$60-$72/year</li>
+    <li><strong>5+ people:</strong> ~15-18 filters/year = ~$90-$108/year (at this point, switch to under-sink)</li>
+  </ul>
+
+  <h3>Under-Sink RO (iSpring RCC7AK)</h3>
+  <ul>
+    <li><strong>All household sizes:</strong> ~$40-$60/year for pre-filters + post-filters, plus ~$25 every 2-3 years for the RO membrane. Annual cost averages $50-$70 regardless of household size, because filter changes are time-based rather than volume-based at typical usage levels.</li>
+  </ul>
+  <p>This is why under-sink systems become the cost-effective choice as household size grows. The per-gallon cost drops dramatically at higher volumes.</p>
+
+  <h2>Our Recommendations by Household Size</h2>
+  <ul>
+    <li><strong>Solo or couple, budget-focused:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name} (${amazonPitcher.price})</a></li>
+    <li><strong>Family of 3-4, want convenience:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} (${britaUltramax.price})</a> with Elite filters</li>
+    <li><strong>Family of 3-4, want best filtration:</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name} (${ispring.price})</a></li>
+    <li><strong>Large family or high demand:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} (${waterdrop.price})</a></li>
+    <li><strong>Apartment or rental (any size):</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} (${bluevua.price})</a></li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Find Your Perfect Fit</h2>
+  <p>The right filter size saves you money and frustration. Use the calculations above to determine your actual daily usage, then pick a filter system that handles that demand comfortably. For full product comparisons, visit our <a href="/best-countertop-filters/">Best Countertop Filters</a> or <a href="/best-under-sink-filters/">Best Under-Sink Filters</a> roundups. And if you are still unsure where to start, our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a> walks through every decision step by step.</p>
+</ContentLayout>

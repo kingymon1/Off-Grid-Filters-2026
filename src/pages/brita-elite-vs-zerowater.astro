@@ -1,0 +1,154 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'brita-elite-vs-zerowater')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Is ZeroWater really better than Brita Elite for filtration?', answer: 'ZeroWater removes more total dissolved solids (TDS) — achieving 0 TDS, which Brita cannot match. However, Brita Elite removes 99% of lead and is NSF 42/53/401 certified for 30+ contaminants including pharmaceuticals. ZeroWater is IAPMO certified for lead, PFOA, PFOS, and chromium. Both are excellent, but ZeroWater goes further on TDS while Brita Elite has broader NSF certifications.' },
+  { question: 'Why do ZeroWater filters cost so much more per gallon than Brita Elite?', answer: 'ZeroWater\'s 5-stage ion exchange technology achieves 0 TDS but exhausts the filter resin much faster — each filter only lasts 15-25 gallons depending on your source water TDS, compared to 120 gallons for Brita Elite. In high-TDS areas, ZeroWater filters may last only 2-3 weeks. This rapid depletion drives the high per-gallon cost.' },
+  { question: 'Does ZeroWater remove fluoride?', answer: 'Yes. ZeroWater\'s 5-stage ion exchange process removes fluoride along with virtually all other dissolved solids. Brita Elite does not specifically target fluoride removal. If fluoride reduction is important to you, ZeroWater is one of the few pitcher filters that can accomplish this.' },
+  { question: 'Why does ZeroWater taste different from Brita Elite?', answer: 'ZeroWater removes ALL dissolved minerals, producing water with 0 TDS. Many people describe this as a flat, empty taste because the beneficial minerals that give water its character are stripped out. Brita Elite leaves some minerals intact, which most people find produces a more natural, pleasant taste. Taste preference is subjective — some people prefer ultra-pure, while others prefer mineral-balanced.' },
+  { question: 'Can I use ZeroWater filters in a Brita pitcher?', answer: 'No. ZeroWater and Brita use completely different filter designs and pitcher mechanisms. ZeroWater filters only work in ZeroWater pitchers and dispensers, and Brita filters only work in Brita products. The two systems are not cross-compatible.' },
+  { question: 'How do I know when to replace a ZeroWater filter?', answer: 'ZeroWater includes a TDS meter with their pitchers. When the TDS reading of filtered water reaches 006 or higher, it is time to replace the filter. This is more precise than Brita\'s time-based or gallon-based recommendation. The drawback is that in high-TDS areas (200+ ppm), you may need to replace filters every 2-3 weeks.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `Brita Elite vs ZeroWater: Which Filter Is Better?`,
+  description: `Brita Elite vs ZeroWater 5-Stage replacement filter comparison. We compare filtration depth, cost per gallon, filter life, taste, and overall value.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Pitcher & Dispenser Replacement Filters', url: '/best-replacement-filters/', description: 'Our expert picks for pitcher and dispenser replacement filters.' },
+  { title: 'Understanding TDS', url: '/understanding-tds/', description: 'What TDS readings mean and what levels are safe to drink.' },
+];
+---
+
+<ContentLayout
+  title={`Brita Elite vs ZeroWater: Which Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`Brita Elite vs ZeroWater 5-Stage filter comparison. We compare filtration depth, cost per gallon, filter life, taste, and value.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Brita Elite vs ZeroWater"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Brita Elite vs ZeroWater: Which Pitcher Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>Brita Elite ($29.78/2-pack)</strong> is the better choice for most households — it removes 99% of lead, lasts 120 gallons per filter, and costs about $0.12/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper TDS reduction (0 ppm) and removes fluoride, but filters deplete 5-8x faster and cost roughly $0.60-1.00/gallon. Choose ZeroWater only if you need maximum TDS reduction or fluoride removal.</p>
+  </div>
+
+  <ProductImage alt="Brita Elite vs ZeroWater 5-Stage filter comparison" icon="pitcher" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">Brita Elite and ZeroWater represent two philosophies: the Elite offers balanced, certified filtration at an economical per-gallon cost, while ZeroWater pursues laboratory-grade purity at the expense of filter life and ongoing costs. Both are significant upgrades over basic pitcher filters.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Depth</h3>
+  <p>ZeroWater achieves what no other pitcher filter can: 0 TDS water. Its 5-stage ion exchange system strips virtually every dissolved solid from water, including minerals, metals, salts, and chemicals. The Brita Elite removes 99% of lead and 30+ specific contaminants with NSF 42/53/401 certification, but does not achieve 0 TDS. For sheer filtration depth and measurable purity, ZeroWater is unmatched. However, many experts question whether 0 TDS is actually desirable for drinking water, since beneficial minerals are also removed.</p>
+  <div class="winner-badge">Winner: ZeroWater (0 TDS, deepest filtration)</div>
+
+  <h3>Filter Life &amp; Convenience</h3>
+  <p>This is where the Brita Elite dominates. Each Elite filter handles 120 gallons — lasting roughly 6 months for a typical household. Each ZeroWater filter manages only 15-25 gallons before the ion exchange resin is exhausted, lasting 2-8 weeks depending on source water TDS. In high-TDS areas (200+ ppm), ZeroWater filters can die in under 2 weeks. The constant filter replacement is ZeroWater's biggest practical drawback.</p>
+  <div class="winner-badge">Winner: Brita Elite (120 gal vs 15-25 gal per filter)</div>
+
+  <h3>Cost Per Gallon</h3>
+  <p>The Brita Elite 2-pack at $29.78 yields 240 total gallons — about $0.12/gallon. The ZeroWater 4-pack at $59.99 yields 60-100 total gallons at best — roughly $0.60-1.00/gallon. Even at the optimistic end, ZeroWater costs 5x more per gallon than Brita Elite. Over a year, a family filtering 3 gallons/day would spend roughly $131 on Brita Elite versus $657-1,095 on ZeroWater. That is a substantial difference.</p>
+  <div class="winner-badge">Winner: Brita Elite ($0.12/gal vs $0.60-1.00/gal)</div>
+
+  <h3>Certifications &amp; Testing</h3>
+  <p>The Brita Elite carries NSF 42/53/401 certification — the gold standard for independent testing, verified by NSF International. ZeroWater uses IAPMO certification for lead, chromium, PFOA, and PFOS. While both are legitimate certifications, NSF is more widely recognized and trusted in the water filtration industry. The Brita Elite's triple NSF certification covers a broader range of tested contaminants across three separate standards.</p>
+  <div class="winner-badge">Winner: Brita Elite (NSF 42/53/401)</div>
+
+  <h3>Taste</h3>
+  <p>Taste is subjective, but most users report that Brita Elite water tastes more natural and pleasant because it retains some beneficial minerals. ZeroWater's 0-TDS output can taste flat, empty, or slightly acidic to some palates. Some people genuinely prefer ultra-pure water, but blind taste tests generally favor water with some mineral content. If you are used to spring water or mineral water, the Brita Elite will taste more familiar.</p>
+  <div class="winner-badge">Winner: Brita Elite (more natural taste)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You want the best balance of filtration, cost, and convenience</li>
+        <li>You prefer changing filters every 6 months, not every few weeks</li>
+        <li>Lead reduction and NSF certification are your priorities</li>
+        <li>You prefer water with a natural mineral taste</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You need maximum TDS reduction — 0 ppm measured purity</li>
+        <li>You want fluoride removal (Brita does not remove fluoride)</li>
+        <li>You have specific PFOA/PFOS concerns and want verified removal</li>
+        <li>You are willing to pay significantly more per gallon for the purest water</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

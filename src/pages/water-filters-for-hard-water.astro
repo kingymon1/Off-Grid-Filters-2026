@@ -1,0 +1,134 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-hard-water')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const zerowater4 = getProductBySlug('zerowater-5stage-4pack')!;
+const zerowater6 = getProductBySlug('zerowater-5stage-6pack')!;
+const ispring = getProductBySlug('ispring-rcc7ak')!;
+const waterdrop = getProductBySlug('waterdrop-g3p600')!;
+const britaElite = getProductBySlug('brita-elite-2pack')!;
+
+const recommendedProducts = [zerowater4, ispring, waterdrop, britaElite];
+
+const faqs = [
+  { question: 'What TDS level is considered hard water?', answer: 'The EPA classifies water hardness by calcium carbonate concentration: soft (0-60 ppm), moderately hard (61-120 ppm), hard (121-180 ppm), and very hard (over 180 ppm). TDS meters measure all dissolved solids (not just hardness minerals), so TDS readings will be higher than hardness alone. As a general guide, TDS under 150 is considered good quality, 150-300 is acceptable, 300-500 is concerning, and over 500 typically needs treatment for palatability.' },
+  { question: 'Is hard water dangerous to drink?', answer: 'Hard water is generally not dangerous to drink. In fact, the calcium and magnesium in hard water can contribute to daily mineral intake. The World Health Organization notes that moderately hard water may have cardiovascular benefits. However, very hard water (TDS above 500) can taste unpleasant, and extremely hard water may cause digestive discomfort in some people. The primary problems with hard water are practical — scale buildup in pipes and appliances, soap scum, and dry skin/hair — rather than health-related.' },
+  { question: 'What is the difference between a water filter and a water softener?', answer: 'A water filter removes contaminants from water (sediment, chemicals, heavy metals, microorganisms). A water softener specifically addresses hardness minerals (calcium and magnesium) by replacing them with sodium or potassium ions through ion exchange. Most filters do not soften water, and softeners do not filter contaminants. For hard water, you may need both: a softener for whole-house scale prevention and a filter (like RO) for drinking water quality.' },
+  { question: 'Do ZeroWater filters work well with hard water?', answer: 'ZeroWater filters are extremely effective at removing TDS from hard water — they achieve 0 ppm readings even from very hard sources. However, hard water dramatically shortens ZeroWater filter life. A filter rated for 15-25 gallons in moderate water may last only 8-15 gallons in very hard water (TDS above 300). This increases the cost per gallon significantly. For very hard water, an RO system is more economical in the long run despite the higher upfront cost.' },
+  { question: 'Will reverse osmosis remove hardness from water?', answer: 'Yes. RO is one of the most effective methods for removing hardness minerals. The iSpring RCC7AK reduces TDS (including hardness) by 93-98%. However, RO only treats water at the point of use (your kitchen sink). It does not protect your whole house from scale buildup. For comprehensive hard water treatment, combine a whole-house water softener with an under-sink RO for drinking water.' },
+  { question: 'Can hard water damage my water filter?', answer: 'Yes. Hard water can clog and shorten the lifespan of all filter types. Scale deposits build up on filter media, reducing flow rate and effectiveness. RO membranes are particularly susceptible — scale buildup on the membrane reduces production and can cause permanent damage. This is why RO systems include pre-filter stages (sediment and carbon) to protect the membrane. In very hard water areas, more frequent pre-filter changes are essential.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Understanding TDS: Total Dissolved Solids in Water', url: '/understanding-tds/', description: 'What TDS readings mean and what levels are safe to drink.' },
+  { title: 'ZeroWater 5-Stage Filter Review', url: '/reviews/zerowater-5stage-4pack/', description: 'The only pitcher filter that achieves 0 TDS from hard water.' },
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'The best value RO system for hard water areas.' },
+  { title: 'Reverse Osmosis vs Carbon Filters', url: '/guides/reverse-osmosis-vs-carbon-filters/', description: 'Which technology handles hard water better and why.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Hard water affects an estimated 85% of American households, causing scale buildup, poor-tasting water, and frustrating white residue on fixtures. We test and recommend the filters that actually reduce TDS and hardness minerals for noticeably better water, from budget pitcher options to full reverse osmosis systems.</p>
+
+  <ProductImage alt="Water filtration solutions for hard water" icon="water" aspect="hero" />
+
+  <h2>Understanding Hard Water and Why It Matters</h2>
+  <p>Hard water contains elevated concentrations of dissolved minerals — primarily calcium and magnesium — picked up as groundwater passes through limestone, chalk, and dolomite formations. While not a health hazard (and potentially beneficial in moderate amounts), hard water creates practical problems that affect daily life:</p>
+  <ul>
+    <li><strong>Scale buildup:</strong> White, chalky deposits accumulate on faucets, showerheads, and inside pipes, water heaters, and appliances. Over time, scale reduces pipe diameter and appliance efficiency, increasing energy bills and shortening equipment lifespan.</li>
+    <li><strong>Poor taste:</strong> Water above 300 TDS often tastes mineral-heavy, chalky, or slightly metallic. Coffee and tea taste noticeably different (worse) made with hard water.</li>
+    <li><strong>Soap inefficiency:</strong> Hard water minerals react with soap, creating scum instead of suds. You use more soap, shampoo, and detergent, and dishes and laundry may not feel fully clean.</li>
+    <li><strong>Dry skin and hair:</strong> Hard water deposits mineral film on skin and hair, causing dryness, irritation, and dull-looking hair.</li>
+    <li><strong>Shortened filter life:</strong> Hard water clogs all filter types faster, increasing replacement costs. This is especially impactful for pitcher filters that have limited capacity.</li>
+  </ul>
+  <p>TDS (Total Dissolved Solids) is the most commonly used measure for hard water. A simple TDS meter ($10-15) gives you an instant reading in parts per million (ppm). Below 150 ppm is considered soft to moderately hard; above 300 ppm is hard; above 500 ppm is very hard and typically warrants treatment.</p>
+
+  <h2>What to Look For in a Hard Water Filter</h2>
+  <p>Treating hard water for drinking requires specific filtration technologies. Standard carbon filters and most pitcher filters do not remove hardness minerals. Here is what works:</p>
+  <ul>
+    <li><strong>Reverse osmosis:</strong> The most effective method for reducing TDS in drinking water. RO membranes reject 93-99% of dissolved minerals. The iSpring RCC7AK and Waterdrop G3P600 are our top RO picks for hard water.</li>
+    <li><strong>Ion exchange (ZeroWater):</strong> ZeroWater's 5-stage ion exchange process strips TDS to 0 ppm — the most complete mineral removal of any pitcher filter. The trade-off is dramatically shortened filter life in hard water.</li>
+    <li><strong>Water softeners (whole-house):</strong> Traditional salt-based softeners replace calcium and magnesium with sodium through ion exchange. They address the whole-house scale problem but add sodium to drinking water, which is why many people pair a softener with an RO system for drinking.</li>
+    <li><strong>Note on standard carbon filters:</strong> Brita Standard, Amazon Basics, and similar carbon/ion exchange pitcher filters do NOT significantly reduce hardness or TDS. They improve taste by removing chlorine but leave mineral content largely unchanged.</li>
+  </ul>
+
+  <ProTip title="Test Your Water Before You Buy">
+    Buy a TDS meter ($10-15 on Amazon) and test your tap water before purchasing a filter. If your TDS is under 200 ppm, a standard pitcher filter may be sufficient for taste improvement. Between 200-400 ppm, consider ZeroWater for small volumes or an RO system for higher usage. Above 400 ppm, reverse osmosis is the only cost-effective long-term solution — ZeroWater filters will last only 1-2 weeks at these levels, making the per-gallon cost prohibitive.
+  </ProTip>
+
+  <h2>Top Picks for Hard Water</h2>
+
+  <h3>1. {zerowater4.name} — Best Pitcher Filter for Hard Water</h3>
+  <p>ZeroWater is the only pitcher filter system that achieves 0 TDS — literally removing every dissolved mineral from your water. The 5-stage ion exchange process strips calcium, magnesium, lead, chromium, PFOA, PFOS, and essentially everything else dissolved in your water. The included TDS meter lets you verify the result with every pour.</p>
+  <p>For hard water users, the 0 TDS result is transformative. Coffee and tea taste dramatically different. The mineral film on glasses disappears. Water tastes ultra-clean and pure — though some people find the completely mineral-free taste a bit flat.</p>
+  <p>The caveat is filter life. ZeroWater filters are rated for 15-25 gallons in normal water, but hard water cuts that significantly. At TDS levels above 300, expect 8-15 gallons per filter. At ${zerowater4.price} for the 4-pack, the cost per gallon ranges from roughly $1 (in soft water) to $2+ (in very hard water). For small-volume drinking water in moderate hard water, ZeroWater delivers unmatched purity from a pitcher. For high-volume use in very hard water, RO is more economical.</p>
+  <p><strong>Price:</strong> ${zerowater4.price} (4-pack) | <a href={`/reviews/${zerowater4.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(zerowater4.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {ispring.name} — Best Value RO for Hard Water</h3>
+  <p>For households with hard water that want an economical long-term solution, the iSpring RCC7AK is the clear winner. Its 6-stage RO system reduces TDS by 93-98%, turning 400 ppm hard water into 8-28 ppm purified water. The dedicated sediment and carbon pre-filter stages protect the RO membrane from the scale deposits that hard water would otherwise cause.</p>
+  <p>The cost-per-gallon math heavily favors the iSpring over pitcher filters in hard water areas. At approximately $0.03-0.05 per gallon for RO water versus $1-2 per gallon for ZeroWater filters in hard water, the iSpring pays for itself within a few months of heavy use. The alkaline remineralization stage adds back a controlled amount of beneficial minerals, giving the water a pleasant, slightly mineralized taste rather than the flat profile of pure RO water.</p>
+  <p>One important consideration for very hard water: the pre-filters will need more frequent replacement. Plan to change the sediment and carbon pre-filters every 3-6 months instead of the standard 6-12 months. The RO membrane itself is protected by these pre-filters and should still last 2-3 years.</p>
+  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {waterdrop.name} — Best Premium RO for Hard Water</h3>
+  <p>The Waterdrop G3P600 excels in hard water environments thanks to its smart LED faucet with real-time TDS monitoring. You can see your water's TDS reading every time you fill a glass — instant verification that the RO membrane is performing correctly. When the reading starts to rise, you know it is time for maintenance before water quality degrades.</p>
+  <p>The 600 GPD production rate means faster water availability than the iSpring's 75 GPD tank system, and the tankless design eliminates the storage tank that can accumulate scale in hard water over time. The 2:1 pure-to-drain ratio also wastes less water than the iSpring's 1:3 ratio — a meaningful difference in areas where water is expensive or limited.</p>
+  <p>At ${waterdrop.price}, it is more than double the iSpring's price. For hard water users who want the convenience of tankless design, real-time monitoring, and superior water efficiency, the premium is warranted. For budget-conscious users, the iSpring delivers comparable water quality at a lower investment.</p>
+  <p><strong>Price:</strong> ${waterdrop.price} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {britaElite.name} — Best for Mildly Hard Water</h3>
+  <p>If your water is only mildly hard (TDS 150-250 ppm) and you do not need full TDS removal, the Brita Elite offers a practical middle ground. While it does not significantly reduce TDS, its 120-gallon capacity and NSF 42/53/401 certification address chlorine taste, lead (99% reduction), pharmaceuticals, and 30+ other contaminants. The longer filter life compared to ZeroWater means less frequent replacement in hard water areas.</p>
+  <p>The Brita Elite will not make hard water soft, but it will make it taste better by removing chlorine and organic taste compounds. For users whose primary concern is taste rather than scale prevention, this may be sufficient. At ${britaElite.price} for a 2-pack providing up to 240 gallons, the per-gallon cost is far lower than ZeroWater.</p>
+  <p><strong>Price:</strong> ${britaElite.price} (2-pack) | <a href={`/reviews/${britaElite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaElite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>Hard Water Filtration Tips</h2>
+  <ul>
+    <li><strong>Measure before buying:</strong> A $10-15 TDS meter pays for itself by directing you to the right solution. Do not buy an RO system if your TDS is only 120 ppm, and do not rely on a Brita Standard if your TDS is 400 ppm.</li>
+    <li><strong>Replace pre-filters more often:</strong> Hard water shortens the life of every filter stage. If your water is above 300 TDS, plan to replace pre-filters at roughly double the normal frequency to protect your RO membrane.</li>
+    <li><strong>Consider a softener + RO combo:</strong> For whole-house hard water treatment, a water softener addresses scale throughout your plumbing while an under-sink RO system provides mineral-free drinking water. The softener extends the life of the RO membrane and pre-filters.</li>
+    <li><strong>Clean your kettle and coffee maker monthly:</strong> Even with filtered water, small amounts of dissolved minerals accumulate over time. White vinegar descaling keeps your appliances performing well.</li>
+    <li><strong>Check your water heater annually:</strong> Hard water accelerates sediment buildup in water heaters. An annual flush extends the unit's lifespan and improves energy efficiency.</li>
+  </ul>
+
+  <ProTip title="The Hard Water Cost Calculator">
+    Here is how to calculate whether ZeroWater or RO is more economical for your hard water: Measure your TDS. Divide the ZeroWater rated capacity (20 gallons average) by your TDS ratio to 200 (baseline). If your TDS is 400, divide 20 by 2 = 10 gallons per filter. At $15 per filter and 10 gallons per filter, that is $1.50/gallon. The iSpring RCC7AK at roughly $0.04/gallon (including replacement filters) produces the same quality water at 1/37th the ongoing cost. For any household using more than 2 gallons per day in hard water, RO is the clear financial winner within the first year.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Hard Water</h2>
+  <p>For most hard water households, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at ${ispring.price} is the best long-term solution. It reduces TDS by 93-98%, produces water that tastes better than bottled, and costs a fraction of the per-gallon expense of pitcher filters in hard water. For renters or those who want a zero-installation option, the <a href={`/reviews/${zerowater4.slug}/`}>ZeroWater 4-pack</a> achieves the most complete mineral removal of any pitcher system — just be prepared for more frequent filter changes if your water is very hard.</p>
+</ContentLayout>

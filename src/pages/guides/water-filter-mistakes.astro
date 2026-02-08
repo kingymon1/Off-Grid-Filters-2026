@@ -1,0 +1,153 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filter-mistakes')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const amazonPitcher = products.find(p => p.slug === 'amazon-basics-10-cup-pitcher')!;
+const britaUltramax = products.find(p => p.slug === 'brita-ultramax-27-cup-dispenser')!;
+const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
+const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
+const britaElite = products.find(p => p.slug === 'brita-elite-2pack')!;
+const zeroWater = products.find(p => p.slug === 'zerowater-5stage-4pack')!;
+const timain = products.find(p => p.slug === 'timain-filter-straw-2pack')!;
+
+const faqs = [
+  { question: 'What is the most common mistake people make with water filters?', answer: 'Not replacing filters on time. This is the single most widespread error. A saturated filter stops removing contaminants and can harbor bacteria. Set a phone reminder for every filter change date, and buy replacement filters in advance so you are never caught without one.' },
+  { question: 'Is it bad to use a water filter past its expiration?', answer: 'Yes. An expired filter has exhausted its adsorption capacity — the activated carbon can no longer trap contaminants. In some cases, an overused filter can release previously captured substances back into the water. Slow flow rate and returning chlorine taste are signs your filter is past its effective life.' },
+  { question: 'Should I buy the most expensive water filter available?', answer: 'No. The best filter is the one matched to your water quality, not the most expensive one. If your municipal water only needs basic chlorine removal, a $24 Amazon Basics pitcher with NSF 42/53 certification does the job. You only need an expensive RO system if testing reveals contaminants like PFAS, high lead, or elevated TDS that carbon cannot handle.' },
+  { question: 'Can I trust marketing claims on water filters?', answer: 'Only trust claims backed by NSF certification. Any manufacturer can print "removes 99% of contaminants" on a box. NSF certification means an independent laboratory verified the claim. Always check for NSF 42 (taste), NSF 53 (health contaminants), NSF 58 (RO systems), or NSF 401 (emerging contaminants) before buying.' },
+  { question: 'Do I need a whole-house filter and a drinking water filter?', answer: 'For most municipal water homes, a drinking water filter at the kitchen tap is sufficient. Whole-house filters are mainly sediment pre-filters — useful for well water homes with sand, silt, or rust, but not necessary for clean municipal water. If you have well water, a two-stage approach (whole-house sediment plus point-of-use drinking water filter) is ideal.' },
+  { question: 'Is ZeroWater better because it removes more TDS?', answer: 'Not necessarily. ZeroWater removes 99.6% of TDS, but TDS includes beneficial minerals like calcium and magnesium. Removing all dissolved solids produces flat-tasting water and requires very frequent filter changes (every 2-4 weeks in high-TDS areas). For most people, a standard carbon filter or RO system with remineralization is a better balance of purity and practicality.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/guides/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Our comprehensive guide to making the right filter choice from the start.' },
+  { title: 'Water Filter Maintenance Guide', url: '/guides/water-filter-maintenance/', description: 'Keep your filter performing with proper maintenance practices.' },
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'New to filters? Start here for the fundamentals.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'Understanding the certifications that actually matter.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/guides/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">After reviewing 29 water filters and reading thousands of customer reviews, we see the same mistakes repeated over and over. Some waste money, some reduce filter effectiveness, and a few can actually make your water quality worse. Here are the eight most common water filter mistakes — and exactly how to avoid each one.</p>
+
+  <ProductImage alt="Common water filter mistakes to avoid" icon="shield" aspect="hero" />
+
+  <h2>Mistake #1: Not Testing Your Water Before Buying</h2>
+  <p><strong>The problem:</strong> Most people buy a water filter based on marketing, reviews, or a friend's recommendation without ever finding out what is actually in their water. This leads to two outcomes — buying a filter that does not address your real contaminants, or spending hundreds of dollars on RO when a $25 pitcher would have been fine.</p>
+  <p><strong>Real-world example:</strong> We regularly see reviews from people who bought expensive RO systems for municipal water that tested at 50 ppm TDS with no lead or PFAS. They spent $200-$400 when a $35 Brita dispenser would have achieved the same practical result for their water.</p>
+  <p><strong>The fix:</strong> Before buying anything, get your water quality data. If you are on municipal water, request your annual Consumer Confidence Report from your utility (it is free and often available online). For well water, spend $50-$150 on a certified lab test. The Environmental Working Group's Tap Water Database lets you search by ZIP code for a quick overview.</p>
+
+  <ProTip>Many municipal water utilities publish their CCR (Consumer Confidence Report) online as a downloadable PDF. Search "[your city] water quality report" to find it in under a minute. This free document tells you exactly what is in your water.</ProTip>
+
+  <h2>Mistake #2: Ignoring Filter Replacement Schedules</h2>
+  <p><strong>The problem:</strong> This is the single most damaging mistake in water filtration. An exhausted filter does not just stop filtering — it can become a health hazard. The warm, moist, carbon-rich environment inside a used-up filter is an ideal breeding ground for bacteria. Studies have found that water from overused filters can have higher bacterial counts than unfiltered tap water.</p>
+  <p><strong>The science:</strong> Activated carbon works through adsorption — contaminants bind to the carbon surface. But there are a limited number of binding sites. Once those sites are full, the carbon is saturated. Continuing to use it means contaminants pass straight through, and in some cases, previously captured contaminants can desorb (release back) into the water.</p>
+  <p><strong>The fix:</strong> Follow the manufacturer's replacement schedule as a baseline. Replace sooner if you notice slow flow or taste changes. Set a recurring phone reminder on the day you install each new filter.</p>
+  <ul>
+    <li>Brita Standard / PUR / Amazon Basics: Every 2 months (40 gallons)</li>
+    <li><a href={`/reviews/${britaElite.slug}/`}>Brita Elite</a>: Every 6 months (120 gallons)</li>
+    <li>Refrigerator filters: Every 6 months</li>
+    <li>Under-sink pre-filters: Every 6 months</li>
+    <li>RO membranes: Every 2-3 years</li>
+  </ul>
+
+  <h2>Mistake #3: Choosing Based on Price Alone</h2>
+  <p><strong>The problem:</strong> Both extremes cause issues. Buying the cheapest uncertified filter means you might not actually be filtering anything. But overspending on a premium system you do not need wastes money.</p>
+  <p><strong>Real-world example:</strong> We see two common traps. First, people buy $8-$10 unbranded pitcher filters from marketplace sellers with zero NSF certification — these have no verified filtration claims. Second, people spend $300+ on countertop RO when their municipal water is already clean and they just needed a $25 pitcher for taste improvement.</p>
+  <p><strong>The fix:</strong> Focus on NSF certification first, then compare prices among certified options. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher at ${amazonPitcher.price}</a> proves that excellent filtration does not require a premium price — it carries NSF 42/53 certification (chlorine, lead, mercury) at the lowest price in our catalog. Pay for the certifications you need, not the brand name.</p>
+
+  <h2>Mistake #4: Ignoring NSF Certifications</h2>
+  <p><strong>The problem:</strong> Marketing claims on water filter packaging are not regulated the way NSF certifications are. A filter can legally claim "removes contaminants" without specifying which ones or proving it. Only NSF (or equivalent IAPMO) certification means an independent lab has tested and verified the claim.</p>
+  <p><strong>What the certifications mean:</strong></p>
+  <ul>
+    <li><strong>NSF 42:</strong> Reduces aesthetic issues — chlorine taste, odor, clarity. Minimum standard for any filter.</li>
+    <li><strong>NSF 53:</strong> Reduces health-related contaminants — lead, cysts, VOCs. This matters for safety.</li>
+    <li><strong>NSF 58:</strong> Specific to RO systems — verifies TDS reduction rate.</li>
+    <li><strong>NSF 401:</strong> Reduces emerging contaminants — pharmaceuticals, pesticides, PFAS compounds.</li>
+    <li><strong>NSF 372:</strong> Lead-free materials — the filter itself does not leach lead.</li>
+  </ul>
+  <p><strong>The fix:</strong> Never buy a water filter without at least NSF 42 certification. For health protection, look for NSF 53. For the most comprehensive pitcher filtration, the <a href={`/reviews/${britaElite.slug}/`}>Brita Elite at ${britaElite.price}</a> carries NSF 42/53/401 triple certification.</p>
+
+  <ProTip>You can verify any filter's NSF certification at nsf.org. Search by brand or model number to confirm the specific contaminants the filter is certified to reduce. Do not trust the box — trust the database.</ProTip>
+
+  <h2>Mistake #5: Buying More Filtration Than You Need</h2>
+  <p><strong>The problem:</strong> There is a common belief that "more filtration stages = better water." This leads people to buy 5-stage, 6-stage, or even 8-stage systems when their water quality does not warrant it. More stages mean more maintenance, higher replacement costs, and in the case of RO, more water waste.</p>
+  <p><strong>When this happens:</strong> The most common version of this mistake is buying a ZeroWater pitcher because "it removes the most." <a href="/reviews/zerowater-5stage-4pack/">ZeroWater's 5-stage filters</a> remove 99.6% of TDS, but each filter only lasts 15-25 gallons (vs. 40-120 for competitors) and costs $15 per cartridge. In a high-TDS area, that is a new filter every 2-3 weeks at $0.60-$1.00 per gallon — more expensive than many bottled waters.</p>
+  <p><strong>The fix:</strong> Match filtration to your actual water quality issues. If your TDS is under 200 ppm and you have no lead or PFAS concerns, a standard carbon filter is all you need. Save the 6-stage RO for water that actually has problems carbon cannot solve.</p>
+
+  <h2>Mistake #6: Forgetting About Ongoing Costs</h2>
+  <p><strong>The problem:</strong> People compare the purchase price of filters but ignore the replacement cartridge cost — which is always the bigger expense over time. A "cheap" filter with expensive or short-lived cartridges costs more than a "expensive" filter with long-lasting cartridges.</p>
+  <p><strong>Example that surprises people:</strong> The ZeroWater pitcher is about $35 upfront, but replacement filters cost $15 each and last only 15-25 gallons. A family of 4 may need 15-20 filters per year: $225-$300 annually in cartridges alone. Meanwhile, the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a> costs more upfront but only $50-$70 per year in replacement filters — and provides far superior filtration.</p>
+  <p><strong>The fix:</strong> Calculate the total first-year cost (purchase + replacement filters) and the annual cost from year two onward before buying. Our <a href="/guides/water-filter-cost-analysis/">Water Filter Cost Analysis</a> guide breaks down the math for every system we review.</p>
+
+  <ProTip>When comparing pitcher filters, calculate the cost per gallon. Brita Standard: $0.15/gallon. Brita Elite: $0.12/gallon. Amazon Basics Enhanced: $0.09/gallon. ZeroWater: $0.60-$1.00/gallon. The cheapest cartridge is not always the cheapest water.</ProTip>
+
+  <h2>Mistake #7: Using the Wrong Filter for Your Water Source</h2>
+  <p><strong>The problem:</strong> Well water and municipal water have very different challenges. Using a pitcher filter on untreated well water is risky because pitchers do not remove bacteria. Using an RO system on clean municipal water is overkill and wastes water.</p>
+  <p><strong>Common mismatches:</strong></p>
+  <ul>
+    <li><strong>Pitcher filter on well water:</strong> Dangerous. Pitcher filters do not remove bacteria or protozoa. Well water can contain E. coli, Giardia, and other pathogens that require UV sterilization or at minimum 0.1-micron ultrafiltration.</li>
+    <li><strong>Survival filter straw for daily home use:</strong> Inefficient. Filter straws like the <a href={`/reviews/${timain.slug}/`}>Timain</a> are designed for emergency and outdoor use. They do not improve taste or remove chemicals — they focus on biological threats.</li>
+    <li><strong>RO system on clean city water:</strong> Wasteful. If your city water has low TDS and no major contaminants, RO wastes 2-4 gallons per filtered gallon unnecessarily.</li>
+  </ul>
+  <p><strong>The fix:</strong> Test your water first, then match the filter technology to your specific contaminants. Our <a href="/guides/how-to-choose-water-filter/">How to Choose a Water Filter</a> guide includes a decision flowchart that maps water issues to the right filter type.</p>
+
+  <h2>Mistake #8: Not Flushing New Filters Before Use</h2>
+  <p><strong>The problem:</strong> Brand-new carbon filters contain loose carbon fines — tiny carbon particles that break free during manufacturing and shipping. If you do not flush them out, your first few glasses of water will contain a harmless but unpleasant black residue. More importantly, air pockets in un-flushed filters reduce filtration effectiveness.</p>
+  <p><strong>The fix:</strong> Every filter type needs flushing before first use:</p>
+  <ul>
+    <li><strong>Pitcher filters:</strong> Fill and discard the first 2-3 pitchers of water.</li>
+    <li><strong>Refrigerator filters:</strong> Run about 2 gallons through before drinking. Discard the first 2-3 batches of ice.</li>
+    <li><strong>Under-sink systems:</strong> Run the faucet for 5-10 minutes after installing new filters.</li>
+    <li><strong>RO systems:</strong> Fill and drain the tank at least twice before drinking. The first fills will have a carbon taste.</li>
+  </ul>
+
+  <h2>Bonus Mistakes Worth Mentioning</h2>
+
+  <h3>Using Hot Water Through Carbon Filters</h3>
+  <p>Hot water damages activated carbon and can cause it to release trapped contaminants. Always filter cold water. If you need hot filtered water, filter it cold first, then heat it.</p>
+
+  <h3>Storing Pitchers in Direct Sunlight</h3>
+  <p>UV light and warmth promote algae and bacterial growth inside the reservoir. Store your pitcher in the refrigerator or a dark cabinet — never on a sunny countertop.</p>
+
+  <h3>Ignoring the Pitcher/Dispenser Cleaning</h3>
+  <p>The pitcher body needs washing every 2-4 weeks even though you are replacing the filter. Biofilm and mineral deposits build up on the plastic surfaces. Disassemble, wash with warm soapy water, and dry completely before reassembling.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Filter Smart, Not Expensive</h2>
+  <p>Avoiding these mistakes saves you money, protects your health, and ensures your filter actually does its job. The common thread is simple: <strong>know your water, match the filter, maintain the schedule.</strong> For a step-by-step guide to making the right choice from day one, start with our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a>. And if you are on a tight budget, our <a href="/guides/best-water-filters-under-50/">Best Filters Under $50</a> guide proves that great filtration is affordable for everyone.</p>
+</ContentLayout>

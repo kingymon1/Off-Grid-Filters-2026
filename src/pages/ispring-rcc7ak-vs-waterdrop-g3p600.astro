@@ -1,0 +1,145 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'ispring-rcc7ak-vs-waterdrop-g3p600')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Is the Waterdrop G3P600 worth twice the price of the iSpring RCC7AK?', answer: 'It depends on your priorities. The Waterdrop offers 8x faster water production (600 vs 75 GPD), a tankless space-saving design, a smart LED faucet with TDS monitoring, and better water efficiency (2:1 vs 1:3). If cabinet space is tight or you need instant RO water on demand, the Waterdrop is worth the premium. If you just want excellent RO water at the lowest price, the iSpring delivers remarkable quality for under $200.' },
+  { question: 'Which system wastes less water — iSpring or Waterdrop?', answer: 'The Waterdrop G3P600 is dramatically more water-efficient with a 2:1 pure-to-drain ratio, while the iSpring RCC7AK wastes water at a 1:3 ratio. That means for every gallon of purified water, the iSpring sends 3 gallons down the drain versus just 0.5 gallons for the Waterdrop. Over a year, a household could save 1,000+ gallons with the Waterdrop.' },
+  { question: 'Do both systems require professional installation?', answer: 'Both require under-sink installation with drilling for a dedicated faucet. The iSpring has a more involved setup due to the pressurized tank but comes with detailed DIY instructions. The Waterdrop is somewhat easier to install since there is no tank, but it requires an electrical outlet under the sink for its pump. Most handy homeowners can install either system in 1-2 hours.' },
+  { question: 'Which has better filtration — the 6-stage iSpring or 8-stage Waterdrop?', answer: 'Both achieve excellent TDS reduction (93-98%) using the same 0.0001-micron RO membrane technology. The iSpring includes an alkaline remineralization stage that improves pH and taste. The Waterdrop has more filtration stages but the effective output is comparable. Both remove lead, PFAS, fluoride, chlorine, and heavy metals.' },
+  { question: 'How do replacement filter costs compare between these systems?', answer: 'The iSpring has cheaper replacement filters — annual filter costs run roughly $60-80 using widely available cartridges. The Waterdrop uses proprietary composite filters that cost more, with annual replacement running approximately $100-130. The iSpring\'s open filter design gives you more third-party options, while the Waterdrop\'s filters are brand-locked.' },
+  { question: 'Can I taste the difference between water from these two systems?', answer: 'Most users report very similar taste from both systems. The iSpring\'s alkaline remineralization stage adds minerals back that slightly improve taste and raise pH to a more natural level. The Waterdrop produces pure RO water that is clean but can taste slightly flat. Both are vastly better than tap water or pitcher filters.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `Head-to-head comparison of the iSpring RCC7AK and Waterdrop G3P600 under-sink reverse osmosis systems. We compare price, speed, space, water efficiency, and filtration.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Our expert picks for the best under-sink water filtration systems.' },
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'A complete guide to reverse osmosis technology and how it works.' },
+];
+---
+
+<ContentLayout
+  title={`${productA.name} vs ${productB.name}: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`Detailed comparison of ${productA.name} vs ${productB.name}. We compare price, speed, water efficiency, and filtration to help you choose the right under-sink RO system.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="iSpring vs Waterdrop"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>iSpring RCC7AK ($198.78)</strong> is the best value in under-sink RO — it delivers 93-98% TDS reduction with alkaline remineralization for under $200. The <strong>Waterdrop G3P600 ($429)</strong> is the premium pick for those who need tankless space savings, 8x faster flow, and superior water efficiency. Both produce excellent water; the question is how much you value speed and space.</p>
+  </div>
+
+  <ProductImage alt="iSpring RCC7AK vs Waterdrop G3P600 under-sink RO comparison" icon="compare" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <p class="lead">The iSpring RCC7AK and Waterdrop G3P600 represent the two dominant approaches to home reverse osmosis: traditional tank-based value vs modern tankless performance. Both remove 99%+ of contaminants, but they differ dramatically in price, speed, space requirements, and water efficiency.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Quality</h3>
+  <p>Both systems use 0.0001-micron RO membranes and achieve 93-98% TDS reduction. The iSpring's 6-stage system includes sediment, GAC, CTO, RO membrane, and crucially, an alkaline remineralization stage that raises water pH and adds beneficial minerals back. The Waterdrop's 8-stage system uses PP, CTO, RO membrane, and post-carbon stages. The iSpring holds a broader NSF 58 certification, while the Waterdrop boasts NSF 42/53/58/372 — the most comprehensive certification set. In lab-grade purity, they are neck and neck, but the iSpring's remineralization gives it a taste edge.</p>
+  <div class="winner-badge">Winner: Tie — iSpring for taste, Waterdrop for certifications</div>
+
+  <h3>Speed &amp; Flow Rate</h3>
+  <p>This is the Waterdrop's standout advantage. At 600 GPD, the G3P600 produces water 8 times faster than the iSpring's 75 GPD. The Waterdrop delivers RO water on demand — no waiting for a tank to refill. The iSpring fills its pressurized tank over time and relies on stored water for instant access, but if you drain the tank, you will wait. For households that use a lot of filtered water for cooking and drinking, the Waterdrop's instant production is transformative.</p>
+  <div class="winner-badge">Winner: Waterdrop G3P600 (600 GPD vs 75 GPD)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>At $198.78, the iSpring RCC7AK is one of the best deals in home water filtration. You get a complete 6-stage RO system with alkaline remineralization backed by 18,000+ reviews. The Waterdrop at $429 is more than double the price. While the Waterdrop offers real advantages in speed and efficiency, the iSpring's price-to-performance ratio is genuinely remarkable. Annual filter costs also favor the iSpring at roughly $60-80 versus $100-130 for the Waterdrop's proprietary cartridges.</p>
+  <div class="winner-badge">Winner: iSpring RCC7AK ($198.78 vs $429)</div>
+
+  <h3>Space &amp; Installation</h3>
+  <p>The Waterdrop's tankless design is a major advantage for kitchens with limited under-sink space. The iSpring requires room for both the filter assembly and a 3-4 gallon pressurized storage tank, consuming most of the cabinet. The Waterdrop's compact unit takes up roughly half the space. However, the Waterdrop requires an electrical outlet under the sink for its booster pump — which not every kitchen has. The iSpring operates on water pressure alone with no electricity required.</p>
+  <div class="winner-badge">Winner: Waterdrop G3P600 (tankless, compact)</div>
+
+  <h3>Water Efficiency</h3>
+  <p>The Waterdrop dominates here with its 2:1 pure-to-drain ratio — for every 2 gallons of purified water, only 1 goes to waste. The iSpring's 1:3 ratio means 3 gallons are wasted for every 1 gallon of purified water. That is a 6x difference in water efficiency. For environmentally-conscious buyers or those in drought-prone regions, this alone could justify the Waterdrop's premium. A family filtering 3 gallons daily would waste roughly 1,095 extra gallons per year with the iSpring.</p>
+  <div class="winner-badge">Winner: Waterdrop G3P600 (2:1 vs 1:3)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You want the best RO water quality for under $200 — unbeatable value</li>
+        <li>You prefer alkaline remineralized water with improved taste and pH</li>
+        <li>You have adequate under-sink cabinet space for the tank system</li>
+        <li>You do not have an electrical outlet under your sink</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>Cabinet space is limited and you need a compact, tankless system</li>
+        <li>You want instant RO water on demand — no waiting for tank refills</li>
+        <li>Water efficiency matters to you (2:1 vs 1:3 pure-to-drain)</li>
+        <li>You want the smart LED faucet with real-time TDS monitoring</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

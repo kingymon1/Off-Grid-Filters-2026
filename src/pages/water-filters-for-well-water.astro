@@ -1,0 +1,125 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-well-water')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const ispring = getProductBySlug('ispring-rcc7ak')!;
+const sediment = getProductBySlug('membrane-solutions-sediment-6pack')!;
+const everpure = getProductBySlug('pentair-everpure-h1200')!;
+const waterdrop = getProductBySlug('waterdrop-g3p600')!;
+
+const recommendedProducts = [ispring, sediment, everpure, waterdrop];
+
+const faqs = [
+  { question: 'How often should I test my well water?', answer: 'The EPA recommends testing well water at least once per year for coliform bacteria, nitrates, pH, and total dissolved solids. Test more frequently if you notice changes in taste, odor, or color, if there has been flooding near your well, if household members experience recurring gastrointestinal illness, or if you have an infant in the home. Additionally, test for lead, arsenic, and PFAS at least once even if your water seems fine — these contaminants are tasteless and odorless.' },
+  { question: 'Do I need a whole-house filter for well water?', answer: 'In most cases, yes. A whole-house sediment filter protects your entire plumbing system, water heater, and appliances from sand, silt, and rust particles that are common in well water. This first line of defense extends the life of downstream filters and appliances. After whole-house sediment filtration, add a point-of-use filter like an under-sink RO system for drinking water to remove dissolved contaminants.' },
+  { question: 'Can a water filter remove iron from well water?', answer: 'Standard sediment filters can capture iron particles (rust) in their ferric (oxidized) form. However, dissolved ferrous iron passes through most sediment filters and requires specialized treatment — either an oxidizing filter, an iron-specific cartridge, or a water softener with iron removal capability. If your well water leaves orange stains on fixtures, you likely have significant iron that needs specialized treatment beyond standard filtration.' },
+  { question: 'Is reverse osmosis necessary for well water?', answer: 'It depends on your well water test results. RO is the most effective point-of-use treatment for dissolved contaminants including arsenic, lead, nitrates, fluoride, and PFAS — all common well water concerns. If your water test shows elevated levels of any dissolved contaminants, an RO system like the iSpring RCC7AK is the most cost-effective solution. If your water test only shows sediment and bacteria, a sediment filter plus UV disinfection may be sufficient.' },
+  { question: 'How do I know if my well water is contaminated?', answer: 'You cannot determine contamination by taste, smell, or appearance alone. Many dangerous contaminants like arsenic, lead, nitrates, and PFAS are completely undetectable without laboratory testing. Get a comprehensive water test from a certified lab — many state health departments offer free or low-cost testing for private wells. Some red flags that suggest contamination include: water near agricultural fields (nitrates/pesticides), water near gas stations or industrial sites (petroleum/chemicals), and homes built before 1986 (lead from plumbing).' },
+  { question: 'What is the best water filter for well water with high TDS?', answer: 'Reverse osmosis is the gold standard for reducing TDS in well water. The iSpring RCC7AK reduces TDS by 93-98%, bringing high-TDS well water into the optimal drinking range. For even higher performance, the Waterdrop G3P600 offers 600 GPD production with real-time TDS monitoring via its smart LED faucet. Both systems include multiple pre-filter stages that protect the RO membrane from the sediment common in well water.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'Our full review of the best value under-sink RO system for well water.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Complete rankings of every under-sink filtration system we tested.' },
+  { title: 'Best Water Filters for Off-Grid Living', url: '/water-filters-for-off-grid/', description: 'Complete filtration strategies for rural and off-grid properties with wells.' },
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'Understand how RO works and why it is the best technology for well water.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Over 43 million Americans rely on private wells for drinking water, and unlike municipal systems, well water receives no centralized treatment. We outline the filtration strategies, testing protocols, and specific products that make well water safe and great-tasting.</p>
+
+  <ProductImage alt="Water filtration systems for well water" icon="house" aspect="hero" />
+
+  <h2>Why Well Water Needs Dedicated Filtration</h2>
+  <p>Municipal water undergoes treatment at centralized facilities that remove contaminants, adjust pH, and add disinfectants before it reaches your tap. Private well water receives none of this treatment. You are your own water utility, which means the responsibility for water quality falls entirely on you.</p>
+  <p>Well water quality varies enormously depending on geography, depth, and surrounding land use. Common well water contaminants include:</p>
+  <ul>
+    <li><strong>Sediment:</strong> Sand, silt, clay, and rust particles are nearly universal in well water. These damage appliances and plumbing over time.</li>
+    <li><strong>Bacteria and parasites:</strong> Coliform bacteria, E. coli, and Giardia can enter wells through surface water infiltration, especially after heavy rains or flooding.</li>
+    <li><strong>Nitrates:</strong> Common near agricultural areas from fertilizer runoff. Dangerous for infants (blue baby syndrome).</li>
+    <li><strong>Heavy metals:</strong> Arsenic, lead, and manganese occur naturally in groundwater in many regions. Lead can also leach from older well components and plumbing.</li>
+    <li><strong>Hard minerals:</strong> Calcium, magnesium, and iron cause scale buildup, staining, and taste issues. High TDS is common in deep wells.</li>
+    <li><strong>PFAS:</strong> Forever chemicals have been detected in well water near military bases, airports, and industrial sites across the country.</li>
+  </ul>
+  <p>The only way to know what is in your well water is to test it. We strongly recommend a comprehensive lab test before choosing a filtration system — treating contaminants you do not have wastes money, while missing contaminants you do have risks your health.</p>
+
+  <h2>What to Look For in a Well Water Filter</h2>
+  <p>Well water filtration typically requires a multi-stage approach. No single filter handles every well water contaminant. Here is the recommended strategy:</p>
+  <ul>
+    <li><strong>First stage — whole-house sediment filter:</strong> Captures sand, silt, and rust before they reach your plumbing. Essential for protecting water heaters, appliances, and downstream filters. A 5-micron sediment cartridge is the standard first line of defense.</li>
+    <li><strong>Second stage — point-of-use RO system:</strong> For drinking water, an under-sink reverse osmosis system removes dissolved contaminants (lead, arsenic, nitrates, PFAS) that sediment filters miss. This is the most effective single investment for well water safety.</li>
+    <li><strong>Optional — UV disinfection:</strong> If bacterial contamination is a concern, a UV sterilizer between the sediment filter and point-of-use provides chemical-free disinfection.</li>
+    <li><strong>Optional — water softener:</strong> For very hard water, a dedicated softener addresses scale buildup better than filtration alone.</li>
+  </ul>
+
+  <ProTip title="Test Before You Buy">
+    Before purchasing any filtration system, get a comprehensive water test from a state-certified laboratory. Your state health department likely offers free or low-cost well water testing. At minimum, test for: coliform bacteria, nitrates, lead, arsenic, pH, TDS, and hardness. The test results will tell you exactly which contaminants need treatment, so you can invest in the right filtration rather than guessing.
+  </ProTip>
+
+  <h2>Top Picks for Well Water</h2>
+
+  <h3>1. {ispring.name} — Best Value RO for Well Water</h3>
+  <p>The iSpring RCC7AK is our top recommendation for well water drinking water filtration. Its 6-stage design includes dedicated sediment and carbon pre-filter stages that handle the heavy particulate load common in well water before the RO membrane does its work removing dissolved contaminants. The result is 93-98% TDS reduction, removal of lead (>98.9%), arsenic, nitrates, fluoride, and PFAS (96-99%).</p>
+  <p>The alkaline remineralization stage is a meaningful advantage for well water users. RO strips essentially everything from water, including beneficial minerals. The remineralization stage adds back calcium and magnesium, improving taste and raising pH to a healthy alkaline level. Many well water users report that their RO water tastes better than bottled water.</p>
+  <p>At ${ispring.price}, this system costs a fraction of a whole-house treatment system and addresses the most critical need: safe drinking water. The 18,000+ reviews with a 4.6-star rating provide strong evidence of reliability, including from many well water users.</p>
+  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {sediment.name} — Essential Whole-House Pre-Filtration</h3>
+  <p>Every well water system should start with a whole-house sediment filter, and the Membrane Solutions 6-pack offers a year's supply of filters at an outstanding value. The 5-micron string wound polypropylene cartridges fit standard 10x2.5-inch housings (sold separately) and capture 99% of sand, silt, rust, and debris before they reach your plumbing.</p>
+  <p>For well water, sediment filtration is not optional — it protects every downstream filter and appliance. Without it, your RO membrane will clog prematurely, your water heater will accumulate sediment, and faucet aerators will plug constantly. At ${sediment.price} for six filters, this is the cheapest and most impactful first step for any well water system.</p>
+  <p>Plan to change filters every 2-3 months for typical well water, or monthly if your water is particularly sediment-heavy. You will be able to see the accumulated sediment on the used filter — this visual confirmation is a powerful reminder of what would otherwise be flowing through your pipes.</p>
+  <p><strong>Price:</strong> ${sediment.price} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {everpure.name} — Best Commercial-Grade Option</h3>
+  <p>For well water users who want the absolute best point-of-use filtration without RO, the Pentair Everpure H-1200 offers commercial restaurant-grade 0.5-micron filtration. This twin-cartridge system removes lead, cysts, chlorine, PFOA, and PFOS at a flow rate that keeps up with real kitchen demands. The 1,000-gallon capacity means fewer filter changes — typically once per year for a household.</p>
+  <p>The Everpure does not remove TDS like an RO system, so it is best suited for well water that tests clean for dissolved minerals and metals but has concerns about bacteria, lead, and cysts. If your well water test shows elevated TDS, arsenic, or nitrates, the iSpring RO system is a better choice. The Everpure excels when you need premium taste and microbial protection without the waste water that RO produces.</p>
+  <p><strong>Price:</strong> ${everpure.price} (replacement cartridge set) | <a href={`/reviews/${everpure.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(everpure.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {waterdrop.name} — Best Premium Tankless RO</h3>
+  <p>For well water users who want the highest-performance RO system with real-time monitoring, the Waterdrop G3P600 provides 600 GPD production — eight times faster than the iSpring. The smart LED faucet displays TDS readings in real time, which is particularly valuable for well water users who want ongoing verification that their system is performing correctly.</p>
+  <p>The tankless design saves the significant under-sink space that a traditional RO tank occupies, and the 2:1 pure-to-drain ratio wastes less water than the iSpring's 1:3 ratio. The trade-off is price: at ${waterdrop.price}, it costs more than double the iSpring. For well water users with space constraints or high daily water needs, the premium is justified.</p>
+  <p><strong>Price:</strong> ${waterdrop.price} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <ProTip title="The Ideal Well Water Filtration Stack">
+    For comprehensive well water treatment, we recommend this stack: Membrane Solutions sediment filters ($26.35/year) as whole-house pre-filtration, plus an iSpring RCC7AK ($198.78) under the kitchen sink for drinking water. Total first-year cost: roughly $225 for the system plus $26 for sediment filters. Ongoing annual cost: approximately $80-100 for replacement filters across both systems. That is less than $0.25 per day for laboratory-grade drinking water from your well.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Well Water</h2>
+  <p>The <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> is the best overall investment for well water drinking water safety. Combined with a <a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filter</a> for whole-house protection, this two-layer approach addresses both the physical sediment and dissolved contaminants that make well water challenging. Start with a water test, then build your filtration system around the specific contaminants found in your well.</p>
+</ContentLayout>

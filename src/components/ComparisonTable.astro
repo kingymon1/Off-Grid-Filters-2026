@@ -1,18 +1,24 @@
 ---
+import { AFFILIATE_TAG } from '../lib/config';
+
 interface Product {
   name: string;
   asin: string;
-  tag: string;
+  tag?: string;
   rating: string;
   price: string;
-  packSize: string;
-  cordLength: string;
-  cordType: string;
-  tools: string[];
-  adjustable: string;
-  warranty: string;
+  filtrationStages?: string;
+  filtrationTechnology?: string;
+  micronRating?: string;
+  capacity?: string;
+  flowRate?: string;
+  certifications?: string;
+  filterLife?: string;
+  contaminantsRemoved?: string;
+  packSize?: string;
+  compatibility?: string;
   highlight?: string;
-  isOurs?: boolean;
+  isEditorsPick?: boolean;
 }
 
 interface Props {
@@ -27,12 +33,13 @@ const { products, features } = Astro.props;
 
 const defaultFeatures = [
   { label: 'Price', key: 'price' as keyof Product },
-  { label: 'Pack Size', key: 'packSize' as keyof Product },
   { label: 'Rating', key: 'rating' as keyof Product },
-  { label: 'Cord Length', key: 'cordLength' as keyof Product },
-  { label: 'Cord Type', key: 'cordType' as keyof Product },
-  { label: 'Adjustable', key: 'adjustable' as keyof Product },
-  { label: 'Warranty', key: 'warranty' as keyof Product },
+  { label: 'Filtration', key: 'filtrationTechnology' as keyof Product },
+  { label: 'Stages', key: 'filtrationStages' as keyof Product },
+  { label: 'Micron Rating', key: 'micronRating' as keyof Product },
+  { label: 'Capacity', key: 'capacity' as keyof Product },
+  { label: 'Certifications', key: 'certifications' as keyof Product },
+  { label: 'Filter Life', key: 'filterLife' as keyof Product },
 ];
 
 const displayFeatures = features || defaultFeatures;
@@ -45,9 +52,9 @@ const displayFeatures = features || defaultFeatures;
         <tr>
           <th class="feature-col">Feature</th>
           {products.map((product) => (
-            <th class:list={['product-col', { 'our-product': product.isOurs }]}>
+            <th class:list={['product-col', { 'editors-pick': product.isEditorsPick }]}>
               <div class="product-header">
-                {product.isOurs && <span class="our-badge">Our Pick</span>}
+                {product.isEditorsPick && <span class="pick-badge">Editor's Pick</span>}
                 <span class="product-name">{product.name}</span>
               </div>
             </th>
@@ -61,37 +68,32 @@ const displayFeatures = features || defaultFeatures;
             {products.map((product) => {
               const value = product[feature.key];
               return (
-                <td class:list={[{ 'our-product': product.isOurs }]}>
-                  {Array.isArray(value) ? value.join(', ') : String(value || '—')}
+                <td class:list={[{ 'editors-pick': product.isEditorsPick }]}>
+                  {feature.key === 'price' ? `$${value}` : String(value || '—')}
                 </td>
               );
             })}
           </tr>
         ))}
-        <tr class="tools-row">
-          <td class="feature-label">Tools Included</td>
-          {products.map((product) => (
-            <td class:list={[{ 'our-product': product.isOurs }]}>
-              <ul class="tools-list">
-                {product.tools.map((tool) => (
-                  <li>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    {tool}
-                  </li>
-                ))}
-              </ul>
-            </td>
-          ))}
-        </tr>
+        {products.some(p => p.contaminantsRemoved) && (
+          <tr>
+            <td class="feature-label">Key Contaminants</td>
+            {products.map((product) => (
+              <td class:list={[{ 'editors-pick': product.isEditorsPick }]}>
+                <span class="contaminants-text">{product.contaminantsRemoved || '—'}</span>
+              </td>
+            ))}
+          </tr>
+        )}
         <tr class="cta-row">
           <td class="feature-label"></td>
           {products.map((product) => (
-            <td class:list={[{ 'our-product': product.isOurs }]}>
+            <td class:list={[{ 'editors-pick': product.isEditorsPick }]}>
               <a
-                href={`https://www.amazon.com/dp/${product.asin}?tag=${product.tag}`}
+                href={`https://www.amazon.com/dp/${product.asin}?tag=${product.tag || AFFILIATE_TAG}`}
                 target="_blank"
                 rel="nofollow sponsored noopener"
-                class:list={['table-cta', { 'table-cta-primary': product.isOurs }]}
+                class:list={['table-cta', { 'table-cta-primary': product.isEditorsPick }]}
               >
                 Check Price
               </a>
@@ -155,7 +157,7 @@ const displayFeatures = features || defaultFeatures;
     gap: 0.375rem;
   }
 
-  .our-badge {
+  .pick-badge {
     display: inline-block;
     font-size: 0.625rem;
     font-weight: 700;
@@ -178,6 +180,7 @@ const displayFeatures = features || defaultFeatures;
     border-bottom: 1px solid hsl(var(--border) / 0.5);
     color: hsl(var(--muted-foreground));
     vertical-align: top;
+    font-size: 0.875rem;
   }
 
   .feature-label {
@@ -187,37 +190,19 @@ const displayFeatures = features || defaultFeatures;
     font-size: 0.875rem;
   }
 
-  .our-product {
+  .editors-pick {
     background: hsl(var(--primary) / 0.03);
     border-left: 1px solid hsl(var(--primary) / 0.1);
     border-right: 1px solid hsl(var(--primary) / 0.1);
   }
 
-  thead .our-product {
+  thead .editors-pick {
     border-top: 2px solid hsl(var(--primary) / 0.4);
   }
 
-  .tools-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .tools-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
+  .contaminants-text {
     font-size: 0.8125rem;
-    color: hsl(var(--muted-foreground));
-  }
-
-  .tools-list svg {
-    color: hsl(var(--primary));
-    flex-shrink: 0;
+    line-height: 1.5;
   }
 
   .cta-row td {
@@ -231,31 +216,32 @@ const displayFeatures = features || defaultFeatures;
     border-radius: 0.625rem;
     font-weight: 700;
     font-size: 0.875rem;
-    border: 1px solid hsl(160 10% 30%);
-    color: hsl(160 10% 90%);
-    background: hsl(160 10% 12%);
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+    background: hsl(var(--muted));
     transition: all 0.2s;
     text-decoration: none;
   }
 
   .table-cta:hover {
-    border-color: hsl(160 65% 36%);
+    border-color: hsl(var(--primary));
     color: #fff;
-    background: hsl(160 15% 16%);
+    background: hsl(var(--primary) / 0.15);
   }
 
   .table-cta-primary {
-    background: linear-gradient(135deg, hsl(160 65% 36%), hsl(160 65% 28%));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
     color: #fff !important;
     border-color: transparent;
-    box-shadow: 0 4px 12px -2px hsl(160 65% 36% / 0.3);
+    box-shadow: 0 4px 12px -2px hsl(var(--primary) / 0.3);
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
 
   .table-cta-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px -2px hsl(160 65% 36% / 0.4);
+    box-shadow: 0 6px 16px -2px hsl(var(--primary) / 0.4);
     color: #fff !important;
-    background: linear-gradient(135deg, hsl(160 65% 40%), hsl(160 65% 32%));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    filter: brightness(1.1);
   }
 </style>
