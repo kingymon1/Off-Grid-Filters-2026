@@ -85,6 +85,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
   description="Expert reviews and buying guides for water filters. We test and compare countertop, under-sink, refrigerator, and survival filters to help you find clean water for every need and budget."
   canonical="/"
   schema={schema}
+  preloadHero={true}
 >
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -1102,6 +1103,11 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     filter: blur(100px);
     opacity: 0;
     animation: splash-orb-in 1.2s ease-out forwards;
+    animation-play-state: paused;
+  }
+
+  .splash-overlay.playing .splash-orb {
+    animation-play-state: running;
   }
 
   .splash-orb-1 {
@@ -1144,6 +1150,11 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     align-items: center;
     justify-content: center;
     animation: splash-float 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-play-state: paused;
+  }
+
+  .splash-overlay.playing .splash-product-wrap {
+    animation-play-state: running;
   }
 
   .splash-product-wrap.phase-crash {
@@ -1176,6 +1187,12 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     object-fit: contain;
     filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.5));
     animation: splash-product-float 2s ease-in-out forwards;
+    animation-play-state: paused;
+    opacity: 0;
+  }
+
+  .splash-overlay.playing .splash-product {
+    animation-play-state: running;
   }
 
   @keyframes splash-product-float {
@@ -1210,7 +1227,12 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     background: radial-gradient(ellipse, rgba(0, 0, 0, 0.35), transparent 70%);
     border-radius: 50%;
     animation: splash-shadow-float 2s ease-in-out forwards;
+    animation-play-state: paused;
     z-index: 0;
+  }
+
+  .splash-overlay.playing .splash-shadow {
+    animation-play-state: running;
   }
 
   @keyframes splash-shadow-float {
@@ -1227,6 +1249,11 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     transform: translateX(-50%);
     text-align: center;
     animation: splash-brand-in 1s ease-out 0.6s both;
+    animation-play-state: paused;
+  }
+
+  .splash-overlay.playing .splash-brand {
+    animation-play-state: running;
   }
 
   .splash-brand-name {
@@ -1376,6 +1403,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
 
 <script>
   // Splash intro animation sequencer
+  // Waits for the product image to load before starting
   (function() {
     const overlay = document.getElementById('splash-overlay');
     if (!overlay) return;
@@ -1392,31 +1420,53 @@ const schema = combineSchemas(faqSchema, websiteSchema);
       return;
     }
 
+    const productImg = overlay.querySelector('.splash-product') as HTMLImageElement;
     const productWrap = overlay.querySelector('.splash-product-wrap') as HTMLElement;
     const flash = overlay.querySelector('.splash-flash') as HTMLElement;
     const cracks = overlay.querySelector('.splash-cracks') as HTMLElement;
 
-    // Phase 1: Float animation plays via CSS for 2s
-    // Phase 2: Crash into screen at 2s
-    setTimeout(() => {
-      productWrap.classList.add('phase-crash');
-    }, 2000);
+    function startSequence() {
+      // Start all CSS animations
+      overlay.classList.add('playing');
 
-    // Phase 3: Flash + cracks at 2.35s (when product is large enough)
-    setTimeout(() => {
-      flash.classList.add('active');
-      cracks.classList.add('active');
-    }, 2350);
+      // Phase 2: Crash into screen at 2s
+      setTimeout(() => {
+        productWrap.classList.add('phase-crash');
+      }, 2000);
 
-    // Phase 4: Dissolve overlay to reveal page at 2.6s
-    setTimeout(() => {
-      overlay.classList.add('dissolve');
-    }, 2600);
+      // Phase 3: Flash + cracks at 2.35s
+      setTimeout(() => {
+        flash.classList.add('active');
+        cracks.classList.add('active');
+      }, 2350);
 
-    // Phase 5: Clean up at 3.1s
-    setTimeout(() => {
-      overlay.classList.add('done');
-      sessionStorage.setItem('splash-seen', '1');
-    }, 3100);
+      // Phase 4: Dissolve overlay at 2.6s
+      setTimeout(() => {
+        overlay.classList.add('dissolve');
+      }, 2600);
+
+      // Phase 5: Clean up at 3.1s
+      setTimeout(() => {
+        overlay.classList.add('done');
+        sessionStorage.setItem('splash-seen', '1');
+      }, 3100);
+    }
+
+    // Wait for the image to load, then start
+    if (productImg.complete && productImg.naturalWidth > 0) {
+      startSequence();
+    } else {
+      productImg.addEventListener('load', startSequence);
+      // If image fails to load, skip the splash after 2s
+      productImg.addEventListener('error', () => {
+        overlay.classList.add('done');
+      });
+      // Safety timeout: if image takes too long, skip
+      setTimeout(() => {
+        if (!overlay.classList.contains('playing')) {
+          overlay.classList.add('done');
+        }
+      }, 4000);
+    }
   })();
 </script>
