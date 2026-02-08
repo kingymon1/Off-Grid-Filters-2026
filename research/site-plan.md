@@ -78,162 +78,26 @@
 
 ---
 
-## Publishing Schedule
+## Publishing Strategy
 
-### Wave 1 — February 11, 2026 (Launch Day)
-**Reviews (6):**
-- Bluevua RO100ROPOT-UV
-- Bluevua RO100ROPOT-Lite UV
-- Amazon Basics 10-Cup Pitcher
-- Brita UltraMax 27-Cup
-- Pentair Everpure H-1200
-- iSpring RCC7AK
+### Bulk Launch — February 8, 2026
 
-**Category Roundups (2):**
-- Best Countertop & Pitcher Filters
-- Best Under-Sink Filters
+All 79 pages go live simultaneously on launch day for maximum authority signal.
 
-**Guides (1):**
-- How to Choose a Water Filter
+**Content totals at launch:**
+- Product Reviews: 29
+- Category Roundups: 6
+- Head-to-Head Comparisons: 15
+- Buyer Guides: 8
+- Activity Guides: 10
+- Knowledge Base: 8
+- Resource Hub: 1
+- Homepage + 404: 2
 
-**Total:** 9 pages
-
-### Wave 2 — February 14, 2026
-**Reviews (4):**
-- Pentair Everpure H-300
-- Waterdrop G3P600
-- everydrop Filter 1
-- GE XWFE
-
-**Comparisons (3):**
-- Bluevua UV vs Lite UV
-- iSpring vs Waterdrop
-- Pentair H-1200 vs H-300
-
-**Category Roundups (2):**
-- Best Refrigerator Filters
-- Best Replacement Filters
-
-**Guides (2):**
-- Beginner Guide to Water Filtration
-- What Is Reverse Osmosis?
-
-**Knowledge Base (1):**
-- Water Filter Types Explained
-
-**Total:** 12 pages
-
-### Wave 3 — February 18, 2026
-**Reviews (5):**
-- GE RPWFE
-- Samsung HAF-QIN
-- Amazon Basics Replacement 3-Pack
-- Brita Standard 3-Pack
-- Brita Elite 2-Pack
-
-**Comparisons (3):**
-- Bluevua UV vs iSpring RCC7AK
-- GE XWFE vs RPWFE
-- everydrop Filter 1 vs GE XWFE
-
-**Survival Reviews (2):**
-- Timain Filter Straw 2-Pack
-- MSR Aquatabs 30-Pack
-
-**Category Roundups (1):**
-- Best Survival & Portable Filters
-
-**Guides (3):**
-- Water Filters for Camping
-- Water Filters for Emergencies
-- Water Filter Maintenance Guide
-
-**Knowledge Base (2):**
-- NSF Certifications Explained
-- Best Water Filters Under $50
-
-**Total:** 16 pages
-
-### Wave 4 — February 22, 2026
-**Reviews (4):**
-- everydrop Filter A
-- AQUACREST UKF8001 6-Pack
-- Brita Standard 4-Pack
-- Membrane Solutions Filter Straw 4-Pack
-
-**Comparisons (3):**
-- Samsung vs everydrop Filter A
-- Brita Standard vs Elite
-- Brita Elite vs ZeroWater
-
-**Guides (4):**
-- Water Filters for Hiking
-- Water Filters for Well Water
-- Water Filters for Off-Grid Living
-- Water Filter Sizing Guide
-
-**Knowledge Base (3):**
-- RO vs Carbon Filters
-- Understanding TDS
-- PFAS in Drinking Water
-
-**Total:** 14 pages
-
-### Wave 5 — February 27, 2026
-**Reviews (5):**
-- ZeroWater 5-Stage 4-Pack
-- PUR Pitcher Filter 4-Pack
-- ZeroWater 5-Stage 6-Pack
-- Waterdrop WD-PF-01A Plus 3-Pack
-- NatureNova Filter Straw 3-Pack
-
-**Comparisons (3):**
-- Brita Standard vs PUR
-- ZeroWater vs PUR
-- Waterdrop Plus vs Brita Elite
-
-**Whole House Reviews (2):**
-- Membrane Solutions Sediment 6-Pack
-- Universal 5-Micron Sediment
-
-**Category Roundups (1):**
-- Best Whole House & Sediment Filters
-
-**Guides (3):**
-- Water Filters for Apartments
-- Water Filters for RV
-- Common Water Filter Mistakes
-
-**Knowledge Base (2):**
-- Water Filter Cost Analysis
-- Lead in Drinking Water
-
-**Total:** 16 pages
-
-### Wave 6 — March 4, 2026
-**Reviews (1):**
-- Elkay 51300C WaterSentry Plus
-
-**Comparisons (3):**
-- Amazon Basics vs Brita Standard
-- Timain vs Membrane Solutions
-- Timain vs NatureNova
-
-**Guides (3):**
-- Water Filters for Baby
-- Water Filters for Travel
-- Water Filters for Hard Water
-
-**Knowledge Base (1):**
-- Is Tap Water Safe?
-
-**Total:** 8 pages
-
-### Wave 7 — March 11, 2026
-**Knowledge Base (1):**
-- History of Water Filtration
-
-**Total:** 1 page (site complete)
+**Rationale:** A bulk launch presents the site as a complete, authoritative resource from day one.
+Google sees a fully interlinked content hub rather than a thin site that slowly adds pages.
+All internal cross-links (navigation, related articles, comparison references) work immediately
+with zero risk of 404s from staggered publication gates.
 
 ---
 

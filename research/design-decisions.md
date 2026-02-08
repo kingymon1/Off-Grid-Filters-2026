@@ -106,7 +106,7 @@ All animations completely disabled when user prefers reduced motion. No exceptio
 ## Layout Architecture
 
 ### Homepage
-- **Hero:** Full-width with grid overlay, floating orbs, centered content
+- **Hero:** Two-column layout — text content (left) + animated product image (right) on desktop, stacked on mobile. Grid overlay background with floating orbs. Real Bluevua hero PNG with CSS entrance + float animation (zero-JS, LCP-optimized)
 - **Content sections:** Container-width (1200px max) with alternating background tints
 - **Card grids:** 1-col mobile → 2-col tablet → 3-4 col desktop
 

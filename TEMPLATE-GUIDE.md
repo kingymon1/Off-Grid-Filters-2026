@@ -118,7 +118,7 @@ Claude will:
 | `src/pages/*-for-*.astro` | Activity guides |
 | `src/pages/*.astro` | Knowledge base pages |
 | `public/robots.txt` | With your domain |
-| `public/llms.txt` | AI-discoverable content index |
+| `src/pages/llms.txt.ts` | Dynamic AI-discoverable content index (Astro API route) |
 | `research/*.md` | Research findings |
 | `IMAGE-GUIDE.md` | Photo replacement guide |
 
