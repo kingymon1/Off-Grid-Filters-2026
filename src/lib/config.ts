@@ -17,15 +17,15 @@ export function isPublished(publishDate: string): boolean {
   return now >= pub;
 }
 
-// Publication waves — staggered rollout starting 2026-02-11
+// All content published on launch day — full authority site from day 1
 export const PUBLISH_WAVES = {
-  wave1: '2026-02-11', // Launch day: homepage, core infrastructure, top 6 reviews, 2 category pages
-  wave2: '2026-02-14', // 6 more reviews, 2 more category pages, 3 comparisons
-  wave3: '2026-02-18', // 6 more reviews, remaining categories, 4 comparisons, 2 guides
-  wave4: '2026-02-22', // 6 more reviews, 4 comparisons, 3 guides, 2 activity pages
-  wave5: '2026-02-27', // 5 remaining reviews, 4 comparisons, 3 guides, 4 activity pages
-  wave6: '2026-03-04', // All remaining guides, activity pages, knowledge base
-  wave7: '2026-03-11', // Final knowledge base pages, resource hub completion
+  wave1: '2026-02-08',
+  wave2: '2026-02-08',
+  wave3: '2026-02-08',
+  wave4: '2026-02-08',
+  wave5: '2026-02-08',
+  wave6: '2026-02-08',
+  wave7: '2026-02-08',
 } as const;
 
 // ── Interfaces ───────────────────────────────────────────────
