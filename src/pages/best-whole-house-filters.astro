@@ -1,0 +1,263 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const categorySlug = 'whole-house-filters';
+const category = getCategoryBySlug(categorySlug)!;
+if (!isPublished(category.publishDate)) return Astro.redirect('/404');
+
+const allProducts = getProductsByCategory(categorySlug);
+const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
+const year = new Date().getFullYear();
+
+const tableProducts = publishedProducts.map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  compatibility: p.specs.compatibility || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'What does a whole-house sediment filter actually do?', answer: 'A whole-house sediment filter is installed on your main water line before it enters your home. It physically traps sand, silt, rust, dirt, and debris particles down to its rated micron size (typically 5 microns). This protects your entire plumbing system, water heater, appliances, and downstream filters from sediment damage. It does NOT remove chemicals, chlorine, bacteria, or dissolved contaminants — for those, you need additional point-of-use filters.' },
+  { question: 'How often should I replace my whole-house sediment filter?', answer: 'For a standard 10x2.5-inch sediment filter on municipal water, every 2-3 months is typical. On well water with heavy sediment, you may need monthly replacement. Signs it is time to change: noticeably reduced water pressure throughout the house, visible discoloration of the filter (should start white and turns brown/orange), or water quality decline at any faucet. The Membrane Solutions 6-pack provides a full year of changes at 2-month intervals.' },
+  { question: 'What micron rating should I choose for my whole-house filter?', answer: 'For most residential applications, 5 microns is the standard recommendation. It catches sand, silt, rust, and sediment while maintaining adequate water pressure and flow rate. A 1-micron filter provides finer filtration but clogs faster and may reduce flow. For well water with heavy sediment, consider a two-stage approach: a 20-micron prefilter followed by a 5-micron fine filter to extend filter life.' },
+  { question: 'Do I need a whole-house filter if I have city water?', answer: 'City water is treated but can still contain sediment from aging distribution pipes, especially after water main breaks or construction. A whole-house sediment filter is inexpensive insurance that protects your water heater, dishwasher, washing machine, and plumbing fixtures from particulate damage. At $4-5 per filter every 2-3 months, it is one of the cheapest home maintenance investments you can make.' },
+  { question: 'What is the difference between string wound and pleated sediment filters?', answer: 'String wound filters (like the Membrane Solutions) use wrapped polypropylene fiber to trap sediment in progressively tighter layers. They are disposable, inexpensive, and effective for their price. Pleated filters have a larger surface area, hold more dirt before clogging, and some can be rinsed and reused. Pleated filters cost more per unit but may last longer between changes. For most residential use, string wound filters are the better value.' },
+  { question: 'What size whole-house filter housing do I need?', answer: 'The most common residential size is 10 x 2.5 inches (referred to as "standard 10-inch"). This fits housings from GE, DuPont, Culligan, Pentek, and most other brands. Larger homes or properties with higher flow demands may use 10 x 4.5 inch ("big blue") housings. Check your existing housing before ordering filters, or choose a standard 10x2.5" housing for new installations.' },
+  { question: 'Can the Elkay 51300C be used in a home setting?', answer: 'The Elkay 51300C is designed specifically for Elkay ezH2O and HaloX bottle filling stations — it will not fit standard whole-house filter housings. However, if you own or maintain an Elkay filling station (common in schools, gyms, and offices), this is the required replacement filter. Its 3,000-gallon capacity and triple NSF certification make it one of the most capable commercial-grade filters available.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  publishedProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Water Filters for Well Water', url: '/water-filters-for-well-water/', description: 'Whole-house and point-of-use filtration strategies for private well water systems.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Point-of-use filtration that pairs well with whole-house sediment pre-filtration.' },
+  { title: 'Water Filter Maintenance Guide', url: '/guides/water-filter-maintenance/', description: 'Learn when to change filters, how to clean systems, and signs your filter needs replacing.' },
+];
+---
+
+<ContentLayout
+  title={`Best ${category.name} ${year}: Expert Picks — OffGrid Filters`}
+  description={`We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by sediment capacity, value, and compatibility.`}
+  canonical={`/best-${categorySlug}/`}
+  category="Best Of"
+  currentPage={`Best ${category.name}`}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Best {category.name} {year}: Expert Picks</h1>
+  <p class="lead">Whole-house sediment filters are the unsung heroes of home water treatment — they silently protect your plumbing, water heater, and appliances from the sand, silt, rust, and debris that municipal pipes and well water deliver to your home. We evaluated {allProducts.length} sediment filters and one commercial-grade bottle filling station filter to find the best options for residential, well water, and commercial applications.</p>
+
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="house" aspect="hero" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Whole-House + Point-of-Use Strategy">
+    <p>The most effective home water treatment strategy uses a whole-house sediment filter as the first line of defense, followed by a point-of-use filter (under-sink RO or countertop) at your drinking water faucet. The sediment filter protects all your plumbing and extends the life of your drinking water filter. This two-stage approach costs less than $50/year in sediment cartridges and dramatically improves your overall water quality.</p>
+  </ProTip>
+
+  {publishedProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon={i === 2 ? 'water' : 'house'} aspect="wide" />
+      {i === 0 && (
+        <>
+          <p>The Membrane Solutions 6-pack is the clear value leader in whole-house sediment filtration. At $4.39 per filter, a full year of bi-monthly filter changes costs under $27. The string wound polypropylene construction effectively traps sand, silt, rust, and sediment at 5 microns — the standard residential rating that balances filtration quality with adequate water flow and pressure.</p>
+          <p>The universal 10x2.5-inch form factor fits virtually every standard whole-house filter housing, including systems from GE, DuPont, Culligan, Pentek, and most generic housings available at hardware stores. With 7,200+ reviews and a 4.5-star rating, long-term reliability is well-documented across a wide variety of water conditions and housing brands.</p>
+          <p>The trade-off with string wound construction is dirt-holding capacity — these filters will clog faster than pleated alternatives in very sediment-heavy well water. They are also strictly disposable; you cannot rinse and reuse them. But at $4.39 per replacement, the cost of frequent changes is minimal. For the vast majority of residential applications, this 6-pack delivers the best year-round sediment protection per dollar spent.</p>
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <p>This universal 5-micron sediment cartridge serves as a reliable drop-in replacement for standard 10x2.5-inch whole-house filter housings. The polypropylene construction provides consistent sediment removal for sand, silt, rust, and scale particles. It functions well as a first-stage prefilter in multi-stage whole-house systems where subsequent stages handle chemical or biological filtration.</p>
+          <p>At $32.88 for a single filter, the per-unit economics are significantly less favorable than the Membrane Solutions 6-pack. The generic branding also means less consistency in manufacturing quality — some users report variation in filter density and effective life between batches. With only 1,500 reviews compared to 7,200 for the Membrane Solutions, the reliability track record is thinner.</p>
+          <p>This filter makes sense in two scenarios: you need a single replacement urgently and do not want to buy a 6-pack, or your local store carries this but not the Membrane Solutions. For planned purchases, the Membrane Solutions 6-pack is the better buy at less than one-seventh the per-filter cost. However, this filter will get the job done if you need it.</p>
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <p>The Elkay 51300C occupies a unique niche in our lineup: it is not a whole-house filter but a commercial-grade replacement cartridge for Elkay ezH2O and HaloX bottle filling stations. These are the water stations you see in schools, airports, gyms, and offices that track how many plastic bottles have been saved. If you maintain one of these units, the 51300C is the required replacement.</p>
+          <p>The specifications are impressive by any standard: 3,000-gallon capacity, triple NSF 42/53/401 certification covering lead, microplastics, cysts, and pharmaceuticals. This filter provides dramatically more contaminant reduction than any residential sediment cartridge, which makes sense given it is filtering water people drink directly. At $93.49, it is expensive, but the 3,000-gallon life means commercial installations may only need one or two replacements per year.</p>
+          <p>The critical limitation is compatibility: this filter only works with specific Elkay and HaloX filling station models. It will not fit any standard whole-house filter housing. Do not purchase this for residential use unless you specifically have an Elkay filling station. For those who do, this is a no-compromise replacement that maintains the high filtration standard these commercial units are known for.</p>
+        </>
+      )}
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Whole-house sediment filtration is more straightforward than other filter categories — the primary job is trapping physical particles effectively without excessively reducing water pressure. We evaluated on <strong>sediment capture effectiveness</strong> (how well does the 5-micron rating hold up in real-world conditions?), <strong>filter life consistency</strong> (does it last as long as claimed?), <strong>compatibility breadth</strong> (how many housings does it fit?), <strong>annual cost</strong> (what does a year of replacements actually cost?), and <strong>user satisfaction</strong> (do reviews indicate reliable performance?).</p>
+  <p>The residential sediment filter market is dominated by nearly identical 10x2.5-inch cartridges, so value and reliability data from real users became the primary differentiators. The Membrane Solutions 6-pack's combination of verified reviews, universal compatibility, and exceptional per-filter pricing made it the clear winner for residential applications.</p>
+
+  <h2>Buying Guide: What to Look For in Whole-House Filters</h2>
+  <p><strong>Start with your water source.</strong> Municipal water typically has low to moderate sediment levels, making a single 5-micron sediment filter sufficient for whole-house protection. Well water varies dramatically — some wells produce clear water, while others deliver heavy sand and iron sediment that can clog a 5-micron filter in weeks. Test your well water or observe the current sediment level in a glass to gauge your filtration needs.</p>
+  <p><strong>Match the filter to your housing.</strong> The standard residential size is 10 x 2.5 inches. Verify your existing housing dimensions before ordering. If you are installing a new housing, standard 10-inch systems are the most affordable and have the widest filter selection. Larger 4.5-inch "big blue" housings offer higher flow rates and longer filter life for large homes or heavy sediment conditions.</p>
+  <p><strong>Understand what sediment filters do NOT do.</strong> Sediment filters remove physical particles only. They do not remove chlorine, chemicals, bacteria, lead, PFAS, or dissolved contaminants. For drinking water quality, pair your whole-house sediment filter with a point-of-use system (under-sink RO or countertop filter) at your kitchen faucet. Think of the sediment filter as protecting your plumbing and the point-of-use filter as protecting your health.</p>
+
+  <ProTip>
+    <p>For well water with heavy sediment, install a two-stage filter housing: a 20-micron cartridge in the first stage to catch large particles, followed by a 5-micron cartridge in the second stage for fine filtration. This extends the life of both filters and prevents the fine 5-micron cartridge from clogging prematurely. The total annual cost of this approach is still under $60.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For residential whole-house sediment filtration, the <strong>Membrane Solutions 5-Micron String Wound Sediment Filter 6-Pack</strong> is the definitive recommendation. At $26.35 for a full year of filters, it is the most cost-effective way to protect your entire plumbing system from sediment damage. The universal 10x2.5-inch size fits virtually every standard housing, and 7,200+ positive reviews confirm reliable, consistent performance. Pair it with an under-sink RO system for complete home water treatment. For Elkay bottle filling station operators, the <strong>Elkay 51300C WaterSentry Plus</strong> is the required commercial-grade replacement with outstanding NSF certifications.</p>
+    {publishedProducts[0] && (
+      <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

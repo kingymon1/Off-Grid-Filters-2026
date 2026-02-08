@@ -1,0 +1,345 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('brita-standard-4pack')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Is the Brita Standard 4-Pack a better deal than the 3-Pack?', answer: 'Yes. The 4-pack costs $18.49 ($4.62/filter) compared to the 3-pack at $17.98 ($5.99/filter). That is a 23% savings per filter for just 51 cents more. You also get 8 months of filtration instead of 6, meaning fewer reorder cycles.' },
+  { question: 'Can I use Brita Standard 4-Pack filters in a ZeroWater or PUR pitcher?', answer: 'No. Brita Standard filters are only compatible with Brita-brand pitchers and dispensers (and some third-party Brita-compatible pitchers like Amazon Basics). They will not fit ZeroWater, PUR, or other brand-specific pitchers due to different cartridge designs.' },
+  { question: 'How do I know when to replace a Brita Standard filter?', answer: 'Replace every 40 gallons or approximately every 2 months. Signs it needs replacing include slower flow rate, returning chlorine taste, and the filter indicator light (on newer pitchers) turning red. If you notice off flavors before the 2-month mark, your source water may be more demanding and you should replace sooner.' },
+  { question: 'Should I upgrade to Brita Elite instead of buying the Standard 4-Pack?', answer: 'If lead, pharmaceuticals, or longer filter life matter to you, yes. Brita Elite filters cost $14.89 each but last 120 gallons (3x longer), making them about $0.12/gallon versus $0.15/gallon for Standard. Elite also adds NSF 53 and 401 certifications for lead and pharmaceutical reduction.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. $${product.price}. ${product.rating}/5 stars.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{product.name} Review ({new Date().getFullYear()})</h1>
+
+  <p class="lead">
+    The Brita Standard 4-Pack is the smartest way to buy genuine Brita Standard filters. For just 51 cents more than the 3-pack, you get an extra filter that saves you 23% per cartridge. With 64,000+ reviews at 4.7 stars, this is the bulk option for Brita loyalists who want 8 months of reliable filtration.
+  </p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5 ({product.reviewCount} reviews)</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Filter Life</span>
+      <span class="spec-value">40 gal (~2 months each)</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Pack Size</span>
+      <span class="spec-value">4 filters</span>
+    </div>
+  </div>
+
+  <ProductImage
+    alt="Brita Standard Replacement Filters 4-Pack"
+    icon="filter"
+    aspect="wide"
+  />
+
+  <h2>Overview</h2>
+  <p>
+    The Brita Standard 4-Pack is identical in filtration to the 3-pack — same activated carbon and ion exchange resin, same 40-gallon capacity per filter, same NSF 42 certification. The only difference is the extra filter and the marginal price bump from $17.98 to $18.49.
+  </p>
+  <p>
+    That math works overwhelmingly in the 4-pack's favor. At $4.62 per filter, you are saving $1.37 per filter compared to the 3-pack. Over a year (6 filters), that adds up to over $8 in savings — essentially a free filter. For a product you will repurchase indefinitely, the 4-pack should be your default.
+  </p>
+  <p>
+    The caveat remains the same as for any Brita Standard filter: NSF 42 certification only covers chlorine taste and odor. If you need lead, pharmaceutical, or PFAS reduction, the Brita Elite or a different brand is the better move. But if you are buying Standard, this is the pack size to choose.
+  </p>
+
+  <div class="best-for-box">
+    <span class="best-for-label">Best For</span>
+    <span class="best-for-value">{product.bestFor}</span>
+    <p>The optimal way to buy Brita Standard filters — 8 months of filtration at the lowest per-filter cost for genuine Brita cartridges.</p>
+  </div>
+
+  <h2>Key Features & Specifications</h2>
+  <table class="specs-table">
+    <tbody>
+      <tr><td>Filtration Technology</td><td>{product.specs.filtrationTechnology}</td></tr>
+      <tr><td>Filter Capacity</td><td>{product.specs.capacity}</td></tr>
+      <tr><td>Certifications</td><td>{product.specs.certifications}</td></tr>
+      <tr><td>Pack Size</td><td>{product.specs.packSize}</td></tr>
+      <tr><td>Filter Life</td><td>{product.specs.filterLife}</td></tr>
+      <tr><td>Compatibility</td><td>{product.specs.compatibility}</td></tr>
+      <tr><td>Contaminants Removed</td><td>{product.specs.contaminantsRemoved}</td></tr>
+    </tbody>
+  </table>
+  <p>
+    The 4-pack uses the same OB03 filter cartridge as all Brita Standard products. Each filter contains granulated activated carbon from coconut shells paired with an ion exchange resin. This combination is effective at improving taste but does not address more serious contaminants like lead or microplastics.
+  </p>
+
+  <ProTip title="Cost Comparison">
+    <p>Per-gallon cost breakdown: Brita Standard 4-Pack = $0.116/gal, Brita Standard 3-Pack = $0.150/gal, Amazon Basics Enhanced 3-Pack = $0.087/gal, Brita Elite 2-Pack = $0.124/gal. The Elite is actually cheaper per gallon than the Standard 3-Pack while offering far better filtration.</p>
+  </ProTip>
+
+  <h2>Pros & Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>
+        {product.pros.map(pro => (
+          <li><span class="check-icon" aria-hidden="true">&#10003;</span> {pro}</li>
+        ))}
+      </ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>
+        {product.cons.map(con => (
+          <li><span class="x-icon" aria-hidden="true">&#10007;</span> {con}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <h2>Performance</h2>
+  <p>
+    Performance is identical to the 3-pack since the filters are the same product. Chlorine taste reduction is immediate and consistent through most of the filter life. Copper, cadmium, mercury, and zinc are reduced to levels below EPA thresholds. Water tastes clean and neutral.
+  </p>
+  <p>
+    The 4-pack advantage is purely logistical: fewer trips to the store and a lower effective cost. Each filter provides approximately 2 months of service for a household of 2-3 people drinking 2-3 glasses of filtered water per day. Heavier usage will shorten the cycle.
+  </p>
+  <p>
+    One thing we noticed across multiple Brita Standard packs is occasional variability in packaging quality. A small percentage of users report receiving filters with carbon dust visible in the packaging. This does not affect performance — the initial rinse recommended by Brita clears any loose carbon — but it can be concerning visually.
+  </p>
+
+  <h2>Value Analysis</h2>
+  <p>
+    The 4-pack at $18.49 is objectively the best way to buy Brita Standard. The per-filter price of $4.62 cannot be beaten in any other Brita Standard pack size. However, the broader question is whether Brita Standard is the right filter for you at all.
+  </p>
+  <p>
+    The Amazon Basics Enhanced 3-Pack provides NSF 42/53/401/372 certification (versus just NSF 42 for Brita) at $10.49 — meaning better filtration for $8 less. If you are not brand-loyal, that is the better purchase. And if you are willing to spend more, the Brita Elite 2-Pack at $29.78 provides significantly better filtration at a lower cost per gallon.
+  </p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <div class="verdict-card">
+    <h2>Final Verdict</h2>
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="noopener noreferrer nofollow" class="btn-primary">
+      Check Price on Amazon
+    </a>
+    <p class="verdict-link">
+      <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+    </p>
+  </div>
+</ContentLayout>
+
+<style>
+  .quick-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+  }
+  @media (min-width: 768px) {
+    .quick-specs { grid-template-columns: repeat(4, 1fr); }
+  }
+  .spec-item {
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+  .spec-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 0.25rem;
+  }
+  .spec-value {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+  }
+  .best-for-box {
+    background: hsl(var(--primary) / 0.06);
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .best-for-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--primary));
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .best-for-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
+  }
+  .best-for-box p { margin: 0; font-size: 0.9375rem; }
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+  }
+  .specs-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    font-size: 0.9375rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .specs-table td:first-child {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    width: 40%;
+  }
+  .pros-cons-grid {
+    display: grid;
+    gap: 1.5rem;
+    margin: 1rem 0 2rem;
+  }
+  @media (min-width: 768px) {
+    .pros-cons-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .pros-list, .cons-list {
+    background: hsl(var(--muted));
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid hsl(var(--border));
+  }
+  .pros-list h3, .cons-list h3 {
+    margin-top: 0;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li {
+    padding: 0.375rem 0;
+    font-size: 0.9375rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  .check-icon { color: #22c55e; font-weight: 700; flex-shrink: 0; }
+  .x-icon { color: #ef4444; font-weight: 700; flex-shrink: 0; }
+  .verdict-card {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--accent) / 0.05));
+    border: 1px solid hsl(var(--primary) / 0.2);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+  .verdict-card h2 { border: none; margin-top: 0; }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .verdict-card p { max-width: 40rem; margin-left: auto; margin-right: auto; }
+  .btn-primary {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px hsl(var(--primary) / 0.3);
+  }
+  .verdict-link { margin-top: 1rem; font-size: 0.9375rem; }
+  .faq-section { margin-top: 1rem; }
+  .faq-item {
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+  .faq-item summary {
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    font-size: 0.9375rem;
+  }
+  .faq-item summary:hover { color: hsl(var(--primary)); }
+  .faq-answer {
+    padding: 0 1.25rem 1.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+</style>

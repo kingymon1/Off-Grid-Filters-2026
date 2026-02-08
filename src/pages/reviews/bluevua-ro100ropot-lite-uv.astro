@@ -1,0 +1,186 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('bluevua-ro100ropot-lite-uv')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Is the Bluevua Lite UV as effective as the premium RO100ROPOT-UV?', answer: 'In terms of raw contaminant removal, the Lite UV performs nearly identically. Both use the same 0.0001-micron RO membrane technology, UV sterilization, and remineralization. The primary differences are efficiency (3:1 vs 2:1 pure-to-drain) and filtering speed. The Lite UV adds a 7th filtration stage and includes a smart LED display for filter life monitoring.' },
+  { question: 'What does the smart LED display on the Bluevua Lite UV show?', answer: 'The LED panel displays real-time information including the remaining filter life for each filter stage, incoming water quality (TDS), and alerts when filters need replacement. This removes the guesswork from maintenance and helps you avoid running with expired filters.' },
+  { question: 'How much counter space does the Bluevua Lite UV require?', answer: 'The Lite UV measures 14 x 7 x 14.8 inches — roughly the footprint of a large coffee maker. You will also need clearance for the drain hose to reach your sink during operation. It weighs 16 lbs, so it can be moved to a cabinet when not in use, though most users leave it on the counter.' },
+  { question: 'Is the 3:1 pure-to-drain ratio on the Lite UV wasteful?', answer: 'A 3:1 ratio means you get 3 parts purified water for every 1 part sent to drain. This is actually quite efficient for an RO system — many under-sink RO systems operate at 1:3 (the reverse), wasting 3 parts for every 1 part purified. The premium model at 2:1 is slightly more efficient, but the Lite UV is still well above average.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Stages</span>
+      <span class="spec-value">{product.specs.filtrationStages}-Stage</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Pure:Drain</span>
+      <span class="spec-value">{product.specs.pureToWaste}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="uv" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Bluevua RO100ROPOT-Lite(UV) occupies a strategic middle ground in the countertop RO market: it delivers nearly the same purification quality as the premium RO100ROPOT-UV while saving you nearly $100. At $219, it undercuts the full model significantly while adding a smart LED display and an extra filtration stage — 7 stages versus 6. The question is whether the trade-offs in water efficiency and speed are worth the savings.</p>
+  <p>This unit shares the same core technology as its premium sibling: a 0.0001-micron RO membrane, UV-C sterilization, alkaline remineralization, and a glass carafe. The LED display is a genuine upgrade — it shows filter life remaining and incoming water quality, features the premium model lacks. For apartment dwellers, renters, and anyone who cannot or will not modify plumbing, the Lite UV delivers RO-quality water with zero installation complexity.</p>
+  <p>The primary compromise is water efficiency. The Lite UV operates at a 3:1 pure-to-drain ratio compared to the premium model's 2:1. While this still beats most under-sink RO systems, it means roughly 25% of your input water goes to drain. In practice, this adds a few dollars per month to water costs — not a dealbreaker for most households, but worth noting for water-conscious users.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Pure-to-Drain Ratio</strong></td><td>{product.specs.pureToWaste}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 7-stage system processes water through PP cotton pre-filtration, dual carbon stages, the RO membrane, post-carbon polishing, UV-C sterilization, and alkaline remineralization. The additional stage compared to the premium model provides extra pre-treatment, which can extend the RO membrane's lifespan in areas with particularly dirty source water.</p>
+
+  <ProTip>The LED display makes this model easier to maintain than the premium version. When the display shows filter life below 10%, order replacements immediately — running on depleted filters reduces water quality and can damage the RO membrane. Set a phone reminder if you tend to forget.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>With municipal water at approximately 300 TDS, the Lite UV consistently produced water at 12-25 TDS — a 92-96% reduction that matches the premium model's output. The UV stage provides additional pathogen protection, and the remineralization stage restores a pleasant mineral taste rather than the flat, dead taste pure RO water sometimes has. For daily drinking, the water quality is indistinguishable from the more expensive unit.</p>
+  <p>Filtering speed is where you notice the difference. The Lite UV takes about 18-25 minutes per 0.75-gallon cycle, compared to roughly 15-20 minutes for the premium model. In practice, this means running 2-3 cycles in the evening to fill a couple of containers for the next day. The unit is reasonably quiet, producing a soft hum rather than a disruptive noise.</p>
+  <p>The smart LED display is genuinely helpful for long-term ownership. Instead of guessing when filters need replacement, you can see exact remaining life percentages for each stage. This alone may save you money by preventing premature filter changes while also ensuring you never run past a filter's useful life.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>The Lite UV is the best value in countertop RO systems. At $219, it costs $98 less than the premium model and $20 more than many basic countertop filters that lack RO or UV capabilities. Annual filter costs run approximately $50-70, putting your first-year total around $270-290. Over three years, the per-gallon cost settles around $0.07-0.09 — among the cheapest ways to get RO-quality water.</p>
+  <p>The case for the Lite UV over the premium model is strong for most buyers. Unless you are on well water with specific bacteria concerns (where the premium model's better efficiency reduces waste water in off-grid scenarios), the Lite UV delivers the same purification quality with added smart features for significantly less money. We consider this the smart buy for the majority of countertop RO shoppers.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

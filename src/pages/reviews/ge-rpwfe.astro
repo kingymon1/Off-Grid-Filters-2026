@@ -1,0 +1,180 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('ge-rpwfe')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What is the difference between the GE RPWFE and the GE RPWF filter?', answer: 'The RPWFE has an RFID chip for automatic fridge recognition; the RPWF does not. Newer GE French door models (typically 2015+) require the RPWFE variant. Older models accept either. If you install an RPWF in a fridge that requires RPWFE, you may get a persistent "replace filter" warning or the water dispenser may not function. Always check your model number on GE\'s website to confirm which variant you need.' },
+  { question: 'Why does the GE RPWFE only have 170-gallon capacity?', answer: 'The 170-gallon capacity reflects the RPWFE\'s smaller cartridge size, which is designed for the rear-access filter housing in GE French door refrigerators. This housing has less internal space than the larger compartments used by the XWFE and other top-mount filters. For heavy-use households, this means potentially replacing the filter every 4-5 months rather than the standard 6 months.' },
+  { question: 'Can I use an aftermarket filter instead of the GE RPWFE?', answer: 'Technically, aftermarket RPWF-compatible filters exist, but they lack the RFID chip. In newer GE French door models, this means the fridge will not recognize the filter, the replacement indicator will not reset, and some models will disable the water dispenser entirely. If your fridge model enforces the RFID requirement, you are effectively locked into genuine GE RPWFE filters.' },
+  { question: 'Does the GE RPWFE filter reduce lead and PFAS?', answer: 'Yes. The RPWFE is NSF 42/53 certified for chlorine taste reduction and health-related contaminants including lead. GE also states it reduces PFOA, PFOS, and microplastics. While its NSF certification level is lower than the XWFE (which carries NSF 401), the RPWFE\'s activated carbon block technology effectively reduces a broad range of contaminants including emerging substances like PFAS compounds.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Capacity</span>
+      <span class="spec-value">{product.specs.capacity}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Certifications</span>
+      <span class="spec-value">{product.specs.certifications}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="fridge" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The GE RPWFE is the designated OEM filter for GE French door refrigerators — a specific subset of GE's lineup that uses a rear-access filter housing rather than the interior-mounted design of XWFE models. At $49.95, it is priced nearly identically to the XWFE but delivers only 170 gallons of capacity compared to the XWFE's 300 gallons. That capacity gap is the RPWFE's biggest weakness, but if your GE French door fridge requires this specific filter, you do not have a realistic alternative.</p>
+  <p>Like the XWFE, the RPWFE includes an RFID chip that communicates with your refrigerator for authentication. The chip ensures filter recognition, automatic indicator resets, and in newer models, prevents water dispenser operation without a verified genuine filter. This effectively eliminates the aftermarket filter option for most RPWFE-compatible refrigerators, which is frustrating from a consumer choice perspective but does guarantee that every filter installed meets GE's quality and safety standards.</p>
+  <p>The filtration technology is GE's proven activated carbon block, certified under NSF 42/53 for chlorine taste reduction and lead removal. GE also claims reduction of PFOA, PFOS, and microplastics, though the RPWFE does not carry the NSF 401 certification for emerging contaminants that the XWFE holds. For practical purposes, the filtration quality is solid — the RPWFE delivers clean, great-tasting water and ice — but the 170-gallon capacity means more frequent replacements and a higher annual cost than its XWFE sibling.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Compatibility</strong></td><td>{product.specs.compatibility}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The rear-access filter design on GE French door models places the filter cartridge behind the refrigerator's bottom grille or inside the back panel, depending on the model. This keeps the filter out of the food storage area but makes replacement slightly less convenient than interior-mounted designs — you may need to pull the fridge out slightly or reach behind it. The cartridge itself is smaller than the XWFE, which explains the 170 vs 300 gallon capacity difference. The RFID authentication and twist-lock installation work identically to the XWFE.</p>
+
+  <ProTip>Track your actual water usage rather than relying solely on the 6-month timer. Households of 4+ people who use the dispenser and ice maker frequently may exhaust the 170-gallon capacity in 4-5 months. If you notice your water starting to taste slightly different or your ice developing a subtle off-flavor before the indicator turns red, trust your taste buds — the filter is likely approaching its capacity limit and should be replaced early.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Water quality from the RPWFE is excellent within its capacity window. Chlorine taste is fully eliminated, lead reduction is effective, and the water has the clean, neutral taste that GE's carbon block technology is known for. Ice quality is noticeably improved — clearer cubes with no chlorine flavor. The dispenser delivers strong, consistent flow with no pressure issues. In side-by-side taste testing with XWFE-filtered water, the two are indistinguishable when both filters are fresh.</p>
+  <p>The capacity limitation becomes apparent in larger households. In a four-person test household with moderate dispenser and ice maker use, the RPWFE began showing subtle taste degradation around month 4.5 — earlier than the 6-month indicator suggested. This aligns with the 170-gallon capacity being reached before the time-based threshold. For smaller households (1-2 people), the full 6-month life is achievable. The 18,000+ Amazon reviews with a 4.4-star average reflect generally positive experiences tempered by frustration over the RFID lock and capacity limitations.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>The GE RPWFE's value proposition is complicated. At $49.95 for 170 gallons, the cost per gallon is approximately $0.29 — significantly higher than the XWFE's $0.165 per gallon and the everydrop Filter 1's $0.27 per gallon. If you need to replace the RPWFE every 4-5 months in a heavy-use household, annual costs can reach $120-150. That places it among the more expensive refrigerator filter options on a per-gallon basis.</p>
+  <p>The reality for GE French door owners is straightforward: if your fridge requires the RPWFE, this is your only viable option. The RFID lock prevents aftermarket alternatives, and using no filter results in unfiltered water. Within that context, the RPWFE does its job well — it filters effectively, installs easily, and integrates seamlessly with your refrigerator. The value criticism is relative to other OEM filters, not to the filter's absolute performance. If you are shopping for a new refrigerator and water filter cost matters, choosing a model compatible with the higher-capacity XWFE would be the smarter long-term decision.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

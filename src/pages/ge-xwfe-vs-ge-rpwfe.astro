@@ -1,0 +1,151 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'ge-xwfe-vs-ge-rpwfe')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  compatibility: p.specs.compatibility || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'What is the difference between GE XWFE and RPWFE filters?', answer: 'Both are GE OEM refrigerator filters with RFID chips, but they fit different GE fridge models. The XWFE is a twist-and-lock filter for side-by-side and select bottom-freezer models, with 300-gallon capacity and NSF 42/53/401 certification (50+ contaminants). The RPWFE is a rear-access filter designed for GE French door models, with only 170-gallon capacity and NSF 42/53 certification.' },
+  { question: 'Can I use an XWFE filter in a fridge that needs RPWFE?', answer: 'No. The XWFE and RPWFE have completely different physical designs and mounting mechanisms. Using the wrong filter type will not fit and the RFID chip will not be recognized by your refrigerator. Always check your fridge model number against GE\'s compatibility list to determine which filter you need.' },
+  { question: 'Why do GE filters have RFID chips?', answer: 'GE uses RFID chips to verify that the installed filter is a genuine GE product. The refrigerator will display a warning or may restrict water/ice functions if it does not detect an authorized filter. This prevents aftermarket filters from being used but ensures consistent filtration quality. Some users find this restrictive, while others appreciate the quality assurance.' },
+  { question: 'Which GE filter removes more contaminants?', answer: 'The XWFE removes 50+ contaminants including PFOA, PFOS, and microplastics, and carries NSF 42/53/401 certification. The RPWFE also reduces PFOA, PFOS, and microplastics but only holds NSF 42/53 certification. In practice, the XWFE has been tested against a broader list of substances.' },
+  { question: 'How often should I replace GE XWFE or RPWFE filters?', answer: 'GE recommends replacing both filters every 6 months. However, the XWFE has a 300-gallon capacity while the RPWFE only has 170 gallons. If your household uses a lot of filtered water (heavy ice maker use, large family), the RPWFE may need replacement sooner than 6 months. The XWFE\'s larger capacity gives more buffer.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `GE XWFE vs RPWFE refrigerator filter comparison. We compare capacity, contaminant removal, certifications, and compatibility to help you choose.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Refrigerator Filters', url: '/best-refrigerator-filters/', description: 'Our expert picks for the best refrigerator water filters.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'What NSF certifications mean and why they matter for water filters.' },
+];
+---
+
+<ContentLayout
+  title={`${productA.name} vs ${productB.name}: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`GE XWFE vs RPWFE refrigerator filter comparison. We compare capacity, contaminant removal, certifications, and compatibility to help you choose the right GE filter.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="GE XWFE vs RPWFE"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>GE XWFE ($49.49)</strong> is the objectively better filter with 300-gallon capacity, 50+ contaminant reduction, and NSF 42/53/401 certification. The <strong>GE RPWFE ($49.95)</strong> has lower capacity (170 gal) and fewer certifications. However, <strong>compatibility is not optional</strong> — your GE fridge model dictates which filter you must use. Check your model number first.</p>
+  </div>
+
+  <ProductImage alt="GE XWFE vs RPWFE refrigerator filter comparison" icon="fridge" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Compatibility', key: 'compatibility' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">Both the XWFE and RPWFE are GE OEM filters with RFID authentication. In most cases, your refrigerator model determines which one you buy — they are not interchangeable. But if you are shopping for a new GE fridge, the XWFE-compatible models offer better filtration specs.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Contaminant Removal</h3>
+  <p>The XWFE removes 50+ contaminants including PFOA, PFOS, microplastics, lead, and cysts. It carries the comprehensive NSF 42/53/401 certification — the 401 covering emerging contaminants like pharmaceuticals and pesticides. The RPWFE also reduces lead, PFOA, PFOS, and microplastics but has only NSF 42/53 certification. The XWFE's broader testing and certification against more substances gives it a clear filtration advantage.</p>
+  <div class="winner-badge">Winner: GE XWFE (50+ contaminants, NSF 401)</div>
+
+  <h3>Capacity</h3>
+  <p>The XWFE provides 300 gallons of capacity versus just 170 gallons for the RPWFE — a 76% advantage. For a family of four using 3 gallons of filtered water daily, the XWFE lasts about 100 days while the RPWFE lasts roughly 57 days. In high-use households with heavy ice maker demand, the RPWFE may not make it to the 6-month replacement mark. The XWFE provides a comfortable buffer for virtually any household size.</p>
+  <div class="winner-badge">Winner: GE XWFE (300 vs 170 gallons)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>The XWFE costs $49.49 while the RPWFE is $49.95 — virtually identical pricing. But the XWFE delivers 76% more capacity and broader certifications for $0.46 less. On a per-gallon basis, the XWFE costs about $0.16/gallon while the RPWFE costs $0.29/gallon. The XWFE is the clear value winner, but again — you can only buy the filter your fridge accepts.</p>
+  <div class="winner-badge">Winner: GE XWFE ($0.16/gal vs $0.29/gal)</div>
+
+  <h3>Compatibility</h3>
+  <p>The XWFE fits GE side-by-side and select bottom-freezer models with a twist-and-lock mechanism. The RPWFE is designed specifically for GE French door refrigerators with a rear-access installation. Both use RFID chips that must be recognized by the fridge. The RPWFE wins for French door owners simply because it is the only option, but the XWFE covers a broader range of GE models overall.</p>
+  <div class="winner-badge">Winner: Tie — depends on your fridge model</div>
+
+  <h3>User Reviews &amp; Reliability</h3>
+  <p>The XWFE has 22,000+ reviews with a 4.5-star rating, while the RPWFE has 18,000+ reviews with a 4.4-star rating. Both have occasional complaints about RFID recognition failures — an inherent risk with GE's authentication system. The XWFE has a slight edge in overall satisfaction, likely driven by its larger capacity providing more value per purchase. Both filters have consistent reports of excellent taste improvement.</p>
+  <div class="winner-badge">Winner: GE XWFE (4.5 stars, more reviews)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>Your GE fridge model requires the XWFE filter</li>
+        <li>You want the best contaminant reduction available in a GE fridge filter</li>
+        <li>You prefer the 300-gallon capacity for longer filter life</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>Your GE French door refrigerator requires the RPWFE filter</li>
+        <li>You value the convenience of the rear-access installation design</li>
+        <li>You need a reliable OEM filter with RFID authentication for your fridge</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

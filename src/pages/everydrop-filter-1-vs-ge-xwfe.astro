@@ -1,0 +1,151 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'everydrop-filter-1-vs-ge-xwfe')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  compatibility: p.specs.compatibility || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'Can I use a GE XWFE filter in a Whirlpool refrigerator?', answer: 'No. GE and Whirlpool/everydrop filters have completely different physical designs and connection mechanisms. The GE XWFE only fits GE refrigerators, and the everydrop Filter 1 only fits Whirlpool-family fridges (Whirlpool, Maytag, Amana, KitchenAid, JennAir). You must use the filter designed for your specific refrigerator brand and model.' },
+  { question: 'Which filter removes more contaminants — everydrop Filter 1 or GE XWFE?', answer: 'The GE XWFE removes 50+ contaminants including PFOA, PFOS, and microplastics. The everydrop Filter 1 reduces 99% of lead plus pharmaceuticals, pesticides, and waterborne parasites. Both carry NSF 42/53/401 certification. The XWFE has been tested against a larger number of specific substances, but both provide excellent, comprehensive filtration.' },
+  { question: 'Why does the GE XWFE have more capacity than the everydrop Filter 1?', answer: 'The GE XWFE offers 300 gallons compared to 200 gallons for the everydrop. This likely comes down to the carbon block design and internal filter media volume. The XWFE\'s larger capacity means it lasts longer before needing replacement, making it cheaper per gallon despite a similar sticker price.' },
+  { question: 'Do both of these filters use RFID technology?', answer: 'The GE XWFE uses an RFID chip that the refrigerator must detect before allowing water/ice functions. The everydrop Filter 1 does not use RFID but is designed to fit only compatible Whirlpool-family refrigerators through its physical design. The RFID on GE filters prevents aftermarket alternatives, while everydrop filters can theoretically be substituted with compatible aftermarket options.' },
+  { question: 'Which filter is cheaper in the long run?', answer: 'The GE XWFE costs $49.49 for 300 gallons ($0.16/gallon), while the everydrop Filter 1 costs $53.99 for 200 gallons ($0.27/gallon). The XWFE is about 40% cheaper per gallon. However, you can only use the filter that fits your fridge — there is no cross-compatibility.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `everydrop Filter 1 vs GE XWFE refrigerator filter comparison. We compare contaminant removal, capacity, certifications, and long-term cost.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Refrigerator Filters', url: '/best-refrigerator-filters/', description: 'Our expert picks for the best refrigerator water filters.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'What NSF certifications mean and why they matter for water filters.' },
+];
+---
+
+<ContentLayout
+  title={`everydrop Filter 1 vs GE XWFE: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`everydrop Filter 1 vs GE XWFE refrigerator filter comparison. We compare contaminant removal, capacity, certifications, and value to help you choose.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="everydrop vs GE XWFE"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>everydrop Filter 1 vs GE XWFE: Which Refrigerator Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>GE XWFE ($49.49)</strong> edges ahead on specs with 300-gallon capacity and 50+ contaminant reduction. The <strong>everydrop Filter 1 ($53.99)</strong> delivers excellent 99% lead reduction and triple NSF certification but at lower capacity (200 gal). <strong>Your fridge brand determines your choice</strong> — GE fridges need the XWFE, Whirlpool-family fridges need the everydrop.</p>
+  </div>
+
+  <ProductImage alt="everydrop Filter 1 vs GE XWFE refrigerator filter comparison" icon="fridge" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Compatibility', key: 'compatibility' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">The everydrop Filter 1 and GE XWFE are the top OEM refrigerator filters from the two largest American appliance makers. Both carry triple NSF certification and deliver premium filtration. This comparison helps you understand which offers more — even though your fridge brand ultimately makes the decision for you.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Contaminant Removal</h3>
+  <p>The GE XWFE claims removal of 50+ contaminants, including PFOA, PFOS, microplastics, lead, and cysts. The everydrop Filter 1 reduces 99% of lead, plus pharmaceuticals, pesticides, and waterborne parasites. Both carry NSF 42/53/401 — the premium triple certification covering chlorine taste, health contaminants, and emerging pollutants. The XWFE's explicit 50+ contaminant count and microplastics reduction give it a slight edge in breadth, but the everydrop's 99% lead reduction rate is the highest in our test group.</p>
+  <div class="winner-badge">Winner: Tie — XWFE for breadth, everydrop for lead</div>
+
+  <h3>Capacity &amp; Filter Life</h3>
+  <p>The XWFE provides 300 gallons per filter versus 200 gallons for the everydrop. Both are rated for 6-month replacement cycles, but the XWFE's 50% greater capacity means it maintains peak performance longer in heavy-use households. For a family using 2-3 gallons daily, the XWFE lasts well past the 6-month mark, while the everydrop hits its 200-gallon limit in roughly 3-4 months under the same conditions.</p>
+  <div class="winner-badge">Winner: GE XWFE (300 vs 200 gallons)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>The GE XWFE costs $49.49 for 300 gallons, working out to $0.16 per gallon. The everydrop Filter 1 costs $53.99 for 200 gallons, or $0.27 per gallon — 69% more per gallon. The XWFE is both cheaper at the register and cheaper per gallon, making it the better value on every metric. The everydrop's premium reflects its OEM Whirlpool branding rather than superior filtration economics.</p>
+  <div class="winner-badge">Winner: GE XWFE ($0.16/gal vs $0.27/gal)</div>
+
+  <h3>Ease of Installation</h3>
+  <p>Both filters are designed for tool-free installation. The XWFE uses a twist-and-lock mechanism that takes about 30 seconds. The everydrop Filter 1 uses a push-in design that can be slightly tricky on first installation — some users report needing extra force to seat it properly. For ongoing replacements, both are straightforward. The XWFE's twist-lock is marginally more intuitive for first-time users.</p>
+  <div class="winner-badge">Winner: GE XWFE (easier twist-and-lock)</div>
+
+  <h3>Brand Trust &amp; Reviews</h3>
+  <p>The everydrop Filter 1 has an impressive 32,000+ reviews with a 4.6-star rating — the highest-rated and most-reviewed filter in this comparison. The GE XWFE has 22,000+ reviews with a 4.5-star rating. Both have overwhelming positive feedback. The everydrop's larger review base and slightly higher rating suggest more consistent user satisfaction across a wider installed base. For Whirlpool-family fridge owners, the everydrop brand has strong trust.</p>
+  <div class="winner-badge">Winner: everydrop Filter 1 (4.6 stars, 32K reviews)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You own a Whirlpool, Maytag, Amana, KitchenAid, or JennAir refrigerator</li>
+        <li>You want the highest-rated OEM filter with 32,000+ positive reviews</li>
+        <li>Lead reduction is your top priority (99% certified removal)</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You own a GE refrigerator compatible with XWFE filters</li>
+        <li>You want the highest capacity fridge filter available (300 gallons)</li>
+        <li>You want 50+ contaminant reduction including microplastics</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

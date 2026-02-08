@@ -1,0 +1,142 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'pentair-everpure-h1200-vs-pentair-everpure-h300')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'What is the difference between the Pentair Everpure H-1200 and H-300?', answer: 'The H-1200 is a replacement cartridge set (twin cartridges, $390) for an existing H-1200 filter head, offering 1,000-gallon capacity with NSF 42/53/401 certification including PFOA/PFOS removal. The H-300 is a complete system ($505) that includes the filter head, single cartridge, faucet, and all hardware, but has only 300-gallon capacity and NSF 42/53 certification.' },
+  { question: 'Do I need a filter head already installed for the H-1200 cartridges?', answer: 'Yes. The H-1200 at $390 is a replacement cartridge set only — it requires the Everpure H-1200 filter head already installed under your sink. If you are starting from scratch, you need either the H-300 complete system or purchase the H-1200 filter head separately and then install these cartridges.' },
+  { question: 'Why is the H-1200 cartridge set cheaper than the H-300 complete system?', answer: 'The H-300 at $505 includes the filter head housing, dedicated faucet, tubing, and all installation hardware — everything you need for a brand-new install. The H-1200 at $390 is just the twin replacement cartridges. If you already own the H-1200 system, the cartridges are the only ongoing cost.' },
+  { question: 'Which Pentair Everpure model removes more contaminants?', answer: 'The H-1200 cartridges have broader certification — NSF 42/53/401, which covers PFOA, PFOS, and pharmaceuticals in addition to lead, cysts, and chlorine. The H-300 has NSF 42/53, which covers lead, cysts, and chlorine but lacks the 401 certification for emerging contaminants.' },
+  { question: 'Are Pentair Everpure filters really used in restaurants?', answer: 'Yes. Pentair Everpure is the dominant commercial water filtration brand, used by Starbucks, McDonald\'s, Subway, and thousands of independent restaurants worldwide. Their systems are designed for the high-volume, high-reliability demands of food service. The home models use the same core technology.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `Comparison of Pentair Everpure H-1200 replacement cartridges vs H-300 complete system. We compare capacity, certifications, price, and what each option includes.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Our expert picks for the best under-sink water filtration systems.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home.' },
+];
+---
+
+<ContentLayout
+  title={`${productA.name} vs ${productB.name}: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`Detailed comparison of Pentair Everpure H-1200 vs H-300. We compare capacity, certifications, price, and features to help you choose the right commercial-grade under-sink filter.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Everpure H-1200 vs H-300"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> If you already own a Pentair Everpure system, the <strong>H-1200 cartridge set ($390)</strong> is the better long-term investment with 3x the capacity and broader NSF certifications. If you are starting from scratch and want a ready-to-install system, the <strong>H-300 ($505)</strong> gets you everything in one box — but at a higher per-gallon cost.</p>
+  </div>
+
+  <ProductImage alt="Pentair Everpure H-1200 vs H-300 under-sink filter comparison" icon="compare" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <p class="lead">These are two very different products from the same commercial-grade brand. The H-1200 is a replacement cartridge set for existing systems, while the H-300 is a complete system. Understanding what you need — cartridges or a full installation — is the first step in choosing between them.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration &amp; Certifications</h3>
+  <p>Both products use Pentair's Micro-Pure activated carbon with precoat submicron technology at 0.5-micron filtration. However, the H-1200 cartridges carry NSF 42/53/401 certification, covering PFOA, PFOS, pharmaceuticals, and pesticides in addition to the standard lead, cysts, and chlorine reduction. The H-300 system carries only NSF 42/53. If your water supply has known PFAS contamination or you want the broadest contaminant coverage, the H-1200 cartridges are the superior choice.</p>
+  <div class="winner-badge">Winner: Everpure H-1200 (NSF 42/53/401 vs 42/53)</div>
+
+  <h3>Capacity &amp; Filter Life</h3>
+  <p>The H-1200 twin cartridge set provides 1,000 gallons of capacity — more than 3x the H-300's 300-gallon capacity. For an average household using 2-3 gallons of filtered water daily, the H-1200 lasts roughly 12 months while the H-300 may need replacement in 4-6 months. This significantly impacts long-term replacement costs and convenience.</p>
+  <div class="winner-badge">Winner: Everpure H-1200 (1,000 vs 300 gallons)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>The H-1200 cartridges cost $390 for 1,000 gallons, working out to roughly $0.39 per gallon. The H-300 complete system costs $505 for 300 gallons (with the first cartridge), or about $1.68 per gallon for the initial cartridge. However, the H-300's price includes the filter head, faucet, and all installation hardware — things you would need to purchase separately for the H-1200. For an existing Everpure owner, the H-1200 is far more economical. For a first-time buyer, the H-300 is the simpler, all-in-one option.</p>
+  <div class="winner-badge">Winner: Everpure H-1200 ($0.39/gal vs $1.68/gal)</div>
+
+  <h3>Ease of Installation</h3>
+  <p>The H-300 is the clear winner for new installations. It includes everything needed: filter head, cartridge, dedicated faucet, tubing, and mounting hardware. A handy homeowner can complete the installation in 1-2 hours. The H-1200 cartridge set is just the cartridges — quarter-turn replacements that take 30 seconds if you already have the filter head installed. But if you don't own an Everpure system yet, you need to source the H-1200 filter head separately, which adds complexity and cost.</p>
+  <div class="winner-badge">Winner: Everpure H-300 (complete system, ready to install)</div>
+
+  <h3>Long-Term Cost of Ownership</h3>
+  <p>For ongoing operation, the H-1200 wins decisively. At $390 per year (one cartridge set) for 1,000 gallons, it costs less per gallon than the H-300's replacement cartridges. The H-300's single-cartridge replacements run roughly $150-180 each at 300 gallons, meaning you might spend $300-360 per year for the same amount of filtered water. The H-1200's twin-cartridge design also provides more consistent flow rates and redundancy.</p>
+  <div class="winner-badge">Winner: Everpure H-1200 (lower cost per gallon)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You already own a Pentair Everpure H-1200 system and need replacement cartridges</li>
+        <li>You want the broadest contaminant removal including PFOA/PFOS (NSF 401)</li>
+        <li>You want the best per-gallon value with 1,000-gallon capacity</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You are installing an under-sink system for the first time and want everything in one box</li>
+        <li>You value the convenience of a complete, ready-to-install system</li>
+        <li>You want commercial-grade filtration without sourcing separate components</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

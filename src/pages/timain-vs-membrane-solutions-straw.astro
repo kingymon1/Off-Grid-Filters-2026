@@ -1,0 +1,153 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'timain-vs-membrane-solutions-straw')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Which survival filter straw is better — Timain or Membrane Solutions?', answer: 'The Timain offers more filtration stages (4 vs 1) and a lower per-straw cost ($7.12 vs $9.75). The Membrane Solutions has a stronger track record with more reviews (8,500 vs 3,200), a higher rating (4.5 vs 4.4), a log-8 bacteria removal rate, and 28mm bottle compatibility. For pure budget, Timain wins. For reliability and group preparedness, Membrane Solutions wins with its 4-pack.' },
+  { question: 'Do either of these survival straws remove viruses?', answer: 'No. Both the Timain and Membrane Solutions straws use 0.1-micron filtration, which removes bacteria and protozoa but NOT viruses. Viruses are much smaller (0.02-0.3 microns) and pass through the filter membrane. For virus protection, pair either straw with chemical purification tablets like MSR Aquatabs.' },
+  { question: 'How long do these filter straws last?', answer: 'Both are rated for approximately 1,500 liters per straw. However, actual lifespan depends heavily on source water turbidity. Clear streams will yield close to the rated capacity, while murky or sediment-heavy water will clog the filters much sooner. Always backwash (if possible) after filtering turbid water to extend filter life.' },
+  { question: 'Can I use these straws with a water bottle?', answer: 'The Membrane Solutions straw fits standard 28mm water bottles, making it easy to screw onto a bottle and squeeze filtered water out. The Timain straw can be used as a direct-drink straw or with a squeeze bag (not included) but does not specifically mention 28mm bottle compatibility. For bottle-based filtering, Membrane Solutions has the advantage.' },
+  { question: 'Are these straw filters safe for international travel?', answer: 'With caution. Both remove bacteria (99.9999%+) and protozoa (99.99%) but NOT viruses. In regions where waterborne viruses (hepatitis A, rotavirus, norovirus) are common — particularly parts of Asia, Africa, and South America — a filter straw alone is NOT sufficient. Pair with Aquatabs or a UV purifier for complete protection when traveling internationally.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `Timain vs Membrane Solutions Filter Straw: Which Is Better?`,
+  description: `Timain 4-Stage vs Membrane Solutions survival filter straw comparison. We compare filtration, price per straw, durability, and field usability.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'Our expert picks for survival and portable water filtration.' },
+  { title: 'Water Filters for Camping', url: '/water-filters-for-camping/', description: 'The best portable water filters for camping trips.' },
+];
+---
+
+<ContentLayout
+  title={`Timain vs Membrane Solutions Straw: Which Survival Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`Timain vs Membrane Solutions survival filter straw comparison. We compare filtration stages, bacteria removal, price, and field performance.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Timain vs Membrane Solutions"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Timain vs Membrane Solutions Filter Straw: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>Timain 2-Pack ($14.23)</strong> wins on per-straw value ($7.12) and offers 4-stage filtration with chlorine and odor reduction. The <strong>Membrane Solutions 4-Pack ($38.98)</strong> wins for families and group preparedness with 4 straws, a stronger review profile (4.5 stars, 8,500+ reviews), and proven 28mm bottle compatibility. Both remove 99.99%+ of bacteria and protozoa.</p>
+  </div>
+
+  <ProductImage alt="Timain vs Membrane Solutions survival filter straw comparison" icon="straw" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Stages', key: 'filtrationStages' },
+    { label: 'Micron Rating', key: 'micronRating' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">Both the Timain and Membrane Solutions straws provide effective portable water filtration at ultra-low prices. They share the same 0.1-micron filtration level and similar capacity ratings. The differences come down to filtration stages, pack size, per-straw cost, and brand reliability.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Technology</h3>
+  <p>The Timain uses a 4-stage filtration system: PP cotton, coconut carbon, PP fiber, and a 0.1-micron ultrafiltration membrane. This multi-stage approach provides chlorine and odor reduction in addition to pathogen removal — beneficial for tap water emergencies or chlorinated municipal water during boil advisories. The Membrane Solutions uses a single-stage 0.1-micron hollow fiber UF membrane. Hollow fiber is a well-proven technology in portable filtration, but without additional stages, it does not reduce chemicals, chlorine, or odor.</p>
+  <div class="winner-badge">Winner: Timain (4-stage vs 1-stage, chemical/odor reduction)</div>
+
+  <h3>Bacteria &amp; Protozoa Removal</h3>
+  <p>Both straws use 0.1-micron filtration and effectively remove bacteria and protozoa. The Timain claims 99.9999% bacteria removal (log-6). The Membrane Solutions claims 99.999999% bacteria removal (log-8) — two orders of magnitude higher on paper. While both are safe for field use, the Membrane Solutions' higher claimed removal rate provides an extra margin of safety. In practice, both will make stream and lake water safe from bacterial pathogens.</p>
+  <div class="winner-badge">Winner: Membrane Solutions (log-8 vs log-6 bacteria removal)</div>
+
+  <h3>Price Per Straw</h3>
+  <p>The Timain 2-pack at $14.23 works out to $7.12 per straw — the cheapest survival filter in our catalog. The Membrane Solutions 4-pack at $38.98 costs $9.75 per straw. While the Membrane Solutions total cost is higher, you get 4 straws versus 2. For a single person buying the cheapest possible survival filter, the Timain is the clear budget winner. For family preparedness, the Membrane Solutions 4-pack covers more people.</p>
+  <div class="winner-badge">Winner: Timain ($7.12 vs $9.75 per straw)</div>
+
+  <h3>Pack Size &amp; Preparedness</h3>
+  <p>The Membrane Solutions 4-pack provides enough straws for a family of four, or allows distribution across multiple emergency kits (car, home, go-bag, office). The Timain 2-pack covers one person with a backup or two people without redundancy. For comprehensive family or group preparedness, having 4 straws readily available is a significant practical advantage.</p>
+  <div class="winner-badge">Winner: Membrane Solutions (4-pack for groups)</div>
+
+  <h3>Reviews &amp; Reliability</h3>
+  <p>The Membrane Solutions straw has 8,500+ reviews with a 4.5-star rating — strong social proof from a wide user base. The Timain has 3,200+ reviews with a 4.4-star rating. Both are well-regarded, but the Membrane Solutions' larger review base and higher rating give it an edge in proven reliability. The Membrane Solutions brand also has more products in the water filtration space, suggesting deeper expertise.</p>
+  <div class="winner-badge">Winner: Membrane Solutions (4.5 stars, 8.5K reviews)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You want the cheapest survival filter available — $7.12 per straw</li>
+        <li>You want 4-stage filtration with chlorine and odor reduction</li>
+        <li>You need a personal straw for solo hiking or as a single emergency backup</li>
+        <li>Budget is your primary constraint</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You need to outfit a family or multiple emergency kits (4 straws)</li>
+        <li>You want the highest documented bacteria removal rate (log-8)</li>
+        <li>28mm bottle compatibility matters for your setup</li>
+        <li>You prefer a more established brand with stronger reviews</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

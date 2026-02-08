@@ -1,0 +1,130 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-emergencies')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const membrane = getProductBySlug('membrane-solutions-filter-straw-4pack')!;
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+const aquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+const naturenova = getProductBySlug('naturenova-filter-straw-3pack')!;
+const bluevua = getProductBySlug('bluevua-ro100ropot-uv')!;
+
+const recommendedProducts = [membrane, aquatabs, timain, naturenova];
+
+const faqs = [
+  { question: 'How much water should I store for emergencies?', answer: 'FEMA recommends a minimum of one gallon per person per day for at least three days. For a family of four, that is 12 gallons minimum. However, two weeks of supply is far more realistic for major disasters — that is 56 gallons for a family of four. Beyond stored water, having portable filtration and purification allows you to access natural water sources indefinitely if municipal systems fail.' },
+  { question: 'How long do water filter straws last in storage?', answer: 'Unused filter straws in sealed packaging last 5-10 years in dry storage. The hollow fiber membranes are stable when dry. However, once used, the filter should be air-dried completely before returning to storage. A damp filter stored in a sealed bag can develop mold internally. Store unused emergency filter straws in a cool, dry place and they will be ready when you need them.' },
+  { question: 'Can I filter floodwater in an emergency?', answer: 'Floodwater is extremely dangerous and filtration alone is not sufficient. Floodwater contains sewage, industrial chemicals, petroleum products, and heavy metals that filter straws cannot remove. If floodwater is your only option, pre-filter through cloth, then filter through a straw, and finally treat with Aquatabs. Even then, use it only for survival — seek clean water alternatives as soon as possible.' },
+  { question: 'Do water purification tablets expire?', answer: 'Yes. MSR Aquatabs have a shelf life of approximately 5 years when kept in their sealed foil packaging in a cool, dry environment. Once the foil strip is opened, use remaining tablets within 12 months. Always check the expiration date on your emergency supply and rotate stock annually. Expired tablets may have reduced effectiveness against pathogens.' },
+  { question: 'What is the best water purification method after a hurricane?', answer: 'Boiling is the most reliable method if you have fuel. Bring water to a rolling boil for at least one minute (3 minutes above 6,500 feet elevation). If boiling is not possible, combine filtration with chemical treatment: filter through a straw to remove bacteria and sediment, then treat with Aquatabs to kill viruses. Avoid any water that smells of chemicals or has an unusual color — no filter or tablet can make chemically contaminated water safe.' },
+  { question: 'Should I build separate emergency water kits for home and car?', answer: 'Yes. Disasters can strike when you are away from home, so we recommend separate kits. A home kit should include stored water, multiple filter straws, and purification tablets. A car kit should include at least one filter straw, a pack of Aquatabs, and a collapsible water container. The Timain 2-pack is ideal for splitting between kits at just $14.23 for the pair.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Water Filters for Off-Grid Living', url: '/water-filters-for-off-grid/', description: 'Long-term water independence strategies for homesteads and remote properties.' },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'Our complete ranking of portable water filters for survival scenarios.' },
+  { title: 'Best Water Filters for Camping', url: '/water-filters-for-camping/', description: 'Portable filters that work just as well at camp as in emergency kits.' },
+  { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Understand the technology behind every filter type for informed preparedness planning.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">When municipal water systems fail after hurricanes, earthquakes, winter storms, or infrastructure breakdowns, access to clean drinking water becomes the most urgent survival need. We break down exactly how to build a water purification kit that keeps your family safe when the taps stop flowing.</p>
+
+  <ProductImage alt="Emergency water filtration and purification kit" icon="shield" aspect="hero" />
+
+  <h2>Why Emergency Water Preparedness Matters</h2>
+  <p>FEMA reports that the average American household has less than three days of water stored at any given time. Yet major natural disasters routinely knock out municipal water treatment for a week or longer. Hurricane Maria left parts of Puerto Rico without clean water for months. The 2021 Texas winter storm disrupted water service for over 13 million people. Flint, Michigan's water crisis lasted years.</p>
+  <p>The human body can survive only about three days without water. Dehydration symptoms begin within hours in hot conditions. Children, the elderly, and people with medical conditions are especially vulnerable. Having a reliable water purification system is not prepper paranoia — it is basic household preparedness that every family should invest in.</p>
+  <p>The good news is that building a comprehensive emergency water kit is inexpensive. For under $65, you can equip your family with filter straws for every member plus chemical purification tablets for backup — a system capable of producing safe drinking water from virtually any freshwater source for months.</p>
+
+  <h2>What to Look For in Emergency Water Purification</h2>
+  <p>Emergency water filtration has different priorities than everyday home filtration. Here is what matters when disaster strikes:</p>
+  <ul>
+    <li><strong>No power or plumbing required:</strong> Forget electric-powered RO systems and plumbed-in filters. Your emergency kit must work when the grid is down and pipes are dry. Filter straws and chemical tablets need nothing but a water source.</li>
+    <li><strong>Long shelf life:</strong> Emergency supplies must be ready years after you buy them. Filter straws in sealed packaging last 5-10 years. Aquatabs last 5 years sealed. Both are reliable set-and-forget supplies.</li>
+    <li><strong>Multi-person capacity:</strong> You need filtration for every family member. Individual filter straws mean no one has to share or wait. Multi-packs like the Membrane Solutions 4-pack are designed for exactly this.</li>
+    <li><strong>Complete biological coverage:</strong> Emergency water sources may contain bacteria, protozoa, and viruses. Filters alone miss viruses. Chemical tablets alone do not remove sediment or cysts. You need both for comprehensive protection.</li>
+    <li><strong>Portability:</strong> You may need to evacuate. Your water purification kit should fit in a go-bag alongside other emergency supplies. Compact, lightweight filter straws are perfect for this.</li>
+  </ul>
+
+  <ProTip title="The 3-Layer Emergency Water Strategy">
+    Build your emergency water preparedness in three layers: (1) Stored water — at least one gallon per person per day for two weeks; (2) Portable filtration — one filter straw per family member; (3) Chemical purification — at least 60 Aquatabs per person. If any one layer fails, the other two keep you safe. This redundancy could be the difference between a manageable situation and a crisis.
+  </ProTip>
+
+  <h2>Top Picks for Emergency Preparedness</h2>
+
+  <h3>1. {membrane.name} — Best for Family Emergency Kits</h3>
+  <p>The Membrane Solutions 4-pack is purpose-built for emergency preparedness. Four individual filter straws mean a family of four each has their own dedicated water filtration device — no sharing, no waiting, no single point of failure. If one straw gets lost or damaged, three family members still have safe water access.</p>
+  <p>The 0.1-micron hollow fiber membrane removes 99.999999% of bacteria and 99.99% of protozoa, which covers the primary biological threats in emergency freshwater sources. Each straw is rated for 1,500+ liters, giving a family of four roughly 375 liters per person — more than 90 days of drinking water at the recommended minimum intake.</p>
+  <p>At ${membrane.price} for four straws, equipping your family for water safety costs less than a single restaurant meal. These belong in every household emergency kit.</p>
+  <p><strong>Price:</strong> ${membrane.price} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {aquatabs.name} — Essential Virus Protection</h3>
+  <p>Filter straws remove bacteria and protozoa but physically cannot capture viruses, which are as small as 0.02 microns. In emergency situations where water sources may be contaminated with sewage (common during flooding), viral threats like norovirus, hepatitis A, and rotavirus are real concerns. MSR Aquatabs kill all three.</p>
+  <p>Each tablet treats 2 quarts in 30 minutes using NaDCC chlorine-based chemistry. The 30-pack provides 60 quarts (15 gallons) of virus-free water — enough for one person for over two weeks. The tablets weigh practically nothing, have a 5-year shelf life sealed, and cost just ${aquatabs.price}. Buy multiple packs to cover your entire family.</p>
+  <p>The recommended emergency protocol: filter water through a straw first to remove bacteria, protozoa, and sediment. Then treat the filtered water with an Aquatab to neutralize any viruses. This two-step process provides the most comprehensive water purification possible without electricity.</p>
+  <p><strong>Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {timain.name} — Best for Go-Bags and Vehicle Kits</h3>
+  <p>The Timain 2-pack is ideal for splitting between emergency stashes. Put one straw in your home emergency kit and one in your car's glove compartment or go-bag. At just 2.1 ounces per straw, it adds virtually no weight to an evacuation bag while providing the ability to drink safely from any freshwater source.</p>
+  <p>The 4-stage filtration with activated carbon provides an advantage over membrane-only straws in emergency scenarios: the carbon stage reduces chlorine taste and odor, which matters if you are treating partially chlorinated municipal water that may have been compromised. At ${timain.price} for two straws, the cost is trivial for such critical insurance.</p>
+  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {naturenova.name} — Best for Base Camp Emergencies</h3>
+  <p>When sheltering in place during an extended emergency, the NatureNova kit's included foldable water bag enables gravity filtration — a hands-free method that can produce larger quantities of filtered water for cooking, cleaning, and drinking. Fill the bag from any source, hang it from a hook or door frame, and let gravity pull water through the filter.</p>
+  <p>The backwash syringe is particularly valuable in extended emergencies where sediment-heavy water is the norm. Being able to maintain and restore your filter's flow rate can extend its life far beyond the rated 1,500 liters. At ${naturenova.price} for three complete kits, it provides redundancy and functionality that simpler straws lack.</p>
+  <p><strong>Price:</strong> ${naturenova.price} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>Building Your Emergency Water Kit</h2>
+  <p>Here is a step-by-step checklist for a complete family emergency water purification setup:</p>
+  <ol>
+    <li><strong>Store baseline water:</strong> At minimum, 1 gallon per person per day for 14 days. Use commercially sealed water or fill food-grade containers and rotate every 6 months.</li>
+    <li><strong>One filter straw per family member:</strong> The Membrane Solutions 4-pack covers a typical family. Store in sealed packaging in your emergency supply bin.</li>
+    <li><strong>Chemical purification tablets:</strong> At least 30 Aquatabs per person. Buy 2-3 packs per family member and store in a cool, dry place.</li>
+    <li><strong>Collection containers:</strong> Store at least two collapsible water containers (5-gallon size) for transporting water from sources back to your shelter.</li>
+    <li><strong>Pre-filtration material:</strong> Include a few coffee filters or clean bandanas for straining sediment from turbid water before filtering.</li>
+    <li><strong>Separate vehicle kits:</strong> Put one filter straw and one pack of Aquatabs in each family vehicle.</li>
+  </ol>
+
+  <ProTip title="Rotate Your Emergency Water Supply">
+    Set a calendar reminder every 6 months to check your emergency water kit. Rotate stored water, verify Aquatabs are within their 5-year expiration date, and confirm filter straws are still in sealed packaging. A kit you built and forgot about may not work when you need it most. Treat it like a smoke detector — test regularly, replace proactively.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Emergency Preparedness</h2>
+  <p>For comprehensive family emergency water preparedness, we recommend the <strong><a href={`/reviews/${membrane.slug}/`}>{membrane.name}</a></strong> combined with multiple packs of <strong><a href={`/reviews/${aquatabs.slug}/`}>{aquatabs.name}</a></strong>. The filter straws handle bacteria and protozoa while the tablets kill viruses — together, they cover every biological threat. Total cost for a family of four: roughly $63. That is an investment in peace of mind that could quite literally save lives.</p>
+</ContentLayout>

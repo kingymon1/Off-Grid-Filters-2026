@@ -1,0 +1,142 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'bluevua-ro100ropot-uv-vs-bluevua-ro100ropot-lite-uv')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'What is the main difference between the Bluevua RO100ROPOT-UV and the Lite UV?', answer: 'The biggest differences are price ($317 vs $219) and water efficiency. The premium UV model has a 2:1 pure-to-drain ratio while the Lite UV wastes more water at 3:1. The Lite UV actually has 7 filtration stages compared to the premium\'s 6, and adds a smart LED display. Both include UV sterilization and glass carafes.' },
+  { question: 'Is the Bluevua Lite UV worth the savings over the full UV model?', answer: 'For most households, yes. The Lite UV saves you nearly $100 and delivers comparable filtration with its 7-stage system. The main trade-off is water waste — the Lite UV uses 50% more drain water. If your water bill is a concern or you live in a drought-prone area, the premium model\'s 2:1 ratio may pay for itself over time.' },
+  { question: 'Do both Bluevua models remove the same contaminants?', answer: 'Yes, both models use the same core reverse osmosis membrane (0.0001 micron) and UV sterilization. Both remove TDS, lead, chlorine, fluoride, bacteria, viruses, heavy metals, and PFAS. The Lite UV actually adds an extra filtration stage, though both achieve comparable purity levels.' },
+  { question: 'How much counter space do these Bluevua systems require?', answer: 'Both models have similar footprints. The premium UV measures 14.5 x 7.5 x 15.2 inches and weighs 18 lbs, while the Lite UV is slightly smaller at 14 x 7 x 14.8 inches and 16 lbs. Either way, plan on dedicating a solid section of counter space near an electrical outlet.' },
+  { question: 'How often do filters need to be replaced on Bluevua countertop RO systems?', answer: 'Both models follow the same replacement schedule: the RO membrane lasts about 12 months, while the pre-filters and post-filters should be changed every 6 months. Annual filter costs are similar for both models since they use comparable cartridge designs.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `Detailed comparison of the Bluevua RO100ROPOT-UV and Lite UV countertop reverse osmosis systems. We compare price, water efficiency, filtration stages, and features.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'Our top picks for countertop and pitcher water filtration systems.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home.' },
+];
+---
+
+<ContentLayout
+  title={`${productA.name} vs ${productB.name}: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`Detailed comparison of ${productA.name} vs ${productB.name}. We compare price, water efficiency, filtration, and features to help you choose the right Bluevua countertop RO.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Bluevua UV vs Lite UV"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>Lite UV ($219)</strong> is the smarter buy for most people, delivering 90% of the premium model's performance at 70% of the price. Choose the full <strong>RO100ROPOT-UV ($317)</strong> only if you care deeply about water efficiency — its 2:1 pure-to-drain ratio wastes significantly less water than the Lite's 3:1 ratio.</p>
+  </div>
+
+  <ProductImage alt={`${productA.brand} RO100ROPOT-UV vs Lite UV comparison`} icon="compare" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <p class="lead">Both Bluevua countertop RO systems offer hospital-grade purification without any installation — just plug in and pour. They share the same glass carafe, UV sterilization, and remineralization features. The question is whether the premium model's better water efficiency justifies the $98 price gap.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Quality</h3>
+  <p>Both systems use the same 0.0001-micron RO membrane and UV sterilization, removing TDS, lead, chlorine, fluoride, bacteria, viruses, heavy metals, and PFAS. The Lite UV actually edges ahead with 7 filtration stages versus the premium's 6. In practice, the water quality difference is negligible — both produce exceptionally pure, remineralized water. The Lite UV's additional stage provides a slight edge in pre-filtration before the RO membrane, which could extend membrane life.</p>
+  <div class="winner-badge">Winner: Bluevua Lite UV (7 stages vs 6)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>At $219 versus $317, the Lite UV saves you $98 upfront — a 31% discount for a system that matches or exceeds the premium model's filtration stages. Both models share similar replacement filter costs and schedules. For a first-time countertop RO buyer, the Lite UV delivers exceptional value. The premium model's higher price is only justified if you value water efficiency highly enough to recoup the $98 difference through lower water bills.</p>
+  <div class="winner-badge">Winner: Bluevua Lite UV ($98 savings)</div>
+
+  <h3>Water Efficiency</h3>
+  <p>This is where the premium model clearly earns its price. The RO100ROPOT-UV achieves a 2:1 pure-to-drain ratio, meaning for every 2 gallons of purified water, only 1 gallon goes to drain. The Lite UV's 3:1 ratio means it wastes 50% more water. For a household filtering 3 gallons per day, the premium model saves roughly 1.5 gallons daily — about 550 gallons per year. In drought-prone areas or homes with high water costs, that adds up.</p>
+  <div class="winner-badge">Winner: Bluevua RO100ROPOT-UV (2:1 vs 3:1)</div>
+
+  <h3>Features &amp; Usability</h3>
+  <p>The Lite UV includes a smart LED display that shows real-time filter life and water quality metrics — a feature absent from the premium model. Both systems feature glass carafes, zero-installation operation, and the same general form factor. The Lite UV's LED display is genuinely useful for knowing when filters need replacement without guesswork, making it the more user-friendly option day-to-day.</p>
+  <div class="winner-badge">Winner: Bluevua Lite UV (smart LED display)</div>
+
+  <h3>Long-Term Reliability</h3>
+  <p>The premium RO100ROPOT-UV has been on the market longer with 2,800+ reviews and a 4.4-star rating. The Lite UV, while well-reviewed with 1,900+ reviews and 4.3 stars, is a newer model with a shorter track record. For buyers who prioritize proven longevity, the premium model's longer market presence and larger review base offer more confidence. Both share Bluevua's warranty and support, however.</p>
+  <div class="winner-badge">Winner: Bluevua RO100ROPOT-UV (longer track record)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You live in a drought-prone area or have high water utility costs</li>
+        <li>You want the most water-efficient countertop RO available (2:1 ratio)</li>
+        <li>You prefer a model with a longer track record and more user reviews</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You want the best value in countertop RO — nearly $100 in savings</li>
+        <li>You want a smart LED display for real-time filter and water quality monitoring</li>
+        <li>Filtration quality matters more to you than water waste ratios</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

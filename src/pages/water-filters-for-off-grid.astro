@@ -1,0 +1,136 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-off-grid')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const ispring = getProductBySlug('ispring-rcc7ak')!;
+const sediment = getProductBySlug('membrane-solutions-sediment-6pack')!;
+const bluevua = getProductBySlug('bluevua-ro100ropot-uv')!;
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+const aquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+
+const recommendedProducts = [ispring, sediment, bluevua, timain, aquatabs];
+
+const faqs = [
+  { question: 'Can I run a reverse osmosis system on solar power?', answer: 'Yes. Under-sink RO systems like the iSpring RCC7AK do not require electricity — they operate on water pressure alone. If your off-grid property has a pressure tank on your well system, the RO works exactly as it would in a grid-connected home. Countertop RO systems like the Bluevua require an electrical outlet, which can be powered by a modest solar panel and battery system (the unit draws approximately 100-150 watts during operation).' },
+  { question: 'What is the best water source for an off-grid property?', answer: 'A drilled well with a submersible pump is the most reliable off-grid water source. Spring collection is a good secondary option if you have a natural spring on your property — gravity-feed it to a storage tank and filter at point of use. Rainwater harvesting is a viable supplemental source in many climates but requires pre-filtration and purification. Surface water from streams and ponds is the least reliable and requires the most treatment.' },
+  { question: 'How much water storage do I need for off-grid living?', answer: 'At minimum, plan for 50 gallons per person per day for all household use (drinking, cooking, washing, and sanitation). A family of four needs 200 gallons per day, or roughly 1,400 gallons per week. For well water with a solar pump that may not run in extended cloudy weather, we recommend 3-7 days of storage — that is a 1,000-2,000 gallon tank for most families. Rainwater harvesting systems should size tanks based on your area\'s dry season duration.' },
+  { question: 'Do I need to filter rainwater for drinking?', answer: 'Absolutely. Collected rainwater is not sterile — it can contain bacteria from bird droppings on your collection surface, parasites, dissolved pollutants from atmospheric contaminants, and sediment from your gutters and piping. At minimum, rainwater for drinking should pass through a sediment filter, then an RO system or countertop purifier. UV sterilization is also strongly recommended for rainwater intended for drinking.' },
+  { question: 'How do I maintain a water filtration system off-grid?', answer: 'Stock replacement filters for at least 12 months at all times — you cannot make a quick run to the hardware store when you live off-grid. For sediment filters, keep a full year supply (6+ cartridges). For RO systems, stock a complete set of replacement cartridges. Track filter change dates on a calendar. Also maintain a portable backup (filter straws and Aquatabs) in case your primary system fails during a resupply gap.' },
+  { question: 'What is the cheapest way to set up off-grid water filtration?', answer: 'The most cost-effective off-grid water setup is: Membrane Solutions sediment filters ($26.35/year) for whole-house pre-filtration, plus an iSpring RCC7AK ($198.78) for drinking water RO. Add a Timain filter straw 2-pack ($14.23) and Aquatabs ($11.99) as portable backup. Total first-year cost: approximately $251. This provides three layers of protection — sediment, RO, and portable backup — for under $300.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Water Filters for Well Water', url: '/water-filters-for-well-water/', description: 'Detailed filtration strategies for private well water systems.' },
+  { title: 'Best Water Filters for Emergency Preparedness', url: '/water-filters-for-emergencies/', description: 'Backup water purification for when primary systems fail.' },
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'Our top-pick under-sink RO for off-grid homesteads.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'The complete guide to selecting the right filter for your needs.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Off-grid living means being your own water utility. Whether you source water from a well, spring, rainwater collection, or surface water, you need a multi-layer filtration strategy that works without municipal infrastructure. We design a complete system using products we have tested and trust.</p>
+
+  <ProductImage alt="Complete water filtration for off-grid homesteads" icon="camping" aspect="hero" />
+
+  <h2>Why Off-Grid Water Filtration Requires a System Approach</h2>
+  <p>In a grid-connected home, your municipality handles water treatment before it reaches your pipes. Off-grid, you are the water treatment plant. This means dealing with challenges that city dwellers never face: sediment from well water or surface sources, bacteria and parasites in untreated water, dissolved minerals and metals from geological sources, and seasonal variation in water quality.</p>
+  <p>No single filter handles all of these challenges. The solution is a layered system where each stage addresses specific contaminants, protecting both your plumbing infrastructure and your family's health. A well-designed off-grid water system has three layers:</p>
+  <ol>
+    <li><strong>Whole-house sediment filtration:</strong> Catches physical particles before they reach your plumbing, water heater, and appliances. Essential for any non-municipal water source.</li>
+    <li><strong>Point-of-use purification:</strong> An under-sink RO system or countertop purifier that produces drinking-quality water at the kitchen tap. This is where the serious contaminant removal happens.</li>
+    <li><strong>Portable backup:</strong> Filter straws and purification tablets for emergencies, outdoor use, and redundancy if your primary system goes down.</li>
+  </ol>
+  <p>This three-layer approach provides the reliability that off-grid living demands. If any single layer fails, the other two maintain your water safety while you troubleshoot or wait for replacement parts.</p>
+
+  <h2>What to Consider for Off-Grid Water Filtration</h2>
+  <p>Off-grid filtration has unique requirements compared to suburban home filtration:</p>
+  <ul>
+    <li><strong>Power requirements:</strong> Under-sink RO systems like the iSpring operate on water pressure alone — no electricity needed. Countertop units like the Bluevua need an outlet. Plan your filtration around your power budget.</li>
+    <li><strong>Water source variability:</strong> Well water quality stays relatively consistent. Spring water varies seasonally. Rainwater quality depends on collection surface cleanliness. Surface water is the most variable and requires the most treatment.</li>
+    <li><strong>Resupply logistics:</strong> Replacement filters may take days or weeks to arrive at a remote address. Stock at least 12 months of replacement cartridges at all times.</li>
+    <li><strong>Temperature extremes:</strong> Unheated structures can expose filters to freezing temperatures, which permanently damages hollow fiber membranes and RO membranes. Insulate or heat your filtration area in cold climates.</li>
+    <li><strong>Multiple use points:</strong> You may need filtered water at the kitchen, bathroom, and outdoor work areas. Design your system with enough capacity and distribution points for your lifestyle.</li>
+  </ul>
+
+  <ProTip title="The Off-Grid Water Audit">
+    Before purchasing filtration equipment, conduct a water audit: (1) Test your water source with a certified lab for bacteria, nitrates, heavy metals, TDS, pH, and hardness. (2) Measure your daily water consumption for drinking, cooking, and washing. (3) Map your water delivery system from source to tap, noting pressure, pipe material, and storage tanks. (4) Assess your power budget for any electrically-powered filtration. This audit ensures you buy the right filtration — not too little (risking health) or too much (wasting money).
+  </ProTip>
+
+  <h2>Top Picks for Off-Grid Living</h2>
+
+  <h3>1. {ispring.name} — Best Under-Sink RO for Off-Grid</h3>
+  <p>The iSpring RCC7AK is the cornerstone of an off-grid drinking water system. Its 6-stage reverse osmosis removes 93-98% of TDS, over 98.9% of lead, and 96-99% of PFAS — addressing the dissolved contaminants that are common in well water and that sediment filters cannot touch. The alkaline remineralization stage adds back beneficial minerals, improving both taste and pH balance.</p>
+  <p>Critically for off-grid use, this system operates entirely on water pressure — no electricity required. If your well system produces at least 40 PSI (standard for most submersible well pumps), the iSpring works exactly as it would in a grid-connected home. The 75 GPD production rate is more than sufficient for a household's drinking and cooking needs.</p>
+  <p>At ${ispring.price}, it is the most cost-effective RO system on the market with this level of filtration. Annual replacement filter costs run approximately $50-70. Over a 5-year span, the total cost of ownership is under $600 — less than $0.33 per day for laboratory-grade drinking water from your well.</p>
+  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {sediment.name} — Whole-House Pre-Filtration</h3>
+  <p>Every off-grid water system starts with sediment filtration. The Membrane Solutions 5-micron cartridges fit standard 10x2.5-inch housings and capture 99% of the sand, silt, rust, and debris that well water and surface water carry. Without this first line of defense, sediment clogs and damages everything downstream — your RO membrane, water heater, faucet aerators, and appliances.</p>
+  <p>For off-grid properties, install the sediment filter housing as close to the water entry point as possible, before the pressure tank if your system has one. The 6-pack at ${sediment.price} provides a full year of filters, and having a year's supply on hand means you are never caught without a replacement on your remote property.</p>
+  <p>Change cartridges every 1-3 months depending on sediment load. In spring when runoff increases sediment in well water, you may need monthly changes. In winter with stable groundwater, cartridges last longer. The visual inspection tells the story — when the white cartridge turns brown, it is time.</p>
+  <p><strong>Price:</strong> ${sediment.price} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {bluevua.name} — Best for Properties Without Plumbing</h3>
+  <p>For off-grid cabins, tiny homes, or properties without under-sink plumbing, the Bluevua countertop RO provides full reverse osmosis with UV sterilization from any surface and electrical outlet. Fill the reservoir manually from your water supply, plug it in, and the 6-stage system produces purified water into the glass carafe. No plumbing connections needed.</p>
+  <p>The UV sterilization is particularly valuable for off-grid properties that rely on rainwater or surface water. These sources can harbor bacteria and viruses that even RO membranes may not fully address at their seals. The UV light kills 99.99% of biological threats as a final safety stage. The glass carafe prevents plastic leaching that becomes a concern in off-grid environments where containers may sit in warm conditions.</p>
+  <p>The Bluevua draws approximately 100-150 watts during operation — easily supplied by a modest solar panel and battery system. A single filtering cycle runs about 15-20 minutes, consuming less energy than a light bulb running for an hour.</p>
+  <p><strong>Price:</strong> ${bluevua.price} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {timain.name} + {aquatabs.name} — Portable Backup System</h3>
+  <p>No off-grid water plan is complete without a portable backup. If your primary well pump fails, your power system goes down during bad weather, or you need water while working away from the cabin, a filter straw and purification tablets provide immediate water access from any natural source.</p>
+  <p>The Timain 2-pack provides two straws: one for your person and one stashed at a water source access point. Aquatabs add virus protection that the straw alone cannot provide. Together at ${timain.price} + ${aquatabs.price}, this backup kit costs under $27 and could sustain your drinking water needs for weeks if your primary system goes offline.</p>
+  <p>For off-grid living, consider keeping backup filter straws at multiple locations: your cabin, your workshop or outbuilding, and in your vehicle. The cost of redundancy is trivial compared to the risk of being without safe water when your well pump needs repair.</p>
+  <p><strong>Timain Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
+  <p><strong>Aquatabs Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
+
+  <h2>Off-Grid Water System Design Tips</h2>
+  <ul>
+    <li><strong>Size your storage for worst-case scenarios:</strong> Calculate your daily water use and multiply by the longest period you might be without water production (pump failure, extended cloudy days for solar-powered systems). Size your storage tank for at least 3-7 days of autonomy.</li>
+    <li><strong>Protect filtration from freezing:</strong> RO membranes and hollow fiber filters are permanently destroyed by freezing. Install your filtration system in an insulated, heated space. If your cabin is unheated during winter absences, drain your RO system completely before leaving.</li>
+    <li><strong>Install a pressure gauge after your well pump:</strong> Most RO systems need at least 40 PSI to operate effectively. If your well system produces inconsistent pressure, add a booster pump before the RO system.</li>
+    <li><strong>Stock 12+ months of replacement filters:</strong> Order replacement cartridges before you need them. Remote delivery delays and seasonal road access limitations can leave you waiting weeks for a filter that is available overnight in the city.</li>
+    <li><strong>Maintain a water log:</strong> Track TDS readings, filter change dates, and water source observations in a simple notebook. This data helps you spot trends (declining well output, seasonal quality changes) before they become problems.</li>
+  </ul>
+
+  <ProTip title="The Complete Off-Grid Water Budget">
+    Here is the annual cost of a comprehensive off-grid water filtration system: Membrane Solutions sediment 6-pack ($26.35), iSpring RCC7AK replacement filters (~$70), portable backup straws and tablets (~$27). Total annual filtration cost after the initial system purchase: approximately $123. That is $0.34 per day for safe, great-tasting water from any well, spring, or rainwater source. The initial system investment (iSpring $198.78 + filter housing ~$15 + sediment filters $26.35) is roughly $240 — less than a single service call from a well technician.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Off-Grid Living</h2>
+  <p>The <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> combined with <strong><a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filters</a></strong> is the foundation of any serious off-grid water system. The sediment filter protects your plumbing infrastructure, and the RO system produces drinking water that is cleaner than most municipal supplies. Add a <a href={`/reviews/${timain.slug}/`}>Timain filter straw</a> and <a href={`/reviews/${aquatabs.slug}/`}>Aquatabs</a> as portable backup, and you have complete water independence for under $275 in the first year.</p>
+</ContentLayout>

@@ -1,0 +1,303 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const categorySlug = 'countertop-filters';
+const category = getCategoryBySlug(categorySlug)!;
+if (!isPublished(category.publishDate)) return Astro.redirect('/404');
+
+const allProducts = getProductsByCategory(categorySlug);
+const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
+const year = new Date().getFullYear();
+
+const tableProducts = publishedProducts.map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Do countertop water filters require any installation or plumbing?', answer: 'No. Countertop filters and pitchers sit on your counter or in the fridge and require zero plumbing modifications. Countertop reverse osmosis systems plug into a standard electrical outlet. Pitchers and dispensers need no power at all. This makes them ideal for renters, apartments, and anyone who cannot modify their plumbing.' },
+  { question: 'Is a countertop RO system worth the extra money over a pitcher?', answer: 'It depends on your water quality concerns. If your main issue is chlorine taste and odor, a $24-35 pitcher handles that well. But if you need to remove TDS, fluoride, lead, PFAS, or heavy metals, a countertop RO system like the Bluevua is worth the investment. RO removes 95-99% of dissolved contaminants that carbon filters cannot touch.' },
+  { question: 'How often do I need to replace countertop filter cartridges?', answer: 'Pitcher filters like the Amazon Basics and Brita need replacing every 40 gallons (roughly 2 months). Countertop RO systems have longer-lasting filters: pre-filters every 6 months and RO membranes every 12 months. Annual filter costs range from $15-20 for pitchers to $60-80 for RO systems.' },
+  { question: 'Can a countertop filter remove lead and PFAS?', answer: 'Standard pitcher filters with basic carbon filtration cannot reliably remove lead or PFAS. For lead removal, look for NSF 53 certification. For PFAS, you need either a reverse osmosis system or a filter specifically certified for PFOA/PFOS reduction. The Bluevua RO systems in our lineup handle both effectively.' },
+  { question: 'What is the best countertop filter for a family of four?', answer: 'For a family of four, we recommend the Brita UltraMax 27-Cup Dispenser ($34.99). Its massive capacity and spigot design eliminate constant refilling. For families concerned about advanced contaminants, pair the UltraMax with an under-sink RO system for drinking water, or step up to the Bluevua RO100ROPOT-UV for countertop RO purification.' },
+  { question: 'How do I know if my tap water needs more than a basic pitcher filter?', answer: 'Start by checking your local water quality report (search your utility provider online). If your water has elevated levels of lead, PFAS, nitrates, or total dissolved solids above 300 ppm, a basic pitcher will not address those issues. You can also buy a TDS meter for under $15 to test your water at home. High TDS readings suggest you may benefit from reverse osmosis filtration.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  publishedProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Higher flow rates and better filtration than countertop options, with out-of-sight installation.' },
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'New to water filtration? Start here with our complete beginner breakdown.' },
+  { title: 'Best Water Filters Under $50', url: '/guides/best-water-filters-under-50/', description: 'Effective water filtration does not need to cost a fortune. Our picks for the best filters under $50.' },
+];
+---
+
+<ContentLayout
+  title={`Best ${category.name} ${year}: Expert Picks — OffGrid Filters`}
+  description={`We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by performance, value, and reliability.`}
+  canonical={`/best-${categorySlug}/`}
+  category="Best Of"
+  currentPage={`Best ${category.name}`}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Best {category.name} {year}: Expert Picks</h1>
+  <p class="lead">We evaluated {allProducts.length} countertop and pitcher filters across filtration quality, capacity, ongoing filter costs, and ease of use. Whether you need a budget-friendly pitcher for basic chlorine reduction or a countertop reverse osmosis system that eliminates 99% of dissolved contaminants, our picks cover every budget and need.</p>
+
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="pitcher" aspect="hero" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="How We Ranked These">
+    <p>We weighted filtration quality (40%), value for money (25%), ease of use (20%), and ongoing filter costs (15%). A $24 pitcher that handles chlorine well can outrank a $300 RO system if the buyer only needs basic taste improvement.</p>
+  </ProTip>
+
+  {publishedProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon={i < 2 ? 'uv' : 'pitcher'} aspect="wide" />
+      {i === 0 && (
+        <>
+          <p>The Bluevua RO100ROPOT-UV earns our top spot as the most capable countertop filtration system you can buy. Its 6-stage reverse osmosis process paired with UV-C sterilization eliminates bacteria, viruses, heavy metals, fluoride, and PFAS that no pitcher filter can touch. The glass carafe is a thoughtful detail that keeps purified water free from plastic contact.</p>
+          <p>At $317, this is a serious investment for a countertop unit. But if your water quality report shows elevated lead, high TDS, or detectable PFAS levels, the RO100ROPOT-UV delivers peace of mind that a $25 pitcher simply cannot. The 2:1 pure-to-drain ratio is efficient for an RO system, and the zero-installation design means renters can take it with them when they move.</p>
+          <p>The main trade-off is speed and counter space. Filtering a full carafe takes several minutes, and the unit has a substantial footprint. For a household that drinks large volumes of water quickly, an under-sink RO system with a tank may be more practical. But for 1-3 person households who prioritize water purity above all else, this is the gold standard.</p>
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <p>The Lite UV model delivers roughly 90% of the premium Bluevua's performance at about 70% of the price. You still get UV sterilization, reverse osmosis, remineralization, and a glass carafe. The addition of a smart LED display showing filter life and water quality is actually a feature the premium model lacks.</p>
+          <p>The key compromise is water efficiency: the Lite UV has a 3:1 pure-to-drain ratio versus the premium's 2:1. Over a year, that adds up to more wasted water. Filtering speed is also slightly slower. But at $219, you are getting countertop RO with UV for about $100 less, which makes this the better pick for most budget-conscious buyers who still want serious filtration.</p>
+          <p>If you are choosing between these two Bluevua models, the Lite UV is the smarter buy unless your water bill makes the 3:1 waste ratio a real concern, or you want the absolute fastest countertop RO filtering speed.</p>
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <p>At $23.64, the Amazon Basics pitcher is the lowest-cost path to NSF-certified water filtration. It does the basics well: chlorine taste and odor reduction, mercury, copper, and cadmium removal, all verified by NSF 42/53 testing. The electronic filter change indicator is a nice touch that removes the guesswork around replacement timing.</p>
+          <p>The trade-offs are exactly what you would expect at this price. Filtering is slow (8-10 minutes for a full pitcher), the design feels utilitarian rather than premium, and the lid seal is not as tight as Brita or PUR pitchers. More importantly, it does not remove TDS, lead, or PFAS — for those contaminants, you need to step up to a RO system or at minimum a Brita Elite filter.</p>
+          <p>This is our recommended starting point for anyone new to water filtration or on a tight budget. It is compatible with inexpensive Brita Standard filters, keeping ongoing costs minimal.</p>
+        </>
+      )}
+      {i === 3 && (
+        <>
+          <p>The Brita UltraMax dominates the large-capacity dispenser category with its 27-cup reservoir and precision-pour spigot. For families of four or more, this eliminates the constant refill cycle that makes smaller pitchers frustrating. Its 42,000+ reviews and 4.6-star rating reflect years of proven reliability that newer products have not matched.</p>
+          <p>The included Standard filter is adequate for chlorine reduction but basic. We strongly recommend upgrading to Brita Elite filters, which add lead, asbestos, and pharmaceutical reduction for a meaningful improvement in filtration quality. The UltraMax accepts both Standard and Elite cartridges.</p>
+          <p>The main downside is size. When full, this dispenser is heavy and takes up an entire refrigerator shelf. The spigot can drip if not fully closed. But for high-volume households that need simple, reliable filtration without any installation, the UltraMax remains the practical choice.</p>
+        </>
+      )}
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>We evaluated each countertop and pitcher filter across five core criteria: <strong>filtration quality</strong> (what contaminants does it actually remove, with what certifications?), <strong>capacity and speed</strong> (how much water can it handle, and how quickly?), <strong>ongoing costs</strong> (what does a year of filter replacements actually cost?), <strong>ease of use</strong> (setup difficulty, maintenance, and daily convenience), and <strong>build quality</strong> (materials, durability, and design).</p>
+  <p>NSF certifications carry significant weight in our rankings. A filter certified to NSF 53 (health effects) or NSF 58 (reverse osmosis) has been independently verified by a third party. Marketing claims without NSF backing get treated with skepticism. We also calculate cost-per-gallon for every product, because a cheap filter with short cartridge life can cost more than a premium filter over a year.</p>
+
+  <h2>Buying Guide: What to Look For in a Countertop Filter</h2>
+  <p>Choosing the right countertop or pitcher filter depends on three factors: what contaminants you need to remove, how much water your household uses, and how much you are willing to spend on replacement filters over time.</p>
+  <p><strong>Filtration technology matters most.</strong> Basic activated carbon (Brita Standard, Amazon Basics) handles chlorine taste, odor, and a handful of metals. Carbon block filters (Brita Elite) add lead and pharmaceutical reduction. Reverse osmosis (Bluevua) removes 95-99% of all dissolved solids including fluoride, PFAS, and heavy metals. Match the technology to your actual water quality concerns.</p>
+  <p><strong>Calculate the annual filter cost, not just the sticker price.</strong> A $24 pitcher with $18 filters every 2 months costs about $108/year in cartridges. A $317 RO system with $70/year in filters costs less in year two. Consider the 2-year total cost of ownership when comparing options.</p>
+
+  <ProTip>
+    <p>Check your local water quality report before buying. If your water is already clean (low TDS, no lead, no PFAS), a basic pitcher is all you need. Do not overspend on RO for water that is already safe. Save RO for water with measurable contamination.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For most households, the <strong>Brita UltraMax 27-Cup Dispenser</strong> with Elite filter upgrades offers the best balance of capacity, filtration, and value. If you have specific concerns about lead, PFAS, fluoride, or high TDS, the <strong>Bluevua RO100ROPOT-UV</strong> delivers countertop reverse osmosis purification without any plumbing work. And for anyone just getting started with filtered water on a tight budget, the <strong>Amazon Basics 10-Cup Pitcher</strong> at under $24 is a no-risk entry point.</p>
+    {publishedProducts[0] && (
+      <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .quick-specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+
+  @media (min-width: 640px) {
+    .quick-specs {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.875rem 1rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  .spec-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .spec-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: hsl(var(--primary));
+  }
+
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

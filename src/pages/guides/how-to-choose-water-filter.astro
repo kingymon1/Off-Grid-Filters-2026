@@ -1,0 +1,193 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const guide = guides.find(g => g.slug === 'how-to-choose-water-filter')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
+const britaUltramax = products.find(p => p.slug === 'brita-ultramax-27-cup-dispenser')!;
+const bluevua = products.find(p => p.slug === 'bluevua-ro100ropot-uv')!;
+const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
+const amazonPitcher = products.find(p => p.slug === 'amazon-basics-10-cup-pitcher')!;
+const timain = products.find(p => p.slug === 'timain-filter-straw-2pack')!;
+const pentairH1200 = products.find(p => p.slug === 'pentair-everpure-h1200')!;
+
+const faqs = [
+  { question: 'What is the best type of water filter for most homes?', answer: 'For most households on municipal water, a pitcher filter like the Brita UltraMax or an under-sink carbon filter provides excellent taste improvement and contaminant reduction at a reasonable cost. If you have specific concerns about lead, PFAS, or high TDS, step up to a reverse osmosis system like the iSpring RCC7AK.' },
+  { question: 'How do I know what contaminants are in my water?', answer: 'Start with your utility\'s annual Consumer Confidence Report (CCR), available online or by request. For a more detailed picture, order a home water test kit from a certified lab. Testing typically costs $20-$150 depending on how many contaminants you want screened. Well water users should test annually.' },
+  { question: 'Do I need a whole-house filter or a point-of-use filter?', answer: 'Point-of-use filters (pitchers, under-sink, countertop) treat water at one tap and are best for drinking and cooking. Whole-house filters treat every tap and protect plumbing but are primarily sediment filters. Most homes benefit from a point-of-use filter for drinking water, with a whole-house sediment pre-filter if you have well water.' },
+  { question: 'How often do water filters need to be replaced?', answer: 'Replacement frequency depends on the filter type and your water usage. Pitcher filters typically last 2 months (40 gallons), while under-sink carbon filters last 6-12 months. RO membranes last 2-3 years. Always follow the manufacturer\'s recommendations and watch for signs like slower flow or taste changes.' },
+  { question: 'Are expensive water filters worth the money?', answer: 'Not always. A $24 Amazon Basics pitcher with NSF 42/53 certification removes the same basic contaminants as a $40 brand-name pitcher. However, premium systems like RO filters genuinely remove more contaminants (fluoride, TDS, PFAS) that carbon filters cannot. Match the filter\'s capabilities to your actual water quality needs.' },
+  { question: 'What does NSF certification mean on a water filter?', answer: 'NSF certification means an independent lab has verified the filter removes what it claims. Key certifications include NSF 42 (taste and odor), NSF 53 (health-related contaminants like lead), NSF 58 (reverse osmosis), and NSF 401 (emerging contaminants like pharmaceuticals). Always prioritize NSF-certified filters over uncertified alternatives.' },
+  { question: 'Can a water filter remove forever chemicals (PFAS)?', answer: 'Yes, but only certain types. Reverse osmosis systems and activated carbon block filters with NSF 53 or P473 certification can reduce PFAS. Standard pitcher filters with basic carbon granules typically cannot. The iSpring RCC7AK reduces PFAS by 96-99%, while the Brita Elite pitcher filter also targets some PFAS compounds.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/guides/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'Brand new to water filters? Start with our accessible beginner introduction.' },
+  { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'Our ranked picks for the best no-install water filters you can buy today.' },
+  { title: 'Reverse Osmosis vs Carbon Filters', url: '/guides/reverse-osmosis-vs-carbon-filters/', description: 'A deep comparison of the two most common filtration technologies.' },
+  { title: 'Water Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/', description: 'Beyond sticker price — the true cost of ownership for every filter type.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/guides/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Choosing a water filter should not feel overwhelming. With dozens of filter types, hundreds of models, and a blizzard of marketing claims, we built this guide to cut through the noise. Whether you are filtering city tap water for better taste or tackling lead and PFAS in well water, we will walk you through every decision — from testing your water to picking the exact product that fits your household, budget, and health goals.</p>
+
+  <ProductImage alt="How to choose the right water filter for your home" icon="filter" aspect="hero" />
+
+  <h2>Step 1: Test Your Water First</h2>
+  <p>Before you spend a single dollar on a filter, find out what is actually in your water. This single step prevents the most common buying mistake — purchasing a filter that does not target your real contaminants.</p>
+  <p><strong>Municipal water users:</strong> Request your city's annual Consumer Confidence Report (CCR). By law, every public water system publishes one. It shows detected contaminants and whether levels exceeded EPA limits. You can also search the Environmental Working Group's Tap Water Database by ZIP code for a more detailed breakdown.</p>
+  <p><strong>Well water users:</strong> You have no utility report. Order a certified lab test — they typically cost $50-$150 and screen for bacteria, nitrates, lead, arsenic, pH, and hardness. Test annually and after any plumbing changes or flooding events.</p>
+  <p><strong>Quick home test kits</strong> ($15-$30) check for a handful of contaminants and give you a rough picture, but certified lab testing is always more accurate and comprehensive.</p>
+
+  <ProTip>If your water report shows lead above 5 ppb or any PFAS detection, skip straight to a reverse osmosis system or an NSF 53-certified filter. Carbon-only pitcher filters will not adequately reduce these contaminants.</ProTip>
+
+  <h2>Step 2: Understand the Five Main Filter Types</h2>
+  <p>Every water filter falls into one of five categories. Each has distinct strengths, installation requirements, and cost profiles.</p>
+
+  <h3>Pitcher and Dispenser Filters</h3>
+  <p><strong>Best for:</strong> Renters, small budgets, basic taste improvement.</p>
+  <p>Pitcher filters are the simplest entry point into filtered water. Fill the top, gravity pulls water through a carbon cartridge, and you pour from the pitcher. No installation, no plumbing, no tools.</p>
+  <p>The <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser (${britaUltramax.price})</a> is our top pick for families — its massive capacity means fewer refills. For budget buyers, the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher (${amazonPitcher.price})</a> delivers NSF 42/53 certified filtration at roughly half the price of brand-name alternatives.</p>
+  <p><strong>Limitations:</strong> Pitcher filters cannot remove TDS, fluoride, or most PFAS. Slow flow rate. Filter replacement every 2 months adds up.</p>
+
+  <h3>Countertop Reverse Osmosis Systems</h3>
+  <p><strong>Best for:</strong> Renters who need serious filtration, health-conscious users, apartments without under-sink access.</p>
+  <p>Countertop RO systems sit on your counter and plug into a standard outlet — no plumbing required. They push water through a semi-permeable membrane that removes 93-99% of dissolved solids, including lead, fluoride, PFAS, and heavy metals.</p>
+  <p>The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV (${bluevua.price})</a> adds UV sterilization and a glass carafe, making it the top-tier countertop choice. For a more affordable option, its <a href="/reviews/bluevua-ro100ropot-lite-uv/">Lite UV sibling ($219.00)</a> delivers 90% of the performance at 70% of the price.</p>
+  <p><strong>Limitations:</strong> Uses counter space. Produces water slowly. Creates wastewater (2:1 to 3:1 pure-to-drain ratio).</p>
+
+  <h3>Under-Sink Filters</h3>
+  <p><strong>Best for:</strong> Homeowners wanting permanent, high-performance filtration that stays hidden.</p>
+  <p>Under-sink systems connect directly to your cold water line, either through a dedicated faucet or inline with your existing one. They offer higher flow rates and more thorough filtration than countertop options.</p>
+  <p>The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> is our best-value under-sink RO, delivering 6-stage filtration with alkaline remineralization for under $200. If you want cutting-edge tankless design with real-time TDS monitoring, the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> is the premium choice at 600 GPD.</p>
+  <p><strong>Limitations:</strong> Requires basic plumbing skills or professional installation. Takes cabinet space. RO systems waste water.</p>
+
+  <h3>Portable and Survival Filters</h3>
+  <p><strong>Best for:</strong> Hikers, campers, emergency preparedness, off-grid living.</p>
+  <p>These lightweight filters use hollow fiber or ultrafiltration membranes to remove bacteria and protozoa from untreated water sources. They are essential for backcountry travel and disaster kits.</p>
+  <p>The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack (${timain.price})</a> is our budget pick at just $7.12 per straw. For complete water safety, pair a filter straw with <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs ($11.99)</a> to kill viruses that filters miss.</p>
+  <p><strong>Limitations:</strong> Do not remove chemicals, heavy metals, or TDS. Not designed for daily home use.</p>
+
+  <h3>Whole-House and Sediment Filters</h3>
+  <p><strong>Best for:</strong> Well water homes, rural properties, protecting appliances and plumbing from sediment.</p>
+  <p>Whole-house filters install at the point where water enters your home. They primarily target sediment — sand, silt, rust, and debris — rather than dissolved contaminants. Think of them as the first line of defense that protects both your plumbing and your point-of-use drinking water filters downstream.</p>
+  <p><strong>Limitations:</strong> Only remove physical particles. You still need a drinking water filter for contaminant reduction.</p>
+
+  <ProTip title="Expert Tip">Most households benefit from a two-stage approach: a whole-house sediment pre-filter to protect plumbing, combined with a point-of-use filter (pitcher, countertop, or under-sink) at the kitchen tap for drinking water quality.</ProTip>
+
+  <h2>Step 3: Match Filtration Technology to Your Contaminants</h2>
+  <p>Once you know what is in your water, match those contaminants to the right technology:</p>
+  <ul>
+    <li><strong>Chlorine taste and odor:</strong> Any activated carbon filter (pitcher, faucet-mount, under-sink carbon). NSF 42 certified.</li>
+    <li><strong>Lead:</strong> Carbon block filters with NSF 53 certification, or any RO system with NSF 58. The Brita Elite reduces 99% of lead.</li>
+    <li><strong>PFAS / forever chemicals:</strong> Reverse osmosis (96-99% reduction) or activated carbon block with specific PFAS certification. Standard pitcher filters are not enough.</li>
+    <li><strong>Fluoride:</strong> Only reverse osmosis and activated alumina filters effectively reduce fluoride. Carbon filters do not.</li>
+    <li><strong>Bacteria and parasites:</strong> UV sterilization, reverse osmosis, or 0.1-micron ultrafiltration. Relevant for well water and outdoor use.</li>
+    <li><strong>High TDS (hard water, dissolved minerals):</strong> Only reverse osmosis significantly reduces TDS. Carbon filters leave TDS unchanged.</li>
+    <li><strong>Sediment (sand, rust, silt):</strong> Sediment pre-filters at 1-5 microns. Essential for well water.</li>
+  </ul>
+
+  <h2>Step 4: Consider Your Household Size and Usage</h2>
+  <p>Filter capacity must match your water consumption. An undersized filter leads to frequent replacements and higher long-term costs.</p>
+  <p><strong>Estimate your daily drinking water need:</strong> The general guideline is 0.5 to 1 gallon per person per day for drinking and cooking. A family of four uses roughly 2-4 gallons daily.</p>
+  <ul>
+    <li><strong>1-2 people:</strong> A 10-cup pitcher filter like the Amazon Basics is adequate. Under-sink is ideal.</li>
+    <li><strong>3-4 people:</strong> Step up to a large dispenser (Brita UltraMax 27-cup) or an under-sink system.</li>
+    <li><strong>5+ people:</strong> Under-sink RO system is strongly recommended. Pitchers cannot keep up with demand.</li>
+  </ul>
+  <p>For a detailed breakdown of capacity calculations, see our <a href="/guides/water-filter-sizing-guide/">Water Filter Sizing Guide</a>.</p>
+
+  <h2>Step 5: Set Your Budget (And Think Long-Term)</h2>
+  <p>The sticker price of a water filter is only part of the equation. Replacement filter costs, energy use, and water waste all factor into the true cost of ownership.</p>
+
+  <h3>Budget Tier: Under $50</h3>
+  <p>Pitcher filters dominate this range. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher at ${amazonPitcher.price}</a> is the best value entry point. Annual replacement filter costs run $20-$40. Total first-year cost: $45-$65.</p>
+
+  <h3>Mid-Range: $50-$250</h3>
+  <p>This is where you get serious filtration. The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a> delivers full reverse osmosis with alkaline remineralization. Annual filter replacement costs are roughly $40-$60. First-year total: $240-$260.</p>
+
+  <h3>Premium: $250-$550</h3>
+  <p>Premium systems offer advanced features like UV sterilization, tankless design, or commercial-grade filtration. The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV at ${bluevua.price}</a> and <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 at ${waterdrop.price}</a> represent the best of this tier. The <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 at ${pentairH1200.price}</a> brings restaurant-grade filtration to your kitchen.</p>
+  <p>For a comprehensive breakdown, read our <a href="/guides/water-filter-cost-analysis/">Water Filter Cost Analysis</a>.</p>
+
+  <h2>Step 6: Check for NSF Certifications</h2>
+  <p>NSF certification is the gold standard in water filtration. It means an independent laboratory has tested the filter and confirmed it removes the contaminants it claims. Here are the key certifications to look for:</p>
+  <ul>
+    <li><strong>NSF 42:</strong> Aesthetic effects — chlorine taste, odor, and clarity. The baseline certification.</li>
+    <li><strong>NSF 53:</strong> Health effects — lead, cysts (Giardia, Cryptosporidium), VOCs. Critical for safety.</li>
+    <li><strong>NSF 58:</strong> Reverse osmosis systems — TDS reduction, membrane performance standards.</li>
+    <li><strong>NSF 401:</strong> Emerging contaminants — pharmaceuticals, pesticides, herbicides. The newest standard.</li>
+    <li><strong>NSF 372:</strong> Lead-free materials — the filter itself contains no lead. A materials standard, not a filtration standard.</li>
+  </ul>
+  <p>For a complete breakdown, see our <a href="/nsf-certifications-explained/">NSF Certifications Explained</a> guide.</p>
+
+  <ProTip>Never trust a filter's marketing claims without NSF certification. Uncertified filters may claim "removes 99% of contaminants" without any independent verification. Always verify claims at nsf.org.</ProTip>
+
+  <h2>Step 7: Decision Flowchart</h2>
+  <p>Still not sure which filter type is right for you? Walk through these questions:</p>
+  <ol>
+    <li><strong>Are you a renter or unable to modify plumbing?</strong> Yes → Go with a pitcher filter or countertop RO. The Brita UltraMax or Bluevua RO100ROPOT-Lite are top choices.</li>
+    <li><strong>Does your water test show lead, PFAS, or high TDS?</strong> Yes → You need reverse osmosis. Choose between countertop (Bluevua) or under-sink (iSpring RCC7AK or Waterdrop G3P600).</li>
+    <li><strong>Is your main concern chlorine taste and basic contaminants?</strong> Yes → A quality pitcher filter or faucet-mount filter is sufficient. Look for NSF 42/53 certification.</li>
+    <li><strong>Do you have well water?</strong> Yes → Start with a whole-house sediment pre-filter, then add an under-sink RO system for drinking water.</li>
+    <li><strong>Do you need portable filtration for hiking or emergencies?</strong> Yes → Get a filter straw (Timain or Membrane Solutions) plus purification tablets (MSR Aquatabs) for complete protection.</li>
+    <li><strong>Is your household five or more people?</strong> Yes → Under-sink systems handle high demand better than pitchers. The iSpring RCC7AK at 75 GPD or Waterdrop G3P600 at 600 GPD are recommended.</li>
+  </ol>
+
+  <h2>Step 8: Installation Considerations</h2>
+  <p>Your living situation directly determines which filters are practical:</p>
+  <ul>
+    <li><strong>No installation (renters, apartments):</strong> Pitcher filters, countertop RO, filter straws. All of these are plug-and-play or completely manual.</li>
+    <li><strong>Basic DIY (homeowners):</strong> Under-sink RO systems typically require drilling a hole in the countertop for the dedicated faucet and connecting to the cold water line. Most handy homeowners can complete the install in 1-2 hours.</li>
+    <li><strong>Professional installation:</strong> Whole-house systems and some commercial-grade under-sink units like the Pentair Everpure line benefit from professional plumbing work.</li>
+  </ul>
+
+  <h2>Product Recommendations by Use Case</h2>
+  <p>Based on our testing and analysis of 29 water filters, here are our top picks for common scenarios:</p>
+  <ul>
+    <li><strong>Best for most people:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — ${britaUltramax.price}, {britaUltramax.rating} stars. Upgrade to Elite filters for lead reduction.</li>
+    <li><strong>Best on a tight budget:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — ${amazonPitcher.price}. NSF 42/53 certified at the lowest price.</li>
+    <li><strong>Best for serious contaminants (RO):</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a> — ${ispring.price}. Full 6-stage RO under $200.</li>
+    <li><strong>Best no-install RO:</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name}</a> — ${bluevua.price}. UV sterilization plus glass carafe.</li>
+    <li><strong>Best premium under-sink:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name}</a> — ${waterdrop.price}. Tankless 600 GPD with smart TDS faucet.</li>
+    <li><strong>Best for emergencies:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — ${timain.price} for 2 straws. Pair with Aquatabs for complete safety.</li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Start Filtering Smarter</h2>
+  <p>The best water filter is the one matched to your actual water quality, household size, and budget. Test your water first, understand what you need to remove, then use this guide to find the right product. Every filter we recommend has been researched, compared, and evaluated against its competitors. Browse our <a href="/guides/">complete guide library</a> for deeper dives on any topic, or jump to our <a href="/best-countertop-filters/">Best Countertop Filters</a> and <a href="/best-under-sink-filters/">Best Under-Sink Filters</a> roundups to see our ranked picks.</p>
+</ContentLayout>

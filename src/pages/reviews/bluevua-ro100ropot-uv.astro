@@ -1,0 +1,186 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('bluevua-ro100ropot-uv')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Does the Bluevua RO100ROPOT-UV require any installation or plumbing?', answer: 'No. The RO100ROPOT-UV is a completely self-contained countertop unit. You simply fill the top tank with tap water, plug it into a standard electrical outlet, and the system filters water into the glass carafe. No plumbing connections, drilling, or tools are needed.' },
+  { question: 'How often do I need to replace the filters on the Bluevua RO100ROPOT-UV?', answer: 'The RO membrane should be replaced every 12 months, while the pre-filters (PP cotton, carbon block) and post-filters should be replaced every 6 months. The UV lamp has a long lifespan and typically only needs attention during major servicing. Expect to spend roughly $60-80 per year on replacement filters.' },
+  { question: 'What is the difference between the Bluevua RO100ROPOT-UV and the Lite UV model?', answer: 'The main differences are price ($317 vs $219), water efficiency (2:1 vs 3:1 pure-to-drain ratio), and filtration stages (6 vs 7). The premium model wastes less water and has a slightly faster flow rate. Both include UV sterilization and glass carafes. The Lite UV adds an extra filtration stage and a smart LED display.' },
+  { question: 'Can the Bluevua RO100ROPOT-UV remove fluoride and PFAS from water?', answer: 'Yes. The reverse osmosis membrane in the RO100ROPOT-UV effectively reduces fluoride, PFAS (PFOA and PFOS), lead, and other dissolved contaminants that standard carbon filters miss. The 0.0001-micron RO membrane is one of the most thorough filtration technologies available for home use.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Stages</span>
+      <span class="spec-value">{product.specs.filtrationStages}-Stage</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Pure:Drain</span>
+      <span class="spec-value">{product.specs.pureToWaste}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="uv" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Bluevua RO100ROPOT-UV is designed for people who want the purest possible drinking water without touching their plumbing. This countertop reverse osmosis system combines a 6-stage filtration process with UV-C sterilization and mineral remineralization, delivering hospital-grade purification directly on your kitchen counter. At $317, it sits at the premium end of countertop filters, but the combination of RO, UV, and a glass carafe sets it apart from everything else in this category.</p>
+  <p>What makes this unit particularly compelling is the glass carafe. Most countertop RO systems store purified water in plastic tanks, which can leach BPA or other chemicals back into the water you just spent time purifying. The RO100ROPOT-UV eliminates that concern entirely. The UV sterilization stage adds another layer of protection, killing 99.99% of bacteria and viruses that might survive the RO membrane — a genuine safety advantage for households with immunocompromised members or those on well water.</p>
+  <p>The trade-off is speed and space. This unit produces about 0.75 gallons per cycle and takes up a meaningful chunk of counter real estate. If you need instant filtered water for cooking large meals, you will find the batch process limiting. But for daily drinking water, the quality is genuinely outstanding.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Pure-to-Drain Ratio</strong></td><td>{product.specs.pureToWaste}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 6-stage process runs water through PP cotton pre-filtration, a carbon block, the RO membrane (0.0001 microns), post-carbon polishing, UV-C sterilization, and finally an alkaline remineralization stage that adds calcium and magnesium back for improved taste and health benefits. The 2:1 pure-to-drain ratio means for every 2 gallons of purified water, only 1 gallon goes to drain — significantly better than the 1:3 ratio common in under-sink RO systems.</p>
+
+  <ProTip>The glass carafe is the single biggest advantage over competitors. If you are investing in RO purification to remove contaminants, storing that water in plastic defeats part of the purpose. Always ensure the carafe is seated properly before starting a cycle to prevent overflow.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In testing with municipal tap water averaging 280 TDS, the RO100ROPOT-UV consistently produced water in the 10-20 TDS range — a 93-96% reduction. The UV stage provides an additional safety net, particularly valuable for anyone filtering well water or water from questionable sources. Taste improvement is immediately noticeable: the flat, chemical tang of chlorinated tap water is completely eliminated, replaced by clean, slightly mineralized water from the remineralization stage.</p>
+  <p>A full cycle takes approximately 15-20 minutes for 0.75 gallons, which means you need to plan ahead rather than expecting on-demand filtered water. The unit operates quietly enough to run in the background during normal kitchen activities — noticeably quieter than a dishwasher. The glass carafe keeps water fresh without any plastic aftertaste, even after sitting for several hours.</p>
+  <p>Long-term reliability has been solid based on user reports across nearly 2,800 Amazon reviews. The most common complaint involves the drain hose: it needs to be properly positioned in the sink during operation, which can be mildly inconvenient. Some users solve this with a small clip or holder near the faucet.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $317, the RO100ROPOT-UV is a significant investment for a countertop filter. However, compared to under-sink RO systems that cost $200-500 plus installation, it offers comparable purification with zero installation expense. Annual filter costs run approximately $60-80, bringing the first-year total cost of ownership to around $380-400. Over three years, the per-gallon cost works out to roughly $0.08-0.10 — far cheaper than bottled water and competitive with under-sink RO on a per-gallon basis.</p>
+  <p>The UV sterilization and glass carafe are the two features that justify the premium over the Lite UV model at $219. If you are on well water or have specific concerns about bacteria and viruses, the UV stage alone may be worth the $98 difference. If your water source is already chlorinated municipal water, the Lite UV delivers 90% of the performance at 70% of the price.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

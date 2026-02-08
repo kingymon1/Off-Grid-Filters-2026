@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Sitemap: https://offgridfilters.com/sitemap-index.xml
+
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /

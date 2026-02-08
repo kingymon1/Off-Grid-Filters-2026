@@ -1,0 +1,127 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-travel')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const timain = getProductBySlug('timain-filter-straw-2pack')!;
+const aquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+const membrane = getProductBySlug('membrane-solutions-filter-straw-4pack')!;
+const bluevuaLite = getProductBySlug('bluevua-ro100ropot-lite-uv')!;
+
+const recommendedProducts = [aquatabs, timain, membrane, bluevuaLite];
+
+const faqs = [
+  { question: 'Can a filter straw make tap water in developing countries safe?', answer: 'Filter straws remove bacteria and protozoa, which covers many waterborne threats in developing countries. However, they do not remove viruses, which are a significant concern in regions with poor sanitation — hepatitis A, norovirus, and rotavirus are common in contaminated water supplies. For comprehensive protection abroad, combine a filter straw with Aquatabs to kill viruses. This two-layer approach covers virtually all biological threats.' },
+  { question: 'Is it safe to use ice in drinks when traveling internationally?', answer: 'In many developing countries, ice may be made from untreated water and is a common source of traveler\'s diarrhea. In upscale restaurants and international hotels, ice is typically made from purified water and is generally safe. At street vendors and local restaurants, it is safer to skip the ice. When in doubt, use the same rule as local water — if you would not drink the tap water, do not use the ice.' },
+  { question: 'How do I purify water in a hotel room abroad?', answer: 'The simplest method is Aquatabs: drop one tablet in a bottle of tap water and wait 30 minutes. If the water is visibly turbid, pre-filter through a filter straw first, then treat with a tablet. For longer stays, bring a portable Bluevua countertop RO if your accommodation has reliable electricity — this produces the purest water possible from any municipal source. For short trips, filter straws plus tablets are lighter and more practical.' },
+  { question: 'Are water purification tablets safe for daily use?', answer: 'MSR Aquatabs use NaDCC (sodium dichloroisocyanurate), which is approved by the WHO and EPA for drinking water treatment. The chlorine concentration in treated water is well within safe limits for daily consumption. Aquatabs are widely used by humanitarian organizations for long-term water treatment in disaster zones and developing regions. They are safe for daily use by healthy adults and children over 2 years old.' },
+  { question: 'Where is it safe to drink tap water when traveling?', answer: 'Tap water is generally safe in: Western Europe, Australia, New Zealand, Japan, South Korea, Singapore, Canada, and the United States. Use caution in: Eastern Europe, parts of the Middle East, and some Caribbean islands. Avoid drinking unfiltered tap water in: most of Central and South America, Africa, South and Southeast Asia, and China. When in doubt, filter and purify. Local tourism boards and the CDC provide country-specific water safety guidance.' },
+  { question: 'What is the best way to carry water purification when flying?', answer: 'Filter straws and Aquatabs are TSA-compliant and easily pass through airport security. Pack filter straws in your carry-on — they are small enough to fit in a pocket. Aquatabs in sealed foil packaging have no liquid restriction issues. A collapsible water bottle (empty through security, filled after) paired with a filter straw gives you safe water at your destination airport. Avoid carrying full water bottles through security.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'MSR Aquatabs Review', url: '/reviews/msr-aquatabs-30pack/', description: 'Our full review of the best chemical water purification for travel.' },
+  { title: 'Best Water Filters for Hiking', url: '/water-filters-for-hiking/', description: 'Ultralight filtration for adventure travel and trekking.' },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'All portable water purification options ranked and compared.' },
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'Understand filtration technology to make smart travel water decisions.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Traveler's diarrhea affects 30-70% of international travelers to developing regions, and contaminated water is the leading cause. We cover the portable water purification strategies that keep you healthy on the road, from weekend getaways to extended international trips.</p>
+
+  <ProductImage alt="Portable water filters and purification for travel" icon="backpack" aspect="hero" />
+
+  <h2>Why Travelers Need Water Purification</h2>
+  <p>The CDC estimates that traveler's diarrhea strikes 30-70% of visitors to high-risk destinations in Central and South America, Africa, and Asia. The primary culprit is contaminated water — not just from drinking tap water directly, but from ice in drinks, salads washed in local water, and brushing teeth with unfiltered water. A single waterborne illness can derail an entire trip.</p>
+  <p>Even in countries with treated municipal water, the local pathogen profile differs from what your immune system is accustomed to. Your body may react to bacteria that locals tolerate without issue. This is why experienced travelers filter and purify water as a default practice, regardless of official water quality ratings.</p>
+  <p>The key challenge for travel water purification is that viruses are a major concern, especially in regions with poor sanitation. Standard filter straws with 0.1-micron membranes remove bacteria and protozoa but physically cannot capture viruses. This is why chemical purification — specifically MSR Aquatabs — is essential for international travel. The combination of filtration plus chemical treatment provides the most comprehensive protection available in a portable format.</p>
+
+  <h2>What to Look For in a Travel Water Filter</h2>
+  <p>Travel water purification has unique constraints compared to home or camping use:</p>
+  <ul>
+    <li><strong>Virus protection:</strong> The most critical factor for international travel. Viruses like hepatitis A, norovirus, and rotavirus are too small for filter membranes. Chemical treatment (Aquatabs) or UV purification is essential.</li>
+    <li><strong>TSA compliance:</strong> Your purification system must pass through airport security. Filter straws and tablets are fully TSA-compliant. Liquids and gel-based purifiers are not.</li>
+    <li><strong>Weight and packability:</strong> Space in a travel bag is precious. A filter straw weighs 2 ounces, and Aquatabs weigh half an ounce. Together, they add negligible weight to your luggage.</li>
+    <li><strong>Ease of use in varied situations:</strong> You might need to purify water in a hotel room, at a restaurant, from a tap, or from a natural source while trekking. Versatile tools that work in multiple scenarios are best.</li>
+    <li><strong>Speed:</strong> Filter straws provide instant filtration. Aquatabs require a 30-minute wait. Plan accordingly — treat water before you need it so it is ready when you are thirsty.</li>
+  </ul>
+
+  <ProTip title="The Traveler's Water Purification Kit">
+    Pack this kit in your carry-on for every international trip: one Timain filter straw (2.1 oz), one pack of MSR Aquatabs (0.5 oz), and a collapsible water bottle (2-3 oz empty). Total weight: under 5 ounces. Total cost: under $20. This kit handles every water scenario from hotel tap water to backcountry streams and keeps you protected against bacteria, protozoa, and viruses. It is the cheapest and lightest travel insurance you can carry.
+  </ProTip>
+
+  <h2>Top Picks for Travel</h2>
+
+  <h3>1. {aquatabs.name} — Essential for International Travel</h3>
+  <p>For international travel where viral contamination is a primary concern, Aquatabs are the single most important water purification item to carry. These EPA-registered tablets kill hepatitis A, norovirus, rotavirus, bacteria, and Giardia in 30 minutes using NaDCC chlorine-based chemistry. No iodine aftertaste, no complicated equipment, no batteries.</p>
+  <p>The practical travel usage is straightforward: fill a water bottle with tap water (or pre-filtered water from your straw), drop in one tablet, shake gently, and wait 30 minutes. Treat a batch before bed and it is ready in the morning. Treat a batch at lunch and it is ready for your afternoon exploration. At 30 tablets in a pack that weighs half an ounce, you have 15 gallons of purification capacity — enough for a 2-week trip.</p>
+  <p>In areas where water is visibly cloudy, pre-filter through your straw first. Turbid water reduces the effectiveness of chemical treatment because particles shield pathogens from the chlorine. Filter first, then treat — this two-step approach handles every water quality scenario.</p>
+  <p><strong>Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {timain.name} — Best Lightweight Travel Filter</h3>
+  <p>The Timain filter straw is the perfect complement to Aquatabs for travelers. While tablets handle viruses, the straw handles instant filtration for bacteria, protozoa, and sediment — no 30-minute wait required. When you are thirsty and need water now, the straw delivers.</p>
+  <p>For travel, the dual-use design is especially practical. Use it as a direct straw to drink from tap water at your hotel (after checking that it is not chemically contaminated). Use it as a squeeze filter to fill your reusable bottle on the go. The 4-stage filtration with activated carbon even improves the taste of heavily chlorinated municipal water common in many countries.</p>
+  <p>The 2-pack at ${timain.price} means you can carry one and leave a backup at your hotel. At 2.1 ounces per straw, it takes up less space than a tube of sunscreen.</p>
+  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {membrane.name} — Best for Group Travel</h3>
+  <p>Traveling with family or friends? The Membrane Solutions 4-pack equips everyone with their own filter straw so no one has to share or go without. At ${membrane.price} for four straws, it works out to under $10 per person for the duration of the trip.</p>
+  <p>The 28mm bottle compatibility is particularly useful for travelers who buy sealed bottled water and want to refill the same bottle from filtered tap water later. Thread the straw onto the bottle opening, flip, and squeeze — filtered water on demand. Each straw's 1,500+ liter capacity far exceeds what any traveler would need on a single trip, so they can be used on future trips as well.</p>
+  <p><strong>Price:</strong> ${membrane.price} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {bluevuaLite.name} — Best for Extended Stays</h3>
+  <p>For digital nomads, expats, or travelers on extended stays of a month or more, a countertop RO system transforms the quality of daily life. The Bluevua Lite UV provides full reverse osmosis with UV sterilization from any electrical outlet — no plumbing required. Set it up in your rental apartment or long-term hotel room, and you have hospital-grade purified water on demand.</p>
+  <p>The cost math favors the Bluevua on longer stays. At ${bluevuaLite.price} one-time, it replaces the daily cost of buying bottled water (typically $2-5/day in developing countries). Over a 3-month stay, bottled water costs $180-450 while the Bluevua costs the one-time investment plus electricity. For travelers who stay put for extended periods, it is the more economical and environmentally friendly choice.</p>
+  <p><strong>Price:</strong> ${bluevuaLite.price} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>Travel Water Safety Tips by Region</h2>
+  <ul>
+    <li><strong>Southeast Asia (Thailand, Vietnam, Cambodia, Indonesia):</strong> Do not drink tap water. Use filter straw + Aquatabs. Avoid ice from street vendors. Sealed bottled water is widely available as a backup.</li>
+    <li><strong>Central and South America (Mexico, Peru, Brazil):</strong> Tap water quality varies by city. In major cities, filtered tap water is usually fine. In rural areas and smaller towns, treat all water. Avoid salads washed in local water.</li>
+    <li><strong>Africa:</strong> Assume all non-bottled water needs treatment. Carry ample Aquatabs. In sub-Saharan Africa, viral contamination is a significant concern — do not rely on filtration alone.</li>
+    <li><strong>India and South Asia:</strong> Universally avoid tap water. Even locals drink bottled or filtered water. Check that sealed bottles are genuinely sealed — resealed bottles with tap water are a known scam in tourist areas.</li>
+    <li><strong>Western Europe, Japan, Australia:</strong> Tap water is safe to drink in most areas. A filter straw provides extra assurance and taste improvement but is not strictly necessary.</li>
+  </ul>
+
+  <ProTip title="The Brushing Your Teeth Rule">
+    If you would not drink the tap water, do not brush your teeth with it either. Swallowing even a small amount of contaminated water while brushing can cause illness. Use your filter straw to fill a cup for brushing, or treat a bottle of tap water with an Aquatab. This is the number one mistake experienced travelers warn about — and the easiest to prevent.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Travel</h2>
+  <p>For international travel, the combination of <strong><a href={`/reviews/${aquatabs.slug}/`}>{aquatabs.name}</a></strong> and a <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> provides the most comprehensive portable water purification for under $20 and under 3 ounces. Aquatabs cover the critical virus threat that filters miss, while the Timain straw provides instant bacteria and protozoa filtration. Together, they handle every water scenario you will encounter on the road.</p>
+</ContentLayout>

@@ -1,0 +1,187 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'what-is-reverse-osmosis')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'How long does a reverse osmosis membrane last?',
+    answer: 'A typical RO membrane lasts 2 to 3 years with proper maintenance. Pre-filters (sediment and carbon) should be replaced every 6 to 12 months to protect the membrane from premature clogging. Households with very hard or heavily sediment-laden water may need to replace membranes sooner.',
+  },
+  {
+    question: 'Does reverse osmosis remove minerals that are good for you?',
+    answer: 'Yes, RO removes beneficial minerals like calcium and magnesium along with contaminants. However, the amount of minerals you get from drinking water is small compared to what you get from food. Many modern RO systems include a remineralization stage that adds healthy minerals back after filtration, such as the iSpring RCC7AK and both Bluevua countertop models.',
+  },
+  {
+    question: 'How much water does a reverse osmosis system waste?',
+    answer: 'Traditional tank-based RO systems waste 3 to 4 gallons of water for every 1 gallon of purified water (a 1:3 or 1:4 ratio). Modern systems are more efficient — the Bluevua RO100ROPOT-UV achieves a 2:1 pure-to-drain ratio, and tankless systems like the Waterdrop G3P600 also achieve 2:1 efficiency. The wastewater is not toxic and can be reused for plants or cleaning.',
+  },
+  {
+    question: 'Can reverse osmosis remove PFAS from water?',
+    answer: 'Yes, reverse osmosis is the most effective residential technology for removing PFAS (forever chemicals). Quality RO systems remove 96% to 99%+ of PFAS compounds including PFOA and PFOS. Activated carbon filters provide partial PFAS reduction, but RO is the gold standard for households concerned about these contaminants.',
+  },
+  {
+    question: 'Is reverse osmosis water safe for babies and infant formula?',
+    answer: 'RO water is safe for babies and commonly recommended by pediatricians because it removes lead, bacteria, and other harmful contaminants. If using RO water for formula, choose a system with remineralization or supplement minerals as directed by your pediatrician. The low fluoride content of RO water is sometimes raised as a concern, but most pediatric dentists consider this manageable.',
+  },
+  {
+    question: 'Do I need a plumber to install a reverse osmosis system?',
+    answer: 'It depends on the system type. Countertop RO systems like the Bluevua models require zero installation — just plug them in. Under-sink systems like the iSpring RCC7AK require connecting to your cold water line and drilling a hole for the dispensing faucet. Many homeowners complete under-sink installation themselves in 1 to 2 hours, but professional installation is available for $100 to $200.',
+  },
+  {
+    question: 'What is the difference between reverse osmosis and a regular water filter?',
+    answer: 'Regular carbon-based water filters reduce chlorine taste, odor, and some contaminants at micron ratings of 0.5 to 5 microns. Reverse osmosis forces water through a semipermeable membrane with pores of approximately 0.0001 microns — small enough to remove dissolved solids, heavy metals, fluoride, PFAS, bacteria, and viruses. RO provides 93% to 99% TDS reduction compared to 10% to 30% for most carbon filters.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Compare RO to carbon, UV, ceramic, and other filtration technologies.' },
+  { title: 'Understanding TDS in Water', url: '/understanding-tds/', description: 'Learn what TDS readings mean and how RO affects them.' },
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'Our top-rated under-sink RO system for the money.' },
+  { title: 'Bluevua RO100ROPOT-UV Review', url: '/reviews/bluevua-ro100ropot-uv/', description: 'The best countertop RO with UV sterilization.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Reverse osmosis is the most thorough water purification technology available for home use. It removes up to 99% of dissolved contaminants, including lead, PFAS, fluoride, bacteria, and viruses. In this guide, we explain exactly how RO works, what it removes, what it does not, and whether you actually need it.</p>
+
+  <ProductImage alt="How reverse osmosis filtration works" icon="water" aspect="hero" />
+
+  <h2>How Reverse Osmosis Works</h2>
+  <p>At its core, reverse osmosis is a pressure-driven filtration process. Normal osmosis occurs naturally when water moves through a semipermeable membrane from a less concentrated solution to a more concentrated one. Reverse osmosis does the opposite — it uses pressure to force water from the contaminated side through the membrane to the clean side, leaving impurities behind.</p>
+  <p>The RO membrane contains microscopic pores approximately 0.0001 microns in diameter. To put that in perspective, a human hair is about 70 microns wide, and most bacteria are 0.2 to 5 microns. The RO membrane's pores are small enough to block dissolved salts, heavy metal ions, organic molecules, and essentially all biological contaminants.</p>
+  <p>In residential systems, your home's water pressure (typically 40 to 80 PSI) provides the force needed to push water through the membrane. Some systems, particularly tankless models like the <a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a>, include a booster pump to increase pressure and flow rate.</p>
+
+  <h2>The Stages of an RO System</h2>
+  <p>Modern residential RO systems use multiple filtration stages. Each stage serves a specific purpose, and together they provide comprehensive water purification.</p>
+
+  <h3>Stage 1: Sediment Pre-Filter (5 microns)</h3>
+  <p>The first stage removes sand, silt, rust, and other large particles. This protects the delicate RO membrane from physical damage and premature clogging. Sediment pre-filters typically need replacement every 6 months.</p>
+
+  <h3>Stage 2: Granular Activated Carbon (GAC)</h3>
+  <p>Carbon filtration removes chlorine, chloramines, and volatile organic compounds (VOCs). Chlorine is particularly important to remove before the RO membrane because it degrades the membrane material over time. This stage also improves taste and removes odors.</p>
+
+  <h3>Stage 3: Carbon Block (CTO)</h3>
+  <p>A denser carbon block filter provides additional chlorine removal and catches smaller organic molecules that passed through the GAC stage. This is the last line of defense before water reaches the membrane.</p>
+
+  <h3>Stage 4: RO Membrane (0.0001 microns)</h3>
+  <p>The heart of the system. The semipermeable membrane rejects 93% to 99% of dissolved solids, including heavy metals, fluoride, nitrates, arsenic, and PFAS. Rejected contaminants are flushed down the drain with wastewater. Quality membranes last 2 to 3 years.</p>
+
+  <h3>Stage 5: Post-Carbon Polish</h3>
+  <p>After the tank (or directly after the membrane in tankless systems), a final carbon filter removes any residual taste or odor and catches any remaining organic compounds. This ensures the water tastes clean and fresh at the faucet.</p>
+
+  <h3>Stage 6: Remineralization (Optional)</h3>
+  <p>Many modern systems add a remineralization stage that introduces beneficial minerals like calcium and magnesium back into the purified water. This raises the pH from slightly acidic (typical of pure RO water at pH 5.5 to 6.5) to a more neutral or slightly alkaline level (pH 7 to 8). Both the <a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> and <a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a> include this stage.</p>
+
+  <ProTip>If your RO system does not include a remineralization stage, you can add mineral drops to your filtered water for about $10 to $15 per bottle. A single bottle typically lasts 2 to 3 months and adds back calcium, magnesium, and trace minerals.</ProTip>
+
+  <h2>What Reverse Osmosis Removes</h2>
+  <p>RO is the most comprehensive residential filtration technology. Here is what a quality RO system eliminates:</p>
+  <ul>
+    <li><strong>Dissolved solids (TDS):</strong> 93% to 99% reduction of total dissolved solids</li>
+    <li><strong>Heavy metals:</strong> Lead (99%+), arsenic, mercury, chromium, cadmium</li>
+    <li><strong>PFAS/forever chemicals:</strong> 96% to 99%+ of PFOA, PFOS, and related compounds</li>
+    <li><strong>Fluoride:</strong> 90% to 95% reduction</li>
+    <li><strong>Nitrates and nitrites:</strong> Critical for well water users near agricultural areas</li>
+    <li><strong>Bacteria and protozoa:</strong> Effectively all biological contaminants</li>
+    <li><strong>Viruses:</strong> Most RO membranes block viruses, and UV-equipped models like the Bluevua guarantee 99.99% virus inactivation</li>
+    <li><strong>Chlorine and chloramines:</strong> Removed by pre-filter carbon stages</li>
+    <li><strong>Pharmaceuticals and pesticides:</strong> Most organic contaminants are rejected</li>
+    <li><strong>Microplastics:</strong> Completely removed due to membrane pore size</li>
+  </ul>
+
+  <h2>What Reverse Osmosis Does Not Remove</h2>
+  <p>No filtration technology is perfect. RO has limitations you should be aware of:</p>
+  <ul>
+    <li><strong>Dissolved gases:</strong> Carbon dioxide, hydrogen sulfide, and some volatile organic compounds can pass through the membrane as gases. Carbon pre-filters catch most VOCs, but dissolved gases may persist.</li>
+    <li><strong>Some pesticides and herbicides:</strong> Very small organic molecules with molecular weights below 200 daltons can sometimes pass through. Carbon pre-filters address most of these.</li>
+    <li><strong>Chlorine (at the membrane):</strong> The membrane itself does not remove chlorine — this is why pre-filter carbon stages are essential. Without them, chlorine destroys the membrane.</li>
+  </ul>
+  <p>In practice, a well-designed multi-stage RO system with carbon pre-filters addresses nearly all of these limitations. The combination of carbon filtration and reverse osmosis provides the most complete residential water treatment available.</p>
+
+  <h2>Advantages of Reverse Osmosis</h2>
+  <ul>
+    <li><strong>Most thorough contaminant removal:</strong> No other consumer technology matches RO's ability to remove dissolved solids and a wide spectrum of contaminants.</li>
+    <li><strong>Proven technology:</strong> RO has been used in municipal water treatment, desalination plants, and medical facilities for decades.</li>
+    <li><strong>Removes PFAS effectively:</strong> With growing concern about forever chemicals, RO is the most reliable residential solution.</li>
+    <li><strong>Measurable results:</strong> You can verify RO performance with an inexpensive TDS meter, giving you objective proof that the system is working.</li>
+    <li><strong>Low ongoing energy cost:</strong> Most under-sink RO systems operate on water pressure alone with no electricity needed.</li>
+  </ul>
+
+  <h2>Disadvantages of Reverse Osmosis</h2>
+  <ul>
+    <li><strong>Water waste:</strong> Traditional systems waste 3 to 4 gallons per gallon of purified water. Modern systems improve this to 2:1 or better, but some waste is inherent to the process.</li>
+    <li><strong>Slow production:</strong> Tank-based systems produce 50 to 100 gallons per day, which is adequate for drinking and cooking but not for whole-house use. Tankless systems like the <a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a> produce 600 GPD for faster delivery.</li>
+    <li><strong>Removes beneficial minerals:</strong> RO strips calcium, magnesium, and other minerals. Remineralization stages address this, but add cost and complexity.</li>
+    <li><strong>Higher upfront cost:</strong> RO systems cost $150 to $500+ compared to $20 to $60 for pitcher filters. However, the per-gallon cost of RO water is competitive over time.</li>
+    <li><strong>Installation required (under-sink):</strong> Most under-sink systems require a dedicated faucet hole and connection to your cold water line. Countertop models like the <a href="/reviews/bluevua-ro100ropot-lite-uv/">Bluevua Lite UV</a> eliminate this barrier entirely.</li>
+    <li><strong>Regular maintenance:</strong> Multiple filter stages on different replacement schedules (6 months, 12 months, 2 to 3 years) require more attention than a simple pitcher filter.</li>
+  </ul>
+
+  <ProTip title="Expert Tip">Use a TDS meter (available for $10 to $15 on Amazon) to monitor your RO system's performance. When the output TDS rises above 10% of your input TDS, it is time to replace the membrane. A well-functioning RO membrane should produce water with a TDS of 10 to 30 ppm from typical municipal water.</ProTip>
+
+  <h2>When Do You Need Reverse Osmosis?</h2>
+  <p>RO is not necessary for everyone. Here is when we recommend it:</p>
+
+  <h3>You Should Consider RO If:</h3>
+  <ul>
+    <li>Your water has high TDS levels (above 300 ppm)</li>
+    <li>You have known lead contamination from old pipes or solder</li>
+    <li>Your area has PFAS contamination in the water supply</li>
+    <li>You use well water with nitrates, arsenic, or other dissolved contaminants</li>
+    <li>You want the most thorough filtration possible for drinking and cooking</li>
+    <li>You have health conditions that require very pure water</li>
+  </ul>
+
+  <h3>You Probably Do Not Need RO If:</h3>
+  <ul>
+    <li>Your municipal water is already clean and your main concern is chlorine taste — a <a href="/reviews/brita-ultramax-27-cup-dispenser/">simple pitcher filter</a> or <a href="/best-countertop-filters/">countertop carbon filter</a> will do</li>
+    <li>You are on a tight budget and a $20 to $35 pitcher filter meets your needs</li>
+    <li>You prefer mineral-rich water and do not want to deal with remineralization</li>
+    <li>You only need filtered water for a single person and a pitcher filter's capacity is sufficient</li>
+  </ul>
+
+  <h2>Types of Residential RO Systems</h2>
+
+  <h3>Under-Sink Tank Systems</h3>
+  <p>The most common type. A pressurized storage tank holds 2 to 4 gallons of purified water, and a dedicated faucet dispenses it. The <a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> at $198.78 is our top value pick in this category, offering 6-stage filtration with alkaline remineralization at a price that undercuts competitors by 50% or more.</p>
+
+  <h3>Under-Sink Tankless Systems</h3>
+  <p>Newer designs eliminate the storage tank by using a booster pump to filter water on demand. The <a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a> produces 600 GPD — eight times faster than traditional 75 GPD tank systems — and saves significant cabinet space. The trade-off is higher price ($429) and the need for an electrical outlet under the sink.</p>
+
+  <h3>Countertop RO Systems</h3>
+  <p>Zero-installation systems that sit on your counter and filter water in batches. The <a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a> is our top pick, featuring 6-stage filtration with UV sterilization and a glass carafe. Ideal for renters, apartments, and anyone who cannot or does not want to modify plumbing.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

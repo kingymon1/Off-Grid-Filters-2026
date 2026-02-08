@@ -1,0 +1,152 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'samsung-haf-qin-vs-everydrop-filter-a')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  compatibility: p.specs.compatibility || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'Is the everydrop Filter A better than the Samsung HAF-QIN?', answer: 'On paper, yes. The everydrop Filter A has triple NSF 42/53/401 certification covering lead, pharmaceuticals, and pesticides, while the Samsung HAF-QIN has only NSF 42 (chlorine taste and odor). The everydrop also specifies a 200-gallon capacity. However, you can only use the filter that fits your refrigerator — Samsung fridges need the HAF-QIN, and Whirlpool-family fridges need the everydrop.' },
+  { question: 'Why is the Samsung HAF-QIN cheaper than the everydrop Filter A?', answer: 'The Samsung HAF-QIN at $37.52 is cheaper partly because it has fewer certifications — only NSF 42 versus the everydrop\'s NSF 42/53/401. Samsung\'s filter is designed primarily for chlorine taste and odor reduction, while the everydrop is engineered for broader contaminant removal including lead and pharmaceuticals. The certification testing alone adds to production costs.' },
+  { question: 'Does the Samsung HAF-QIN remove lead?', answer: 'No. The Samsung HAF-QIN has only NSF 42 certification, which covers chlorine taste and odor reduction. It does not have NSF 53 certification for lead, cysts, or other health contaminants. If lead removal is important, Samsung fridge owners should consider supplementing with a separate under-sink or countertop filter.' },
+  { question: 'Can I use an everydrop filter in my Samsung refrigerator?', answer: 'No. everydrop filters are designed exclusively for Whirlpool-family refrigerators (Whirlpool, Maytag, Amana, KitchenAid, JennAir). They will not physically fit Samsung models. Samsung refrigerators require Samsung-specific filters like the HAF-QIN.' },
+  { question: 'How do I know which filter my refrigerator needs?', answer: 'Check your refrigerator\'s user manual or look for the filter model number printed on your existing filter. Samsung fridges typically list compatible filter models inside the fridge near the filter housing. Whirlpool-family fridges indicate whether they use Filter 1, Filter A, or another type. You can also search your fridge model number on the manufacturer\'s website.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `${productA.name} vs ${productB.name}`,
+  description: `Samsung HAF-QIN vs everydrop Filter A refrigerator filter comparison. We compare certifications, contaminant removal, price, and overall value.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Refrigerator Filters', url: '/best-refrigerator-filters/', description: 'Our expert picks for the best refrigerator water filters.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter.' },
+];
+---
+
+<ContentLayout
+  title={`Samsung HAF-QIN vs everydrop Filter A: Which Is Better? (${year}) — OffGrid Filters`}
+  description={`Samsung HAF-QIN vs everydrop Filter A refrigerator filter comparison. We compare certifications, contaminant removal, price, and value.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Samsung vs everydrop"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Samsung HAF-QIN vs everydrop Filter A: Which Refrigerator Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>everydrop Filter A ($48)</strong> is the objectively better filter with triple NSF 42/53/401 certification covering lead, pharmaceuticals, and pesticides. The <strong>Samsung HAF-QIN ($37.52)</strong> is more affordable but only certified for chlorine taste and odor (NSF 42). As always with fridge filters, <strong>your refrigerator brand dictates your choice</strong>.</p>
+  </div>
+
+  <ProductImage alt="Samsung HAF-QIN vs everydrop Filter A refrigerator filter" icon="fridge" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Compatibility', key: 'compatibility' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">These two filters represent opposite ends of the OEM refrigerator filter spectrum: the Samsung HAF-QIN offers basic filtration at the lowest OEM price, while the everydrop Filter A provides premium triple-certified contaminant reduction. Your fridge brand determines which one you buy, but understanding the differences can inform whether you need supplemental filtration.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Contaminant Removal &amp; Certifications</h3>
+  <p>The everydrop Filter A carries NSF 42/53/401 — the premium triple certification covering chlorine taste, lead and cysts (health contaminants), and emerging contaminants like pharmaceuticals and pesticides. The Samsung HAF-QIN has only NSF 42, which covers chlorine taste and odor and basic particulates. This is the most significant difference between these filters. If your water has known lead contamination, the Samsung filter will not adequately address it.</p>
+  <div class="winner-badge">Winner: everydrop Filter A (NSF 42/53/401 vs NSF 42)</div>
+
+  <h3>Price</h3>
+  <p>The Samsung HAF-QIN is the most affordable OEM fridge filter in our catalog at $37.52, while the everydrop Filter A costs $48 — a $10.48 difference. For Samsung fridge owners on a budget, the lower price is welcome. However, the price difference reflects the gap in filtration capability. The everydrop's higher cost funds the more advanced activated carbon block media and the additional NSF testing and certification.</p>
+  <div class="winner-badge">Winner: Samsung HAF-QIN ($37.52 vs $48)</div>
+
+  <h3>Capacity &amp; Filter Life</h3>
+  <p>The everydrop Filter A specifies a 200-gallon capacity with a 6-month recommended replacement cycle. Samsung does not prominently specify the HAF-QIN's gallon capacity — a transparency issue that makes it harder to calculate long-term costs. Both recommend 6-month replacement intervals, but without a specified capacity, Samsung owners must trust the time-based recommendation rather than a usage-based metric.</p>
+  <div class="winner-badge">Winner: everydrop Filter A (200 gal specified vs unspecified)</div>
+
+  <h3>Installation</h3>
+  <p>The Samsung HAF-QIN uses a simple quarter-turn installation that takes under 30 seconds. It is widely praised as one of the easiest fridge filter replacements available. The everydrop Filter A uses a rotating knob design that is also tool-free but slightly more involved than a simple quarter-turn. Both are easy enough for anyone, but Samsung's quarter-turn simplicity wins on pure speed and intuitiveness.</p>
+  <div class="winner-badge">Winner: Samsung HAF-QIN (quarter-turn simplicity)</div>
+
+  <h3>Brand Ecosystem &amp; Compatibility</h3>
+  <p>The Samsung HAF-QIN works across Samsung's French door, side-by-side, and 4-Door Flex lineups — broad compatibility within the Samsung brand. The everydrop Filter A is compatible with newer Whirlpool, Maytag, Amana, KitchenAid, and JennAir models — covering five major brands under one filter. For sheer brand reach, the everydrop's compatibility across the Whirlpool family gives it an edge in the replacement market.</p>
+  <div class="winner-badge">Winner: everydrop Filter A (5 brands vs 1)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You own a Samsung French door, side-by-side, or 4-Door Flex refrigerator</li>
+        <li>You want the most affordable OEM fridge filter replacement</li>
+        <li>Your primary concern is chlorine taste and odor improvement</li>
+        <li>Consider supplementing with an under-sink filter if lead/PFAS is a concern</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You own a newer Whirlpool, Maytag, Amana, KitchenAid, or JennAir fridge</li>
+        <li>You want premium lead, pharmaceutical, and pesticide reduction</li>
+        <li>NSF 42/53/401 triple certification gives you confidence in filtration quality</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

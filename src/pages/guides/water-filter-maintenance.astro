@@ -1,0 +1,182 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filter-maintenance')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const britaStandard3 = products.find(p => p.slug === 'brita-standard-3pack')!;
+const britaElite = products.find(p => p.slug === 'brita-elite-2pack')!;
+const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
+const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
+const everydrop1 = products.find(p => p.slug === 'everydrop-filter-1-edr1rxd1')!;
+const geXwfe = products.find(p => p.slug === 'ge-xwfe')!;
+const membraneSediment = products.find(p => p.slug === 'membrane-solutions-sediment-6pack')!;
+
+const faqs = [
+  { question: 'How often should I replace my pitcher water filter?', answer: 'Most standard pitcher filters (Brita Standard, PUR, Amazon Basics) need replacing every 40 gallons or roughly every 2 months for a typical household. Brita Elite filters last longer at 120 gallons (about 6 months). ZeroWater filters have the shortest lifespan at 15-25 gallons, which can mean replacement every 2-4 weeks in high-TDS areas.' },
+  { question: 'What happens if I do not replace my water filter on time?', answer: 'An overused filter becomes less effective at removing contaminants and can actually harbor bacteria. The activated carbon becomes saturated, meaning it can no longer absorb chlorine, lead, or other substances. In extreme cases, a clogged filter can release previously captured contaminants back into your water. Slow flow rate is the first warning sign.' },
+  { question: 'Can I clean and reuse a water filter cartridge?', answer: 'Most disposable carbon cartridges (pitcher filters, refrigerator filters) cannot be meaningfully cleaned or reused. However, hollow fiber membrane filters (like survival straws) can be backflushed to restore flow rate. Some ceramic filters can be scrubbed and reused. Never attempt to clean and reuse a carbon-based filter cartridge — it will not restore filtration capacity.' },
+  { question: 'How do I know when my RO membrane needs replacing?', answer: 'RO membranes typically last 2-3 years. Signs it needs replacement include a TDS reading above 10-15% of your inlet TDS (meaning rejection rate has dropped below 85-90%), noticeably slower water production, or off-taste in filtered water. Smart systems like the Waterdrop G3P600 display real-time TDS readings to make this easy to monitor.' },
+  { question: 'Why does my filtered water taste bad even with a new filter?', answer: 'New carbon filters often produce a slight charcoal taste for the first few pitchers. Always flush a new filter by running 2-3 pitchers of water through it and discarding. If taste issues persist, check that you installed the filter correctly and that the seal is tight. For RO systems, off-taste usually means a post-carbon filter needs replacing.' },
+  { question: 'Do refrigerator water filters need special maintenance?', answer: 'Refrigerator filters are mostly set-and-forget — replace every 6 months or when the fridge indicator light turns on. However, you should run about 2 gallons of water through a new filter before drinking. If your fridge has no indicator, set a calendar reminder. The only real maintenance is keeping the filter housing clean during changes.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/guides/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Our comprehensive guide to selecting the right filter for your needs.' },
+  { title: 'Water Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/', description: 'True cost of ownership including replacement filter expenses.' },
+  { title: 'Common Water Filter Mistakes', url: '/guides/water-filter-mistakes/', description: 'The biggest mistakes people make — including skipping maintenance.' },
+  { title: 'Best Replacement Filters', url: '/best-replacement-filters/', description: 'Our top-rated replacement filters for pitchers and dispensers.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/guides/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">A water filter is only as good as its maintenance. A neglected filter does not just stop working — it can become a breeding ground for bacteria and actually make your water worse. This guide covers replacement schedules, warning signs of filter failure, cleaning techniques, and maintenance best practices for every filter type we review.</p>
+
+  <ProductImage alt="Water filter maintenance and replacement guide" icon="tools" aspect="hero" />
+
+  <h2>Why Maintenance Matters More Than You Think</h2>
+  <p>Water filters work by trapping contaminants in a filter medium — typically activated carbon, a membrane, or ion exchange resin. Over time, that medium becomes saturated. Once it reaches capacity, three things happen:</p>
+  <ol>
+    <li><strong>Filtration effectiveness drops.</strong> A saturated carbon filter cannot absorb any more chlorine, lead, or VOCs. Your water passes through essentially unfiltered.</li>
+    <li><strong>Flow rate decreases.</strong> As pores clog with trapped sediment and particulates, water flow slows dramatically — sometimes to a trickle.</li>
+    <li><strong>Bacterial growth increases.</strong> The moist, carbon-rich environment inside an exhausted filter is ideal for bacterial colonization. Studies have shown that overused filters can have higher bacterial counts than unfiltered tap water.</li>
+  </ol>
+  <p>The solution is straightforward: follow the replacement schedule and watch for warning signs.</p>
+
+  <h2>Replacement Schedules by Filter Type</h2>
+
+  <h3>Pitcher and Dispenser Filters</h3>
+  <p>Pitcher filters have the shortest lifespans because they rely on small, inexpensive cartridges with limited carbon capacity.</p>
+  <ul>
+    <li><strong><a href={`/reviews/${britaStandard3.slug}/`}>Brita Standard</a>:</strong> Every 40 gallons or approximately 2 months. At $17.98 for a 3-pack, that is about $6 per change.</li>
+    <li><strong><a href={`/reviews/${britaElite.slug}/`}>Brita Elite</a>:</strong> Every 120 gallons or approximately 6 months. At $29.78 for a 2-pack, the longer lifespan actually makes it cheaper per gallon than Standard.</li>
+    <li><strong>ZeroWater 5-Stage:</strong> Every 15-25 gallons — much shorter than competitors because the 5-stage ion exchange system works harder. In high-TDS areas, you may replace every 2-3 weeks.</li>
+    <li><strong>PUR Standard:</strong> Every 40 gallons or 2 months, similar to Brita Standard.</li>
+  </ul>
+
+  <ProTip>Use the TDS meter that comes with ZeroWater pitchers to know exactly when to replace the filter. When your TDS reading exceeds 006, the filter is exhausted. This objective measurement beats any guessing game.</ProTip>
+
+  <h3>Refrigerator Filters</h3>
+  <p>Refrigerator filters generally last 6 months, but capacity varies by model:</p>
+  <ul>
+    <li><strong><a href={`/reviews/${geXwfe.slug}/`}>GE XWFE</a>:</strong> 300 gallons or 6 months — the most generous capacity among fridge filters.</li>
+    <li><strong><a href={`/reviews/${everydrop1.slug}/`}>everydrop Filter 1</a>:</strong> 200 gallons or 6 months. Heavy-use families may exhaust 200 gallons before the 6-month mark.</li>
+    <li><strong>Samsung HAF-QIN:</strong> 6 months (Samsung does not prominently advertise gallon capacity).</li>
+  </ul>
+  <p>Most modern refrigerators track filter life and display a warning light. Do not ignore it — the indicator is typically based on water flow volume, making it a reasonably accurate gauge.</p>
+
+  <h3>Under-Sink and RO Systems</h3>
+  <p>Under-sink systems have multiple filters on different replacement cycles. For the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK</a>:</p>
+  <ul>
+    <li><strong>Sediment pre-filter (Stage 1):</strong> Every 6 months</li>
+    <li><strong>GAC carbon filter (Stage 2):</strong> Every 6 months</li>
+    <li><strong>CTO carbon block (Stage 3):</strong> Every 6 months</li>
+    <li><strong>RO membrane (Stage 4):</strong> Every 2-3 years</li>
+    <li><strong>Post-carbon filter (Stage 5):</strong> Every 12 months</li>
+    <li><strong>Alkaline remineralization (Stage 6):</strong> Every 12 months</li>
+  </ul>
+  <p>The <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600</a> simplifies this with its smart TDS faucet that tells you exactly when each filter stage needs replacement — a major convenience advantage over traditional RO systems.</p>
+
+  <h3>Whole-House Sediment Filters</h3>
+  <p>Sediment filter replacement frequency depends heavily on your source water quality. The <a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions 5-Micron String Wound filters</a> typically last 2-3 months for well water with moderate sediment, and up to 6 months for relatively clean municipal water. A visible color change from white to brown/orange indicates it is time for a replacement.</p>
+
+  <h2>Warning Signs Your Filter Needs Replacing</h2>
+  <p>Do not wait for a scheduled date if you notice any of these indicators:</p>
+  <ul>
+    <li><strong>Slower flow rate:</strong> The most common and reliable sign. If your pitcher takes twice as long to fill or your faucet flow has dropped noticeably, the filter is clogged.</li>
+    <li><strong>Taste or odor changes:</strong> A return of chlorine taste, metallic flavors, or musty odor means the carbon is saturated.</li>
+    <li><strong>TDS creep (RO systems):</strong> If your output TDS is rising — for example, from 10 ppm to 30 ppm — the RO membrane is losing effectiveness.</li>
+    <li><strong>Visible discoloration:</strong> Sediment filters that have turned dark brown, or pitcher filters with visible algae or mold growth.</li>
+    <li><strong>Filter indicator light:</strong> Modern refrigerators and smart systems track usage. Trust the indicator.</li>
+    <li><strong>Unusual sounds:</strong> Gurgling, hissing, or air-burst sounds from under-sink systems may indicate air locks caused by deteriorating filter seals.</li>
+  </ul>
+
+  <ProTip>Keep a simple log of when you replace filters — a sticky note on the fridge or a recurring phone reminder works. This single habit prevents the most common maintenance failure: simply forgetting.</ProTip>
+
+  <h2>Cleaning Your Filter System</h2>
+  <p>While the filter cartridge itself is usually disposable, the housing, pitcher, or system components need regular cleaning to prevent mold and bacteria buildup.</p>
+
+  <h3>Pitcher and Dispenser Cleaning</h3>
+  <ol>
+    <li>Remove the filter cartridge and set it aside.</li>
+    <li>Disassemble all removable parts (lid, reservoir, spigot).</li>
+    <li>Wash all parts with warm water and mild dish soap. Use a bottle brush for hard-to-reach areas.</li>
+    <li>For stubborn buildup, soak parts in a mixture of one tablespoon white vinegar per cup of warm water for 15 minutes.</li>
+    <li>Rinse thoroughly and air dry completely before reassembling.</li>
+    <li>Clean every 2-4 weeks, or whenever you notice discoloration or sliminess.</li>
+  </ol>
+
+  <h3>Refrigerator Filter Housing</h3>
+  <p>When replacing a fridge filter, wipe the filter housing cavity with a damp cloth. Check for any mold or mineral buildup around the O-ring seal. Run 2 gallons of water through the new filter before using it for drinking — this flushes carbon fines and air pockets.</p>
+
+  <h3>Under-Sink System Maintenance</h3>
+  <p>During filter changes on systems like the iSpring RCC7AK:</p>
+  <ol>
+    <li>Turn off the water supply and release pressure by opening the dedicated faucet.</li>
+    <li>Use the included filter wrench to open each housing.</li>
+    <li>Inspect O-rings for cracks, dryness, or deformation. Apply food-grade silicone grease to O-rings every 6-12 months.</li>
+    <li>Wipe the inside of each filter housing with a clean, damp cloth.</li>
+    <li>Check tubing connections for any signs of leaking or mineral deposits.</li>
+    <li>After installing new filters, flush the system for 5-10 minutes before drinking.</li>
+  </ol>
+
+  <h3>Survival Filter Maintenance</h3>
+  <p>Hollow fiber membrane straws benefit from backflushing after each use. The <a href="/reviews/naturenova-filter-straw-3pack/">NatureNova straw kit</a> includes a backwash syringe specifically for this purpose. Force clean water backward through the filter to dislodge trapped particles. This extends filter life significantly — from hundreds of liters to the full rated capacity.</p>
+
+  <h2>Common Maintenance Mistakes</h2>
+  <ul>
+    <li><strong>Running the filter past its rated capacity.</strong> "It still works" is not the same as "it is still filtering effectively." Carbon saturation is invisible until taste changes.</li>
+    <li><strong>Not flushing new filters.</strong> All carbon-based filters release fine carbon particles when new. Run water through them before drinking.</li>
+    <li><strong>Ignoring the O-rings.</strong> Dried or cracked O-rings cause leaks and allow unfiltered water to bypass the filter. A $2 tube of silicone grease prevents hundreds of dollars in water damage.</li>
+    <li><strong>Storing filters improperly.</strong> Unused replacement filters should be stored in their sealed packaging in a cool, dry location. Opened or damp filters grow mold.</li>
+    <li><strong>Using hot water through carbon filters.</strong> Hot water damages activated carbon and can cause it to release trapped contaminants. Always filter cold water.</li>
+  </ul>
+
+  <ProTip>Buy replacement filters in bulk when you find a good price. The <a href={`/reviews/${britaStandard3.slug}/`}>Brita Standard 3-Pack</a> or <a href="/reviews/brita-standard-4pack/">4-Pack</a> saves money per filter, and sealed cartridges have a shelf life of several years.</ProTip>
+
+  <h2>Product-Specific Maintenance Quick Reference</h2>
+  <p>Here is a quick lookup for the products we review:</p>
+  <ul>
+    <li><strong><a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a>:</strong> Replace RO membrane every 12 months, other filters every 6 months. Drain and clean glass carafe weekly. Wipe UV chamber during filter changes.</li>
+    <li><strong><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK</a>:</strong> 3 pre-filters every 6 months, RO membrane every 2-3 years, post-filters every 12 months. Sanitize tank annually.</li>
+    <li><strong><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600</a>:</strong> CF filter every 6 months, MRO filter every 12 months, CB filter every 24 months. Smart faucet alerts when replacement is due.</li>
+    <li><strong><a href="/reviews/pentair-everpure-h1200/">Pentair Everpure H-1200</a>:</strong> Replace twin cartridge set every 12 months or 1,000 gallons. Quarter-turn removal makes changes fast.</li>
+    <li><strong><a href="/reviews/elkay-51300c-watersentry-plus/">Elkay 51300C</a>:</strong> Replace every 3,000 gallons (6-12 months in commercial use). Reset the filter counter on the filling station after replacement.</li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Keep Your Filter Working for You</h2>
+  <p>Consistent maintenance is the difference between a water filter that protects your health and an expensive paperweight. Set reminders, buy replacement filters in advance, and pay attention to the warning signs. For help choosing the right replacement filters, see our <a href="/best-replacement-filters/">Best Replacement Filters</a> roundup or use our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a> to find a system that fits your maintenance preferences.</p>
+</ContentLayout>

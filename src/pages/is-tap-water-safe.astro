@@ -1,0 +1,181 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'is-tap-water-safe')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'Is US tap water safe to drink straight from the faucet?',
+    answer: 'For most Americans, yes — municipal tap water meets EPA safety standards and is safe to drink. The EPA regulates over 90 contaminants under the Safe Drinking Water Act, and public water systems are required to test regularly and report results. However, "safe by regulation" does not mean "free of all contaminants." Many people choose filtration to remove chlorine taste, reduce trace contaminants below regulatory limits, or address contaminants that the EPA does not yet regulate (like many PFAS compounds). The answer depends on your local water quality and personal health priorities.',
+  },
+  {
+    question: 'How can I find out what is in my tap water?',
+    answer: 'Three main resources: First, your water utility must send you an annual Consumer Confidence Report (CCR) by July 1 each year, listing all detected contaminants and their levels. You can also request this from your utility or find it online. Second, the Environmental Working Group (EWG) database at ewg.org/tapwater provides a more critical analysis that compares your water against health guidelines (often stricter than EPA limits). Third, you can order an independent lab test ($50 to $400 depending on contaminants tested) for definitive results specific to your tap.',
+  },
+  {
+    question: 'What are the most common contaminants in US tap water?',
+    answer: 'The most frequently detected contaminants include: disinfection byproducts (trihalomethanes and haloacetic acids from chlorine treatment), lead (from aging pipes and service lines), nitrates (from agricultural runoff), PFAS (forever chemicals from industrial use), arsenic (natural geological source), chromium-6 (industrial and natural sources), and microplastics (ubiquitous environmental contamination). Most are present at levels below EPA maximum contaminant levels, but some health experts argue the EPA limits are not strict enough for all of these.',
+  },
+  {
+    question: 'Is well water safe to drink without treatment?',
+    answer: 'Private wells are NOT regulated by the EPA and are the owner responsibility to test and treat. Well water can contain bacteria (E. coli, coliform), nitrates from agricultural runoff, arsenic from natural geological deposits, radon, iron, manganese, and hard water minerals. The CDC recommends testing private wells at least annually for bacteria and nitrates, and periodically for other contaminants based on local risk factors. Many well water sources require some form of treatment — at minimum sediment filtration, and often additional systems depending on test results.',
+  },
+  {
+    question: 'Does chlorine in tap water pose health risks?',
+    answer: 'Chlorine itself at municipal treatment levels is not considered a significant health risk — it is added specifically to kill harmful bacteria and make water safe. However, chlorine reacts with organic matter in water to form disinfection byproducts (DBPs) like trihalomethanes (THMs) and haloacetic acids (HAAs). Long-term exposure to high levels of DBPs has been associated with increased cancer risk and reproductive effects. Activated carbon filters effectively remove both chlorine and many disinfection byproducts.',
+  },
+  {
+    question: 'Is bottled water safer than tap water?',
+    answer: 'Not necessarily. Bottled water is regulated by the FDA (not the EPA) and in many cases is held to less stringent testing requirements than municipal tap water. Some bottled water brands are simply filtered municipal tap water. Independent testing has found microplastics, PFAS, and other contaminants in various bottled water brands. Home filtration of tap water provides equal or better quality control, costs far less per gallon, and eliminates plastic waste.',
+  },
+  {
+    question: 'What is the EWG tap water database and should I trust it?',
+    answer: 'The Environmental Working Group (EWG) tap water database compares municipal water quality data against health guidelines that are often stricter than EPA legal limits. EWG argues that many EPA maximum contaminant levels are outdated and do not reflect current science. Their analysis tends to be more alarming than EPA assessments, which some critics argue causes unnecessary concern. The truth is in between: EPA limits are legally enforceable minimums, while EWG guidelines represent aspirational health targets. Both perspectives have value — use the EWG database as motivation to filter, not as a reason to panic.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Lead in Drinking Water', url: '/lead-in-drinking-water/', description: 'The most common health concern in US tap water.' },
+  { title: 'PFAS in Drinking Water', url: '/pfas-in-drinking-water/', description: 'The emerging contaminant threat in water supplies.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Find the right filter for your water quality.' },
+  { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Compare filtration technologies for your needs.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">The short answer: for most Americans, yes — tap water meets federal safety standards. The longer answer: "meets safety standards" does not mean "free of contaminants," and those standards may not be as protective as you think. Here is an honest, balanced look at US water quality, what your tap water actually contains, and when additional filtration makes sense.</p>
+
+  <ProductImage alt="Is US tap water safe to drink" icon="water" aspect="hero" />
+
+  <h2>How US Tap Water Is Regulated</h2>
+  <p>The Safe Drinking Water Act (SDWA) of 1974 gives the Environmental Protection Agency (EPA) authority to set standards for drinking water quality. Here is how the system works:</p>
+  <ul>
+    <li><strong>Maximum Contaminant Level Goals (MCLGs):</strong> Health-based goals set at levels where no known health effects are expected. These are aspirational — not enforceable. For carcinogens like lead, the MCLG is zero.</li>
+    <li><strong>Maximum Contaminant Levels (MCLs):</strong> Enforceable limits that public water systems must meet. MCLs balance health protection with technical feasibility and cost. They are always equal to or less protective than MCLGs.</li>
+    <li><strong>Treatment Techniques:</strong> For some contaminants where monitoring is impractical, the EPA specifies required treatment methods instead of numerical limits.</li>
+  </ul>
+  <p>The EPA currently regulates over 90 contaminants. Public water systems (serving 25+ people) must test regularly, treat as required, and publish annual Consumer Confidence Reports (CCRs) disclosing what they found. Violations trigger enforcement actions.</p>
+  <p>The system works — waterborne disease outbreaks in the US are rare compared to countries without centralized water treatment. But the system has gaps that are worth understanding.</p>
+
+  <h2>Where the Gaps Are</h2>
+
+  <h3>Outdated Standards</h3>
+  <p>Many EPA MCLs were set decades ago and have not been updated to reflect current scientific understanding. The arsenic standard (10 ppb) was not updated until 2001, and some health groups argue it should be lower. The lead action level (15 ppb) is a regulatory trigger, not a health-based threshold — there is no safe level of lead. Many standards were set balancing health against the cost of treatment, not purely on health science.</p>
+
+  <h3>Unregulated Contaminants</h3>
+  <p>Over 160 unregulated contaminants have been detected in US water supplies according to EWG analysis. The most significant include:</p>
+  <ul>
+    <li><strong>PFAS:</strong> Until 2024, there were no federal limits for any PFAS compounds. The new 4 ppt standard for PFOA and PFOS does not take effect until 2029. Thousands of other PFAS compounds remain unregulated.</li>
+    <li><strong>Microplastics:</strong> Detected in tap water nationwide. No federal standard exists, and the health effects of chronic ingestion are still being studied.</li>
+    <li><strong>Pharmaceuticals:</strong> Trace amounts of common drugs (antibiotics, hormones, antidepressants) have been detected in water supplies. The EPA does not regulate these.</li>
+    <li><strong>Hexavalent chromium (chromium-6):</strong> The total chromium standard (100 ppb) does not distinguish between harmless trivalent chromium and carcinogenic hexavalent chromium. California proposed a 10 ppb standard for chromium-6 specifically.</li>
+  </ul>
+
+  <h3>Infrastructure Aging</h3>
+  <p>The American Society of Civil Engineers gives US drinking water infrastructure a C- grade. An estimated 6 million lead service lines remain in use. Water main breaks occur approximately 240,000 times per year. Aging pipes can introduce lead, iron, and bacteria into otherwise clean water between the treatment plant and your faucet.</p>
+
+  <ProTip>Your municipal water may leave the treatment plant perfectly clean but pick up contaminants on the way to your faucet. This is called "last mile" contamination, and it is why point-of-use filtration at your tap provides a meaningful additional layer of protection — even when your utility reports clean water at the plant.</ProTip>
+
+  <h2>How to Check Your Specific Water Quality</h2>
+
+  <h3>1. Consumer Confidence Report (CCR)</h3>
+  <p>Every public water system must provide an annual CCR by July 1. It lists every regulated contaminant detected, the level found, the EPA MCL, and whether any violations occurred. You can find your CCR on your utility's website or request a paper copy. This is the official, regulated data source.</p>
+
+  <h3>2. EWG Tap Water Database</h3>
+  <p>The Environmental Working Group's database at ewg.org/tapwater goes beyond the CCR. Enter your zip code to see what contaminants have been detected and how they compare to EWG's health guidelines (which are often 100x to 1,000x stricter than EPA MCLs). EWG's analysis is more conservative and may identify concerns that your CCR glosses over. Use it as an additional perspective, not the only perspective.</p>
+
+  <h3>3. Independent Lab Testing</h3>
+  <p>For the most accurate picture of what is actually at your faucet (not just at the treatment plant), order an independent lab test. Basic test panels covering lead, bacteria, and common metals run $50 to $100. Comprehensive panels including PFAS, VOCs, and pharmaceuticals run $200 to $400. This is especially important for homes with older plumbing, private wells, or specific health concerns.</p>
+
+  <ProTip title="Expert Tip">When reviewing your CCR, pay attention to the "range of detection" column, not just the average. If the highest detected level is close to the MCL — even if the average is well below — that means some samples exceeded levels that health experts consider optimal. Also check for any "violation" or "non-compliance" notes, which indicate times when standards were not met.</ProTip>
+
+  <h2>Common Municipal Water Contaminants</h2>
+
+  <h3>Disinfection Byproducts (DBPs)</h3>
+  <p>Chlorine and chloramine are added to municipal water to kill bacteria — an essential public health measure. However, these disinfectants react with naturally occurring organic matter to form byproducts like trihalomethanes (THMs) and haloacetic acids (HAAs). DBPs are the most commonly detected regulated contaminants in US water supplies. Long-term exposure to elevated DBP levels has been associated with increased bladder cancer risk and reproductive effects. Carbon filtration effectively removes chlorine and many DBPs.</p>
+
+  <h3>Lead</h3>
+  <p>Lead does not come from the water source — it dissolves from lead pipes, solder, and fixtures in the distribution system and your home plumbing. An estimated 9.2 million homes still receive water through lead service lines. There is no safe level of lead. See our dedicated <a href="/lead-in-drinking-water/">lead in drinking water guide</a> for detailed information.</p>
+
+  <h3>Nitrates</h3>
+  <p>Common in agricultural areas from fertilizer runoff. The EPA MCL is 10 ppm. Nitrates are particularly dangerous for infants (causing "blue baby syndrome") and pregnant women. Well water users in farming regions should test annually.</p>
+
+  <h3>PFAS</h3>
+  <p>Detected in the water supplies serving an estimated 110+ million Americans. New EPA standards (effective 2029) set limits of 4 ppt for PFOA and PFOS. Until your utility achieves compliance, point-of-use filtration is the practical solution. See our <a href="/pfas-in-drinking-water/">PFAS guide</a> for filter recommendations.</p>
+
+  <h3>Arsenic</h3>
+  <p>A naturally occurring element found in groundwater, particularly in the Southwest and New England. The EPA MCL is 10 ppb, but some health studies suggest cancer risk increases at levels below this. Reverse osmosis is the most effective residential treatment for arsenic.</p>
+
+  <h2>Regional Differences in Water Quality</h2>
+  <p>Water quality varies dramatically across the United States based on source water, local geology, infrastructure age, and treatment methods:</p>
+  <ul>
+    <li><strong>Southwest:</strong> Higher arsenic levels from natural geological deposits. Hard water (high TDS from calcium and magnesium) is common. Lower chlorine levels needed due to clean source water in some areas.</li>
+    <li><strong>Midwest and Northeast:</strong> Higher lead risk from aging infrastructure in older cities (Chicago, Cleveland, Newark, Philadelphia). More lead service lines per capita. Agricultural nitrate contamination in rural areas.</li>
+    <li><strong>Southeast:</strong> Higher disinfection byproduct levels due to warmer temperatures and higher organic matter in source water. Some areas have elevated PFAS from military installations.</li>
+    <li><strong>West Coast:</strong> Generally good municipal water quality. Drought-related concerns about source water availability. Some agricultural areas have nitrate and pesticide contamination in groundwater.</li>
+    <li><strong>Rural areas and small systems:</strong> Smaller water systems (serving fewer than 3,300 people) have the highest violation rates. Rural well water is unregulated and can contain bacteria, nitrates, arsenic, and other contaminants.</li>
+  </ul>
+
+  <h2>When Should You Filter Your Tap Water?</h2>
+  <p>Based on our research, we recommend filtration in these situations:</p>
+
+  <h3>Strongly Recommended:</h3>
+  <ul>
+    <li>Homes with pre-1986 plumbing (lead solder risk) — use <a href="/nsf-certifications-explained/">NSF 53 certified filters</a></li>
+    <li>Homes with known lead service lines</li>
+    <li>Areas with detected PFAS contamination</li>
+    <li>Private well water (test first, then filter as needed)</li>
+    <li>Homes with infants, young children, or pregnant women</li>
+    <li>Anyone with immune system compromise</li>
+  </ul>
+
+  <h3>Recommended for Improvement:</h3>
+  <ul>
+    <li>Anyone who dislikes the taste of chlorinated water — a basic <a href="/reviews/brita-ultramax-27-cup-dispenser/">pitcher filter</a> or <a href="/reviews/amazon-basics-10-cup-pitcher/">budget pitcher</a> solves this for under $35</li>
+    <li>Hard water areas (high TDS) — an <a href="/what-is-reverse-osmosis/">RO system</a> significantly improves taste and reduces mineral buildup</li>
+    <li>Anyone wanting to reduce exposure to unregulated contaminants (pharmaceuticals, microplastics, DBPs)</li>
+  </ul>
+
+  <h3>Probably Not Necessary:</h3>
+  <ul>
+    <li>Homes with new plumbing, clean utility reports, and no taste concerns — though filtration never hurts</li>
+    <li>Areas with exceptionally clean source water and modern infrastructure</li>
+  </ul>
+
+  <h2>The Bottom Line</h2>
+  <p>US tap water is among the safest in the world thanks to the Safe Drinking Water Act and municipal treatment systems. Most Americans can drink their tap water without acute health risk. But "meets minimum federal standards" is a low bar, and those standards have known gaps — particularly for PFAS, lead from aging infrastructure, and unregulated emerging contaminants.</p>
+  <p>Water filtration is not about panic — it is about practical risk reduction. A $24 <a href="/reviews/amazon-basics-10-cup-pitcher/">pitcher filter</a> improves taste and reduces chlorine byproducts. A $30 <a href="/reviews/brita-elite-2pack/">Brita Elite upgrade</a> adds lead protection. A $199 <a href="/reviews/ispring-rcc7ak/">RO system</a> provides comprehensive contaminant removal. The right level of filtration depends on your water quality, your household (children are more vulnerable), and your personal comfort level.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

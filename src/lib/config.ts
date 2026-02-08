@@ -1,0 +1,1411 @@
+// ============================================================
+// SINGLE SOURCE OF TRUTH — OffGrid Filters 2026
+// All components, pages, and schemas read from this file.
+// ============================================================
+
+export const SITE_URL = 'https://offgridfilters.com';
+export const SITE_NAME = 'OffGrid Filters';
+
+// ── Publication Schedule ─────────────────────────────────────
+// Pages are gated by publishDate. At build time, only pages
+// whose publishDate <= today are included in the build output.
+// A daily CI rebuild (see .github/workflows/ci.yml) ensures
+// pages go live automatically on their scheduled date.
+export function isPublished(publishDate: string): boolean {
+  const now = new Date();
+  const pub = new Date(publishDate + 'T00:00:00Z');
+  return now >= pub;
+}
+
+// All content published on launch day — full authority site from day 1
+export const PUBLISH_WAVES = {
+  wave1: '2026-02-08',
+  wave2: '2026-02-08',
+  wave3: '2026-02-08',
+  wave4: '2026-02-08',
+  wave5: '2026-02-08',
+  wave6: '2026-02-08',
+  wave7: '2026-02-08',
+} as const;
+
+// ── Interfaces ───────────────────────────────────────────────
+export interface Product {
+  name: string;
+  slug: string;
+  brand: string;
+  asin: string;
+  price: string;
+  category: string;
+  categoryName: string;
+  notes: string;
+  rating: string;
+  reviewCount: string;
+  bestFor: string;
+  pros: string[];
+  cons: string[];
+  verdict: string;
+  specs: ProductSpecs;
+  publishDate: string;
+}
+
+export interface ProductSpecs {
+  filtrationStages?: string;
+  filtrationTechnology?: string;
+  micronRating?: string;
+  capacity?: string;
+  flowRate?: string;
+  certifications?: string;
+  dimensions?: string;
+  weight?: string;
+  filterLife?: string;
+  compatibility?: string;
+  contaminantsRemoved?: string;
+  pureToWaste?: string;
+  packSize?: string;
+  gpd?: string;
+  [key: string]: string | undefined;
+}
+
+export interface Category {
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  buyingFactors: string[];
+  publishDate: string;
+}
+
+export interface Comparison {
+  productA: string; // slug
+  productB: string; // slug
+  slug: string;
+  publishDate: string;
+}
+
+export interface GuideConfig {
+  title: string;
+  slug: string;
+  description: string;
+  type: 'buyer' | 'activity' | 'knowledge';
+  publishDate: string;
+}
+
+export interface NavLink {
+  title: string;
+  url: string;
+}
+
+// ── Helper to generate Amazon affiliate URL ──────────────────
+export const AFFILIATE_TAG = 'offgrid09a-20';
+
+export function getAffiliateUrl(asin: string): string {
+  return `https://www.amazon.com/dp/${asin}?tag=${AFFILIATE_TAG}`;
+}
+
+export const AFFILIATE_URL = `https://www.amazon.com?tag=${AFFILIATE_TAG}`;
+
+// ── Categories ───────────────────────────────────────────────
+export const categories: Category[] = [
+  {
+    name: 'Countertop & Pitcher Filters',
+    slug: 'countertop-filters',
+    description: 'No-install filtration for apartments, rentals, and anyone who wants clean water without plumbing work. From budget pitchers to advanced countertop RO systems.',
+    icon: 'filter',
+    buyingFactors: ['Filtration quality', 'Capacity', 'Filter cost over time', 'Ease of use', 'Space requirements'],
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Under-Sink Filters',
+    slug: 'under-sink-filters',
+    description: 'Permanent filtration solutions that connect directly to your water line. Higher flow rates and better filtration than countertop options, with out-of-sight installation.',
+    icon: 'filter',
+    buyingFactors: ['GPD rating', 'Filtration stages', 'Installation complexity', 'Filter replacement cost', 'TDS reduction'],
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Refrigerator Filters',
+    slug: 'refrigerator-filters',
+    description: 'OEM and aftermarket replacement filters for refrigerator water dispensers and ice makers. Match the right filter to your fridge brand and model.',
+    icon: 'filter',
+    buyingFactors: ['Compatibility', 'NSF certifications', 'Capacity (gallons)', 'Contaminants removed', 'OEM vs aftermarket value'],
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+  {
+    name: 'Pitcher & Dispenser Replacement Filters',
+    slug: 'replacement-filters',
+    description: 'Replacement cartridges for Brita, ZeroWater, PUR, and other pitcher systems. We break down cost-per-gallon so you can find the best long-term value.',
+    icon: 'filter',
+    buyingFactors: ['Cost per gallon', 'Filter lifespan', 'Contaminants reduced', 'Pitcher compatibility', 'Certifications'],
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+  {
+    name: 'Survival & Portable Filters',
+    slug: 'survival-filters',
+    description: 'Lightweight, packable water purification for hiking, camping, emergency preparedness, and off-grid living. From filter straws to purification tablets.',
+    icon: 'camping',
+    buyingFactors: ['Weight', 'Filtration level (microns)', 'Capacity (liters)', 'Durability', 'Ease of use in the field'],
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'Whole House & Sediment Filters',
+    slug: 'whole-house-filters',
+    description: 'Protect your entire plumbing system with whole-house sediment filtration. Essential for well water, rural properties, and commercial bottle-filling stations.',
+    icon: 'filter',
+    buyingFactors: ['Micron rating', 'Flow rate', 'Housing compatibility', 'Filter lifespan', 'Sediment capacity'],
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+];
+
+// ── Full Product Catalog (29 products) ───────────────────────
+export const products: Product[] = [
+  // ── Countertop & Pitcher Filters ──────────────────────────
+  {
+    name: 'Bluevua RO100ROPOT-UV Countertop Reverse Osmosis System',
+    slug: 'bluevua-ro100ropot-uv',
+    brand: 'Bluevua',
+    asin: 'B0CNPMRFXS',
+    price: '317.00',
+    category: 'countertop-filters',
+    categoryName: 'Countertop & Pitcher Filters',
+    notes: '6-stage RO with UV sterilization and remineralization, glass carafe, no installation, 2:1 pure-to-drain',
+    rating: '4.4',
+    reviewCount: '2800',
+    bestFor: 'Best Premium Countertop RO',
+    pros: [
+      'UV sterilization kills 99.99% of bacteria and viruses',
+      '6-stage filtration including remineralization for better taste',
+      'Elegant glass carafe — no plastic contact with purified water',
+      'Zero installation required — plug in and start filtering',
+      'Efficient 2:1 pure-to-drain ratio saves water',
+    ],
+    cons: [
+      'Premium price at $317 — significant investment for countertop unit',
+      'Takes up considerable counter space',
+      'Produces water slowly compared to under-sink systems',
+      'Replacement filters are proprietary and moderately expensive',
+    ],
+    verdict: 'The Bluevua RO100ROPOT-UV is the best countertop RO system for health-conscious users who want hospital-grade purification without any installation. The UV stage and glass carafe justify the premium over the Lite model.',
+    specs: {
+      filtrationStages: '6',
+      filtrationTechnology: 'Reverse Osmosis + UV + Remineralization',
+      micronRating: '0.0001',
+      capacity: '0.75 gallons per cycle',
+      flowRate: '~0.5 GPM',
+      certifications: 'NSF/ANSI 58',
+      dimensions: '14.5 x 7.5 x 15.2 inches',
+      weight: '18 lbs',
+      filterLife: '12 months (RO membrane), 6 months (other filters)',
+      pureToWaste: '2:1',
+      contaminantsRemoved: 'TDS, lead, chlorine, fluoride, bacteria, viruses, heavy metals, PFAS',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Bluevua RO100ROPOT-Lite(UV) Countertop Reverse Osmosis System',
+    slug: 'bluevua-ro100ropot-lite-uv',
+    brand: 'Bluevua',
+    asin: 'B0CZ475FBC',
+    price: '219.00',
+    category: 'countertop-filters',
+    categoryName: 'Countertop & Pitcher Filters',
+    notes: '7-stage RO with UV and remineralization, 3:1 pure-to-drain, smart LED display, glass carafe',
+    rating: '4.3',
+    reviewCount: '1900',
+    bestFor: 'Best Value Countertop RO',
+    pros: [
+      '7-stage filtration with UV at nearly $100 less than the full RO100',
+      'Smart LED display shows filter life and water quality',
+      'Glass carafe keeps water free from plastic leaching',
+      'No installation — perfect for rentals and apartments',
+      'Remineralization adds healthy minerals back after RO',
+    ],
+    cons: [
+      'Less efficient 3:1 pure-to-drain ratio wastes more water',
+      'Slower filtering speed than the premium model',
+      'Counter space footprint still substantial',
+      'Newer model with shorter track record for long-term reliability',
+    ],
+    verdict: 'The Lite UV delivers 90% of the premium model\'s performance at 70% of the price. If you want countertop RO with UV but need to mind your budget, this is the smart pick.',
+    specs: {
+      filtrationStages: '7',
+      filtrationTechnology: 'Reverse Osmosis + UV + Remineralization',
+      micronRating: '0.0001',
+      capacity: '0.75 gallons per cycle',
+      flowRate: '~0.4 GPM',
+      certifications: 'NSF/ANSI 58',
+      dimensions: '14 x 7 x 14.8 inches',
+      weight: '16 lbs',
+      filterLife: '12 months (RO membrane), 6 months (other filters)',
+      pureToWaste: '3:1',
+      contaminantsRemoved: 'TDS, lead, chlorine, fluoride, bacteria, viruses, heavy metals, PFAS',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Amazon Basics 10-Cup Water Filter Pitcher',
+    slug: 'amazon-basics-10-cup-pitcher',
+    brand: 'Amazon Basics',
+    asin: 'B07YT18P21',
+    price: '23.64',
+    category: 'countertop-filters',
+    categoryName: 'Countertop & Pitcher Filters',
+    notes: '10-cup pitcher, NSF 42/53 certified, compatible with Brita filters, electronic filter indicator',
+    rating: '4.4',
+    reviewCount: '15000',
+    bestFor: 'Best Budget Pitcher',
+    pros: [
+      'Unbeatable price at under $24 — cheapest NSF-certified pitcher',
+      'Compatible with Brita Standard and generic filters for cheap refills',
+      'Electronic filter change indicator removes guesswork',
+      '10-cup capacity fits easily in most refrigerator doors',
+      'NSF 42/53 certified for chlorine taste, lead, and mercury reduction',
+    ],
+    cons: [
+      'Slow filtering speed — takes 8-10 minutes for a full pitcher',
+      'Basic design feels less premium than Brita or PUR',
+      'Lid can be loose and may leak during pouring',
+      'Does not remove TDS or advanced contaminants like PFAS',
+    ],
+    verdict: 'The Amazon Basics pitcher is the best entry point into filtered water. It does the basics well at half the price of brand-name alternatives. Perfect for budget-conscious households.',
+    specs: {
+      filtrationStages: '2',
+      filtrationTechnology: 'Activated Carbon + Ion Exchange',
+      capacity: '10 cups (2.4 liters)',
+      certifications: 'NSF 42/53',
+      dimensions: '10.5 x 5.4 x 10.5 inches',
+      weight: '1.8 lbs',
+      filterLife: '40 gallons (~2 months)',
+      compatibility: 'Brita Standard compatible filters',
+      contaminantsRemoved: 'Chlorine taste/odor, mercury, copper, cadmium, zinc',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Brita UltraMax 27-Cup Water Filter Dispenser',
+    slug: 'brita-ultramax-27-cup-dispenser',
+    brand: 'Brita',
+    asin: 'B09WBL9HCS',
+    price: '34.99',
+    category: 'countertop-filters',
+    categoryName: 'Countertop & Pitcher Filters',
+    notes: '27-cup large capacity dispenser, includes 1 Standard filter, precision-pour spigot',
+    rating: '4.6',
+    reviewCount: '42000',
+    bestFor: 'Best for Large Families',
+    pros: [
+      'Massive 27-cup capacity — serves families of 4+ without constant refilling',
+      'Precision-pour spigot makes dispensing easy and mess-free',
+      'Fits on refrigerator shelf or countertop',
+      'Compatible with both Brita Standard and Elite filters',
+      'Trusted Brita brand with 42,000+ reviews and 4.6 stars',
+    ],
+    cons: [
+      'Takes up significant refrigerator shelf space due to large footprint',
+      'Heavy when full — difficult to move or pour from',
+      'Included Standard filter is basic — Elite upgrade recommended',
+      'Spigot can drip if not fully closed',
+    ],
+    verdict: 'The UltraMax is the undisputed king of pitcher/dispenser filtration for families. The 27-cup capacity and spigot design make it more practical than any pitcher. Upgrade to Elite filters for best results.',
+    specs: {
+      filtrationStages: '2',
+      filtrationTechnology: 'Activated Carbon + Ion Exchange',
+      capacity: '27 cups (6.3 liters)',
+      certifications: 'NSF 42/53 (Standard filter), NSF 42/53/401 (Elite filter)',
+      dimensions: '14.4 x 5.6 x 10 inches',
+      weight: '3.2 lbs (empty)',
+      filterLife: '40 gallons / 2 months (Standard), 120 gallons / 6 months (Elite)',
+      compatibility: 'Brita Standard and Brita Elite filters',
+      contaminantsRemoved: 'Chlorine taste/odor, mercury, copper, cadmium, zinc (Standard); + lead, asbestos, benzene (Elite)',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+
+  // ── Under-Sink Filters ────────────────────────────────────
+  {
+    name: 'Pentair Everpure H-1200 Replacement Cartridge Set',
+    slug: 'pentair-everpure-h1200',
+    brand: 'Pentair Everpure',
+    asin: 'B002WDS3AW',
+    price: '390.00',
+    category: 'under-sink-filters',
+    categoryName: 'Under-Sink Filters',
+    notes: 'Twin replacement cartridge set for H-1200 system, 0.5 micron, 1000-gal capacity, NSF certified for lead/cysts/PFOA/PFOS',
+    rating: '4.7',
+    reviewCount: '1200',
+    bestFor: 'Best Commercial-Grade Home Filter',
+    pros: [
+      'Commercial restaurant quality — same brand used in Starbucks and McDonald\'s',
+      '1,000-gallon capacity means fewer replacements per year',
+      '0.5-micron filtration catches cysts, lead, PFOA, and PFOS',
+      'Exceptional taste improvement — noticeably better than pitcher filters',
+      'Twin cartridge design provides redundancy and consistent flow',
+    ],
+    cons: [
+      'Very expensive at $390 for replacement cartridges alone',
+      'Requires existing H-1200 filter head (sold separately)',
+      'Professional installation recommended for the initial system',
+      'Overkill for households with already-clean municipal water',
+    ],
+    verdict: 'The Everpure H-1200 is the gold standard for under-sink filtration if money is no object. Restaurant-grade quality in your home kitchen. The cartridge cost is high but the 1,000-gallon lifespan offsets it.',
+    specs: {
+      filtrationStages: '2 (twin cartridge)',
+      filtrationTechnology: 'Micro-Pure activated carbon + precoat submicron',
+      micronRating: '0.5',
+      capacity: '1,000 gallons',
+      flowRate: '0.5 GPM',
+      certifications: 'NSF 42/53/401 (lead, cysts, PFOA/PFOS)',
+      dimensions: '12.75 x 3.25 inches (each cartridge)',
+      weight: '4.5 lbs (set)',
+      filterLife: '12 months or 1,000 gallons',
+      contaminantsRemoved: 'Lead, cysts, chlorine, PFOA, PFOS, particulates, mold, algae',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Pentair Everpure H-300 Drinking Water System',
+    slug: 'pentair-everpure-h300',
+    brand: 'Pentair Everpure',
+    asin: 'B0045LXJGC',
+    price: '505.00',
+    category: 'under-sink-filters',
+    categoryName: 'Under-Sink Filters',
+    notes: 'Complete under-sink system with filter head, cartridge, and hardware, 300-gal capacity, 0.5 micron, commercial-grade',
+    rating: '4.6',
+    reviewCount: '850',
+    bestFor: 'Best Complete Under-Sink System',
+    pros: [
+      'Complete system — includes filter head, cartridge, faucet, and all hardware',
+      'Commercial-grade 0.5-micron filtration used in restaurants worldwide',
+      'Simple quarter-turn cartridge replacement — no tools needed',
+      'Compact single-cartridge design saves under-sink space',
+      'NSF certified for lead, cysts, and chlorine reduction',
+    ],
+    cons: [
+      'Most expensive single system at $505 — premium investment',
+      'Only 300-gallon capacity vs 1,000 for the H-1200',
+      'Lower flow rate than RO systems — noticeable under heavy use',
+      'Replacement cartridges are proprietary and costly',
+    ],
+    verdict: 'The H-300 is perfect if you want a complete, ready-to-install commercial-grade system. You pay a premium for the all-in-one convenience and Pentair\'s restaurant pedigree.',
+    specs: {
+      filtrationStages: '1',
+      filtrationTechnology: 'Micro-Pure activated carbon + precoat submicron',
+      micronRating: '0.5',
+      capacity: '300 gallons',
+      flowRate: '0.5 GPM',
+      certifications: 'NSF 42/53',
+      dimensions: '14 x 4 inches (cartridge)',
+      weight: '8 lbs (complete system)',
+      filterLife: '6-12 months or 300 gallons',
+      contaminantsRemoved: 'Lead, cysts, chlorine taste/odor, mold, algae, particulates',
+    },
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+  {
+    name: 'iSpring RCC7AK 6-Stage Reverse Osmosis System',
+    slug: 'ispring-rcc7ak',
+    brand: 'iSpring',
+    asin: 'B005LJ8EXU',
+    price: '198.78',
+    category: 'under-sink-filters',
+    categoryName: 'Under-Sink Filters',
+    notes: '75 GPD, alkaline remineralization, NSF 58 certified, reduces TDS 93-98%, PFAS 96-99%, lead >98.9%',
+    rating: '4.6',
+    reviewCount: '18000',
+    bestFor: 'Best Value Under-Sink RO',
+    pros: [
+      'Incredible value — full 6-stage RO with alkaline remineralization under $200',
+      'NSF 58 certified with 93-98% TDS reduction',
+      'Alkaline remineralization stage restores healthy minerals and improves pH',
+      '75 GPD production rate handles typical household demand',
+      'Massive 18,000+ reviews with 4.6 stars — proven reliability',
+    ],
+    cons: [
+      'Requires under-sink installation with drilling for the faucet',
+      'Tank takes up significant cabinet space',
+      'Wastes water — typical 1:3 pure-to-drain ratio',
+      'Filter replacement schedule involves 5 different cartridges on different timelines',
+    ],
+    verdict: 'The iSpring RCC7AK is the best RO system for the money, period. Under $200 gets you 6-stage filtration with alkaline remineralization that rivals systems costing twice as much.',
+    specs: {
+      filtrationStages: '6',
+      filtrationTechnology: 'Sediment + GAC + CTO + RO Membrane + Alkaline Remineralization',
+      micronRating: '0.0001',
+      capacity: '75 GPD',
+      flowRate: '75 GPD',
+      certifications: 'NSF 58',
+      dimensions: '15 x 5.2 x 17.5 inches',
+      weight: '25 lbs',
+      filterLife: '6-12 months (pre/post filters), 2-3 years (RO membrane)',
+      gpd: '75',
+      pureToWaste: '1:3',
+      contaminantsRemoved: 'TDS (93-98%), lead (>98.9%), PFAS (96-99%), fluoride, chlorine, arsenic, bacteria',
+    },
+    publishDate: PUBLISH_WAVES.wave1,
+  },
+  {
+    name: 'Waterdrop G3P600 Tankless Reverse Osmosis System',
+    slug: 'waterdrop-g3p600',
+    brand: 'Waterdrop',
+    asin: 'B07P1XFYJP',
+    price: '429.00',
+    category: 'under-sink-filters',
+    categoryName: 'Under-Sink Filters',
+    notes: '8-stage tankless RO, 600 GPD, smart LED faucet with TDS monitor, 2:1 pure-to-drain, NSF 42/53/58/372',
+    rating: '4.5',
+    reviewCount: '6500',
+    bestFor: 'Best Premium Under-Sink RO',
+    pros: [
+      'Tankless design saves massive under-sink cabinet space',
+      '600 GPD — 8x faster than traditional 75 GPD tank systems',
+      'Smart LED faucet displays real-time TDS readings',
+      'Efficient 2:1 pure-to-drain ratio saves water vs traditional RO',
+      'NSF 42/53/58/372 — the most comprehensive certifications in its class',
+    ],
+    cons: [
+      'Premium price at $429 — more than double the iSpring RCC7AK',
+      'Requires electrical outlet under the sink for the pump',
+      'Slightly noisier than tank-based systems during operation',
+      'Proprietary filters cost more than iSpring replacements',
+    ],
+    verdict: 'The Waterdrop G3P600 is the best tankless RO for those who want speed, space savings, and real-time water quality monitoring. Worth the premium over tank systems if cabinet space is limited.',
+    specs: {
+      filtrationStages: '8',
+      filtrationTechnology: 'PP + CTO + RO Membrane + Post Carbon (tankless)',
+      micronRating: '0.0001',
+      capacity: '600 GPD',
+      flowRate: '600 GPD',
+      certifications: 'NSF 42/53/58/372',
+      dimensions: '17.7 x 5.7 x 17.8 inches',
+      weight: '18.5 lbs',
+      filterLife: '6 months (CF filter), 12 months (MRO filter), 24 months (CB filter)',
+      gpd: '600',
+      pureToWaste: '2:1',
+      contaminantsRemoved: 'TDS, lead, chlorine, fluoride, PFAS, chromium, arsenic, heavy metals, bacteria',
+    },
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+
+  // ── Refrigerator Filters ──────────────────────────────────
+  {
+    name: 'everydrop by Whirlpool Refrigerator Filter 1 (EDR1RXD1)',
+    slug: 'everydrop-filter-1-edr1rxd1',
+    brand: 'everydrop',
+    asin: 'B00UXG4WR8',
+    price: '53.99',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'NSF 42/53/401, reduces 99% of lead, fits Whirlpool/Maytag/Amana/KitchenAid/JennAir, 200-gal capacity',
+    rating: '4.6',
+    reviewCount: '32000',
+    bestFor: 'Best for Whirlpool/Maytag Fridges',
+    pros: [
+      'OEM quality — made by the same company that built your fridge',
+      'Triple NSF certification (42/53/401) covers lead, pharmaceuticals, and pesticides',
+      'Reduces 99% of lead — among the highest-rated for lead removal',
+      'Guaranteed compatibility with Whirlpool, Maytag, Amana, KitchenAid, and JennAir',
+      '200-gallon capacity lasts most households 6 months',
+    ],
+    cons: [
+      'Premium OEM pricing at $54 — aftermarket options cost less',
+      'Only 200-gallon capacity — less than GE filters',
+      'Push-in design can be tricky on first installation',
+      'Not compatible with Whirlpool models that use Filter 2 or Filter 3',
+    ],
+    verdict: 'If you own a Whirlpool-family fridge, the everydrop Filter 1 is the safest, most reliable choice. The triple NSF certification and OEM guarantee justify the premium over aftermarket.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block',
+      capacity: '200 gallons',
+      certifications: 'NSF 42/53/401',
+      filterLife: '6 months or 200 gallons',
+      compatibility: 'Whirlpool, Maytag, Amana, KitchenAid, JennAir (Filter 1 models)',
+      contaminantsRemoved: 'Lead (99%), chlorine taste/odor, pharmaceuticals, pesticides, waterborne parasites',
+    },
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+  {
+    name: 'GE XWFE Refrigerator Water Filter',
+    slug: 'ge-xwfe',
+    brand: 'GE Appliances',
+    asin: 'B0882ZJ48W',
+    price: '49.49',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'RFID chip, NSF certified for 50+ impurities incl. lead/PFOA/PFOS/microplastics, 300-gal capacity',
+    rating: '4.5',
+    reviewCount: '22000',
+    bestFor: 'Best Overall Refrigerator Filter',
+    pros: [
+      'Removes 50+ contaminants including PFOA, PFOS, and microplastics',
+      'Generous 300-gallon capacity — lasts most households 6 months easily',
+      'RFID chip ensures your fridge recognizes genuine GE filters',
+      'NSF certified for lead, cysts, and emerging contaminants',
+      'Easy twist-and-lock installation — no tools required',
+    ],
+    cons: [
+      'RFID chip means aftermarket alternatives won\'t be recognized by the fridge',
+      'Slightly pricey at $49.49 — but the 300-gallon capacity offsets this',
+      'Must verify exact GE model compatibility (XWFE vs XWF)',
+      'RFID can occasionally fail, requiring customer service contact',
+    ],
+    verdict: 'The GE XWFE is the most capable refrigerator filter on the market with its 50+ contaminant reduction and 300-gallon capacity. The RFID lock is annoying but ensures genuine filter quality.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block',
+      capacity: '300 gallons',
+      certifications: 'NSF 42/53/401',
+      filterLife: '6 months or 300 gallons',
+      compatibility: 'GE refrigerators (XWFE compatible models)',
+      contaminantsRemoved: 'Lead, PFOA, PFOS, microplastics, cysts, chlorine, 50+ substances',
+    },
+    publishDate: PUBLISH_WAVES.wave2,
+  },
+  {
+    name: 'GE RPWFE Refrigerator Water Filter',
+    slug: 'ge-rpwfe',
+    brand: 'GE Appliances',
+    asin: 'B009PCI2JU',
+    price: '49.95',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'RFID chip, NSF 42/53, reduces lead/microplastics/PFOA/PFOS, 170-gal capacity, fits GE French door models',
+    rating: '4.4',
+    reviewCount: '18000',
+    bestFor: 'Best for GE French Door Fridges',
+    pros: [
+      'Purpose-built for GE French door refrigerators',
+      'Reduces lead, PFOA, PFOS, and microplastics',
+      'RFID verification ensures filter authenticity',
+      'NSF 42/53 certified for chlorine and lead reduction',
+      'Easy rear-access installation on compatible models',
+    ],
+    cons: [
+      'Only 170-gallon capacity — lowest among premium fridge filters',
+      'RFID lock prevents use of cheaper aftermarket filters',
+      'Nearly $50 for a filter that may need replacing every 4-5 months in heavy-use homes',
+      'Confusing model designations — easily mixed up with RPWF (no RFID)',
+    ],
+    verdict: 'A solid OEM choice for GE French door owners, but the 170-gallon capacity is a drawback. If your fridge requires RPWFE, you don\'t have alternatives — but it does filter well.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block',
+      capacity: '170 gallons',
+      certifications: 'NSF 42/53',
+      filterLife: '6 months or 170 gallons',
+      compatibility: 'GE French Door refrigerators (RPWFE models)',
+      contaminantsRemoved: 'Lead, PFOA, PFOS, microplastics, chlorine taste/odor, cysts',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'Samsung HAF-QIN/EXP Refrigerator Water Filter (DA97-17376B)',
+    slug: 'samsung-haf-qin',
+    brand: 'Samsung',
+    asin: 'B071NFVVNG',
+    price: '37.52',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'Carbon block filtration, quarter-turn install, fits Samsung French 4-door/side-by-side/4-Door Flex models',
+    rating: '4.5',
+    reviewCount: '28000',
+    bestFor: 'Best for Samsung Fridges',
+    pros: [
+      'Most affordable OEM fridge filter at $37.52',
+      'Simple quarter-turn installation — takes under 30 seconds',
+      'Internal filter design keeps exterior clean',
+      'Compatible across Samsung\'s French door, side-by-side, and 4-Door Flex lineups',
+      'Carbon block effectively reduces chlorine and particulates',
+    ],
+    cons: [
+      'Basic NSF 42 certification — doesn\'t cover lead or PFAS',
+      'Lower contaminant reduction compared to GE and everydrop filters',
+      'Capacity not prominently specified — Samsung is less transparent',
+      'No RFID — some users report occasional fridge warning lights with genuine filters',
+    ],
+    verdict: 'The Samsung HAF-QIN is perfectly adequate for Samsung fridge owners. It\'s affordable and easy to install, but if you need serious contaminant reduction, consider an under-sink system as supplemental filtration.',
+    specs: {
+      filtrationTechnology: 'Carbon Block',
+      certifications: 'NSF 42',
+      filterLife: '6 months',
+      compatibility: 'Samsung French 4-door, side-by-side, 4-Door Flex models',
+      contaminantsRemoved: 'Chlorine taste/odor, particulates, sediment',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'everydrop by Whirlpool Refrigerator Filter A (EDRARXD1)',
+    slug: 'everydrop-filter-a-edrarxd1',
+    brand: 'everydrop',
+    asin: 'B0D8MFM6BK',
+    price: '48.00',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'NSF 42/53/401, rotating knob install, fits Whirlpool/Maytag/Amana/KitchenAid/JennAir, 200-gal capacity',
+    rating: '4.5',
+    reviewCount: '5000',
+    bestFor: 'Best for Newer Whirlpool-Family Fridges',
+    pros: [
+      'Triple NSF certification (42/53/401) matching the Filter 1',
+      'Newer design with rotating knob for easier installation',
+      'Reduces pharmaceuticals, pesticides, and lead',
+      'Compatible across Whirlpool family brands',
+      'Slightly cheaper than Filter 1 at $48',
+    ],
+    cons: [
+      'Newer product with fewer long-term reviews',
+      'Only 200-gallon capacity — same as the older Filter 1',
+      'Must verify which Whirlpool-family models use Filter A vs Filter 1',
+      'OEM pricing still higher than aftermarket alternatives',
+    ],
+    verdict: 'Filter A is everydrop\'s updated design for newer Whirlpool-family fridges. Same great triple-NSF certification as Filter 1, with a slightly improved installation mechanism.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block',
+      capacity: '200 gallons',
+      certifications: 'NSF 42/53/401',
+      filterLife: '6 months or 200 gallons',
+      compatibility: 'Whirlpool, Maytag, Amana, KitchenAid, JennAir (Filter A models)',
+      contaminantsRemoved: 'Lead, chlorine, pharmaceuticals, pesticides, waterborne parasites',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+  {
+    name: 'AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack)',
+    slug: 'aquacrest-ukf8001-6pack',
+    brand: 'AQUACREST',
+    asin: 'B08BZHQWXH',
+    price: '16.88',
+    category: 'refrigerator-filters',
+    categoryName: 'Refrigerator Filters',
+    notes: 'Aftermarket 6-pack, NSF 42 certified, coconut shell carbon block, compatible with Maytag UKF8001/Whirlpool EDR4RXD1',
+    rating: '4.3',
+    reviewCount: '9500',
+    bestFor: 'Best Budget Refrigerator Filter',
+    pros: [
+      'Incredible value — 6 filters for $16.88 works out to ~$2.81 per filter',
+      'Coconut shell carbon block provides good chlorine taste/odor reduction',
+      'NSF 42 certified — independently tested',
+      'Compatible with Maytag UKF8001, Whirlpool EDR4RXD1, and many more',
+      'Full year of filter changes in one purchase',
+    ],
+    cons: [
+      'Only NSF 42 — no lead or pharmaceutical reduction certification',
+      'Aftermarket quality may vary — some users report shorter effective life',
+      'May trigger "replace filter" warnings on some refrigerators',
+      'Not recommended for homes with known lead or PFAS contamination',
+    ],
+    verdict: 'At under $3 per filter, the AQUACREST 6-pack is unbeatable for basic chlorine and taste improvement. Just don\'t expect OEM-level contaminant reduction — you get what you pay for.',
+    specs: {
+      filtrationTechnology: 'Coconut Shell Carbon Block',
+      certifications: 'NSF 42',
+      packSize: '6',
+      filterLife: '6 months per filter',
+      compatibility: 'Maytag UKF8001, Whirlpool EDR4RXD1, Viking, KitchenAid, and more',
+      contaminantsRemoved: 'Chlorine taste/odor, sediment, particulates',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+
+  // ── Pitcher & Dispenser Replacement Filters ───────────────
+  {
+    name: 'Amazon Basics Enhanced Replacement Water Filters (3-Pack)',
+    slug: 'amazon-basics-replacement-3pack',
+    brand: 'Amazon Basics',
+    asin: 'B07YT16TMS',
+    price: '10.49',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '3-pack, NSF 42/53/401/372, compatible with Brita pitchers, 40-gal per filter, made in Europe',
+    rating: '4.4',
+    reviewCount: '12000',
+    bestFor: 'Best Budget Replacement Filter',
+    pros: [
+      'Best value pitcher filter — $3.50 per filter with quad NSF certification',
+      'NSF 42/53/401/372 — more certifications than Brita Standard at half the price',
+      'Made in Europe with high manufacturing standards',
+      'Compatible with all Brita pitchers and dispensers (except Stream)',
+      'Lead-free certification (NSF 372) adds peace of mind',
+    ],
+    cons: [
+      'Slightly slower flow rate than genuine Brita filters',
+      'Some users report a shorter effective life than claimed 40 gallons',
+      'May not fit as snugly as genuine Brita cartridges in older pitchers',
+      'Amazon branding lacks the recognition of established filter brands',
+    ],
+    verdict: 'The Amazon Basics Enhanced filters are the best-kept secret in pitcher filtration. More NSF certifications than Brita Standard at roughly half the price. A no-brainer value pick.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon + Ion Exchange',
+      capacity: '40 gallons per filter',
+      certifications: 'NSF 42/53/401/372',
+      packSize: '3',
+      filterLife: '40 gallons (~2 months per filter)',
+      compatibility: 'Brita pitchers and dispensers (except Stream)',
+      contaminantsRemoved: 'Chlorine, lead, mercury, cadmium, pharmaceuticals',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'Brita Standard Replacement Filters (3-Pack)',
+    slug: 'brita-standard-3pack',
+    brand: 'Brita',
+    asin: 'B00004SU18',
+    price: '17.98',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '3-pack, reduces chlorine/copper/cadmium/mercury, 40-gal per filter, fits all Brita except Stream',
+    rating: '4.7',
+    reviewCount: '95000',
+    bestFor: 'Most Popular Pitcher Filter',
+    pros: [
+      'The gold standard — 95,000+ reviews with 4.7 stars',
+      'Universal compatibility with all Brita pitchers and dispensers',
+      'Reliable, consistent chlorine taste and odor reduction',
+      '6 months of filtration in one 3-pack purchase',
+      'Widely available at every major retailer',
+    ],
+    cons: [
+      'Nearly double the price of Amazon Basics for fewer NSF certifications',
+      'Only NSF 42 — doesn\'t certify for lead reduction',
+      'No PFAS, pharmaceutical, or advanced contaminant removal',
+      'Flow rate degrades noticeably toward end of filter life',
+    ],
+    verdict: 'Brita Standard is reliable and universally trusted, but you\'re paying a brand premium. The Amazon Basics Enhanced offers more filtration for less money. Still a solid choice for Brita loyalists.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon + Ion Exchange',
+      capacity: '40 gallons per filter',
+      certifications: 'NSF 42',
+      packSize: '3',
+      filterLife: '40 gallons (~2 months per filter)',
+      compatibility: 'All Brita pitchers and dispensers (except Stream)',
+      contaminantsRemoved: 'Chlorine taste/odor, copper, cadmium, mercury, zinc',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'Brita Standard Replacement Filters (4-Pack)',
+    slug: 'brita-standard-4pack',
+    brand: 'Brita',
+    asin: 'B0000CF98Q',
+    price: '18.49',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '4-pack, ion-exchange resin + activated carbon, 40-gal per filter, fits all Brita except Stream',
+    rating: '4.7',
+    reviewCount: '64000',
+    bestFor: 'Best Brita Standard Value Pack',
+    pros: [
+      'Best per-filter price for genuine Brita — $4.62 per filter',
+      '8 months of filtration in one purchase',
+      'Same proven performance as the 3-pack',
+      'Reduces chlorine taste, copper, cadmium, and mercury',
+      'Universal Brita pitcher/dispenser compatibility',
+    ],
+    cons: [
+      'Still more expensive per filter than Amazon Basics Enhanced',
+      'Same basic NSF 42 certification — no lead or PFAS coverage',
+      'Packaging sometimes arrives with damaged filters',
+      'Considering the Elite upgrade may be better long-term value',
+    ],
+    verdict: 'If you\'re committed to genuine Brita Standard filters, the 4-pack is the way to buy. But honestly, the Brita Elite or Amazon Basics Enhanced offer more filtration for similar or less money.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon + Ion Exchange',
+      capacity: '40 gallons per filter',
+      certifications: 'NSF 42',
+      packSize: '4',
+      filterLife: '40 gallons (~2 months per filter)',
+      compatibility: 'All Brita pitchers and dispensers (except Stream)',
+      contaminantsRemoved: 'Chlorine taste/odor, copper, cadmium, mercury, zinc',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+  {
+    name: 'Brita Elite Replacement Filters (2-Pack)',
+    slug: 'brita-elite-2pack',
+    brand: 'Brita',
+    asin: 'B01MU7973W',
+    price: '29.78',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '2-pack (formerly Longlast), reduces 99% of lead + 30 contaminants, 120-gal per filter, 6-month life',
+    rating: '4.5',
+    reviewCount: '38000',
+    bestFor: 'Best Premium Pitcher Filter',
+    pros: [
+      'Reduces 99% of lead — critical for homes with older plumbing',
+      '120-gallon capacity (3x Standard) means 6-month filter life',
+      'Removes 30+ contaminants including asbestos and benzene',
+      'Lower cost-per-gallon than Standard despite higher upfront price',
+      'NSF 42/53/401 triple certification',
+    ],
+    cons: [
+      'Higher upfront cost at $14.89 per filter',
+      'Slower flow rate than Standard filters — patience required',
+      'Can clog faster in very hard water areas',
+      'Only 2-pack — need to reorder more frequently than 4-pack Standard',
+    ],
+    verdict: 'The Brita Elite is the smartest upgrade for any Brita pitcher owner. The 3x longer life actually makes it cheaper per gallon than Standard, and the lead reduction is a game-changer.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block + Pleated Media',
+      capacity: '120 gallons per filter',
+      certifications: 'NSF 42/53/401',
+      packSize: '2',
+      filterLife: '120 gallons (~6 months per filter)',
+      compatibility: 'All Brita pitchers and dispensers (except Stream)',
+      contaminantsRemoved: 'Lead (99%), chlorine, asbestos, benzene, pharmaceuticals, pesticides, 30+ substances',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'ZeroWater 5-Stage Replacement Filter (4-Pack)',
+    slug: 'zerowater-5stage-4pack',
+    brand: 'ZeroWater',
+    asin: 'B00C7N7L1E',
+    price: '59.99',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '4-pack, 5-stage ion exchange, 0 TDS, IAPMO certified for lead/chromium/PFOA/PFOS',
+    rating: '4.4',
+    reviewCount: '26000',
+    bestFor: 'Best for TDS Reduction',
+    pros: [
+      'Only pitcher filter that achieves 0 TDS — measurably the purest water',
+      '5-stage filtration is the most thorough in pitcher filter category',
+      'IAPMO certified for lead, chromium, PFOA, and PFOS reduction',
+      'Comes with TDS meter for verifiable water quality testing',
+      '4-pack provides good value for ZeroWater\'s premium filters',
+    ],
+    cons: [
+      'Expensive at $15 per filter with shorter effective life (~15-25 gallons)',
+      'Highest cost-per-gallon of any pitcher filter system',
+      'Filters clog much faster in high-TDS areas — may last only 2-3 weeks',
+      'Stripped, flat taste from removing all minerals — some people dislike it',
+    ],
+    verdict: 'ZeroWater filters deliver laboratory-grade purity but at a steep ongoing cost. Best for users with very hard or contaminated water who need maximum TDS reduction. Not ideal for areas with already-clean municipal water.',
+    specs: {
+      filtrationTechnology: '5-Stage Ion Exchange + Activated Carbon',
+      capacity: '~15-25 gallons per filter (varies by source water TDS)',
+      certifications: 'IAPMO (lead, chromium, PFOA, PFOS)',
+      packSize: '4',
+      filterLife: '15-25 gallons (2-8 weeks depending on TDS)',
+      compatibility: 'ZeroWater pitchers and dispensers',
+      contaminantsRemoved: 'TDS (99.6%), lead, chromium, PFOA, PFOS, mercury, chlorine, fluoride',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+  {
+    name: 'ZeroWater 5-Stage Replacement Filter (6-Pack)',
+    slug: 'zerowater-5stage-6pack',
+    brand: 'ZeroWater',
+    asin: 'B00OZIOLB2',
+    price: '80.99',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '6-pack, 5-stage ion exchange, 0 TDS, IAPMO certified for lead/chromium/PFOA/PFOS, ~15 gal per filter',
+    rating: '4.4',
+    reviewCount: '22000',
+    bestFor: 'Best ZeroWater Value Pack',
+    pros: [
+      'Best per-filter price for ZeroWater at ~$13.50 per filter',
+      'Same 5-stage 0-TDS filtration as the 4-pack',
+      '6 filters can last 6-12 months depending on source water',
+      'Bulk buying reduces the sting of ZeroWater\'s high replacement frequency',
+      'IAPMO certified for PFOA, PFOS, lead, and chromium',
+    ],
+    cons: [
+      'Still the most expensive pitcher filter system on a per-gallon basis',
+      'Each filter lasts only 15-25 gallons in moderate-TDS water',
+      'Large upfront investment at $81',
+      'Same flat-taste issue as all ZeroWater filters',
+    ],
+    verdict: 'If you\'re committed to ZeroWater, the 6-pack is the only way to buy. The per-filter savings are meaningful when you\'re going through 6-12 filters per year.',
+    specs: {
+      filtrationTechnology: '5-Stage Ion Exchange + Activated Carbon',
+      capacity: '~15-25 gallons per filter',
+      certifications: 'IAPMO (lead, chromium, PFOA, PFOS)',
+      packSize: '6',
+      filterLife: '15-25 gallons per filter',
+      compatibility: 'ZeroWater pitchers and dispensers',
+      contaminantsRemoved: 'TDS (99.6%), lead, chromium, PFOA, PFOS, mercury, chlorine, fluoride',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+  {
+    name: 'PUR Water Pitcher Replacement Filter (4-Pack)',
+    slug: 'pur-pitcher-filter-4pack',
+    brand: 'PUR',
+    asin: 'B07WWB1MLN',
+    price: '23.22',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '4-pack, 2-in-1 filtration, NSF certified, LockFit design, 40-gal per filter, reduces 20+ substances',
+    rating: '4.5',
+    reviewCount: '19000',
+    bestFor: 'Best Brita Alternative',
+    pros: [
+      'LockFit design ensures proper seating — less likely to produce unfiltered bypass',
+      'NSF certified to reduce 20+ substances including lead and mercury',
+      'Competitive pricing at ~$5.81 per filter',
+      'Better lead reduction than Brita Standard at a similar price point',
+      '4-pack provides 8 months of filtration',
+    ],
+    cons: [
+      'Only compatible with PUR pitchers — not interchangeable with Brita',
+      'Slower flow rate than Brita Standard filters',
+      'Filters sometimes arrive sealed but with black carbon dust leaking',
+      'PUR pitchers are less widely available than Brita',
+    ],
+    verdict: 'PUR filters offer better contaminant reduction than Brita Standard at a similar price, especially for lead. The LockFit design is a genuine innovation. Solid choice for PUR pitcher owners.',
+    specs: {
+      filtrationTechnology: '2-in-1 Activated Carbon + Ion Exchange',
+      capacity: '40 gallons per filter',
+      certifications: 'NSF 42/53',
+      packSize: '4',
+      filterLife: '40 gallons (~2 months per filter)',
+      compatibility: 'PUR pitchers and dispensers only',
+      contaminantsRemoved: 'Lead, mercury, chlorine taste/odor, 20+ substances',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+  {
+    name: 'Waterdrop WD-PF-01A Plus Replacement Filter (3-Pack)',
+    slug: 'waterdrop-wd-pf01a-plus-3pack',
+    brand: 'Waterdrop',
+    asin: 'B08C7QNSKZ',
+    price: '33.99',
+    category: 'replacement-filters',
+    categoryName: 'Pitcher & Dispenser Replacement Filters',
+    notes: '3-pack, ACF technology, NSF 42/372, reduces PFAS/PFOA/PFOS/arsenic/fluoride, 200-gal per filter',
+    rating: '4.4',
+    reviewCount: '8500',
+    bestFor: 'Best for PFAS Reduction',
+    pros: [
+      'Exceptional 200-gallon filter life — 5x longer than Brita Standard',
+      'ACF (Activated Carbon Fiber) technology for superior PFAS/PFOA/PFOS removal',
+      'Reduces fluoride and arsenic — rare for pitcher filters',
+      'Lowest cost-per-gallon of any pitcher filter in our catalog',
+      'NSF 42/372 certified with lead-free materials',
+    ],
+    cons: [
+      'Only compatible with Waterdrop pitchers — smaller brand ecosystem',
+      'Waterdrop pitchers are less widely available than Brita',
+      'NSF 42 only for performance — no NSF 53 or 401 certification',
+      'Higher upfront 3-pack price than Brita or Amazon Basics',
+    ],
+    verdict: 'The Waterdrop WD-PF-01A Plus is a hidden gem with its 200-gallon life and PFAS reduction capability. If you can commit to the Waterdrop pitcher ecosystem, the long-term value is outstanding.',
+    specs: {
+      filtrationTechnology: 'ACF (Activated Carbon Fiber)',
+      capacity: '200 gallons per filter',
+      certifications: 'NSF 42/372',
+      packSize: '3',
+      filterLife: '200 gallons (~6 months per filter)',
+      compatibility: 'Waterdrop pitchers and dispensers',
+      contaminantsRemoved: 'PFAS, PFOA, PFOS, fluoride, arsenic, chlorine taste/odor',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+
+  // ── Survival & Portable Filters ───────────────────────────
+  {
+    name: 'Timain 4-Stage Water Filter Straw (2-Pack)',
+    slug: 'timain-filter-straw-2pack',
+    brand: 'Timain',
+    asin: 'B0CCD6BTVX',
+    price: '14.23',
+    category: 'survival-filters',
+    categoryName: 'Survival & Portable Filters',
+    notes: '2-pack, 0.1 micron ultrafiltration, 4-stage, removes 99.9999% bacteria, squeeze or suction use',
+    rating: '4.4',
+    reviewCount: '3200',
+    bestFor: 'Best Budget Survival Filter',
+    pros: [
+      'Cheapest survival filter at just $7.12 per straw',
+      '4-stage filtration with 0.1-micron ultrafiltration membrane',
+      'Removes 99.9999% of bacteria and 99.99% of protozoa',
+      'Dual-use design: drink directly through straw or use as squeeze filter',
+      '2-pack means one for your pack and one for your emergency kit',
+    ],
+    cons: [
+      'Unknown brand with limited long-term track record',
+      'Does not remove viruses — not suitable for international travel',
+      'Capacity claims (1,500L) may be optimistic — replace sooner',
+      'Squeeze bag not included — need to supply your own water container',
+    ],
+    verdict: 'The Timain straw is an incredible value for basic backcountry and emergency water filtration. At $7 per straw, there\'s no excuse not to carry one. Just don\'t rely on it for virus removal.',
+    specs: {
+      filtrationStages: '4',
+      filtrationTechnology: 'PP Cotton + Coconut Carbon + PP Fiber + 0.1μm UF Membrane',
+      micronRating: '0.1',
+      capacity: '1,500 liters per straw',
+      dimensions: '7.9 x 1.2 inches',
+      weight: '2.1 oz per straw',
+      packSize: '2',
+      contaminantsRemoved: 'Bacteria (99.9999%), protozoa (99.99%), sediment, chlorine, odor',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+  {
+    name: 'Membrane Solutions Portable Water Filter Straw (4-Pack)',
+    slug: 'membrane-solutions-filter-straw-4pack',
+    brand: 'Membrane Solutions',
+    asin: 'B07SYYQZDN',
+    price: '38.98',
+    category: 'survival-filters',
+    categoryName: 'Survival & Portable Filters',
+    notes: '4-pack, 0.1 micron hollow fiber membrane, 99.999999% bacteria removal, fits 28mm bottles',
+    rating: '4.5',
+    reviewCount: '8500',
+    bestFor: 'Best for Group/Family Preparedness',
+    pros: [
+      '4-pack — outfit the whole family or stash in multiple kits',
+      '0.1-micron hollow fiber membrane — proven filtration technology',
+      '99.999999% bacteria removal rate (log-8 reduction)',
+      'Fits standard 28mm water bottles for convenient filtering',
+      'Established brand with 8,500+ reviews and 4.5-star rating',
+    ],
+    cons: [
+      'More expensive per straw ($9.75) than Timain',
+      'Does not remove viruses, chemicals, or heavy metals',
+      'No squeeze bag or accessories included',
+      'Flow rate decreases over time as membrane clogs',
+    ],
+    verdict: 'The Membrane Solutions 4-pack is the best value for equipping a family or building multiple emergency kits. The hollow fiber membrane technology is well-proven and the 4.5-star rating across 8,500 reviews inspires confidence.',
+    specs: {
+      filtrationStages: '1',
+      filtrationTechnology: '0.1μm Hollow Fiber UF Membrane',
+      micronRating: '0.1',
+      capacity: '1,500+ liters per straw',
+      dimensions: '8.3 x 1.2 inches',
+      weight: '2.0 oz per straw',
+      packSize: '4',
+      compatibility: 'Fits 28mm standard water bottles',
+      contaminantsRemoved: 'Bacteria (99.999999%), protozoa (99.99%), sediment, microplastics',
+    },
+    publishDate: PUBLISH_WAVES.wave4,
+  },
+  {
+    name: 'NatureNova Personal Water Filter Straw (3-Pack)',
+    slug: 'naturenova-filter-straw-3pack',
+    brand: 'NatureNova',
+    asin: 'B08YJHG8DQ',
+    price: '28.99',
+    category: 'survival-filters',
+    categoryName: 'Survival & Portable Filters',
+    notes: '3-pack, 4-stage filtration, 1500L per straw, includes foldable water bag and backwash syringe',
+    rating: '4.3',
+    reviewCount: '4200',
+    bestFor: 'Best Survival Filter Kit',
+    pros: [
+      'Most complete kit — includes foldable water bag AND backwash syringe',
+      '4-stage filtration for comprehensive contaminant removal',
+      'Backwash syringe extends filter life significantly',
+      '3-pack covers personal, vehicle, and home emergency kits',
+      'Foldable water bag enables gravity-feed filtering',
+    ],
+    cons: [
+      'Most expensive per straw at $9.66',
+      'Foldable water bag is thin and prone to puncture',
+      'Backwash syringe adds complexity compared to simpler straws',
+      'Slightly heavier than Timain and Membrane Solutions straws',
+    ],
+    verdict: 'The NatureNova kit provides the best out-of-the-box survival filtration experience. The included accessories (water bag + backwash syringe) mean you\'re field-ready without buying anything extra.',
+    specs: {
+      filtrationStages: '4',
+      filtrationTechnology: 'PP Cotton + Coconut Carbon + PP Fiber + 0.1μm UF Membrane',
+      micronRating: '0.1',
+      capacity: '1,500 liters per straw',
+      dimensions: '8.0 x 1.2 inches',
+      weight: '2.5 oz per straw (plus accessories)',
+      packSize: '3 (includes foldable water bag + backwash syringe per straw)',
+      contaminantsRemoved: 'Bacteria (99.9999%), protozoa (99.99%), sediment, chlorine, odor, heavy metals (partial)',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+  {
+    name: 'MSR Aquatabs Water Purification Tablets (30-Pack)',
+    slug: 'msr-aquatabs-30pack',
+    brand: 'MSR',
+    asin: 'B007W5D13O',
+    price: '11.99',
+    category: 'survival-filters',
+    categoryName: 'Survival & Portable Filters',
+    notes: '30-pack, NaDCC chemical purification, EPA approved, treats 2 quarts per tablet in 30 min, no iodine',
+    rating: '4.6',
+    reviewCount: '5500',
+    bestFor: 'Best Chemical Water Purification',
+    pros: [
+      'Ultralight — 30 tablets weigh virtually nothing',
+      'EPA-registered for water purification effectiveness',
+      'Kills viruses, bacteria, and Giardia — what filters can\'t do',
+      'No iodine taste — NaDCC chlorine-based for better flavor',
+      'Perfect backup to filter straws for complete water treatment',
+    ],
+    cons: [
+      '30-minute wait time for purification — not instant like filtering',
+      'Does not remove sediment, chemicals, or heavy metals',
+      'Limited shelf life once package is opened',
+      'Only treats 2 quarts per tablet — heavy users go through them fast',
+    ],
+    verdict: 'Aquatabs are the essential complement to any filter straw. Filters remove bacteria and protozoa but miss viruses — Aquatabs kill everything biological. Carry both for complete water safety.',
+    specs: {
+      filtrationTechnology: 'NaDCC (Sodium Dichloroisocyanurate) chemical purification',
+      capacity: '2 quarts per tablet (60 quarts per 30-pack)',
+      certifications: 'EPA registered, WHO recommended',
+      weight: '0.5 oz (30-pack)',
+      packSize: '30',
+      contaminantsRemoved: 'Viruses (99.99%), bacteria (99.9999%), Giardia cysts, Cryptosporidium (partial)',
+    },
+    publishDate: PUBLISH_WAVES.wave3,
+  },
+
+  // ── Whole House & Sediment Filters ────────────────────────
+  {
+    name: 'Membrane Solutions 5-Micron String Wound Sediment Filter (6-Pack)',
+    slug: 'membrane-solutions-sediment-6pack',
+    brand: 'Membrane Solutions',
+    asin: 'B082PXRJBZ',
+    price: '26.35',
+    category: 'whole-house-filters',
+    categoryName: 'Whole House & Sediment Filters',
+    notes: '6-pack, 10x2.5 inch standard, removes 99% sediment, universal fit for GE/DuPont/Culligan housings',
+    rating: '4.5',
+    reviewCount: '7200',
+    bestFor: 'Best Value Sediment Filter',
+    pros: [
+      'Outstanding value — $4.39 per filter in the 6-pack',
+      'Universal 10x2.5" standard size fits virtually all standard housings',
+      'String wound construction provides excellent sediment trapping',
+      '5-micron rating catches sand, silt, rust, and debris effectively',
+      '6-pack provides a full year of filter changes for most households',
+    ],
+    cons: [
+      'String wound design has lower dirt-holding capacity than pleated',
+      'Cannot be cleaned and reused — strictly disposable',
+      'Only removes physical sediment — no chemical or biological filtration',
+      'May need more frequent changes in very sediment-heavy well water',
+    ],
+    verdict: 'The Membrane Solutions sediment filters are the best value for standard whole-house pre-filtration. A year\'s supply for under $27 is hard to beat. Essential for well water and rural properties.',
+    specs: {
+      filtrationTechnology: 'String Wound Polypropylene',
+      micronRating: '5',
+      dimensions: '10 x 2.5 inches (standard)',
+      packSize: '6',
+      compatibility: 'GE, DuPont, Culligan, Pentek, and most 10" standard housings',
+      contaminantsRemoved: 'Sand, silt, rust, sediment, debris, dirt (99%)',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+  {
+    name: 'Universal 5-Micron Sediment Filter Cartridge',
+    slug: 'universal-5micron-sediment-filter',
+    brand: 'Generic',
+    asin: 'B0FYDWSKY2',
+    price: '32.88',
+    category: 'whole-house-filters',
+    categoryName: 'Whole House & Sediment Filters',
+    notes: 'Standard 10x2.5 inch sediment cartridge, universal fit, first-stage prefilter for whole house systems',
+    rating: '4.2',
+    reviewCount: '1500',
+    bestFor: 'Reliable Universal Prefilter',
+    pros: [
+      'Universal 10x2.5" compatibility — fits the most common housings',
+      'Solid 5-micron filtration for standard sediment removal',
+      'Works as effective first-stage prefilter in multi-stage systems',
+      'Straightforward drop-in replacement — no adapters needed',
+    ],
+    cons: [
+      'More expensive per filter than Membrane Solutions multi-packs',
+      'Generic branding with less quality consistency',
+      'Fewer reviews — less proven track record',
+      'Single filter — no bulk pricing advantage',
+    ],
+    verdict: 'A functional universal sediment cartridge that gets the job done. For most users, the Membrane Solutions 6-pack offers better value, but this works if you need a single replacement.',
+    specs: {
+      filtrationTechnology: 'Polypropylene Sediment',
+      micronRating: '5',
+      dimensions: '10 x 2.5 inches (standard)',
+      compatibility: 'Standard 10" whole-house filter housings',
+      contaminantsRemoved: 'Sand, silt, rust, sediment, scale particles',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+  {
+    name: 'Elkay 51300C WaterSentry Plus Replacement Filter',
+    slug: 'elkay-51300c-watersentry-plus',
+    brand: 'Elkay',
+    asin: 'B004PUCV3K',
+    price: '93.49',
+    category: 'whole-house-filters',
+    categoryName: 'Whole House & Sediment Filters',
+    notes: 'For Elkay ezH2O bottle filling stations, 3000-gal capacity, NSF 42/53/401, reduces lead/microplastics/cysts',
+    rating: '4.7',
+    reviewCount: '2800',
+    bestFor: 'Best for Bottle Filling Stations',
+    pros: [
+      'Designed specifically for Elkay ezH2O bottle filling stations',
+      'Massive 3,000-gallon capacity — lasts 6-12 months in commercial use',
+      'Triple NSF certification (42/53/401) including lead and pharmaceuticals',
+      'Reduces microplastics and cysts — critical for public water access',
+      'Commercial-grade quality at $93.49 is reasonable for the capacity',
+    ],
+    cons: [
+      'Only works with Elkay/HaloX filling stations — no universal compatibility',
+      'Premium price for residential users ($93.49)',
+      'Niche product — limited to specific Elkay units',
+      'Replacing the cartridge requires accessing the internal mechanism',
+    ],
+    verdict: 'The Elkay 51300C is a must-buy if you own or maintain an Elkay ezH2O bottle filling station. The 3,000-gallon capacity and triple NSF certification make it the commercial-grade standard. Not relevant for home pitcher or under-sink use.',
+    specs: {
+      filtrationTechnology: 'Activated Carbon Block',
+      capacity: '3,000 gallons',
+      certifications: 'NSF 42/53/401',
+      filterLife: '3,000 gallons (6-12 months)',
+      compatibility: 'Elkay ezH2O and HaloX bottle filling stations',
+      contaminantsRemoved: 'Lead, microplastics, cysts, chlorine taste/odor, pharmaceuticals',
+    },
+    publishDate: PUBLISH_WAVES.wave5,
+  },
+];
+
+// ── Comparisons ──────────────────────────────────────────────
+export const comparisons: Comparison[] = [
+  { productA: 'bluevua-ro100ropot-uv', productB: 'bluevua-ro100ropot-lite-uv', slug: 'bluevua-ro100ropot-uv-vs-bluevua-ro100ropot-lite-uv', publishDate: PUBLISH_WAVES.wave2 },
+  { productA: 'ispring-rcc7ak', productB: 'waterdrop-g3p600', slug: 'ispring-rcc7ak-vs-waterdrop-g3p600', publishDate: PUBLISH_WAVES.wave2 },
+  { productA: 'pentair-everpure-h1200', productB: 'pentair-everpure-h300', slug: 'pentair-everpure-h1200-vs-pentair-everpure-h300', publishDate: PUBLISH_WAVES.wave2 },
+  { productA: 'bluevua-ro100ropot-uv', productB: 'ispring-rcc7ak', slug: 'bluevua-ro100ropot-uv-vs-ispring-rcc7ak', publishDate: PUBLISH_WAVES.wave3 },
+  { productA: 'ge-xwfe', productB: 'ge-rpwfe', slug: 'ge-xwfe-vs-ge-rpwfe', publishDate: PUBLISH_WAVES.wave3 },
+  { productA: 'everydrop-filter-1-edr1rxd1', productB: 'ge-xwfe', slug: 'everydrop-filter-1-vs-ge-xwfe', publishDate: PUBLISH_WAVES.wave3 },
+  { productA: 'samsung-haf-qin', productB: 'everydrop-filter-a-edrarxd1', slug: 'samsung-haf-qin-vs-everydrop-filter-a', publishDate: PUBLISH_WAVES.wave4 },
+  { productA: 'brita-standard-3pack', productB: 'brita-elite-2pack', slug: 'brita-standard-vs-brita-elite', publishDate: PUBLISH_WAVES.wave4 },
+  { productA: 'brita-elite-2pack', productB: 'zerowater-5stage-4pack', slug: 'brita-elite-vs-zerowater', publishDate: PUBLISH_WAVES.wave4 },
+  { productA: 'brita-standard-3pack', productB: 'pur-pitcher-filter-4pack', slug: 'brita-standard-vs-pur', publishDate: PUBLISH_WAVES.wave5 },
+  { productA: 'zerowater-5stage-4pack', productB: 'pur-pitcher-filter-4pack', slug: 'zerowater-vs-pur', publishDate: PUBLISH_WAVES.wave5 },
+  { productA: 'waterdrop-wd-pf01a-plus-3pack', productB: 'brita-elite-2pack', slug: 'waterdrop-plus-vs-brita-elite', publishDate: PUBLISH_WAVES.wave5 },
+  { productA: 'amazon-basics-replacement-3pack', productB: 'brita-standard-3pack', slug: 'amazon-basics-vs-brita-standard', publishDate: PUBLISH_WAVES.wave6 },
+  { productA: 'timain-filter-straw-2pack', productB: 'membrane-solutions-filter-straw-4pack', slug: 'timain-vs-membrane-solutions-straw', publishDate: PUBLISH_WAVES.wave6 },
+  { productA: 'timain-filter-straw-2pack', productB: 'naturenova-filter-straw-3pack', slug: 'timain-vs-naturenova-straw', publishDate: PUBLISH_WAVES.wave6 },
+];
+
+// ── Guides ───────────────────────────────────────────────────
+export const guides: GuideConfig[] = [
+  // Buyer guides
+  { title: 'How to Choose a Water Filter: Complete 2026 Guide', slug: 'how-to-choose-water-filter', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.', type: 'buyer', publishDate: PUBLISH_WAVES.wave1 },
+  { title: 'Water Filter Maintenance Guide: Keep Your Filter Performing', slug: 'water-filter-maintenance', description: 'Learn when to change filters, how to clean systems, and signs your filter needs replacing.', type: 'buyer', publishDate: PUBLISH_WAVES.wave3 },
+  { title: 'Water Filter Sizing Guide: Match Your Filter to Your Household', slug: 'water-filter-sizing-guide', description: 'Calculate the right filter capacity based on your household size, water usage, and source water quality.', type: 'buyer', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Best Water Filters Under $50: Budget Guide', slug: 'best-water-filters-under-50', description: 'Effective water filtration does not need to cost a fortune. Our picks for the best filters under $50.', type: 'buyer', publishDate: PUBLISH_WAVES.wave3 },
+  { title: 'Reverse Osmosis vs Carbon Filters: Which Do You Need?', slug: 'reverse-osmosis-vs-carbon-filters', description: 'A detailed comparison of the two most common filtration technologies and which suits your needs.', type: 'buyer', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Beginner Guide to Water Filtration', slug: 'water-filtration-beginner-guide', description: 'New to water filtration? Start here. We explain types, technologies, and how to pick your first filter.', type: 'buyer', publishDate: PUBLISH_WAVES.wave2 },
+  { title: 'Common Water Filter Mistakes and How to Avoid Them', slug: 'water-filter-mistakes', description: 'The most common mistakes people make when choosing, installing, and maintaining water filters.', type: 'buyer', publishDate: PUBLISH_WAVES.wave5 },
+  { title: 'Water Filter Cost Analysis: True Cost of Ownership', slug: 'water-filter-cost-analysis', description: 'Beyond the sticker price — we break down replacement filter costs, energy use, and water waste for each filter type.', type: 'buyer', publishDate: PUBLISH_WAVES.wave5 },
+
+  // Activity/use-case guides
+  { title: 'Best Water Filters for Camping: 2026 Guide', slug: 'water-filters-for-camping', description: 'The best portable water filters for car camping, backpacking base camps, and group camping trips.', type: 'activity', publishDate: PUBLISH_WAVES.wave3 },
+  { title: 'Best Water Filters for Hiking & Backpacking', slug: 'water-filters-for-hiking', description: 'Ultralight water filtration options for thru-hikers, day hikers, and backpackers.', type: 'activity', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Best Water Filters for Emergency Preparedness', slug: 'water-filters-for-emergencies', description: 'Build a complete water purification kit for natural disasters, power outages, and SHTF scenarios.', type: 'activity', publishDate: PUBLISH_WAVES.wave3 },
+  { title: 'Best Water Filters for Well Water', slug: 'water-filters-for-well-water', description: 'Whole-house and point-of-use filtration strategies for private well water systems.', type: 'activity', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Best Water Filters for Apartments & Renters', slug: 'water-filters-for-apartments', description: 'No-install filtration solutions for renters who cannot modify plumbing.', type: 'activity', publishDate: PUBLISH_WAVES.wave5 },
+  { title: 'Best Water Filters for RV & Van Life', slug: 'water-filters-for-rv', description: 'On-the-road water filtration for full-time RVers, van lifers, and overlanders.', type: 'activity', publishDate: PUBLISH_WAVES.wave5 },
+  { title: 'Best Water Filters for Baby Formula & Infant Water', slug: 'water-filters-for-baby', description: 'Safe water preparation for infant formula, with specific filter recommendations for new parents.', type: 'activity', publishDate: PUBLISH_WAVES.wave6 },
+  { title: 'Best Water Filters for Travel', slug: 'water-filters-for-travel', description: 'Portable water purification for international travel, from filter bottles to UV purifiers.', type: 'activity', publishDate: PUBLISH_WAVES.wave6 },
+  { title: 'Best Water Filters for Off-Grid Living', slug: 'water-filters-for-off-grid', description: 'Complete water filtration strategies for off-grid cabins, homesteads, and remote properties.', type: 'activity', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Best Water Filters for Hard Water', slug: 'water-filters-for-hard-water', description: 'Solutions for high-TDS, calcium-heavy, and mineral-rich water supplies.', type: 'activity', publishDate: PUBLISH_WAVES.wave6 },
+
+  // Knowledge base
+  { title: 'What Is Reverse Osmosis? How RO Filtration Works', slug: 'what-is-reverse-osmosis', description: 'A complete guide to reverse osmosis technology — how it works, what it removes, and who needs it.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave2 },
+  { title: 'NSF Water Filter Certifications Explained', slug: 'nsf-certifications-explained', description: 'What NSF 42, 53, 58, 401, and 372 certifications mean and why they matter.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave3 },
+  { title: 'Understanding TDS: Total Dissolved Solids in Water', slug: 'understanding-tds', description: 'What TDS readings mean, how to measure them, and what levels are safe to drink.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'PFAS in Drinking Water: What You Need to Know', slug: 'pfas-in-drinking-water', description: 'Forever chemicals explained — where they come from, health risks, and which filters remove them.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Lead in Drinking Water: Sources, Risks, and Filtration', slug: 'lead-in-drinking-water', description: 'How lead enters your water, health effects, and which filter types are certified to remove it.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave5 },
+  { title: 'Water Filter Types Explained: Complete Technology Guide', slug: 'water-filter-types-explained', description: 'Activated carbon, RO, UV, ceramic, ion exchange — every filtration technology explained and compared.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave2 },
+  { title: 'Is Tap Water Safe to Drink? A State-by-State Guide', slug: 'is-tap-water-safe', description: 'The state of US municipal water quality and when you should consider additional filtration.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave6 },
+  { title: 'History of Water Filtration: From Ancient Methods to Modern RO', slug: 'history-of-water-filtration', description: 'How humans have purified drinking water throughout history and the technologies that changed everything.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave7 },
+];
+
+// ── Helper lookups ───────────────────────────────────────────
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find(p => p.slug === slug);
+}
+
+export function getProductsByCategory(categorySlug: string): Product[] {
+  return products.filter(p => p.category === categorySlug);
+}
+
+export function getCategoryBySlug(slug: string): Category | undefined {
+  return categories.find(c => c.slug === slug);
+}
+
+export function getGuidesByType(type: 'buyer' | 'activity' | 'knowledge'): GuideConfig[] {
+  return guides.filter(g => g.type === type);
+}
+
+export function getRelatedProducts(product: Product, count: number = 3): Product[] {
+  return products
+    .filter(p => p.category === product.category && p.slug !== product.slug)
+    .slice(0, count);
+}
+
+// ── Navigation Structure ─────────────────────────────────────
+export const siteConfig = {
+  siteName: SITE_NAME,
+  siteUrl: SITE_URL,
+  brand: 'OffGrid Filters',
+  brandTagline: 'Expert Water Filter Reviews',
+  tagline: 'Expert Water Filter Reviews & Guides',
+  niche: 'water filters',
+  affiliateTag: AFFILIATE_TAG,
+  productDescription: 'Expert reviews and buying guides for water filters — from countertop RO systems to survival filter straws. We test, compare, and recommend the best water filtration products for every need and budget.',
+
+  seo: {
+    datePublished: '2026-02-11',
+    dateModified: '2026-02-08',
+    defaultOgImage: '/favicon.png',
+  },
+
+  socialProof: {
+    productsReviewed: '29',
+    categories: '6',
+    hoursResearch: '200+',
+    rating: '4.5',
+    reviewCount: '500000',
+  },
+
+  navigation: {
+    hubUrl: '/guides/',
+    hubLabel: 'All Guides',
+    categories: {
+      'Reviews': [
+        { title: 'Bluevua RO100ROPOT-UV', url: '/reviews/bluevua-ro100ropot-uv/' },
+        { title: 'iSpring RCC7AK', url: '/reviews/ispring-rcc7ak/' },
+        { title: 'Waterdrop G3P600', url: '/reviews/waterdrop-g3p600/' },
+        { title: 'Brita UltraMax', url: '/reviews/brita-ultramax-27-cup-dispenser/' },
+        { title: 'GE XWFE', url: '/reviews/ge-xwfe/' },
+        { title: 'Timain Filter Straw', url: '/reviews/timain-filter-straw-2pack/' },
+      ] as NavLink[],
+      'Best Of': [
+        { title: 'Best Countertop Filters', url: '/best-countertop-filters/' },
+        { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/' },
+        { title: 'Best Refrigerator Filters', url: '/best-refrigerator-filters/' },
+        { title: 'Best Replacement Filters', url: '/best-replacement-filters/' },
+        { title: 'Best Survival Filters', url: '/best-survival-filters/' },
+        { title: 'Best Whole House Filters', url: '/best-whole-house-filters/' },
+      ] as NavLink[],
+      'Compare': [
+        { title: 'Bluevua UV vs Lite UV', url: '/bluevua-ro100ropot-uv-vs-bluevua-ro100ropot-lite-uv/' },
+        { title: 'iSpring vs Waterdrop', url: '/ispring-rcc7ak-vs-waterdrop-g3p600/' },
+        { title: 'Brita Standard vs Elite', url: '/brita-standard-vs-brita-elite/' },
+        { title: 'GE XWFE vs RPWFE', url: '/ge-xwfe-vs-ge-rpwfe/' },
+        { title: 'Brita Elite vs ZeroWater', url: '/brita-elite-vs-zerowater/' },
+      ] as NavLink[],
+      'Guides': [
+        { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/' },
+        { title: 'Beginner Guide', url: '/guides/water-filtration-beginner-guide/' },
+        { title: 'Budget Filters Under $50', url: '/guides/best-water-filters-under-50/' },
+        { title: 'RO vs Carbon Filters', url: '/guides/reverse-osmosis-vs-carbon-filters/' },
+        { title: 'Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/' },
+      ] as NavLink[],
+      'Learn': [
+        { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/' },
+        { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/' },
+        { title: 'Understanding TDS', url: '/understanding-tds/' },
+        { title: 'PFAS in Drinking Water', url: '/pfas-in-drinking-water/' },
+        { title: 'Water Filter Types', url: '/water-filter-types-explained/' },
+      ] as NavLink[],
+    } as Record<string, NavLink[]>,
+  },
+};

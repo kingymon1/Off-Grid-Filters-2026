@@ -4,36 +4,36 @@
 
 @layer base {
   :root {
-    --background: 160 20% 5%;
-    --foreground: 160 10% 95%;
+    --background: 210 25% 5%;
+    --foreground: 210 10% 95%;
 
-    --card: 160 15% 9%;
-    --card-foreground: 160 10% 95%;
-    --card-elevated: 160 15% 12%;
+    --card: 210 18% 9%;
+    --card-foreground: 210 10% 95%;
+    --card-elevated: 210 18% 12%;
 
-    --primary: 160 65% 36%;
-    --primary-foreground: 160 10% 98%;
-    --primary-warm: 160 65% 28%;
-    --primary-glow: 160 65% 36%;
+    --primary: 205 70% 48%;
+    --primary-foreground: 210 10% 98%;
+    --primary-warm: 205 70% 38%;
+    --primary-glow: 205 70% 48%;
 
-    --secondary: 160 10% 15%;
-    --secondary-foreground: 160 10% 88%;
+    --secondary: 210 10% 15%;
+    --secondary-foreground: 210 10% 88%;
 
-    --muted: 160 12% 11%;
-    --muted-foreground: 160 8% 55%;
+    --muted: 210 12% 11%;
+    --muted-foreground: 210 8% 55%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 160 20% 5%;
-    --accent-warm: 38 92% 42%;
+    --accent: 32 90% 52%;
+    --accent-foreground: 210 25% 5%;
+    --accent-warm: 32 90% 42%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 95%;
 
-    --success: 142 70% 40%;
+    --success: 155 70% 40%;
 
-    --border: 160 12% 18%;
-    --input: 160 10% 14%;
-    --ring: 160 65% 36%;
+    --border: 210 12% 18%;
+    --input: 210 10% 14%;
+    --ring: 205 70% 48%;
 
     --radius: 1rem;
   }
@@ -74,7 +74,7 @@
 }
 
 @layer components {
-  .container-hr8 {
+  .container-brand {
     @apply w-full max-w-[1100px] mx-auto px-4;
   }
 
@@ -82,7 +82,7 @@
     @apply py-16 lg:py-24;
   }
 
-  .card-hr8 {
+  .card-brand {
     @apply bg-card border border-border rounded-2xl p-8;
     box-shadow: 0 0 0 1px hsl(var(--border) / 0.5), 0 4px 24px -4px rgba(0, 0, 0, 0.3);
   }

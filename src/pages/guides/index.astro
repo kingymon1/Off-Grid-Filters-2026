@@ -1,0 +1,126 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { products, categories, comparisons, guides, getProductBySlug, isPublished } from '../../lib/config';
+import { generateArticleSchema } from '../../lib/schema';
+
+const year = new Date().getFullYear();
+const publishedProducts = products.filter(p => isPublished(p.publishDate));
+const publishedCategories = categories.filter(c => isPublished(c.publishDate));
+const publishedComparisons = comparisons.filter(c => isPublished(c.publishDate));
+const publishedGuides = guides.filter(g => isPublished(g.publishDate));
+
+const buyerGuides = publishedGuides.filter(g => g.type === 'buyer');
+const activityGuides = publishedGuides.filter(g => g.type === 'activity');
+const knowledgeBase = publishedGuides.filter(g => g.type === 'knowledge');
+
+const schema = generateArticleSchema({
+  title: 'Water Filter Guides & Resources',
+  description: 'Complete collection of water filter guides, reviews, comparisons, and educational content.',
+  url: '/guides/',
+});
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Start here.' },
+  { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'Our top countertop picks.' },
+  { title: 'Beginner Guide', url: '/guides/water-filtration-beginner-guide/', description: 'New to water filtration?' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'Understand filter certifications.' },
+];
+---
+
+<ContentLayout
+  title={`Water Filter Guides & Resources — OffGrid Filters`}
+  description="Browse all water filter guides, reviews, comparisons, and educational content. Your complete resource hub for water filtration."
+  canonical="/guides/"
+  category="Guides"
+  currentPage="All Guides"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Water Filter Guides &amp; Resources</h1>
+  <p class="lead">Your complete resource hub for water filtration. Browse {publishedProducts.length} product reviews, {publishedCategories.length} category roundups, buyer guides, and educational content.</p>
+
+  <h2>Product Reviews</h2>
+  <div class="resource-grid">
+    {publishedProducts.map(p => (
+      <a href={`/reviews/${p.slug}/`} class="resource-card">
+        <span class="resource-title">{p.name}</span>
+        <span class="resource-meta">{p.rating}&#9733; &middot; ${p.price}</span>
+      </a>
+    ))}
+  </div>
+
+  <h2>Best Of Roundups</h2>
+  <div class="resource-grid">
+    {publishedCategories.map(c => (
+      <a href={`/best-${c.slug}/`} class="resource-card">
+        <span class="resource-title">Best {c.name}</span>
+        <span class="resource-meta">{year} Picks</span>
+      </a>
+    ))}
+  </div>
+
+  <h2>Head-to-Head Comparisons</h2>
+  <div class="resource-grid">
+    {publishedComparisons.map(c => {
+      const a = getProductBySlug(c.productA);
+      const b = getProductBySlug(c.productB);
+      return (
+        <a href={`/${c.slug}/`} class="resource-card">
+          <span class="resource-title">{a?.brand} vs {b?.brand}</span>
+          <span class="resource-meta">{a?.name.split(' ').slice(0,2).join(' ')} vs {b?.name.split(' ').slice(0,2).join(' ')}</span>
+        </a>
+      );
+    })}
+  </div>
+
+  {buyerGuides.length > 0 && (
+    <>
+      <h2>Buyer Guides</h2>
+      <div class="resource-grid">
+        {buyerGuides.map(g => (
+          <a href={`/guides/${g.slug}/`} class="resource-card">
+            <span class="resource-title">{g.title}</span>
+            <span class="resource-meta">{g.description}</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+
+  {activityGuides.length > 0 && (
+    <>
+      <h2>Activity &amp; Use-Case Guides</h2>
+      <div class="resource-grid">
+        {activityGuides.map(g => (
+          <a href={`/${g.slug}/`} class="resource-card">
+            <span class="resource-title">{g.title}</span>
+            <span class="resource-meta">{g.description}</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+
+  {knowledgeBase.length > 0 && (
+    <>
+      <h2>Knowledge Base</h2>
+      <div class="resource-grid">
+        {knowledgeBase.map(g => (
+          <a href={`/${g.slug}/`} class="resource-card">
+            <span class="resource-title">{g.title}</span>
+            <span class="resource-meta">{g.description}</span>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+</ContentLayout>
+
+<style>
+  .resource-grid { display:grid; grid-template-columns:1fr; gap:0.75rem; margin-bottom:2rem; }
+  @media(min-width:768px) { .resource-grid { grid-template-columns:repeat(2,1fr); } }
+  .resource-card { display:flex; flex-direction:column; gap:0.25rem; padding:1rem 1.25rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:0.75rem; transition:all 0.2s; text-decoration:none; }
+  .resource-card:hover { border-color:hsl(var(--primary)/0.4); background:hsl(var(--primary)/0.05); transform:translateY(-1px); }
+  .resource-title { font-weight:600; color:hsl(var(--foreground)); font-size:0.9375rem; }
+  .resource-meta { font-size:0.8125rem; color:hsl(var(--muted-foreground)); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+</style>

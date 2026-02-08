@@ -1,0 +1,153 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'timain-vs-naturenova-straw')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'What is the difference between the Timain and NatureNova filter straws?', answer: 'Both use 4-stage filtration with 0.1-micron UF membranes and identical filtration technology (PP cotton, coconut carbon, PP fiber, UF membrane). The key differences are: Timain is a bare-bones 2-pack at $14.23 ($7.12/straw), while NatureNova is a 3-pack at $28.99 ($9.66/straw) that includes a foldable water bag and backwash syringe with each straw. The NatureNova kit is field-ready out of the box.' },
+  { question: 'Is the NatureNova water bag worth the extra cost?', answer: 'Yes, if you plan to use the straw for gravity filtering or group water production. The foldable water bag lets you fill from a water source and hang it above a container, using gravity to push water through the straw — hands-free filtering. Without a bag, you need to either drink directly from the source or provide your own squeeze container. For a survival kit, the bag adds genuine utility.' },
+  { question: 'What does the backwash syringe do?', answer: 'The backwash syringe reverses water flow through the filter, pushing trapped sediment and debris out of the membrane pores. Regular backwashing can significantly extend filter life, especially after filtering turbid or muddy water. The Timain does not include a backwash syringe, so its filters may clog sooner in dirty water conditions. This is a meaningful advantage for extended backcountry use.' },
+  { question: 'Which straw is lighter for backpacking?', answer: 'The Timain is slightly lighter at 2.1 oz per straw versus the NatureNova at 2.5 oz per straw. However, when you factor in the NatureNova\'s included water bag and backwash syringe, the total carry weight increases. If ultralight weight is your priority and you already have a squeeze bag, the Timain is the lighter choice. If you need a complete kit, the NatureNova\'s accessories add minimal weight for significant functionality.' },
+  { question: 'Do both straws remove heavy metals?', answer: 'The NatureNova claims partial heavy metal removal due to its coconut carbon stage, while the Timain does not specifically claim heavy metal reduction. Neither straw should be relied upon for comprehensive heavy metal removal — they are primarily designed for biological contaminant filtration (bacteria and protozoa). For heavy metals like lead or mercury, a dedicated home filter is recommended.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `Timain vs NatureNova Filter Straw: Which Is Better?`,
+  description: `Timain 4-Stage vs NatureNova survival filter straw comparison. We compare included accessories, price per straw, filtration quality, and field readiness.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'Our expert picks for survival and portable water filtration.' },
+  { title: 'Water Filters for Emergency Preparedness', url: '/water-filters-for-emergencies/', description: 'Build a complete water purification kit for emergencies.' },
+];
+---
+
+<ContentLayout
+  title={`Timain vs NatureNova Straw: Which Survival Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`Timain vs NatureNova survival filter straw comparison. We compare accessories, price, filtration, weight, and field readiness.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Timain vs NatureNova"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Timain vs NatureNova Filter Straw: Which Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>NatureNova 3-Pack ($28.99)</strong> is the better overall kit with included water bags and backwash syringes that make it field-ready out of the box. The <strong>Timain 2-Pack ($14.23)</strong> is the budget king at $7.12/straw for the same 4-stage filtration technology. Both share identical filtration specs — the difference is in accessories and completeness.</p>
+  </div>
+
+  <ProductImage alt="Timain vs NatureNova survival filter straw comparison" icon="straw" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Stages', key: 'filtrationStages' },
+    { label: 'Micron Rating', key: 'micronRating' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">The Timain and NatureNova are remarkably similar straws — same filtration technology, same micron rating, same capacity. What separates them is the NatureNova's included accessories (water bag + backwash syringe) and the Timain's lower per-straw price. This comparison helps you decide whether the extras are worth the premium.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Quality</h3>
+  <p>Both straws use an identical 4-stage filtration approach: PP cotton pre-filter, coconut shell activated carbon, PP fiber, and a 0.1-micron ultrafiltration membrane. Both remove 99.9999% of bacteria and 99.99% of protozoa. The NatureNova claims partial heavy metal reduction from its carbon stage, which the Timain does not specifically advertise. In terms of core water safety — making stream or lake water drinkable — they perform identically.</p>
+  <div class="winner-badge">Winner: Tie (identical 4-stage filtration, 0.1 micron)</div>
+
+  <h3>Included Accessories</h3>
+  <p>This is the NatureNova's defining advantage. Each straw comes with a foldable water bag for gravity-feed filtering AND a backwash syringe for extending filter life. The water bag enables hands-free filtering — fill the bag, hang it up, and let gravity push water through the straw into a clean container. The backwash syringe reverses water flow to clear trapped sediment from the membrane. The Timain includes just the straws — you supply your own container and have no backwash capability.</p>
+  <div class="winner-badge">Winner: NatureNova (water bag + backwash syringe included)</div>
+
+  <h3>Price Per Straw</h3>
+  <p>The Timain at $14.23 for 2 straws costs $7.12 per straw — the cheapest survival filter straw in our catalog. The NatureNova at $28.99 for 3 straws costs $9.66 per straw — 36% more. However, the NatureNova's price includes accessories that you would need to buy separately for the Timain. A basic squeeze bag costs $5-8, which closes the price gap considerably. For bare-minimum filtration at the absolute lowest price, the Timain wins.</p>
+  <div class="winner-badge">Winner: Timain ($7.12 vs $9.66 per straw)</div>
+
+  <h3>Weight &amp; Portability</h3>
+  <p>The Timain weighs 2.1 oz per straw while the NatureNova weighs 2.5 oz per straw (plus accessories). For ultralight backpackers counting every gram, the Timain's lighter weight is an advantage. However, the 0.4 oz difference per straw is negligible for most users. The NatureNova's accessories add some weight but pack flat and take up minimal space. For the vast majority of hikers and preppers, the weight difference is irrelevant.</p>
+  <div class="winner-badge">Winner: Timain (2.1 oz vs 2.5 oz per straw)</div>
+
+  <h3>Filter Longevity &amp; Maintenance</h3>
+  <p>Both straws are rated for 1,500 liters. However, the NatureNova's included backwash syringe provides a meaningful lifespan advantage. Regular backwashing clears accumulated sediment from the UF membrane, restoring flow rate and extending effective filter life. Without backwashing capability (Timain), the filter will clog sooner in turbid water conditions. For extended backcountry trips or emergency scenarios where filter replacement is not an option, the NatureNova's maintenance capability is a significant practical benefit.</p>
+  <div class="winner-badge">Winner: NatureNova (backwash syringe extends life)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>Budget is your primary constraint — $7.12/straw is the cheapest option</li>
+        <li>You already own squeeze bags or other water containers</li>
+        <li>You want the lightest possible straw for ultralight backpacking</li>
+        <li>You need a simple, bare-bones emergency backup filter</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>You want a complete, field-ready kit with water bag and backwash syringe</li>
+        <li>You plan extended backcountry trips where filter longevity matters</li>
+        <li>You need 3 straws for personal, vehicle, and home emergency kits</li>
+        <li>You value the backwash capability for maintaining filter performance</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

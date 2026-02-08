@@ -1,0 +1,152 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const comp = comparisons.find(c => c.slug === 'brita-standard-vs-pur')!;
+if (!isPublished(comp.publishDate)) return Astro.redirect('/404');
+
+const productA = getProductBySlug(comp.productA)!;
+const productB = getProductBySlug(comp.productB)!;
+const year = new Date().getFullYear();
+
+const tableProducts = [productA, productB].map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 1,
+}));
+
+const faqs = [
+  { question: 'Is PUR better than Brita Standard for water filtration?', answer: 'Yes, in terms of contaminant reduction. PUR filters carry NSF 42/53 certification and reduce 20+ substances including lead and mercury. Brita Standard only has NSF 42, covering chlorine taste and odor. PUR\'s LockFit design also ensures better filter seating. However, Brita Standard is cheaper per filter and has a more established brand presence.' },
+  { question: 'Can I use PUR filters in a Brita pitcher?', answer: 'No. PUR and Brita filters have completely different physical designs. PUR filters only fit PUR pitchers, and Brita filters only fit Brita pitchers. If you want to switch from one brand to the other, you need to buy a new pitcher as well.' },
+  { question: 'Why does Brita have more reviews than PUR?', answer: 'Brita has been the dominant pitcher filter brand for decades and has a significantly larger market share. With 95,000+ reviews, the Brita Standard filter reflects a massive installed base. PUR\'s 19,000+ reviews still represent strong market presence but Brita\'s brand recognition gives it a head start in review volume.' },
+  { question: 'Which filter lasts longer — Brita Standard or PUR?', answer: 'Both are rated for 40 gallons and approximately 2 months of use. They have equivalent lifespans. The difference is not in longevity but in what they remove during that lifespan — PUR filters more contaminants per gallon than Brita Standard.' },
+  { question: 'What is PUR\'s LockFit technology?', answer: 'LockFit is PUR\'s proprietary filter mounting design that ensures the filter is properly seated in the pitcher. It uses a click-and-lock mechanism that provides tactile confirmation of correct installation. This reduces the risk of unfiltered water bypassing the filter, which can happen with Brita\'s push-in design if the filter is not perfectly seated.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: `Brita Standard vs PUR: Which Pitcher Filter Is Better?`,
+  description: `Brita Standard vs PUR pitcher filter comparison. We compare contaminant removal, certifications, price, filter design, and long-term value.`,
+  url: `/${comp.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: `${productA.name} Review`, url: `/reviews/${productA.slug}/`, description: productA.verdict },
+  { title: `${productB.name} Review`, url: `/reviews/${productB.slug}/`, description: productB.verdict },
+  { title: 'Best Pitcher & Dispenser Replacement Filters', url: '/best-replacement-filters/', description: 'Our expert picks for pitcher and dispenser replacement filters.' },
+  { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'New to water filtration? Start here.' },
+];
+---
+
+<ContentLayout
+  title={`Brita Standard vs PUR: Which Pitcher Filter Is Better? (${year}) — OffGrid Filters`}
+  description={`Brita Standard vs PUR pitcher filter comparison. We compare contaminant removal, certifications, price, and value to help you choose.`}
+  canonical={`/${comp.slug}/`}
+  category="Compare"
+  currentPage="Brita Standard vs PUR"
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Brita Standard vs PUR: Which Pitcher Filter Is Better in {year}?</h1>
+
+  <div class="verdict-card">
+    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> delivers better filtration with NSF 42/53 certification, lead reduction, and the LockFit design — all at a competitive price. The <strong>Brita Standard 3-Pack ($17.98)</strong> has the brand name, faster flow, and a wider pitcher ecosystem, but its NSF 42-only certification leaves a gap in contaminant removal. PUR wins on filtration; Brita wins on availability.</p>
+  </div>
+
+  <ProductImage alt="Brita Standard vs PUR pitcher filter comparison" icon="pitcher" aspect="hero" />
+
+  <h2>At a Glance</h2>
+  <ComparisonTable products={tableProducts} features={[
+    { label: 'Price', key: 'price' },
+    { label: 'Rating', key: 'rating' },
+    { label: 'Pack Size', key: 'packSize' },
+    { label: 'Capacity', key: 'capacity' },
+    { label: 'Certifications', key: 'certifications' },
+    { label: 'Filter Life', key: 'filterLife' },
+    { label: 'Filtration', key: 'filtrationTechnology' },
+  ]} />
+
+  <p class="lead">Brita vs PUR is the classic pitcher filter showdown. Both have been competing for decades, and both have loyal followings. The data shows PUR has quietly pulled ahead on filtration quality while Brita maintains its edge in brand recognition and ecosystem breadth.</p>
+
+  <h2>Category-by-Category Breakdown</h2>
+
+  <h3>Filtration Quality</h3>
+  <p>PUR carries NSF 42/53 certification and reduces 20+ substances including lead and mercury. The 2-in-1 activated carbon and ion exchange technology provides a meaningful upgrade in contaminant removal. Brita Standard has only NSF 42, covering chlorine taste and odor plus copper, cadmium, mercury, and zinc — but no lead certification. For households with lead concerns or older plumbing, PUR offers critical protection that Brita Standard does not provide.</p>
+  <div class="winner-badge">Winner: PUR (NSF 42/53, lead reduction)</div>
+
+  <h3>Price &amp; Value</h3>
+  <p>The Brita Standard 3-pack costs $17.98 ($6/filter for 120 total gallons), while the PUR 4-pack costs $23.22 ($5.81/filter for 160 total gallons). PUR actually costs less per filter AND provides more total filtration volume. The PUR 4-pack delivers 160 gallons for $23.22 ($0.145/gallon) versus Brita's 120 gallons for $17.98 ($0.15/gallon). PUR's per-gallon price is marginally better, and the 4-pack means two extra months of filtration before reordering.</p>
+  <div class="winner-badge">Winner: PUR ($5.81/filter vs $6/filter)</div>
+
+  <h3>Filter Design &amp; Reliability</h3>
+  <p>PUR's LockFit technology provides a click-and-lock installation that confirms proper seating. This is a genuine innovation — it prevents unfiltered water from bypassing the filter, which can happen with loose-fitting cartridges. Brita Standard uses a simpler drop-in design that works fine but lacks the tactile confirmation of a proper lock. For users who want assurance that every drop is filtered, PUR's design is more reliable.</p>
+  <div class="winner-badge">Winner: PUR (LockFit design)</div>
+
+  <h3>Filtering Speed</h3>
+  <p>Brita Standard filters water noticeably faster than PUR. The lighter activated carbon and ion exchange resin design allows water to pass through quickly. PUR's denser 2-in-1 filtration media creates more resistance, resulting in slower filtering — particularly noticeable when filling a full pitcher. If you frequently fill and immediately pour, the Brita Standard's speed advantage is a real convenience benefit.</p>
+  <div class="winner-badge">Winner: Brita Standard (faster flow rate)</div>
+
+  <h3>Brand Ecosystem &amp; Availability</h3>
+  <p>Brita dominates the pitcher ecosystem with a wider variety of pitcher sizes, dispensers, and filter pack options. Brita pitchers are available at virtually every retailer and the Standard filter's 95,000+ reviews reflect massive market penetration. PUR pitchers are available but less ubiquitous, with 19,000+ reviews for the filter. If you already own a Brita pitcher, switching to PUR means buying new hardware. The Brita ecosystem is simply larger and more accessible.</p>
+  <div class="winner-badge">Winner: Brita Standard (wider ecosystem, 95K reviews)</div>
+
+  <h2>Who Should Get Which?</h2>
+  <div class="recommendation-grid">
+    <div class="rec-card rec-a">
+      <h3>Get the {productA.name} if...</h3>
+      <ul>
+        <li>You already own a Brita pitcher and want the lowest-hassle replacement</li>
+        <li>Fast filtering speed matters more to you than contaminant depth</li>
+        <li>Your water is already clean and you mainly want taste improvement</li>
+      </ul>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+    </div>
+    <div class="rec-card rec-b">
+      <h3>Get the {productB.name} if...</h3>
+      <ul>
+        <li>Lead reduction and broader contaminant removal are important to you</li>
+        <li>You want the LockFit design for guaranteed proper filter seating</li>
+        <li>You are starting fresh or willing to switch pitchers for better filtration</li>
+        <li>You want better per-filter value with the 4-pack</li>
+      </ul>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+    </div>
+  </div>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>
+
+<style>
+  .verdict-card { text-align:center; padding:1.5rem; background:hsl(var(--muted)/0.3); border:1px solid hsl(var(--border)); border-radius:1rem; margin:1.5rem 0; position:relative; overflow:hidden; }
+  .verdict-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)),hsl(var(--primary))); }
+  .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
+  .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
+  @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
+  .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
+  .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+</style>

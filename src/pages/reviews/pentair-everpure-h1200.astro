@@ -1,0 +1,184 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('pentair-everpure-h1200')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Do I need the Everpure H-1200 filter head to use these cartridges?', answer: 'Yes. The H-1200 replacement cartridge set requires the Everpure H-1200 filter head (sold separately). The filter head is a one-time purchase that mounts under your sink and connects to your cold water line. Once installed, you only need to buy these replacement cartridge sets going forward — typically once per year.' },
+  { question: 'How does the Everpure H-1200 compare to a reverse osmosis system?', answer: 'The H-1200 does not remove TDS or desalinate water like an RO system. Instead, it uses 0.5-micron commercial-grade carbon filtration to remove lead, cysts, PFOA, PFOS, chlorine, and particulates while preserving beneficial minerals. RO removes everything including minerals and produces wastewater. The H-1200 provides excellent contaminant reduction with no water waste and faster flow rates.' },
+  { question: 'Is the Pentair Everpure H-1200 the same system used in restaurants?', answer: 'Yes. Pentair Everpure is the dominant commercial water filtration brand, used in Starbucks, McDonald\'s, Subway, and thousands of other restaurants and coffee shops worldwide. The H-1200 residential line uses the same Micro-Pure filtration technology as their commercial systems, adapted for home installation under a kitchen sink.' },
+  { question: 'Why are the H-1200 replacement cartridges so expensive?', answer: 'At $390, the cartridge set reflects commercial-grade manufacturing and materials. However, the 1,000-gallon capacity means you typically replace cartridges only once per year. That works out to about $1.07 per day for restaurant-quality water — less than a single bottle of water. The cost-per-gallon is actually competitive with many cheaper filter systems that require more frequent replacement.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Capacity</span>
+      <span class="spec-value">{product.specs.capacity}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Micron Rating</span>
+      <span class="spec-value">{product.specs.micronRating}μm</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="faucet" aspect="hero" />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Pentair Everpure H-1200 replacement cartridge set represents the top tier of under-sink water filtration — the same commercial-grade technology that Starbucks, McDonald's, and thousands of restaurants rely on to deliver consistently clean, great-tasting water. At $390 for a twin-cartridge set, it is by far the most expensive filter in our catalog, but it targets a completely different audience than budget pitchers or even mid-range RO systems. This is for people who demand the best filtration money can buy and are willing to pay a premium for proven, restaurant-grade performance.</p>
+  <p>The twin-cartridge design uses Pentair's proprietary Micro-Pure activated carbon with precoat submicron filtration at 0.5 microns — fine enough to catch cysts like Giardia and Cryptosporidium, lead particles, PFOA, PFOS, and chlorine, while leaving beneficial minerals intact. Unlike reverse osmosis, the H-1200 does not strip water of calcium and magnesium, which means you get contaminant-free water that still tastes naturally mineral-rich rather than flat.</p>
+  <p>The 1,000-gallon capacity is what separates the H-1200 from most residential filters. Where a typical pitcher filter lasts 40 gallons and a standard under-sink filter lasts 200-300 gallons, the H-1200's twin cartridges keep delivering consistent performance for nearly a full year of typical household use. That long service life partially offsets the high upfront cartridge cost.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The NSF 42/53/401 triple certification is the gold standard for residential filtration, covering chlorine taste and odor (42), health-related contaminants like lead and cysts (53), and emerging contaminants like PFOA, PFOS, and pharmaceuticals (401). The twin cartridge arrangement provides redundancy — even if one cartridge begins to saturate, the second continues filtering effectively. Each cartridge measures 12.75 x 3.25 inches, so the pair requires dedicated under-sink space but remains more compact than a full RO system with its tank.</p>
+
+  <ProTip>If you are installing an Everpure system for the first time, budget an additional $150-250 for the filter head and a dedicated drinking faucet. The initial system cost is steep, but after that, your only ongoing expense is this cartridge set once per year. Many plumbers are familiar with Everpure from commercial installations and can complete a residential install in under an hour.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>The Everpure H-1200 delivers noticeably superior water quality compared to pitcher filters and most consumer-grade under-sink systems. The taste improvement is the first thing you notice — water from the H-1200 tastes crisp and clean without the flat, stripped quality of RO water. Chlorine is completely eliminated, and the mineral content gives the water a slightly sweet, natural character that coffee enthusiasts and home baristas particularly appreciate. In fact, many users purchase the H-1200 specifically for coffee and tea preparation, where water quality directly affects flavor extraction.</p>
+  <p>Flow rate is rated at 0.5 GPM, which is adequate for filling glasses and small containers but noticeably slower than unfiltered tap water. You will not want to fill large pots through the dedicated faucet — use your regular tap for cooking volumes. The 1,200 Amazon reviews with a 4.7-star average (one of the highest ratings in our entire catalog) reflect exceptionally high satisfaction. The most common positive comment across reviews is about water taste, followed by the convenience of year-long cartridge life.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $390 per year for replacement cartridges, the Everpure H-1200 is the most expensive filtration option in our catalog on an annual basis. However, the 1,000-gallon capacity brings the cost to approximately $0.39 per gallon — higher than an under-sink RO system like the iSpring RCC7AK ($0.08-0.10/gallon) but dramatically lower than bottled water ($1-2/gallon). The initial system setup (filter head, faucet, installation) adds $200-400, bringing first-year total cost to roughly $600-800.</p>
+  <p>The value proposition is not about being the cheapest — it is about being the best. If you have already tried pitcher filters and under-sink carbon systems and found them lacking, the H-1200 represents the ceiling of non-RO filtration. For homes with already-clean municipal water, it may be overkill. But for homes dealing with lead concerns, PFOA/PFOS contamination, or simply demanding the absolute best-tasting filtered water, the Everpure H-1200 has no equal in its class.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

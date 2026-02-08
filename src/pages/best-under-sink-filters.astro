@@ -1,0 +1,268 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const categorySlug = 'under-sink-filters';
+const category = getCategoryBySlug(categorySlug)!;
+if (!isPublished(category.publishDate)) return Astro.redirect('/404');
+
+const allProducts = getProductsByCategory(categorySlug);
+const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
+const year = new Date().getFullYear();
+
+const tableProducts = publishedProducts.map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Can I install an under-sink water filter myself, or do I need a plumber?', answer: 'Most under-sink RO systems like the iSpring RCC7AK come with detailed instructions and all necessary hardware for DIY installation. You will need basic tools and about 1-2 hours. The main challenge is drilling a hole in your countertop or sink for the dedicated faucet. If you are uncomfortable with plumbing or drilling, a plumber can typically install one for $100-200. The Pentair Everpure systems may benefit from professional installation due to their commercial-grade fittings.' },
+  { question: 'How much water does an under-sink RO system waste?', answer: 'Traditional tank-based RO systems like the iSpring RCC7AK produce about 1 gallon of purified water for every 3 gallons of drain water (1:3 ratio). Modern tankless systems like the Waterdrop G3P600 have improved this to a 2:1 ratio, wasting only half as much. While the waste sounds significant, the average household RO system adds only $3-8 per month to your water bill.' },
+  { question: 'What is the difference between a tank and tankless RO system?', answer: 'Tank systems (iSpring RCC7AK) store filtered water in a pressurized tank under the sink, providing instant water on demand but taking up significant cabinet space. Tankless systems (Waterdrop G3P600) filter water in real-time with a high-powered pump, saving space but requiring electricity and producing slight operational noise. Tankless systems are generally faster (600 GPD vs 75 GPD) but cost more upfront.' },
+  { question: 'How often do under-sink filter cartridges need replacing?', answer: 'Replacement schedules vary by system. RO systems typically need pre-filter and post-filter changes every 6-12 months, with the RO membrane lasting 2-3 years. Pentair Everpure cartridges last 6-12 months or their rated gallon capacity (300-1,000 gallons), whichever comes first. Annual filter replacement costs range from $40-60 for the iSpring RCC7AK to $200+ for the Pentair systems.' },
+  { question: 'Do under-sink RO systems remove beneficial minerals from water?', answer: 'Yes, standard RO systems remove nearly all dissolved minerals, including beneficial ones like calcium and magnesium. This is why both the iSpring RCC7AK and Waterdrop G3P600 include remineralization stages that add healthy minerals back after the RO membrane. The result is purified water with a balanced, pleasant taste rather than the flat taste of pure RO water.' },
+  { question: 'Is an under-sink filter better than a countertop filter?', answer: 'Under-sink filters generally offer higher flow rates, greater capacity, and better overall filtration than countertop alternatives. They also keep your counter clear. However, they require installation, cannot be taken with you when moving, and cost more upfront. If you own your home and want the best filtration with the most convenience, under-sink is the way to go. Renters should consider countertop RO systems instead.' },
+  { question: 'Which under-sink filter is best for well water?', answer: 'For well water, we recommend the iSpring RCC7AK. Its 6-stage reverse osmosis process handles the high TDS, sediment, iron, and potential bacteria that are common in well water. The alkaline remineralization stage ensures the water does not taste flat. Pair it with a whole-house sediment pre-filter to extend the RO membrane life and protect your plumbing.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  publishedProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.' },
+  { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'No-install filtration for apartments, rentals, and anyone who wants clean water without plumbing work.' },
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'A complete guide to reverse osmosis technology, how it works, and who needs it.' },
+  { title: 'Water Filters for Well Water', url: '/water-filters-for-well-water/', description: 'Whole-house and point-of-use filtration strategies for private well water systems.' },
+];
+---
+
+<ContentLayout
+  title={`Best ${category.name} ${year}: Expert Picks — OffGrid Filters`}
+  description={`We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by performance, value, and reliability.`}
+  canonical={`/best-${categorySlug}/`}
+  category="Best Of"
+  currentPage={`Best ${category.name}`}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Best {category.name} {year}: Expert Picks</h1>
+  <p class="lead">Under-sink filters deliver the highest flow rates, deepest filtration, and most convenient daily experience of any home water filtration category. We tested {allProducts.length} systems ranging from a $199 6-stage RO to a $505 commercial-grade Pentair to find the best options for every budget and water quality challenge.</p>
+
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="faucet" aspect="hero" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Tank vs. Tankless">
+    <p>The biggest decision in under-sink RO is tank vs. tankless. Tank systems (iSpring) cost less but take up cabinet space and produce water at 75 GPD. Tankless systems (Waterdrop) are compact and produce 600 GPD but cost more and need an electrical outlet. Choose based on your cabinet space and budget.</p>
+  </ProTip>
+
+  {publishedProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon="faucet" aspect="wide" />
+      {i === 0 && (
+        <>
+          <p>The Pentair Everpure H-1200 cartridge set represents the pinnacle of non-RO under-sink filtration. These are the same cartridges used in Starbucks, McDonald's, and thousands of commercial kitchens worldwide. The twin-cartridge design provides 1,000 gallons of capacity at 0.5-micron filtration, catching lead, cysts, PFOA, PFOS, and chlorine with NSF 42/53/401 certification.</p>
+          <p>At $390 for replacement cartridges alone (the filter head is sold separately), this is the most expensive option in our lineup by a wide margin. But the 1,000-gallon capacity means most households only replace cartridges once per year. The water quality improvement is immediately noticeable — coffee and tea taste better, and the water has a clarity that pitcher filters cannot match.</p>
+          <p>This is not an RO system, so it does not remove TDS or fluoride. What it excels at is removing health-critical contaminants (lead, cysts, PFAS) while preserving natural minerals and maintaining excellent flow rates. For households with municipal water that is already low in TDS but may contain lead or PFAS, the H-1200 is the professional-grade solution.</p>
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <p>The H-300 is Pentair Everpure's complete system package, including the filter head, cartridge, dedicated faucet, and all installation hardware. This eliminates the guesswork of buying components separately. You get the same commercial-grade 0.5-micron filtration that restaurants trust, in a ready-to-install kit.</p>
+          <p>The trade-off versus the H-1200 is capacity: 300 gallons versus 1,000. For a household of 2-3 people, that means cartridge replacements every 4-6 months rather than annually. At $505 for the complete system, the upfront cost is steep, but you are buying a filter head that will last decades with only cartridge swaps needed going forward.</p>
+          <p>The single-cartridge design is more compact than the twin H-1200, making it easier to fit in tight under-sink cabinets. Quarter-turn cartridge replacement is genuinely tool-free and takes under 30 seconds. If you want the Pentair commercial pedigree without buying the head and cartridges separately, the H-300 is the all-in-one answer.</p>
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <p>The iSpring RCC7AK is the best-selling under-sink RO system on Amazon for good reason: six filtration stages including alkaline remineralization, NSF 58 certification, and a sub-$200 price point that undercuts comparable systems by $100 or more. With 18,000+ reviews and a 4.6-star rating, long-term reliability is well-documented.</p>
+          <p>The 6-stage process starts with sediment and carbon pre-filters, passes water through a 0.0001-micron RO membrane that removes 93-98% of TDS, and finishes with post-carbon polishing and an alkaline remineralization stage that restores healthy minerals and improves pH. The result is water that is both pure and pleasant-tasting.</p>
+          <p>At 75 GPD, this is not a high-volume system — the pressurized tank stores about 3 gallons of filtered water for on-demand use, which is sufficient for most households. The tank does take up meaningful cabinet space, and the 1:3 pure-to-drain ratio wastes more water than modern tankless systems. But at under $200, the iSpring RCC7AK remains the best value in under-sink reverse osmosis.</p>
+        </>
+      )}
+      {i === 3 && (
+        <>
+          <p>The Waterdrop G3P600 is the most technologically advanced under-sink filter in our lineup. Its tankless design produces 600 gallons per day — eight times faster than the iSpring — while taking up far less cabinet space. The smart LED faucet displays real-time TDS readings so you can verify your water quality with every glass.</p>
+          <p>The 2:1 pure-to-drain ratio is best-in-class for a residential RO system, wasting half as much water as traditional tank systems. The 8-stage filtration process delivers comprehensive contaminant removal with NSF 42/53/58/372 certification — the most certifications of any system in our roundup.</p>
+          <p>The premium comes at $429 and the requirement for an under-sink electrical outlet. The pump produces slight operational noise that is absent from passive tank systems. Proprietary replacement filters also cost more than the iSpring's widely-available cartridges. For buyers who prioritize speed, space savings, and water efficiency over upfront cost, the G3P600 is the future of home RO filtration.</p>
+        </>
+      )}
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Under-sink filters are a long-term investment, so our evaluation prioritized factors that matter over years of daily use. We weighted <strong>filtration performance</strong> (what contaminants are actually removed, verified by third-party certifications), <strong>daily convenience</strong> (flow rate, faucet quality, noise level), <strong>total cost of ownership</strong> (upfront cost plus 3 years of replacement filters), and <strong>installation requirements</strong> (DIY-friendliness, space needed, tools required).</p>
+  <p>We cross-referenced manufacturer claims against NSF certification databases and Amazon reviewer feedback to identify any discrepancies between marketing and real-world performance. Products with higher NSF certification levels received ranking boosts because independent verification matters more than lab-condition marketing claims.</p>
+
+  <h2>Buying Guide: What to Look For in an Under-Sink Filter</h2>
+  <p>Under-sink filtration is the most effective point-of-use water treatment for homes. Here are the key factors to evaluate before purchasing.</p>
+  <p><strong>Reverse osmosis vs. carbon filtration:</strong> RO systems (iSpring, Waterdrop) remove 93-99% of all dissolved solids, including fluoride, PFAS, and heavy metals. Carbon systems (Pentair Everpure) excel at removing chlorine, lead, cysts, and particulates while preserving natural minerals. Choose RO if your TDS is high or you have specific dissolved contaminants. Choose carbon if your water is already low-TDS but needs taste improvement and targeted contaminant removal.</p>
+  <p><strong>GPD rating matters for flow:</strong> A 75 GPD system with a tank provides about 3 gallons of stored water. A 600 GPD tankless system delivers on-demand water at near-tap pressure. For households of 4+ that use filtered water for cooking, coffee, and drinking, a higher GPD rating prevents running out during peak usage.</p>
+
+  <ProTip>
+    <p>Before buying an under-sink system, check two things: (1) Do you have enough cabinet space under the sink? Measure depth, width, and height. (2) For tankless systems, is there an electrical outlet within reach? If not, you will need an electrician before installation, which adds $100-200 to your project cost.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best value in under-sink reverse osmosis, the <strong>iSpring RCC7AK</strong> at $198.78 is nearly impossible to beat. It delivers 6-stage filtration with alkaline remineralization at half the price of comparable systems. If you want the fastest, most space-efficient RO system and can afford the premium, the <strong>Waterdrop G3P600</strong> is the best tankless option. For non-RO commercial-grade filtration that preserves minerals, the <strong>Pentair Everpure H-1200</strong> cartridge set is the professional's choice.</p>
+    {publishedProducts[0] && (
+      <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

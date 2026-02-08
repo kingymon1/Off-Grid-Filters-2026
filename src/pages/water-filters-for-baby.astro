@@ -1,0 +1,134 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'water-filters-for-baby')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const britaElite = getProductBySlug('brita-elite-2pack')!;
+const ispring = getProductBySlug('ispring-rcc7ak')!;
+const waterdrop = getProductBySlug('waterdrop-g3p600')!;
+const britaUltramax = getProductBySlug('brita-ultramax-27-cup-dispenser')!;
+const bluevua = getProductBySlug('bluevua-ro100ropot-uv')!;
+
+const recommendedProducts = [ispring, britaElite, waterdrop, bluevua];
+
+const faqs = [
+  { question: 'Is tap water safe for baby formula?', answer: 'Municipal tap water that meets EPA standards is generally considered safe for preparing infant formula. However, the EPA sets maximum contaminant levels based on adult exposure — infants are far more vulnerable to contaminants like lead, nitrates, and PFAS at lower concentrations. If your water quality report shows any detected lead (even below the action level), or if your home has plumbing installed before 1986, we strongly recommend filtering water used for formula preparation.' },
+  { question: 'Should I use filtered or distilled water for baby formula?', answer: 'The American Academy of Pediatrics (AAP) recommends using fluoridated tap water for formula preparation to support dental development. However, excess fluoride in infants can cause dental fluorosis. If your water has fluoride above 0.7 ppm, consider alternating between filtered and unfiltered water. RO filters remove fluoride entirely, so if you use an RO system, your pediatrician may recommend fluoride supplements. Distilled water is safe but removes all minerals and fluoride.' },
+  { question: 'Which NSF certifications matter most for baby water?', answer: 'NSF 53 is the most critical certification for baby water — it covers lead and cyst reduction. NSF 42 covers chlorine taste and odor. NSF 401 covers pharmaceuticals and emerging contaminants. For maximum safety, choose a filter with all three: NSF 42/53/401. The Brita Elite carries this triple certification. For the most comprehensive protection, NSF 58 (reverse osmosis) removes the widest range of contaminants at the highest reduction rates.' },
+  { question: 'Can lead in water harm my baby?', answer: 'Yes — lead is particularly dangerous for infants. Even low-level lead exposure in infants can cause developmental delays, learning difficulties, reduced IQ, and behavioral problems. There is no safe level of lead exposure for children. The EPA action level for lead is 15 ppb, but the AAP recommends 1 ppb or less for water used by children. Filters certified under NSF 53 for lead reduction are essential in any home with an infant, especially in older buildings.' },
+  { question: 'Do I need to boil filtered water for baby formula?', answer: 'The CDC recommends boiling water for one minute and cooling it before mixing with powdered formula if your baby is younger than 3 months, was born premature, or has a weakened immune system. After 3 months, most healthy infants can use filtered tap water without boiling if the water source is clean municipal water. If you use an RO system with UV sterilization like the Bluevua, the UV stage provides an additional microbial safety layer that reduces the need for boiling.' },
+  { question: 'How often should I change filters when preparing baby water?', answer: 'Follow the manufacturer recommended replacement schedule strictly — do not stretch filter life beyond the rated gallons or months. For baby water, we actually recommend replacing filters slightly before they are due. A depleted filter can release trapped contaminants back into the water. Set calendar reminders and err on the side of changing early rather than late.' },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'The best value under-sink RO system for families with infants.' },
+  { title: 'Lead in Drinking Water: Sources, Risks, and Filtration', url: '/lead-in-drinking-water/', description: 'Everything parents need to know about lead in their water.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'What NSF 42, 53, 58, and 401 mean for your baby\'s water safety.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Complete rankings of under-sink systems for maximum family protection.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">When it comes to water for your infant, "probably safe" is not good enough. We break down the specific contaminants that pose the greatest risk to babies, the NSF certifications that matter most, and the filters that provide the highest level of protection for formula preparation and infant drinking water.</p>
+
+  <ProductImage alt="Water filters for baby formula and infant water safety" icon="water" aspect="hero" />
+
+  <h2>Why Water Quality Is Critical for Infants</h2>
+  <p>Infants are uniquely vulnerable to waterborne contaminants. Their developing organs, smaller body mass, and higher water-to-body-weight ratio mean that contaminants affect them at far lower concentrations than adults. A contaminant level considered safe for an adult can be genuinely harmful to an infant.</p>
+  <p>The contaminants of greatest concern for infants include:</p>
+  <ul>
+    <li><strong>Lead:</strong> No safe level exists for children. Even trace amounts can cause developmental delays, reduced IQ, and behavioral problems. The AAP recommends water contain less than 1 ppb of lead for children — far below the EPA action level of 15 ppb. Homes with plumbing installed before 1986 are at highest risk.</li>
+    <li><strong>Nitrates:</strong> Above 10 ppm, nitrates interfere with an infant's ability to carry oxygen in the blood, causing methemoglobinemia (blue baby syndrome). This is primarily a concern for well water users near agricultural areas.</li>
+    <li><strong>PFAS:</strong> Forever chemicals accumulate in the body over time and have been linked to immune system effects, developmental delays, and increased cancer risk. They are found in the water supply of an estimated 200 million Americans.</li>
+    <li><strong>Bacteria and viruses:</strong> Infants' immune systems are immature. Waterborne pathogens that an adult's body handles without symptoms can cause severe illness in newborns.</li>
+    <li><strong>Chlorine byproducts:</strong> While chlorine itself is used for disinfection, the byproducts (trihalomethanes and haloacetic acids) formed when chlorine reacts with organic matter are associated with health risks at chronic exposure levels.</li>
+  </ul>
+
+  <h2>What to Look For in a Water Filter for Baby Formula</h2>
+  <p>Not all filters provide the level of protection infants need. Here are the specific criteria to prioritize:</p>
+  <ul>
+    <li><strong>NSF 53 certification for lead:</strong> This is non-negotiable. NSF 53 certifies that a filter reduces lead to below EPA standards. Brita Elite, iSpring RCC7AK, and Waterdrop G3P600 all carry this certification.</li>
+    <li><strong>Reverse osmosis for comprehensive protection:</strong> RO systems remove the widest range of contaminants at the highest reduction rates. The iSpring RCC7AK removes 93-98% of TDS, >98.9% of lead, and 96-99% of PFAS. For families with known water quality concerns, RO provides the strongest safety margin.</li>
+    <li><strong>Remineralization:</strong> Pure RO water is slightly acidic and stripped of minerals. For infant formula, remineralized RO water (like from the iSpring RCC7AK) restores a healthy mineral balance that supports formula's nutritional profile.</li>
+    <li><strong>Consistent filtration quality:</strong> Choose established brands with proven track records and proper NSF certification — not just claims. Over 18,000 verified reviews for the iSpring and 38,000 for the Brita Elite provide real-world confidence.</li>
+    <li><strong>Easy maintenance with clear replacement schedules:</strong> When filtering water for an infant, there is no room for guessing about filter condition. Systems with clear replacement indicators or schedules help parents maintain peak performance.</li>
+  </ul>
+
+  <ProTip title="The Two-Minute Test for New Parents">
+    Buy a TDS meter ($10-15 on Amazon) and test your tap water. If the reading is under 150 ppm and your city's water quality report shows no lead detections, a pitcher with Brita Elite filters provides excellent protection. If TDS is above 300 ppm, or your report shows any lead, nitrates, or PFAS, invest in an RO system. This simple test takes 10 seconds and tells you exactly how much filtration you need for your baby's water.
+  </ProTip>
+
+  <h2>Top Picks for Baby Formula and Infant Water</h2>
+
+  <h3>1. {ispring.name} — Best Overall for Infant Safety</h3>
+  <p>The iSpring RCC7AK is our top recommendation for families with infants. The 6-stage reverse osmosis system provides the most comprehensive contaminant removal available at a reasonable price point. It reduces lead by over 98.9%, removes 96-99% of PFAS, eliminates nitrates, and strips TDS by 93-98%. The alkaline remineralization stage then adds back calcium and magnesium, restoring the mineral content that supports infant formula nutrition.</p>
+  <p>At ${ispring.price}, the iSpring represents an investment in your child's health that costs roughly $0.54 per day over a year — less than a single bottle of nursery water from the grocery store. The 18,000+ reviews with 4.6 stars include extensive feedback from parents who purchased it specifically for infant formula preparation.</p>
+  <p>The system does require under-sink installation with a separate faucet, which takes 1-2 hours for a competent DIYer. For renters, check your lease first — or consider the Bluevua countertop option instead. For homeowners, this is a set-it-and-forget-it solution that protects your entire family's drinking water.</p>
+  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>2. {britaUltramax.name} with {britaElite.name} — Best Pitcher Option</h3>
+  <p>For families who want effective lead reduction without the complexity of an RO system, the Brita UltraMax dispenser with Elite filters is the simplest path to safer water. The Elite filter is NSF 42/53/401 certified, reducing 99% of lead, plus asbestos, benzene, pharmaceuticals, and 30+ other contaminants. Its 120-gallon capacity means you replace filters only every 6 months.</p>
+  <p>The 27-cup capacity of the UltraMax means you always have filtered water ready. At 3 AM when you need to prepare a bottle, the last thing you want is to wait for a pitcher to filter. The spigot dispenses water instantly, which is a genuine quality-of-life advantage for sleep-deprived new parents.</p>
+  <p>Important note: the Brita Standard filter does NOT certify for lead reduction — only the Elite does. For infant use, always use Elite filters. The per-gallon cost with Elite filters is actually lower than with Standard due to the 3x longer lifespan.</p>
+  <p><strong>Price:</strong> ${britaUltramax.price} (dispenser) + ${britaElite.price} (Elite 2-pack) | <a href={`/reviews/${britaUltramax.slug}/`}>Dispenser Review</a> | <a href={`/reviews/${britaElite.slug}/`}>Elite Filter Review</a> | <a href={getAffiliateUrl(britaUltramax.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>3. {waterdrop.name} — Best Premium RO for Families</h3>
+  <p>For families who want the highest-performance RO system with real-time water quality verification, the Waterdrop G3P600 offers a smart LED faucet that displays TDS readings as you fill your baby's bottle. This instant confirmation that your water quality is within safe parameters provides peace of mind that no other system matches.</p>
+  <p>The tankless design produces water on demand at 600 GPD — fast enough to fill a baby bottle in seconds. The NSF 42/53/58/372 certification is the most comprehensive in its class, and the 2:1 pure-to-drain ratio wastes less water than traditional tank systems. At ${waterdrop.price}, it is a premium investment, but families who want the absolute best water quality and monitoring capability will find the price justified.</p>
+  <p><strong>Price:</strong> ${waterdrop.price} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h3>4. {bluevua.name} — Best for Renters with Infants</h3>
+  <p>For renting families who cannot install an under-sink system, the Bluevua countertop RO provides hospital-grade purification without any plumbing work. The UV sterilization stage kills 99.99% of bacteria and viruses — an especially important feature when preparing formula for newborns with developing immune systems. The glass carafe eliminates plastic contact with your baby's water.</p>
+  <p>At ${bluevua.price}, it costs more than a pitcher but delivers dramatically better filtration. For the first year of your baby's life — when water quality matters most — this investment costs roughly $0.87 per day. When compared to buying nursery water at the store ($1-2 per gallon), the Bluevua is the more economical choice within months.</p>
+  <p><strong>Price:</strong> ${bluevua.price} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+
+  <h2>Infant Water Safety Tips</h2>
+  <ul>
+    <li><strong>Always use cold water:</strong> Hot tap water dissolves more lead and other contaminants from pipes. Filter cold water and heat it separately for formula preparation.</li>
+    <li><strong>Flush pipes before use:</strong> Run the cold tap for 30 seconds before collecting water for formula, especially first thing in the morning. This clears stagnant water that has been sitting in your pipes overnight.</li>
+    <li><strong>Follow filter replacement schedules strictly:</strong> A spent filter can release trapped contaminants. When filtering for an infant, replace filters on or before their rated expiration.</li>
+    <li><strong>Discuss fluoride with your pediatrician:</strong> RO systems remove fluoride, which supports dental development. If you use RO water for formula exclusively, ask your pediatrician about fluoride supplements starting at 6 months.</li>
+    <li><strong>Test your water:</strong> Whether you use municipal water or a well, get a lab test for lead, nitrates, and PFAS. Your results will tell you exactly what level of filtration your family needs.</li>
+  </ul>
+
+  <ProTip title="Formula Preparation Best Practice">
+    The safest routine for formula preparation: (1) Run the cold tap for 30 seconds. (2) Filter through your RO system or pitcher with Elite filters. (3) For babies under 3 months or immunocompromised infants, boil the filtered water for 1 minute and cool to body temperature (98.6F). (4) Mix with formula per instructions. (5) Use within 2 hours or refrigerate immediately. This multi-step approach eliminates virtually all waterborne risks.
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Top Pick for Baby Water Safety</h2>
+  <p>For families who can install an under-sink system, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at ${ispring.price} provides the most comprehensive protection available at a reasonable price. The combination of >98.9% lead removal, 96-99% PFAS removal, nitrate elimination, and alkaline remineralization makes it the gold standard for infant water safety. For renters, the <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax</a> with <a href={`/reviews/${britaElite.slug}/`}>Elite filters</a> delivers certified lead reduction without any installation — ready to use the day it arrives.</p>
+</ContentLayout>

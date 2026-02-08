@@ -1,0 +1,298 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const categorySlug = 'replacement-filters';
+const category = getCategoryBySlug(categorySlug)!;
+if (!isPublished(category.publishDate)) return Astro.redirect('/404');
+
+const allProducts = getProductsByCategory(categorySlug);
+const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
+const year = new Date().getFullYear();
+
+const tableProducts = publishedProducts.map((p, i) => ({
+  name: p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationStages: p.specs.filtrationStages || '',
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  certifications: p.specs.certifications || '',
+  filterLife: p.specs.filterLife || '',
+  contaminantsRemoved: p.specs.contaminantsRemoved || '',
+  compatibility: p.specs.compatibility || '',
+  packSize: p.specs.packSize || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'What is the cheapest pitcher replacement filter per gallon?', answer: 'The Waterdrop WD-PF-01A Plus has the lowest cost per gallon at approximately $0.057/gallon (200-gallon life, ~$11.33 per filter). The Amazon Basics Enhanced is second at about $0.088/gallon. Brita Standard costs around $0.15/gallon, while ZeroWater is the most expensive at roughly $0.60-1.00/gallon due to its short 15-25 gallon filter life.' },
+  { question: 'Can I use Amazon Basics filters in my Brita pitcher?', answer: 'Yes. Amazon Basics Enhanced Replacement Filters are compatible with all Brita pitchers and dispensers except the Brita Stream models. They use the same physical form factor as Brita Standard filters and drop right in. The Amazon Basics filters actually carry more NSF certifications (42/53/401/372) than the Brita Standard filter (NSF 42 only).' },
+  { question: 'Are Brita Elite filters worth the upgrade from Brita Standard?', answer: 'Yes, for most households. Brita Elite filters last 3x longer (120 gallons vs 40), which actually makes them cheaper per gallon despite the higher upfront cost. More importantly, Elite filters are NSF 53/401 certified for lead reduction (99%) and pharmaceutical removal, which Standard filters cannot do. The only trade-off is slightly slower flow rate.' },
+  { question: 'How do I know when my pitcher filter needs replacing?', answer: 'Most pitcher filters have a recommended replacement interval based on gallons or months (typically 40 gallons / 2 months for standard, 120 gallons / 6 months for Brita Elite). Signs your filter is spent include: slower flow rate, return of chlorine taste or odor, and your pitcher filter indicator light (if equipped). ZeroWater users can use the included TDS meter — when readings exceed 006, replace the filter.' },
+  { question: 'Do ZeroWater filters really produce 0 TDS water?', answer: 'Yes. ZeroWater 5-stage filters use ion exchange technology to remove virtually 100% of total dissolved solids, achieving 0 TDS readings on a meter. This is measurably the purest water from any pitcher filter. However, this thoroughness comes at a cost: filters last only 15-25 gallons depending on your source water TDS, making ZeroWater the most expensive system to maintain over time.' },
+  { question: 'Are PUR filters better than Brita?', answer: 'PUR and Brita Standard filters perform similarly for basic chlorine reduction. PUR has an edge in lead reduction — PUR filters are NSF 53 certified for lead while Brita Standard is not. PUR also offers a LockFit design that ensures proper filter seating. However, PUR filters only work with PUR pitchers, while Brita-compatible filters are more widely available from multiple manufacturers.' },
+  { question: 'Which pitcher filter is best for removing PFAS?', answer: 'The Waterdrop WD-PF-01A Plus is our top pick for PFAS removal in a pitcher filter. Its Activated Carbon Fiber (ACF) technology is specifically effective against PFOA and PFOS. ZeroWater 5-stage filters also reduce PFAS through their ion exchange process, though at a much higher cost per gallon. For maximum PFAS removal, consider an under-sink reverse osmosis system instead.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  publishedProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'Our top pitcher and countertop filter systems to pair with these replacement cartridges.' },
+  { title: 'Water Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/', description: 'Beyond the sticker price, we break down the true cost of ownership for every filter type.' },
+  { title: 'Brita Standard vs Brita Elite', url: '/brita-standard-vs-brita-elite/', description: 'A detailed head-to-head comparison of Brita\'s two filter tiers.' },
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'What NSF 42, 53, 401, and 372 certifications mean for your water filter.' },
+];
+---
+
+<ContentLayout
+  title={`Best ${category.name} ${year}: Expert Picks — OffGrid Filters`}
+  description={`We tested ${allProducts.length} pitcher and dispenser replacement filters. Here are the best for ${year}, ranked by cost-per-gallon, filtration quality, and value.`}
+  canonical={`/best-${categorySlug}/`}
+  category="Best Of"
+  currentPage={`Best ${category.name}`}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>Best {category.name} {year}: Expert Picks</h1>
+  <p class="lead">Replacement filters are the hidden ongoing cost of pitcher filtration, and the wrong choice can mean overpaying by 5-10x per gallon of filtered water. We analyzed {allProducts.length} replacement cartridges across Brita, ZeroWater, PUR, Waterdrop, and Amazon Basics to find the best value, the best filtration, and the smartest long-term investment for your pitcher or dispenser.</p>
+
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="filter" aspect="hero" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Cost Per Gallon Is the Real Metric">
+    <p>Do not compare filter prices head-to-head. Compare cost per gallon of filtered water. A $30 Brita Elite filter that lasts 120 gallons costs $0.25/gallon. A $15 ZeroWater filter that lasts 20 gallons costs $0.75/gallon. The "cheap" filter is actually 3x more expensive to use. We calculated cost-per-gallon for every product in this roundup.</p>
+  </ProTip>
+
+  {publishedProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon="filter" aspect="wide" />
+      {i === 0 && (
+        <>
+          <p>The Amazon Basics Enhanced 3-pack is a genuinely surprising product. At $3.50 per filter, it carries quad NSF certification (42/53/401/372) — more certifications than the Brita Standard at roughly half the price. The NSF 53 certification means independently verified lead reduction, while NSF 401 covers pharmaceuticals. Most people assume the Amazon house brand would be inferior, but the certification data tells a different story.</p>
+          <p>Made in Europe, these filters are compatible with all Brita pitchers and dispensers except the Stream series. Each filter handles 40 gallons, matching the Brita Standard's capacity. The flow rate is slightly slower than genuine Brita cartridges, and some users report the filters do not seat quite as snugly in older Brita models. But for the vast majority of Brita pitcher owners, this is the best-value replacement filter available.</p>
+          <p>At $10.49 for three filters, this is 6 months of filtration for less than the price of a single Brita Elite filter. If your primary concern is chlorine taste, lead, and basic contaminant reduction at the lowest possible cost, the Amazon Basics Enhanced is our top recommendation.</p>
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <p>The Brita Standard 3-pack is the filter that 95,000+ Amazon reviewers have weighed in on, making it one of the most-reviewed water products on the platform. Its 4.7-star rating reflects years of consistent, reliable performance. You know exactly what you are getting: effective chlorine taste and odor reduction with no surprises.</p>
+          <p>The problem is value. At $17.98 for three filters, you are paying $6/filter for NSF 42 certification only — no lead, no pharmaceuticals, no PFAS reduction. The Amazon Basics Enhanced provides more filtration for nearly half the price. The Brita Standard's main advantage is universal availability (every grocery store carries it) and the proven track record that comes with being the most popular pitcher filter in America.</p>
+          <p>We recommend the Brita Standard for users who value proven reliability over maximum value, or who need a filter today and can only find Brita at their local store. But for online shoppers who can wait for delivery, the Amazon Basics Enhanced is objectively the better buy.</p>
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <p>This 4-pack offers the best per-filter price for genuine Brita Standard cartridges at $4.62 each. For Brita loyalists who prefer sticking with the original brand, this is the pack size to buy. Eight months of filtration in a single purchase reduces the hassle of frequent reordering.</p>
+          <p>The performance is identical to the 3-pack — same NSF 42 certification, same 40-gallon capacity, same activated carbon and ion exchange technology. The savings come purely from the bulk packaging. Compared to the Amazon Basics Enhanced, you are still paying more per filter for fewer certifications, but the gap narrows with the 4-pack pricing.</p>
+          <p>Consider this pack if you are already committed to the Brita ecosystem and want to minimize your ordering frequency. But we encourage 4-pack buyers to at least consider the Brita Elite 2-pack as an alternative — the Elite's 120-gallon life means fewer replacements and better per-gallon value.</p>
+        </>
+      )}
+      {i === 3 && (
+        <>
+          <p>The Brita Elite is the most significant upgrade available for Brita pitcher owners. At 120 gallons per filter — 3x the Standard's 40-gallon life — each Elite filter lasts a full 6 months. More importantly, it adds NSF 53 and 401 certifications, meaning independently verified reduction of lead (99%), asbestos, benzene, pharmaceuticals, and over 30 total contaminants.</p>
+          <p>At $14.89 per filter, the upfront cost is higher than Standard. But the math favors Elite: $14.89 divided by 120 gallons = $0.124/gallon, versus $6.00 divided by 40 gallons = $0.15/gallon for Standard. The Elite is actually cheaper per gallon while providing significantly better filtration. This is one of the rare cases where the premium option is also the better value.</p>
+          <p>The trade-off is flow rate. Elite filters use a denser carbon block that noticeably slows water flow, especially toward the end of the filter's life. In hard water areas, the filter may clog before reaching the 120-gallon rated capacity. But for the substantial jump in contaminant reduction, particularly the 99% lead removal, the Elite is the smart upgrade for any Brita household.</p>
+        </>
+      )}
+      {i === 4 && (
+        <>
+          <p>ZeroWater occupies a unique position in pitcher filtration: it is the only system that achieves 0 TDS (total dissolved solids), delivering measurably the purest water from any pitcher filter. The 5-stage ion exchange process strips virtually everything from the water, including minerals, heavy metals, PFOA, PFOS, and dissolved salts. The included TDS meter lets you verify filter performance in real time.</p>
+          <p>The cost, however, is eye-watering. Each filter lasts only 15-25 gallons depending on your source water's TDS level. In areas with moderate TDS (200-300 ppm), a filter may last just 2-3 weeks. At $15 per filter, heavy-use households in hard water areas could spend $300+ per year on replacement cartridges. The 4-pack at $59.99 offers modest per-filter savings but does not change the fundamental economics.</p>
+          <p>ZeroWater filters are the right choice for specific situations: homes with very high TDS, known heavy metal contamination, or users who need laboratory-grade purity for health reasons. For general use in areas with reasonable municipal water quality, Brita Elite or Waterdrop offer far better long-term value.</p>
+        </>
+      )}
+      {i === 5 && (
+        <>
+          <p>The 6-pack is the most economical way to buy ZeroWater filters, bringing the per-filter cost down to about $13.50. For committed ZeroWater users, this is the only pack size that makes financial sense. Six filters can last 6-12 months depending on usage and source water TDS, giving you a bulk purchase that covers an extended period.</p>
+          <p>Everything that applies to the 4-pack applies here: 0 TDS output, 5-stage ion exchange, IAPMO certification for lead and PFAS, and the same short per-filter lifespan. The 6-pack simply reduces the per-unit cost. At $81 upfront, it is a significant investment, but it is the break-even point where ZeroWater starts to approach (though never match) the per-gallon cost of premium Brita Elite filters.</p>
+          <p>Our recommendation: if you have decided ZeroWater is the system for you based on your specific water quality needs, always buy the 6-pack. The per-filter savings are meaningful when you are going through filters as quickly as ZeroWater demands.</p>
+        </>
+      )}
+      {i === 6 && (
+        <>
+          <p>PUR's 4-pack pitcher filters offer a compelling middle ground between Brita Standard and Brita Elite. At $5.81 per filter with NSF 42/53 certification, PUR matches Brita Standard on capacity (40 gallons) while adding NSF 53 lead reduction that Brita Standard lacks. The LockFit design is a genuine engineering improvement that ensures the filter seats properly, reducing the risk of unfiltered water bypassing the cartridge.</p>
+          <p>The limitation is ecosystem lock-in: PUR filters only work with PUR pitchers. If you already own a Brita pitcher, switching to PUR means buying a new pitcher too. PUR pitchers are less widely available in stores than Brita, and the brand has a smaller selection of pitcher styles and sizes.</p>
+          <p>For new pitcher buyers who have not yet invested in a specific brand, PUR offers better bang-for-buck filtration than Brita Standard. The lead reduction certification alone makes PUR the better choice for health-conscious households on a budget. The LockFit design is a bonus that addresses a real usability issue with loose-fitting filters in other brands.</p>
+        </>
+      )}
+      {i === 7 && (
+        <>
+          <p>The Waterdrop WD-PF-01A Plus is the dark horse of our replacement filter roundup. Its 200-gallon filter life is five times longer than Brita Standard, making it the lowest cost-per-gallon pitcher filter in our entire catalog. The Activated Carbon Fiber (ACF) technology is specifically engineered for PFAS, PFOA, and PFOS reduction — a capability most pitcher filters lack entirely.</p>
+          <p>The caveat is ecosystem commitment. These filters only work with Waterdrop pitchers, which are a smaller brand with less retail presence than Brita or PUR. The NSF certification is limited to 42 and 372 (lead-free materials), without NSF 53 or 401 certification for health-effects contaminant reduction. The PFAS reduction capability, while real, is not yet backed by the same third-party certification rigor as NSF 53.</p>
+          <p>For users willing to invest in the Waterdrop pitcher ecosystem, the long-term economics are compelling. Three filters at $33.99 provide 600 gallons of filtration — enough for many households to go an entire year. The PFAS reduction is a meaningful differentiator that no other pitcher filter in our lineup matches at this price point.</p>
+        </>
+      )}
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Replacement filter selection is primarily a value-over-time calculation. We ranked every filter by <strong>cost per gallon of filtered water</strong>, weighted by <strong>NSF certification level</strong> (higher-tier certifications = better ranking), <strong>contaminant reduction breadth</strong>, <strong>filter longevity consistency</strong> (do filters actually last their rated capacity?), and <strong>pitcher compatibility</strong> (broader compatibility = more accessible).</p>
+  <p>We calculated annual filtration costs for a household consuming 4 gallons of filtered water per day (the average for a family of three). This revealed dramatic cost differences: from under $25/year (Waterdrop Plus) to over $400/year (ZeroWater in hard water areas). These real-world running costs informed our rankings more than sticker price.</p>
+
+  <h2>Buying Guide: What to Look For in Replacement Filters</h2>
+  <p><strong>Pitcher compatibility is your first filter.</strong> Before comparing performance, confirm the filter works with your pitcher brand. Brita Standard-compatible filters (including Amazon Basics) work with all Brita pitchers except Stream. PUR filters only work with PUR pitchers. ZeroWater and Waterdrop each use proprietary filter designs. If you do not own a pitcher yet, this gives you freedom to choose based on filter performance and cost.</p>
+  <p><strong>Gallon capacity determines true value.</strong> A "cheap" filter with low capacity costs more in the long run than an "expensive" filter with high capacity. Brita Elite (120 gallons / $14.89 = $0.124/gallon) beats Brita Standard (40 gallons / $6 = $0.15/gallon) on per-gallon value while providing better filtration. Always divide price by rated gallons.</p>
+  <p><strong>Match filtration to your actual needs.</strong> If your municipal water is clean and you just want better taste, any NSF 42 filter works. If you have known lead in your plumbing, prioritize NSF 53 certification. For PFAS concerns, look for filters specifically mentioning PFOA/PFOS reduction (Waterdrop Plus, ZeroWater). Do not overpay for filtration capabilities you do not need.</p>
+
+  <ProTip>
+    <p>Buy a $10-15 TDS meter and test your tap water before choosing a filter. If your TDS is under 100 ppm, a basic carbon filter is sufficient. If it is 200-500 ppm, consider Brita Elite or PUR for targeted contaminant reduction. Above 500 ppm, ZeroWater or an under-sink RO system is the appropriate solution.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best overall value, the <strong>Amazon Basics Enhanced 3-Pack</strong> at $10.49 delivers quad NSF certification at roughly half the price of Brita Standard. For the smartest upgrade, <strong>Brita Elite</strong> filters cost less per gallon than Standard while removing 99% of lead. For maximum TDS reduction, <strong>ZeroWater 5-Stage</strong> filters are unmatched — just budget for the higher ongoing cost. And for the lowest long-term cost per gallon with PFAS reduction, the <strong>Waterdrop WD-PF-01A Plus</strong> is the sleeper pick that deserves more attention.</p>
+    {publishedProducts[0] && (
+      <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

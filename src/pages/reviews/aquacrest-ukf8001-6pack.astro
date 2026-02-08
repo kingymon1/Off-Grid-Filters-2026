@@ -1,0 +1,170 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('aquacrest-ukf8001-6pack')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Is the AQUACREST UKF8001 as good as the genuine Maytag/Whirlpool filter?', answer: 'For basic chlorine taste and odor reduction, the AQUACREST performs comparably to OEM filters. However, it only carries NSF 42 certification (taste/odor), while genuine everydrop filters carry NSF 42/53/401 (lead, pharmaceuticals, pesticides). If your primary concern is taste improvement, the AQUACREST is excellent. If you need certified lead or pharmaceutical reduction, invest in the OEM filter.' },
+  { question: 'Which refrigerators are compatible with the AQUACREST UKF8001?', answer: 'The UKF8001 is compatible with Maytag UKF8001, Whirlpool EDR4RXD1, Viking RWFFR, KitchenAid 67003523, and many other refrigerator models that use the standard UKF8001 form factor. Check your current filter model number against the AQUACREST compatibility list before ordering. The filter may trigger a "replace filter" indicator on some fridge models.' },
+  { question: 'How long does each AQUACREST UKF8001 filter last?', answer: 'Each filter is rated for 6 months of use. For a typical household of 2-4 people, this estimate is accurate. The 6-pack therefore provides a full 3 years of filter replacements. In households with very high water usage or heavily sediment-laden water, effective life may be shorter. Replace sooner if you notice decreased flow rate or taste degradation.' },
+  { question: 'Will the AQUACREST filter trigger a warning light on my refrigerator?', answer: 'It may. Some newer refrigerators have filter detection systems designed to identify OEM cartridges. The AQUACREST lacks the proprietary chips or encoders that some fridges require. The water will still flow and filter correctly, but you may see a persistent "replace filter" or "water filter" warning on your fridge display. This is cosmetic and does not affect water quality.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(productSchema, faqSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'How to Choose a Water Filter',
+    url: '/guides/how-to-choose-water-filter/',
+    description: 'Everything you need to know to pick the right water filter for your home.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
+
+  <div class="quick-specs">
+    <div class="spec-item">
+      <span class="spec-label">Price</span>
+      <span class="spec-value">${product.price}</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Rating</span>
+      <span class="spec-value">{product.rating}/5</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">Pack Size</span>
+      <span class="spec-value">{product.specs.packSize} filters</span>
+    </div>
+    <div class="spec-item">
+      <span class="spec-label">NSF</span>
+      <span class="spec-value">{product.specs.certifications}</span>
+    </div>
+  </div>
+
+  <ProductImage alt={product.name} icon="fridge" aspect="hero" />
+
+  <h2>Overview</h2>
+  <p>The AQUACREST UKF8001 6-Pack is the budget king of aftermarket refrigerator filters. At $16.88 for six filters, you are paying just $2.81 per cartridge — roughly 5% of what a genuine everydrop or GE filter costs. The math is staggering: a full three years of filter changes for less than the price of a single OEM replacement. The catch, predictably, is in the certifications.</p>
+  <p>These coconut shell carbon block filters carry NSF 42 certification for chlorine taste and odor reduction but lack the NSF 53 (lead, cysts) and NSF 401 (pharmaceuticals, pesticides) certifications that OEM filters provide. For households where tap water is already reasonably clean and the primary goal is better taste, the AQUACREST delivers excellent value. For homes with known lead, PFAS, or pharmaceutical concerns, this is not the right filter.</p>
+  <p>The 6-pack is compatible with Maytag UKF8001, Whirlpool EDR4RXD1, Viking, KitchenAid, and many other refrigerators that use the standard UKF8001 form factor. With 9,500+ reviews and a 4.3-star rating, the AQUACREST has earned its reputation as a reliable budget alternative.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Pack Size</strong></td><td>{product.specs.packSize} filters</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Compatibility</strong></td><td>{product.specs.compatibility}</td></tr>
+    <tr><td><strong>Contaminants</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <ProTip>If you want the AQUACREST's budget pricing but need better contaminant removal, consider pairing it with an under-sink system like the iSpring RCC7AK. The fridge filter handles taste while the under-sink RO removes lead, PFAS, and other health contaminants.</ProTip>
+
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>✓ {p}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>✗ {c}</li>)}</ul>
+    </div>
+  </div>
+
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>The AQUACREST UKF8001 does exactly what NSF 42 promises: it reduces chlorine taste and odor effectively. Fresh out of the package, water tastes noticeably cleaner and crisper. The coconut shell carbon block does a good job capturing sediment and particulates. Flow rate from the dispenser is comparable to OEM filters, with no noticeable restriction.</p>
+  <p>Where the AQUACREST shows its budget roots is in longevity and consistency. Some users report that taste improvement begins to fade around 4-5 months rather than the full 6. Water with high sediment content will clog these filters faster than OEM equivalents with denser carbon blocks. The quality control across a 6-pack can also vary — occasional reports of carbon fines in the first few gallons are more common than with OEM filters. These are acceptable trade-offs at $2.81 per filter.</p>
+
+  <h2>Value Analysis</h2>
+  <p>The value proposition is almost comically good. At $2.81 per filter with a 6-month rated life, annual filtration costs $5.62. Compare that to the everydrop Filter 1 at $107.98/year or the GE XWFE at $98.98/year. Over three years, you save $300+ versus OEM filters. The 6-pack also reduces the hassle of frequent ordering — one purchase covers 3 years.</p>
+  <p>The caveat is the certification gap. If you view NSF 53/401 certifications as essential insurance for your family's health, the AQUACREST is the wrong filter regardless of price. But for the majority of households on clean municipal water where the primary need is taste improvement, the AQUACREST 6-pack represents extraordinary value that is genuinely hard to argue against.</p>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <div class="verdict-rating">
+      <span class="rating-value">{product.rating}</span>
+      <span class="rating-max">/5</span>
+    </div>
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
+  .spec-item { text-align: center; }
+  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
+  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 55%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-shift 4s linear infinite; background-size: 200% auto; }
+  @keyframes gradient-shift { 0%, 100% { background-position: 0% center; } 50% { background-position: 100% center; } }
+  .verdict-rating { margin-bottom: 1rem; }
+  .rating-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .rating-max { font-size: 1.5rem; color: hsl(var(--muted-foreground)); font-weight: 600; }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

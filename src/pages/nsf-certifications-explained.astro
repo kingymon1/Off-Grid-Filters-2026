@@ -1,0 +1,178 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'nsf-certifications-explained')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'What is the difference between NSF 42 and NSF 53?',
+    answer: 'NSF 42 covers aesthetic effects — it certifies that a filter reduces chlorine taste and odor. NSF 53 covers health effects — it certifies that a filter reduces specific health-related contaminants like lead, cysts (Giardia, Cryptosporidium), and volatile organic compounds. A filter with only NSF 42 improves taste but may not protect against harmful substances. For health protection, look for NSF 53 at minimum.',
+  },
+  {
+    question: 'Does a filter need NSF certification to be safe?',
+    answer: 'NSF certification is not legally required, but it is the strongest independent verification available. Uncertified filters may still work, but you have no third-party proof of their claims. Some brands use language like "tested to NSF standards" without actual certification — this means they claim to meet the standards but have not been independently verified. Always check the NSF database at nsf.org to confirm a filter is genuinely certified.',
+  },
+  {
+    question: 'How do I verify if a filter is truly NSF certified?',
+    answer: 'Visit the NSF International product listing database at info.nsf.org/Certified/DWTU. You can search by manufacturer, product name, or model number. Genuinely certified products will appear with their specific certification standards listed. If a product does not appear in the database, its NSF claims may be misleading.',
+  },
+  {
+    question: 'What does NSF 401 certification cover?',
+    answer: 'NSF 401 covers "emerging contaminants" — substances that are increasingly found in water supplies but are not yet regulated by the EPA. This includes pharmaceuticals (ibuprofen, estrone), herbicides (atrazine), pesticides (DEET), and new-generation flame retardants. Filters with NSF 401 certification offer protection against these emerging threats.',
+  },
+  {
+    question: 'Is NSF 58 certification important for RO systems?',
+    answer: 'Yes, NSF 58 is the standard specifically designed for reverse osmosis systems. It tests total dissolved solids (TDS) reduction efficiency and verifies the system performs as claimed. An NSF 58 certified RO system has been independently tested to verify its TDS rejection rate. Systems like the iSpring RCC7AK and Bluevua countertop models carry NSF 58 certification.',
+  },
+  {
+    question: 'What is NSF 372 and why does it matter?',
+    answer: 'NSF 372 certifies that a filter and its components are "lead-free" — meaning they contain no more than 0.25% lead in wetted surfaces. This prevents the filter itself from leaching lead into your water. It does not mean the filter removes lead from your water (that is NSF 53). Both certifications together give you the strongest lead protection: the system does not add lead and actively removes it.',
+  },
+  {
+    question: 'Which NSF certifications should I look for in a water filter?',
+    answer: 'At minimum, look for NSF 42 (taste improvement) and NSF 53 (health contaminant reduction). If you want broader protection, NSF 401 adds emerging contaminant coverage. For RO systems, NSF 58 is the relevant standard. NSF 372 (lead-free materials) is a bonus that ensures the filter itself is safe. The Amazon Basics Enhanced replacement filters stand out with quad certification: NSF 42, 53, 401, and 372.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Use certification knowledge to pick the right filter.' },
+  { title: 'PFAS in Drinking Water', url: '/pfas-in-drinking-water/', description: 'Which certifications cover forever chemicals?' },
+  { title: 'Lead in Drinking Water', url: '/lead-in-drinking-water/', description: 'NSF 53 is critical for lead protection.' },
+  { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'Compare certifications across our top countertop picks.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">NSF certifications are the gold standard for verifying water filter performance. They tell you exactly what a filter has been independently proven to remove — not just what the manufacturer claims. Understanding these certifications is the single most important skill for choosing a water filter that actually protects your health.</p>
+
+  <ProductImage alt="NSF water filter certifications explained" icon="shield" aspect="hero" />
+
+  <h2>What Is NSF International?</h2>
+  <p>NSF International (originally the National Sanitation Foundation) is an independent, accredited organization that develops public health standards and tests products for compliance. Founded in 1944, NSF has become the most trusted third-party certification body for water treatment products worldwide.</p>
+  <p>When a water filter carries an NSF certification mark, it means the product has been independently tested in NSF's laboratories, verified to reduce specific contaminants to the levels claimed, and is subject to ongoing annual retesting and unannounced factory inspections. This is fundamentally different from a manufacturer simply claiming their product works.</p>
+  <p>The key distinction to understand: NSF certification is voluntary. Manufacturers must submit their products for testing and pay for the certification process. This means filters without NSF certification are not necessarily unsafe — but you have no independent proof of their claims.</p>
+
+  <h2>NSF 42: Aesthetic Effects</h2>
+  <p>NSF/ANSI Standard 42 is the baseline certification for water filters. It covers <strong>aesthetic effects</strong> — improvements to the taste, odor, and appearance of water rather than health-related contaminant removal.</p>
+
+  <h3>What NSF 42 Tests For:</h3>
+  <ul>
+    <li><strong>Chlorine taste and odor reduction:</strong> The most common reason people buy water filters. NSF 42 verifies the filter reduces free chlorine to improve taste.</li>
+    <li><strong>Particulate reduction:</strong> Removal of visible particles, sediment, and turbidity.</li>
+    <li><strong>Nominal particulate reduction (Class I through VI):</strong> Different classes specify different particle size ranges the filter can remove.</li>
+  </ul>
+  <p>Most basic pitcher filters carry NSF 42 certification. The <a href="/reviews/brita-standard-3pack/">Brita Standard filters</a> and <a href="/reviews/samsung-haf-qin/">Samsung HAF-QIN refrigerator filter</a> are examples of NSF 42-only certified products. They make your water taste better, but they are not independently verified to remove health-threatening contaminants like lead.</p>
+
+  <ProTip>NSF 42 is a minimum baseline. If a filter does not even have NSF 42 certification, approach its claims with extra skepticism. Any reputable filter manufacturer should be able to achieve at least this basic certification.</ProTip>
+
+  <h2>NSF 53: Health Effects</h2>
+  <p>NSF/ANSI Standard 53 is where certifications start protecting your health. This standard covers the reduction of specific <strong>health-related contaminants</strong> that may be present in drinking water.</p>
+
+  <h3>What NSF 53 Tests For:</h3>
+  <ul>
+    <li><strong>Lead:</strong> One of the most critical contaminants, especially for homes with pre-1986 plumbing. NSF 53 tests for lead reduction at initial, midpoint, and end-of-filter-life conditions.</li>
+    <li><strong>Cysts:</strong> Giardia and Cryptosporidium — parasitic organisms that cause severe gastrointestinal illness and are resistant to chlorine disinfection.</li>
+    <li><strong>VOCs (volatile organic compounds):</strong> Including industrial solvents and chemical contaminants.</li>
+    <li><strong>Mercury, asbestos, turbidity:</strong> Additional health-risk substances.</li>
+    <li><strong>MTBE:</strong> A gasoline additive that can contaminate groundwater.</li>
+  </ul>
+  <p>NSF 53 certification is what separates basic taste-improvement filters from genuine health-protection filters. The <a href="/reviews/brita-elite-2pack/">Brita Elite filters</a>, <a href="/reviews/ge-xwfe/">GE XWFE</a> refrigerator filter, and <a href="/reviews/everydrop-filter-1-edr1rxd1/">everydrop Filter 1</a> all carry NSF 53 certification for lead reduction.</p>
+  <p>Important: NSF 53 certification is specific to particular contaminants. A filter may be NSF 53 certified for lead but not for cysts, or vice versa. Always check the specific contaminants listed on the NSF certificate, not just the standard number.</p>
+
+  <h2>NSF 58: Reverse Osmosis Systems</h2>
+  <p>NSF/ANSI Standard 58 is the certification standard designed specifically for <strong>reverse osmosis systems</strong>. While NSF 42 and 53 apply to point-of-use filters generally, NSF 58 addresses the unique aspects of RO technology.</p>
+
+  <h3>What NSF 58 Tests For:</h3>
+  <ul>
+    <li><strong>TDS (total dissolved solids) reduction:</strong> The primary performance metric for RO systems. NSF 58 verifies the stated TDS rejection rate.</li>
+    <li><strong>Recovery rate (efficiency):</strong> How much purified water the system produces relative to water sent to drain.</li>
+    <li><strong>Pressure requirements:</strong> Performance under specified water pressure conditions.</li>
+    <li><strong>Structural integrity:</strong> The system does not leak, crack, or fail under normal operating conditions.</li>
+    <li><strong>Contaminant reduction:</strong> Specific contaminants including barium, cadmium, copper, fluoride, radium, selenium, nitrate/nitrite, and TDS.</li>
+  </ul>
+  <p>The <a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> and both <a href="/reviews/bluevua-ro100ropot-uv/">Bluevua countertop models</a> carry NSF 58 certification. The <a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a> holds NSF 42, 53, 58, and 372 — the most comprehensive certification set of any RO system in our catalog.</p>
+
+  <h2>NSF 401: Emerging Contaminants</h2>
+  <p>NSF/ANSI Standard 401 is a newer certification that addresses <strong>emerging contaminants</strong> — substances increasingly detected in water supplies that are not yet federally regulated but raise growing health concerns.</p>
+
+  <h3>What NSF 401 Tests For:</h3>
+  <ul>
+    <li><strong>Pharmaceuticals:</strong> Ibuprofen, naproxen, estrone (an estrogen compound), and other drugs that enter water supplies through human waste and improper medication disposal.</li>
+    <li><strong>Herbicides:</strong> Atrazine and simazine — widely used agricultural chemicals detected in many municipal water systems.</li>
+    <li><strong>Pesticides:</strong> DEET (the insect repellent compound), linuron, and other common pesticide residues.</li>
+    <li><strong>Flame retardants:</strong> TCEP and other organophosphate compounds used in furniture and electronics manufacturing.</li>
+    <li><strong>BPA (bisphenol A):</strong> An endocrine-disrupting chemical used in plastics and can linings.</li>
+  </ul>
+  <p>NSF 401 certification is especially relevant for families concerned about long-term exposure to low-level contaminants. The <a href="/reviews/everydrop-filter-1-edr1rxd1/">everydrop Filter 1 (EDR1RXD1)</a> and <a href="/reviews/amazon-basics-replacement-3pack/">Amazon Basics Enhanced replacement filters</a> are NSF 401 certified.</p>
+
+  <ProTip>The Amazon Basics Enhanced filters carry quad certification: NSF 42, 53, 401, and 372. That is more certifications than the Brita Standard filters at roughly half the price. Certifications do not always correlate with brand recognition or price.</ProTip>
+
+  <h2>NSF 372: Lead-Free Compliance</h2>
+  <p>NSF/ANSI Standard 372 is different from the others — it does not test what the filter removes from water. Instead, it certifies that the <strong>filter itself and its components are lead-free</strong>, containing no more than 0.25% lead by weighted average on wetted surfaces.</p>
+  <p>This standard exists because, ironically, some water treatment products historically contained enough lead in their brass fittings, solder, or other components to actually add lead to the water passing through them. NSF 372 certification ensures the filter is not part of the problem.</p>
+  <p>NSF 372 and NSF 53 (for lead reduction) complement each other: NSF 372 guarantees the filter does not introduce lead, while NSF 53 guarantees the filter removes existing lead from your water supply. Together, they provide complete lead protection.</p>
+
+  <h2>Other Certifications You May Encounter</h2>
+
+  <h3>IAPMO Certification</h3>
+  <p>The International Association of Plumbing and Mechanical Officials (IAPMO) is another third-party certification body. IAPMO tests products against the same NSF/ANSI standards, so an IAPMO certification to NSF/ANSI 53 is functionally equivalent to an NSF certification to the same standard. <a href="/reviews/zerowater-5stage-4pack/">ZeroWater filters</a> use IAPMO certification for their lead and PFAS reduction claims.</p>
+
+  <h3>WQA Gold Seal</h3>
+  <p>The Water Quality Association's Gold Seal program is another legitimate third-party testing program that tests against NSF/ANSI standards. Products with the WQA Gold Seal have been independently verified in accredited laboratories.</p>
+
+  <h3>"Tested to NSF Standards" (Beware)</h3>
+  <p>Some manufacturers claim their products are "tested to NSF standards" or "meet NSF standards" without carrying actual NSF certification. This language is a red flag. It typically means the manufacturer conducted their own internal testing using NSF test protocols, but the results were not independently verified by NSF or another accredited lab. Always check the NSF database for genuine certification.</p>
+
+  <h2>How to Verify NSF Certifications</h2>
+  <ol>
+    <li><strong>Visit the NSF database:</strong> Go to info.nsf.org/Certified/DWTU and search for the product by manufacturer or model number.</li>
+    <li><strong>Check specific contaminants:</strong> Click on the product listing to see exactly which contaminants the filter is certified to reduce. The standard number alone does not tell the full story.</li>
+    <li><strong>Look at the certified model number:</strong> Ensure the specific model you are buying matches the certified listing. Manufacturers sometimes certify one model but sell multiple similar-looking models that may not all be certified.</li>
+    <li><strong>Confirm the certification is current:</strong> NSF certifications require annual renewal. An expired certification may mean the product no longer meets the standard.</li>
+  </ol>
+
+  <h2>NSF Certifications Across Our Product Catalog</h2>
+  <p>To help you compare, here is how the products we review stack up on certifications:</p>
+  <ul>
+    <li><strong>NSF 42 only:</strong> Brita Standard filters, Samsung HAF-QIN, AQUACREST UKF8001</li>
+    <li><strong>NSF 42 + 53:</strong> Brita Elite, PUR pitcher filters, GE RPWFE, Pentair Everpure H-300</li>
+    <li><strong>NSF 42 + 53 + 401:</strong> everydrop Filter 1, everydrop Filter A, GE XWFE, Pentair Everpure H-1200</li>
+    <li><strong>NSF 42 + 53 + 401 + 372:</strong> Amazon Basics Enhanced replacement filters</li>
+    <li><strong>NSF 42 + 53 + 58 + 372:</strong> Waterdrop G3P600</li>
+    <li><strong>NSF 58:</strong> iSpring RCC7AK, Bluevua RO100ROPOT-UV, Bluevua Lite UV</li>
+    <li><strong>IAPMO certified:</strong> ZeroWater (lead, chromium, PFOA, PFOS)</li>
+  </ul>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

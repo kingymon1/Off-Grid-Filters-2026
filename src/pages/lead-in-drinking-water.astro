@@ -1,0 +1,184 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ProTip from '../components/ProTip.astro';
+import { guides, isPublished } from '../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+
+const guide = guides.find(g => g.slug === 'lead-in-drinking-water')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+const faqs = [
+  {
+    question: 'How does lead get into drinking water?',
+    answer: 'Lead enters drinking water primarily through corrosion of lead-containing plumbing materials. Lead pipes (common in homes built before 1930), lead solder used to join copper pipes (common before 1986), and brass faucets and fixtures can all leach lead into water. The lead does not come from the water source or treatment plant — it dissolves from your home plumbing as water sits in contact with these materials. Hot water, acidic water, and water that sits in pipes overnight dissolve more lead.',
+  },
+  {
+    question: 'What level of lead in water is safe?',
+    answer: 'There is no safe level of lead exposure according to the CDC, EPA, and WHO. Lead is harmful at any detectable level, especially for children. The EPA action level of 15 parts per billion (ppb) triggers mandatory corrective action by water utilities, but this is a regulatory trigger, not a health-based safety threshold. Many health experts advocate for much lower limits. The goal should be to minimize lead exposure as much as possible.',
+  },
+  {
+    question: 'How do I test my water for lead?',
+    answer: 'You can test for lead using a certified laboratory water test kit. Most home test kits cost $20 to $50 and require you to collect a water sample and mail it to a lab. For the most accurate results, use a "first draw" sample — water that has been sitting in your pipes for at least 6 hours (typically first thing in the morning before any water use). Many water utilities offer free or subsidized lead testing. Contact your utility or local health department for options.',
+  },
+  {
+    question: 'Which water filters are certified to remove lead?',
+    answer: 'Filters certified under NSF Standard 53 for lead reduction are independently verified to remove lead. Our top certified picks include the iSpring RCC7AK RO system (99%+ lead reduction), Brita Elite pitcher filters (99% lead reduction), everydrop Filter 1 for refrigerators (99% lead reduction), and the Pentair Everpure H-1200 under-sink system. Standard Brita and basic pitcher filters are NOT certified for lead removal. Always check for NSF 53 certification specific to lead.',
+  },
+  {
+    question: 'Does boiling water remove lead?',
+    answer: 'No. Boiling water does not remove lead — it actually concentrates it because water evaporates while lead remains behind. If your water contains lead, boiling will make the concentration worse. The only effective methods for removing lead from water are filtration (NSF 53 certified), reverse osmosis, and distillation.',
+  },
+  {
+    question: 'Are children more vulnerable to lead in water?',
+    answer: 'Yes, significantly. Children absorb 4 to 5 times more lead from ingestion than adults. Even low levels of lead exposure can cause reduced IQ, learning disabilities, behavioral problems, slowed growth, hearing problems, and anemia in children. Infants drinking formula made with lead-contaminated water are at particularly high risk because water makes up a large proportion of their diet. If you have young children, lead-certified water filtration is strongly recommended.',
+  },
+  {
+    question: 'What happened in Flint, Michigan?',
+    answer: 'In 2014, the city of Flint switched its water source from treated Lake Huron water to the Flint River without adding corrosion control chemicals. The untreated Flint River water was highly corrosive and dissolved lead from the city aging lead service lines, causing lead levels in some homes to exceed 100 ppb (nearly 7 times the EPA action level). The crisis exposed 100,000+ residents to elevated lead, including thousands of children. It took years to replace lead service lines and restore safe water. The Flint crisis remains the most prominent example of lead contamination in modern US history.',
+  },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'NSF Certifications Explained', url: '/nsf-certifications-explained/', description: 'NSF 53 is the key certification for lead removal.' },
+  { title: 'Is Tap Water Safe?', url: '/is-tap-water-safe/', description: 'How lead fits into the broader picture of US water safety.' },
+  { title: 'Brita Elite Filter Review', url: '/reviews/brita-elite-2pack/', description: 'The most popular NSF 53 certified pitcher filter for lead.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Under-sink options for comprehensive lead protection.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/${guide.slug}/`}
+  category="Learn"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Lead in drinking water is an invisible, odorless, tasteless threat that affects millions of American homes. There is no safe level of lead exposure — particularly for children, who absorb lead at 4 to 5 times the rate of adults. The good news: certified water filters can remove over 99% of lead. The critical step is knowing which filters actually work and which only claim to.</p>
+
+  <ProductImage alt="Lead contamination in drinking water sources" icon="shield" aspect="hero" />
+
+  <h2>Where Lead in Water Comes From</h2>
+  <p>Lead almost never originates at the water treatment plant or the water source itself. In nearly all cases, lead enters drinking water through corrosion of materials in the distribution system and household plumbing. Understanding the sources helps you assess your own risk.</p>
+
+  <h3>Lead Service Lines</h3>
+  <p>Lead service lines are the pipes that connect the water main under the street to your home's internal plumbing. An estimated 6 to 10 million lead service lines remain in use across the United States, primarily in homes built before 1950 in older cities in the Midwest and Northeast. These pipes are the single largest source of lead in drinking water. The EPA's Lead and Copper Rule Improvements (LCRI) require utilities to replace lead service lines, but the timeline extends to 2037 and beyond.</p>
+
+  <h3>Lead Solder</h3>
+  <p>Before 1986, lead-based solder was commonly used to join copper pipes. The Safe Drinking Water Act amendments banned lead solder in 1986, but homes built or plumbed before that date may still have lead solder in their plumbing joints. As water passes through these joints — especially acidic water or water that has been sitting still — lead dissolves into the water.</p>
+
+  <h3>Brass Faucets and Fixtures</h3>
+  <p>Brass is an alloy of copper and zinc that historically contained up to 8% lead. Even "lead-free" brass (redefined in 2014 as containing no more than 0.25% lead by wetted surface) can contribute trace amounts. Older faucets, valves, and connectors remain significant lead sources in many homes.</p>
+
+  <h3>Galvanized Steel Pipes</h3>
+  <p>Galvanized steel pipes that were downstream of lead pipes or connected to lead service lines can accumulate lead in their zinc coating over decades. Even after lead pipes are replaced, the galvanized pipes retain stored lead that leaches into water. This is an often-overlooked source.</p>
+
+  <ProTip>The highest lead levels in your water typically occur in the "first draw" — the first water out of the faucet in the morning after water has sat in pipes overnight. Running your cold water faucet for 30 seconds to 2 minutes before drinking flushes out the highest-lead water. This is a free, immediate risk reduction step you can take today, though it does not replace proper filtration.</ProTip>
+
+  <h2>Health Effects of Lead Exposure</h2>
+  <p>Lead is a potent neurotoxin with no known safe level of exposure. The effects depend on the level and duration of exposure, and are significantly more severe in children.</p>
+
+  <h3>Effects on Children</h3>
+  <ul>
+    <li><strong>Neurological damage:</strong> Even low levels of lead exposure can reduce IQ by 2 to 5 points. Higher exposure causes more severe cognitive impairment, learning disabilities, and attention deficit disorders.</li>
+    <li><strong>Behavioral problems:</strong> Lead exposure is linked to increased aggression, hyperactivity, and reduced impulse control.</li>
+    <li><strong>Developmental delays:</strong> Slowed growth, delayed puberty, and impaired speech and language development.</li>
+    <li><strong>Hearing loss:</strong> Lead damages the auditory nerve, leading to hearing impairment at levels previously considered "safe."</li>
+    <li><strong>Anemia:</strong> Lead interferes with hemoglobin production, reducing the blood's oxygen-carrying capacity.</li>
+  </ul>
+  <p>Children are especially vulnerable because they absorb 4 to 5 times more lead from ingestion than adults, their developing brains are more susceptible to neurological damage, and behaviors like hand-to-mouth contact increase exposure opportunities. Infants on formula are at particular risk because water constitutes a large portion of their dietary intake.</p>
+
+  <h3>Effects on Adults</h3>
+  <ul>
+    <li><strong>Cardiovascular effects:</strong> Lead exposure is associated with increased blood pressure and risk of heart disease.</li>
+    <li><strong>Kidney damage:</strong> Chronic exposure can cause reduced kidney function over time.</li>
+    <li><strong>Reproductive effects:</strong> Reduced fertility in both men and women, increased risk of miscarriage, and potential harm to fetal development.</li>
+    <li><strong>Neurological effects:</strong> Memory problems, difficulty concentrating, and mood changes.</li>
+  </ul>
+
+  <h2>How to Test for Lead</h2>
+  <p>Lead is invisible, tasteless, and odorless in water — the only way to know if you have it is to test. Here are your options:</p>
+
+  <h3>Free Testing Through Your Utility</h3>
+  <p>Many water utilities offer free lead testing, especially after the Flint crisis raised public awareness. Contact your water provider and ask about their lead testing program. Some utilities will send a free test kit to your home.</p>
+
+  <h3>Certified Laboratory Test Kits</h3>
+  <p>Home collection kits from certified labs cost $20 to $80. You collect a water sample following specific instructions and mail it to the lab. Results typically arrive within 1 to 2 weeks. For the most informative results, collect a "first draw" sample (first water in the morning) and a "flushed" sample (after running water for 2 minutes). Comparing the two tells you whether lead is from your home plumbing or the service line.</p>
+
+  <h3>How to Interpret Results</h3>
+  <ul>
+    <li><strong>0 ppb (non-detect):</strong> No lead detected at the laboratory's detection limit. Excellent.</li>
+    <li><strong>1-5 ppb:</strong> Low but detectable. Filtration recommended, especially if children or pregnant women are in the household.</li>
+    <li><strong>5-15 ppb:</strong> Moderate. Filtration strongly recommended. Investigate plumbing sources.</li>
+    <li><strong>15+ ppb:</strong> Exceeds EPA action level. Immediate filtration required. Contact your water utility. Consider plumbing replacement.</li>
+    <li><strong>100+ ppb:</strong> Severe contamination. Do not use unfiltered water for drinking or cooking. Seek professional assessment immediately.</li>
+  </ul>
+
+  <h2>Which Filters Remove Lead?</h2>
+  <p>The critical requirement is <a href="/nsf-certifications-explained/">NSF 53 certification</a> specifically for lead reduction. Not all NSF 53 certified filters cover lead — the certification is contaminant-specific. Here are proven options:</p>
+
+  <h3>Reverse Osmosis Systems (99%+ removal)</h3>
+  <p>RO systems provide the most thorough lead removal available for residential use:</p>
+  <ul>
+    <li><a href="/reviews/ispring-rcc7ak/">iSpring RCC7AK</a> ($198.78) — Over 98.9% lead reduction, NSF 58 certified, best value RO system</li>
+    <li><a href="/reviews/waterdrop-g3p600/">Waterdrop G3P600</a> ($429) — NSF 42/53/58/372, premium tankless design</li>
+    <li><a href="/reviews/bluevua-ro100ropot-uv/">Bluevua RO100ROPOT-UV</a> ($317) — Countertop RO, no installation required</li>
+  </ul>
+
+  <h3>Under-Sink Carbon Filters (95-99% removal)</h3>
+  <p>High-quality carbon block systems with NSF 53 lead certification:</p>
+  <ul>
+    <li><a href="/reviews/pentair-everpure-h1200/">Pentair Everpure H-1200</a> ($390) — Commercial-grade, NSF 53 certified for lead</li>
+    <li><a href="/reviews/pentair-everpure-h300/">Pentair Everpure H-300</a> ($505) — Complete system with faucet, NSF 53 for lead and cysts</li>
+  </ul>
+
+  <h3>Pitcher and Refrigerator Filters (95-99% removal)</h3>
+  <p>Specific models with NSF 53 lead certification:</p>
+  <ul>
+    <li><a href="/reviews/brita-elite-2pack/">Brita Elite</a> ($29.78/2-pack) — 99% lead reduction, NSF 42/53/401</li>
+    <li><a href="/reviews/everydrop-filter-1-edr1rxd1/">everydrop Filter 1</a> ($53.99) — 99% lead reduction for Whirlpool-family fridges</li>
+    <li><a href="/reviews/ge-xwfe/">GE XWFE</a> ($49.49) — NSF 53 lead certified for GE refrigerators</li>
+    <li><a href="/reviews/amazon-basics-replacement-3pack/">Amazon Basics Enhanced</a> ($10.49/3-pack) — NSF 42/53/401/372, lead certified</li>
+  </ul>
+
+  <ProTip title="Expert Tip">The <a href="/reviews/brita-standard-3pack/">Brita Standard</a> filter is NOT certified for lead removal — only the <a href="/reviews/brita-elite-2pack/">Brita Elite</a> is. This is one of the most common misconceptions. If lead is a concern, upgrading from Standard to Elite is critical. The Elite costs more upfront but lasts 3 times longer (120 vs 40 gallons), making it cheaper per gallon.</ProTip>
+
+  <h2>The Flint Water Crisis: A Case Study</h2>
+  <p>The Flint, Michigan water crisis is the most significant lead contamination event in modern US history, and it illustrates how quickly safe water can become dangerous.</p>
+  <p>In April 2014, Flint switched its water source from the Detroit Water and Sewerage Department (Lake Huron water) to the Flint River as a cost-saving measure. The decision was made without implementing corrosion control treatment — a critical step that prevents lead pipes from leaching. The Flint River water was highly corrosive (high chloride content and low pH), and it rapidly dissolved lead from the city's aging lead service lines and household plumbing.</p>
+  <p>Within months, residents noticed discolored, foul-smelling water. Blood lead levels in children under 5 doubled in some neighborhoods. Independent testing found lead levels exceeding 100 ppb in some homes — nearly 7 times the EPA action level. An outbreak of Legionnaires' disease killed 12 people. Despite resident complaints, state and city officials initially dismissed concerns and insisted the water was safe.</p>
+  <p>It took over a year of activism, independent research by Virginia Tech scientists, and a public health emergency declaration before the city reconnected to Detroit's water system and began replacing lead service lines. The crisis exposed approximately 100,000 residents to elevated lead levels, including an estimated 12,000 children.</p>
+  <p>The lessons from Flint are clear: water quality can change with infrastructure decisions, lead contamination does not always produce visible or taste-detectable symptoms, and point-of-use filtration with NSF 53 certified filters provides an essential safety net regardless of your water utility's assurances.</p>
+
+  <h2>Immediate Steps to Reduce Lead Exposure</h2>
+  <ol>
+    <li><strong>Test your water</strong> using a certified lab test or free utility testing. You cannot assess lead risk without data.</li>
+    <li><strong>Flush your pipes</strong> by running cold water for 30 seconds to 2 minutes before drinking, especially in the morning.</li>
+    <li><strong>Use cold water only</strong> for drinking and cooking — hot water dissolves more lead from plumbing.</li>
+    <li><strong>Install an NSF 53 certified filter</strong> on your primary drinking water source. Even a $10 Amazon Basics pitcher filter provides certified lead protection.</li>
+    <li><strong>Replace old faucets</strong> manufactured before 2014 — they may contain up to 8% lead in brass components.</li>
+    <li><strong>Check your service line</strong> — contact your water utility to determine if your home is connected by a lead service line. Many utilities maintain databases of known lead lines.</li>
+  </ol>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+</ContentLayout>

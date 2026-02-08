@@ -1,0 +1,210 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductImage from '../../components/ProductImage.astro';
+import ProTip from '../../components/ProTip.astro';
+import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+
+const guide = guides.find(g => g.slug === 'reverse-osmosis-vs-carbon-filters')!;
+if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
+const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
+const bluevua = products.find(p => p.slug === 'bluevua-ro100ropot-uv')!;
+const bluevuaLite = products.find(p => p.slug === 'bluevua-ro100ropot-lite-uv')!;
+const britaElite = products.find(p => p.slug === 'brita-elite-2pack')!;
+const britaUltramax = products.find(p => p.slug === 'brita-ultramax-27-cup-dispenser')!;
+const pentairH1200 = products.find(p => p.slug === 'pentair-everpure-h1200')!;
+const geXwfe = products.find(p => p.slug === 'ge-xwfe')!;
+
+const faqs = [
+  { question: 'Is reverse osmosis better than carbon filtration?', answer: 'RO removes a broader range of contaminants, including dissolved solids (TDS), fluoride, and most PFAS compounds that carbon filters miss. However, "better" depends on your water quality. If your main concern is chlorine taste and basic contaminants, a carbon filter is sufficient and more cost-effective. RO is better when you need to remove dissolved minerals, fluoride, high lead levels, or PFAS.' },
+  { question: 'Does reverse osmosis waste a lot of water?', answer: 'Traditional tank-based RO systems waste 3-4 gallons for every 1 gallon of purified water (1:3 to 1:4 pure-to-drain ratio). Modern tankless systems like the Waterdrop G3P600 are more efficient at 2:1 pure-to-drain. Countertop systems vary — the Bluevua RO100ROPOT-UV achieves 2:1, while the Lite model is 3:1. The wastewater can be repurposed for watering plants or cleaning.' },
+  { question: 'Do carbon filters remove lead from water?', answer: 'Some carbon filters can reduce lead, but only those with NSF 53 certification. The Brita Elite is NSF 53 certified and reduces 99% of lead. Standard activated carbon granule filters (like Brita Standard) are NOT certified for lead removal. If lead is a concern, look specifically for NSF 53 certification on any carbon filter, or use an RO system which removes lead as a matter of course.' },
+  { question: 'Does RO water taste flat because minerals are removed?', answer: 'Yes, RO water can taste flat or "empty" because the membrane removes beneficial minerals along with contaminants. This is why many RO systems include an alkaline remineralization stage — both the iSpring RCC7AK and Bluevua systems add calcium, magnesium, and potassium back into the water after filtration. This improves both taste and nutritional value.' },
+  { question: 'Can I use a carbon filter and RO system together?', answer: 'Yes, and most RO systems already do this. A typical under-sink RO system includes 2-3 carbon pre-filter stages before the RO membrane and a post-carbon filter after. The carbon stages remove chlorine (which damages the RO membrane) and improve taste, while the membrane handles dissolved solids and heavy metals. This layered approach provides the most comprehensive filtration.' },
+  { question: 'Which type of filter removes PFAS (forever chemicals)?', answer: 'Reverse osmosis is the most effective at PFAS removal — the iSpring RCC7AK reduces PFAS by 96-99%. Some advanced carbon block filters also reduce PFAS, particularly those with NSF P473 or NSF 53 certification for specific PFAS compounds. Standard carbon granule filters in basic pitcher systems are generally not effective against PFAS. If PFAS is your primary concern, RO is the safer choice.' },
+  { question: 'How much more does an RO system cost compared to a carbon filter?', answer: `Upfront costs differ significantly. A Brita pitcher with carbon filter costs $${britaUltramax.price}. An under-sink RO system like the iSpring RCC7AK costs $${ispring.price}. However, the long-term cost per gallon is often lower for RO systems because their filters last longer per gallon. Over 5 years, a pitcher system may cost $350-$500 in total (including filters), while an RO system costs $350-$450 total. The gap narrows considerably over time.` },
+];
+
+const articleSchema = generateArticleSchema({
+  title: guide.title,
+  description: guide.description,
+  url: `/guides/${guide.slug}/`,
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/', description: 'A deep dive into how RO technology works and what it removes.' },
+  { title: 'iSpring RCC7AK Review', url: '/reviews/ispring-rcc7ak/', description: 'Our detailed review of the best-value under-sink RO system.' },
+  { title: 'Best Under-Sink Filters', url: '/best-under-sink-filters/', description: 'Our ranked picks for the best permanent filtration systems.' },
+  { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Every filtration technology compared and explained.' },
+];
+---
+
+<ContentLayout
+  title={`${guide.title} — OffGrid Filters`}
+  description={guide.description}
+  canonical={`/guides/${guide.slug}/`}
+  category="Guides"
+  currentPage={guide.title}
+  schema={schema}
+  relatedArticles={relatedArticles}
+>
+  <h1>{guide.title}</h1>
+  <p class="lead">Reverse osmosis and activated carbon are the two dominant water filtration technologies on the market. They work in fundamentally different ways, remove different contaminants, and come at different price points. This guide explains the science behind each, compares their strengths and weaknesses, and helps you decide which one your household actually needs.</p>
+
+  <ProductImage alt="Reverse osmosis vs carbon filter comparison" icon="compare" aspect="hero" />
+
+  <h2>How Carbon Filtration Works</h2>
+  <p>Activated carbon filtration is the most common water treatment technology in consumer products. It appears in pitcher filters, faucet-mount filters, refrigerator filters, and as a stage within RO systems.</p>
+  <p>The process relies on <strong>adsorption</strong> — not absorption. Contaminants chemically bond to the surface of the carbon, sticking to millions of tiny pores in the filter material. Activated carbon has an enormous surface area: a single gram contains roughly 3,000 square meters of surface area, giving contaminants plenty of opportunity to latch on.</p>
+  <p>Carbon filters come in two main forms:</p>
+  <ul>
+    <li><strong>Granular Activated Carbon (GAC):</strong> Loose carbon granules. Found in basic pitcher filters like Brita Standard. Water flows around and between the granules. Effective for chlorine and basic taste improvement, but has gaps where water can bypass without contacting carbon.</li>
+    <li><strong>Carbon Block:</strong> Compressed carbon formed into a solid block. Found in premium filters like the <a href={`/reviews/${britaElite.slug}/`}>Brita Elite</a>, refrigerator filters, and under-sink systems. Denser structure means better contact time and more thorough filtration. Can be rated for lead and cyst removal (NSF 53).</li>
+  </ul>
+
+  <h3>What Carbon Removes Well</h3>
+  <ul>
+    <li>Chlorine taste and odor (the #1 reason people buy filters)</li>
+    <li>Volatile organic compounds (VOCs) — pesticides, herbicides, industrial solvents</li>
+    <li>Some pharmaceuticals and endocrine disruptors (NSF 401 certified filters)</li>
+    <li>Lead (carbon block with NSF 53 certification only)</li>
+    <li>Sediment and particulates (when mechanically rated, e.g., 0.5 micron)</li>
+    <li>Some PFAS compounds (advanced carbon block filters with specific certification)</li>
+  </ul>
+
+  <h3>What Carbon Cannot Remove</h3>
+  <ul>
+    <li>Total dissolved solids (TDS) — minerals, salts, metals in solution</li>
+    <li>Fluoride</li>
+    <li>Nitrates and nitrites</li>
+    <li>Sodium</li>
+    <li>Most heavy metals in dissolved form (unless specifically certified)</li>
+    <li>Bacteria and viruses (carbon is not a disinfectant)</li>
+  </ul>
+
+  <ProTip>The quality of carbon matters enormously. Coconut shell activated carbon (used in premium filters) has more micropores and is better for VOC and chlorine removal than coal-based carbon. Check the product specs — better filters specify their carbon source.</ProTip>
+
+  <h2>How Reverse Osmosis Works</h2>
+  <p>Reverse osmosis uses pressure to force water through a semi-permeable membrane with pores roughly 0.0001 microns in size — small enough to block individual molecules. For context, a human hair is about 75 microns in diameter. The RO membrane is 750,000 times finer.</p>
+  <p>In a typical RO system like the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK</a>, water passes through multiple stages:</p>
+  <ol>
+    <li><strong>Sediment pre-filter:</strong> Removes sand, silt, and particles to protect the membrane.</li>
+    <li><strong>Carbon pre-filter(s):</strong> Removes chlorine, which damages RO membranes, plus VOCs.</li>
+    <li><strong>RO membrane:</strong> The heart of the system. Removes 93-98% of dissolved solids.</li>
+    <li><strong>Post-carbon filter:</strong> Polishes taste after the tank.</li>
+    <li><strong>Remineralization (some systems):</strong> Adds beneficial minerals back for taste and health.</li>
+  </ol>
+
+  <h3>What RO Removes</h3>
+  <ul>
+    <li>Everything carbon removes, plus:</li>
+    <li>Total dissolved solids (TDS) — 93-98% reduction</li>
+    <li>Fluoride (90-95% reduction)</li>
+    <li>Lead (>98.9% reduction)</li>
+    <li>PFAS / forever chemicals (96-99% reduction)</li>
+    <li>Arsenic, chromium, and heavy metals</li>
+    <li>Nitrates and nitrites</li>
+    <li>Bacteria (when combined with UV or proper system design)</li>
+    <li>Sodium</li>
+  </ul>
+
+  <h3>RO Limitations</h3>
+  <ul>
+    <li>Wastes water (1:3 to 3:1 pure-to-drain ratio depending on system)</li>
+    <li>Removes beneficial minerals (calcium, magnesium) unless remineralization stage is included</li>
+    <li>Slower water production than carbon-only systems (tank-based systems have limited on-demand supply)</li>
+    <li>Higher upfront cost ($199-$500+ for under-sink, $219-$317 for countertop)</li>
+    <li>More complex installation and maintenance</li>
+    <li>Some systems require electricity (tankless models, countertop systems)</li>
+  </ul>
+
+  <h2>Head-to-Head Comparison</h2>
+
+  <h3>Contaminant Removal</h3>
+  <p><strong>Winner: Reverse Osmosis.</strong> RO removes virtually everything that carbon removes, plus dissolved solids, fluoride, nitrates, and a wider range of heavy metals. If you want the most comprehensive filtration possible, RO is unmatched.</p>
+
+  <h3>Cost (Upfront)</h3>
+  <p><strong>Winner: Carbon.</strong> A Brita UltraMax dispenser costs ${britaUltramax.price}. A carbon-block under-sink filter like the <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200</a> costs more, but basic pitcher carbon filters start under $25. The cheapest RO system in our catalog is the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a>.</p>
+
+  <h3>Cost (Long-Term Per Gallon)</h3>
+  <p><strong>Winner: Depends on usage.</strong> Carbon pitcher filters cost roughly $0.12-$0.15 per gallon in filter replacements. Under-sink RO systems cost roughly $0.02-$0.05 per gallon because their filters serve far more water before replacement. Over 3-5 years, the total cost of ownership can actually be lower for RO if you consume significant volumes.</p>
+
+  <h3>Ease of Installation</h3>
+  <p><strong>Winner: Carbon.</strong> Pitcher filters require zero installation. Countertop carbon filters may need a faucet adapter. Under-sink RO systems require drilling a faucet hole and connecting to the cold water line — typically a 1-2 hour DIY job. However, countertop RO systems like the <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV</a> close this gap by offering RO with no installation at all.</p>
+
+  <h3>Water Waste</h3>
+  <p><strong>Winner: Carbon.</strong> Carbon filters produce zero wastewater. Every drop that enters comes out filtered. RO systems by definition produce concentrated wastewater as contaminants are flushed away. Modern systems have improved this — the Waterdrop G3P600 achieves a 2:1 pure-to-drain ratio, but older systems can waste 3-4x the water they produce.</p>
+
+  <h3>Water Taste</h3>
+  <p><strong>Winner: Tie (with caveats).</strong> Carbon filters produce great-tasting water with natural mineral content preserved. RO systems produce extremely pure water that can taste "flat" — but systems with remineralization (iSpring RCC7AK, both Bluevua models) add minerals back for a balanced, crisp taste. Without remineralization, many people find RO water less satisfying.</p>
+
+  <h3>Maintenance Complexity</h3>
+  <p><strong>Winner: Carbon.</strong> Swap a pitcher filter every 2 months — done. RO systems have 3-6 different filter stages on different replacement schedules (6 months, 12 months, 2-3 years). Smart systems like the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600</a> mitigate this with LED alerts, but there is inherently more to manage.</p>
+
+  <ProTip>Many RO systems already include carbon filtration as pre- and post-stages. So the real choice is not "RO or carbon" — it is "carbon only" vs "carbon plus RO membrane." The membrane is what adds TDS reduction and the broader contaminant removal capability.</ProTip>
+
+  <h2>When to Choose Carbon Filtration</h2>
+  <p>A carbon-only filter is the right choice if:</p>
+  <ul>
+    <li>Your municipal water is reasonably clean and your main issue is chlorine taste</li>
+    <li>Your budget is under $50 for the system and you want low ongoing costs</li>
+    <li>You are renting and cannot modify plumbing</li>
+    <li>Your water testing shows low TDS (under 200 ppm) and no concerning contaminants</li>
+    <li>You want the simplest possible maintenance</li>
+    <li>Water waste is a concern for you</li>
+  </ul>
+  <p><strong>Our carbon filter recommendations:</strong></p>
+  <ul>
+    <li>Best pitcher: <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} (${britaUltramax.price})</a> with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a></li>
+    <li>Best under-sink carbon: <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 (${pentairH1200.price})</a></li>
+    <li>Best fridge filter: <a href={`/reviews/${geXwfe.slug}/`}>{geXwfe.name} (${geXwfe.price})</a></li>
+  </ul>
+
+  <h2>When to Choose Reverse Osmosis</h2>
+  <p>An RO system is the right choice if:</p>
+  <ul>
+    <li>Your water has high TDS (above 300 ppm) or hard water issues</li>
+    <li>Testing shows lead, PFAS, fluoride, arsenic, or nitrates</li>
+    <li>You are on well water with multiple contaminant concerns</li>
+    <li>You want the most thorough filtration possible regardless of cost</li>
+    <li>You are willing to handle slightly more complex maintenance</li>
+    <li>You plan to stay in your home long enough to recoup the investment</li>
+  </ul>
+  <p><strong>Our RO recommendations:</strong></p>
+  <ul>
+    <li>Best value under-sink RO: <a href={`/reviews/${ispring.slug}/`}>{ispring.name} (${ispring.price})</a></li>
+    <li>Best premium under-sink RO: <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} (${waterdrop.price})</a></li>
+    <li>Best no-install countertop RO: <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} (${bluevua.price})</a></li>
+    <li>Best budget countertop RO: <a href={`/reviews/${bluevuaLite.slug}/`}>{bluevuaLite.name} ($219.00)</a></li>
+  </ul>
+
+  <h2>The Hybrid Approach</h2>
+  <p>You do not have to choose just one. Many households use both technologies in a layered approach:</p>
+  <ul>
+    <li><strong>Under-sink RO for drinking and cooking water</strong> at the kitchen tap — handles serious contaminants.</li>
+    <li><strong>Refrigerator carbon filter for ice and cold water</strong> — the fridge filter handles chlorine taste for ice cubes and cold drinks.</li>
+    <li><strong>Whole-house sediment pre-filter</strong> for well water homes — protects both the RO system and all household plumbing.</li>
+  </ul>
+  <p>This multi-layer strategy provides the best overall water quality across your entire home.</p>
+
+  <ProTip>If you have a refrigerator with a built-in filter, it already uses carbon block filtration. Adding an under-sink RO system for the kitchen faucet gives you the best of both worlds — carbon-filtered ice and RO-purified drinking water — without replacing anything you already own.</ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Make Your Decision</h2>
+  <p>If you are still unsure, start by <a href="/guides/how-to-choose-water-filter/">testing your water</a>. The results will make the decision clear: basic taste issues point to carbon, while dissolved contaminants point to RO. For a deeper understanding of RO technology, read our <a href="/what-is-reverse-osmosis/">What Is Reverse Osmosis?</a> knowledge base article. And for side-by-side product matchups, see our <a href="/ispring-rcc7ak-vs-waterdrop-g3p600/">iSpring vs Waterdrop comparison</a>.</p>
+</ContentLayout>
