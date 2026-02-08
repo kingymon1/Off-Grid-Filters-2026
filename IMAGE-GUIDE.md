@@ -38,6 +38,18 @@ node scripts/convert-to-webp.mjs
 
 ## Homepage (`src/pages/index.astro`)
 
+### Hero Section — Product Image (LIVE)
+| Image | Status | Aspect | Filename |
+|---|---|---|---|
+| Bluevua RO100ROPOT-UV hero | **Live** — real PNG uploaded | 1:1 (520×520) | `bluevua-ro100ropot-uv-hero.png` |
+
+> This is the animated hero product image displayed in the two-column hero layout. It uses
+> `loading="eager"` + `fetchpriority="high"` as the LCP element, with a `<link rel="preload">`
+> in `<head>`. The image has pure CSS entrance and float animations.
+>
+> To replace with WebP: convert the source PNG, update the `src` in `index.astro` line ~114
+> and the preload `href` in `BaseLayout.astro` line ~52.
+
 ### Featured Picks Section
 | Placeholder | Recommended Photo | Aspect | Filename |
 |---|---|---|---|
