@@ -705,28 +705,44 @@ User-agent: Applebot-Extended
 Allow: /
 ```
 
-**`public/llms.txt`:**
-```
-# [Site Name]
-> [One-line description of the site]
+**`src/pages/llms.txt.ts`:** (Dynamic Astro API route)
 
-## About
-[2-3 sentences about the site's mission]
+Instead of a static file, create a dynamic Astro API route that auto-generates the llms.txt
+content from `src/lib/config.ts` arrays. This ensures llms.txt stays in sync whenever products,
+categories, comparisons, or guides are added or removed — no manual updates needed.
 
-## Product Reviews
-[List all review page URLs with product names]
+```typescript
+import type { APIRoute } from 'astro';
+import { SITE_NAME, SITE_URL, products, categories, comparisons, guides, siteConfig } from '../lib/config';
 
-## Best Of / Roundups
-[List all category roundup URLs]
+export const GET: APIRoute = () => {
+  const buyerGuides = guides.filter(g => g.type === 'buyer');
+  const activityGuides = guides.filter(g => g.type === 'activity');
+  const knowledgeBase = guides.filter(g => g.type === 'knowledge');
 
-## Comparisons
-[List all comparison page URLs]
+  const lines = [
+    `# ${SITE_NAME}`,
+    `> ${siteConfig.tagline}`,
+    '', '## About', siteConfig.productDescription,
+    '', '## Product Reviews',
+    ...products.map(p => `- ${SITE_URL}/reviews/${p.slug}/ — ${p.name}`),
+    '', '## Best Of / Roundups',
+    ...categories.map(c => `- ${SITE_URL}/best-${c.slug}/ — ${c.name}`),
+    '', '## Comparisons',
+    ...comparisons.map(c => `- ${SITE_URL}/${c.slug}/ — ${c.title}`),
+    '', '## Buyer Guides',
+    ...buyerGuides.map(g => `- ${SITE_URL}/guides/${g.slug}/ — ${g.title}`),
+    '', '## Activity Guides',
+    ...activityGuides.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}`),
+    '', '## Knowledge Base',
+    ...knowledgeBase.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}`),
+    '',
+  ];
 
-## Guides
-[List all guide URLs]
-
-## Knowledge Base
-[List all knowledge base URLs]
+  return new Response(lines.join('\n'), {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=86400' },
+  });
+};
 ```
 
 **`public/favicon.ico`** and **`public/favicon.png`:**
@@ -887,7 +903,7 @@ When complete, the project should contain:
 
 ### Public (4+ files)
 - [ ] `public/robots.txt`
-- [ ] `public/llms.txt`
+- [ ] `src/pages/llms.txt.ts` (dynamic API route — auto-generated from config)
 - [ ] `public/favicon.ico`
 - [ ] `public/favicon.png`
 

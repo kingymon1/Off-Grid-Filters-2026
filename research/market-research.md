@@ -141,38 +141,14 @@
 
 ---
 
-## Content Publishing Strategy
+## Publishing Strategy
 
-### Wave 1 (Feb 11 — Launch Day): Foundation
-- Homepage, top reviews (Bluevua UV, iSpring, Amazon Basics, Brita UltraMax, Pentair H-1200)
-- Core buying guide + beginner guide
-- Countertop and under-sink category roundups
+### Bulk Launch — February 8, 2026
 
-### Wave 2 (Feb 14): Expand
-- More reviews (Bluevua Lite, H-300, Waterdrop, everydrop, GE XWFE)
-- First comparisons (Bluevua UV vs Lite, iSpring vs Waterdrop, H-1200 vs H-300)
-- Beginner guide, What is RO, Water filter types
+All 79 pages publish simultaneously on launch day. The complete content library — 29 reviews,
+6 category roundups, 15 comparisons, 8 buyer guides, 10 activity guides, 8 knowledge base
+articles, resource hub, and homepage — goes live as a fully interlinked authority site.
 
-### Wave 3 (Feb 18): Depth
-- Survival filters, replacement filters
-- Camping/hiking/emergency guides
-- NSF certifications explained
-
-### Wave 4 (Feb 22): Breadth
-- Remaining fridge filters, more replacement filters
-- Activity guides (hiking, well water, off-grid)
-- TDS, PFAS knowledge base
-
-### Wave 5 (Feb 27): Long Tail
-- Budget value packs, survival accessories
-- RV, apartments, mistakes guide, cost analysis
-- Lead in water knowledge base
-
-### Wave 6 (Mar 4): Niche
-- Final comparisons, baby/travel/hard water guides
-- Tap water safety, Amazon Basics vs Brita
-
-### Wave 7 (Mar 11): Complete
-- History of water filtration
-- Any remaining content
-- Full site complete
+This approach ensures all internal cross-links work from day one, presents maximum authority
+to search engines on first crawl, and avoids any risk of users landing on 404 pages from
+navigation links to unpublished content.
