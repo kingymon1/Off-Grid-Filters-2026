@@ -35,6 +35,17 @@ if (!imageSrc && slug) {
 
 const hasImage = !!imageSrc;
 
+// For real product images (which are square from Amazon), use a 4:5 portrait
+// container instead of wide/hero ratios — it better frames the product.
+// Placeholders keep their original requested aspect.
+const showcaseAspect = hasImage && (aspect === 'hero' || aspect === 'wide')
+  ? 'aspect-[4/5]'
+  : hasImage && aspect === 'square'
+    ? 'aspect-square'
+    : hasImage && aspect === 'tall'
+      ? 'aspect-[2/3]'
+      : null;
+
 const aspectMap = {
   hero: 'aspect-[16/9]',
   square: 'aspect-square',
@@ -70,16 +81,21 @@ const iconSvg = icons[icon] || icons.filter;
 
 {hasImage ? (
   <figure class:list={['product-image-real', className]}>
-    <div class:list={['image-container', aspectMap[aspect]]}>
-      <div class="image-inner">
-        <div class="image-gradient"></div>
+    <div class:list={['image-showcase', showcaseAspect || aspectMap[aspect]]}>
+      <div class="showcase-inner">
+        <!-- Subtle dark-to-lighter radial gradient backdrop -->
+        <div class="showcase-backdrop"></div>
+        <!-- Ambient brand-colored glow behind the product -->
+        <div class="showcase-glow"></div>
         <img
           src={imageSrc}
+          srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
+          sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
           alt={alt}
           loading={priority ? 'eager' : 'lazy'}
           decoding={priority ? 'sync' : 'async'}
           fetchpriority={priority ? 'high' : undefined}
-          class="real-image"
+          class="showcase-image"
         />
       </div>
     </div>
@@ -105,21 +121,21 @@ const iconSvg = icons[icon] || icons.filter;
 )}
 
 <style>
+  /* ── Spotlight Vignette Showcase ── */
   .product-image-real {
     margin: 2rem 0;
     border-radius: 1rem;
     overflow: hidden;
   }
 
-  .product-image-real .image-container {
+  .image-showcase {
     position: relative;
     width: 100%;
     overflow: hidden;
     border-radius: 1rem;
-    border: 1px solid hsl(var(--border));
   }
 
-  .product-image-real .image-inner {
+  .showcase-inner {
     position: absolute;
     inset: 0;
     display: flex;
@@ -127,24 +143,78 @@ const iconSvg = icons[icon] || icons.filter;
     justify-content: center;
   }
 
-  .product-image-real .image-gradient {
+  /* Dark base with a subtle lighter center — the "stage" */
+  .showcase-backdrop {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(ellipse 60% 50% at 30% 40%, hsl(var(--primary) / 0.06), transparent),
-      radial-gradient(ellipse 50% 40% at 70% 60%, hsl(var(--accent) / 0.04), transparent),
-      linear-gradient(135deg, hsl(var(--card)), hsl(var(--muted)));
+      radial-gradient(
+        ellipse 65% 65% at 50% 48%,
+        hsl(210 15% 18%) 0%,
+        hsl(210 18% 12%) 35%,
+        hsl(var(--card)) 65%,
+        hsl(var(--background)) 100%
+      );
   }
 
-  .real-image {
+  /* Brand-colored ambient glow */
+  .showcase-glow {
+    position: absolute;
+    inset: 15%;
+    border-radius: 50%;
+    background:
+      radial-gradient(
+        circle at 45% 45%,
+        hsl(var(--primary) / 0.10) 0%,
+        hsl(var(--primary) / 0.04) 40%,
+        transparent 70%
+      );
+    filter: blur(20px);
+    z-index: 0;
+  }
+
+  /* The product image with radial mask vignette */
+  .showcase-image {
     position: relative;
-    max-width: 85%;
-    max-height: 85%;
+    max-width: 88%;
+    max-height: 88%;
     width: auto;
     height: auto;
     object-fit: contain;
     z-index: 1;
-    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+    /* Radial mask: fully visible center, smooth fade at edges eliminates white bg */
+    mask-image: radial-gradient(
+      ellipse 80% 80% at 50% 50%,
+      black 45%,
+      rgba(0, 0, 0, 0.6) 60%,
+      rgba(0, 0, 0, 0.2) 72%,
+      transparent 82%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 80% at 50% 50%,
+      black 45%,
+      rgba(0, 0, 0, 0.6) 60%,
+      rgba(0, 0, 0, 0.2) 72%,
+      transparent 82%
+    );
+    filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.25));
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  .image-showcase:hover .showcase-image {
+    transform: scale(1.03);
+    filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.35));
+  }
+
+  .image-showcase:hover .showcase-glow {
+    background:
+      radial-gradient(
+        circle at 45% 45%,
+        hsl(var(--primary) / 0.16) 0%,
+        hsl(var(--primary) / 0.06) 40%,
+        transparent 70%
+      );
+    transition: background 0.4s ease;
   }
 
   .product-image-placeholder {
@@ -232,6 +302,28 @@ const iconSvg = icons[icon] || icons.filter;
     color: hsl(var(--muted-foreground));
     text-align: center;
     font-style: italic;
+  }
+
+  /* Shimmer on showcase (real images) */
+  .image-showcase::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      hsl(var(--primary) / 0.04) 46%,
+      hsl(var(--primary) / 0.08) 50%,
+      hsl(var(--primary) / 0.04) 54%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: shimmer-slow 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 1rem;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 30%, black 70%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 30%, black 70%);
   }
 
   .image-container::after {
