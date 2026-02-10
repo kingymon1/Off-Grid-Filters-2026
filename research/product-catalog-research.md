@@ -104,10 +104,10 @@
 - **NSF:** 42/53/401 | **Capacity:** 200 gal | Updated rotating knob design
 - **Market Position:** Updated everydrop for newer Whirlpool-family fridges — same certifications, improved design
 
-### 14. AQUACREST UKF8001 6-Pack
-- **ASIN:** B08BZHQWXH | **Price:** $16.88 (6-pack) | **Rating:** 4.3/5 (9,500 reviews)
+### 14. AQUACREST UKF8001 3-Pack
+- **ASIN:** B01G4T47S6 | **Price:** $16.88 (3-pack) | **Rating:** 4.3/5 (9,500 reviews)
 - **NSF:** 42 only | Coconut shell carbon | Compatible with Maytag/Whirlpool/Viking/KitchenAid
-- **Market Position:** Budget aftermarket champion — ~$2.81/filter for basic chlorine/taste improvement
+- **Market Position:** Budget aftermarket champion — ~$5.63/filter for basic chlorine/taste improvement
 
 ---
 

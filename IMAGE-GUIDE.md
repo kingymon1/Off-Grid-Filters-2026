@@ -94,7 +94,7 @@ Each review page has 1 hero image.
 | GE RPWFE | Filter being installed into GE French door fridge | `ge-rpwfe-hero.webp` |
 | Samsung HAF-QIN | Filter with Samsung fridge, quarter-turn detail | `samsung-haf-qin-hero.webp` |
 | everydrop Filter A | Filter with rotating knob mechanism visible | `everydrop-filter-a-edrarxd1-hero.webp` |
-| AQUACREST UKF8001 6-Pack | All 6 filters arranged in a row | `aquacrest-ukf8001-6pack-hero.webp` |
+| AQUACREST UKF8001 3-Pack | All 3 filters arranged in a row | `aquacrest-ukf8001-3pack-hero.webp` |
 | Amazon Basics Enhanced 3-Pack | 3-pack with one filter removed from packaging | `amazon-basics-replacement-3pack-hero.webp` |
 | Brita Standard 3-Pack | Filters with Brita pitcher in background | `brita-standard-3pack-hero.webp` |
 | Brita Standard 4-Pack | 4-pack arranged on counter | `brita-standard-4pack-hero.webp` |

@@ -35,7 +35,7 @@
 | GE RPWFE Refrigerator Water Filter | B009PCI2JU | https://www.amazon.com/dp/B009PCI2JU | `ge-rpwfe-hero.webp` |
 | Samsung HAF-QIN/EXP Refrigerator Water Filter (DA97-17376B) | B071NFVVNG | https://www.amazon.com/dp/B071NFVVNG | `samsung-haf-qin-hero.webp` |
 | everydrop by Whirlpool Refrigerator Filter A (EDRARXD1) | B0D8MFM6BK | https://www.amazon.com/dp/B0D8MFM6BK | `everydrop-filter-a-edrarxd1-hero.webp` |
-| AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack) | B08BZHQWXH | https://www.amazon.com/dp/B08BZHQWXH | `aquacrest-ukf8001-6pack-hero.webp` |
+| AQUACREST UKF8001 Replacement Refrigerator Filter (3-Pack) | B01G4T47S6 | https://www.amazon.com/dp/B01G4T47S6 | `aquacrest-ukf8001-3pack-hero.webp` |
 
 ## Pitcher & Dispenser Replacement Filters
 
