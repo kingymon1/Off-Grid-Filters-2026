@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'reverse-osmosis-vs-carbon-filters')!;
@@ -26,7 +26,7 @@ const faqs = [
   { question: 'Does RO water taste flat because minerals are removed?', answer: 'Yes, RO water can taste flat or "empty" because the membrane removes beneficial minerals along with contaminants. This is why many RO systems include an alkaline remineralization stage — both the iSpring RCC7AK and Bluevua systems add calcium, magnesium, and potassium back into the water after filtration. This improves both taste and nutritional value.' },
   { question: 'Can I use a carbon filter and RO system together?', answer: 'Yes, and most RO systems already do this. A typical under-sink RO system includes 2-3 carbon pre-filter stages before the RO membrane and a post-carbon filter after. The carbon stages remove chlorine (which damages the RO membrane) and improve taste, while the membrane handles dissolved solids and heavy metals. This layered approach provides the most comprehensive filtration.' },
   { question: 'Which type of filter removes PFAS (forever chemicals)?', answer: 'Reverse osmosis is the most effective at PFAS removal — the iSpring RCC7AK reduces PFAS by 96-99%. Some advanced carbon block filters also reduce PFAS, particularly those with NSF P473 or NSF 53 certification for specific PFAS compounds. Standard carbon granule filters in basic pitcher systems are generally not effective against PFAS. If PFAS is your primary concern, RO is the safer choice.' },
-  { question: 'How much more does an RO system cost compared to a carbon filter?', answer: `Upfront costs differ significantly. A Brita pitcher with carbon filter costs $${britaUltramax.price}. An under-sink RO system like the iSpring RCC7AK costs $${ispring.price}. However, the long-term cost per gallon is often lower for RO systems because their filters last longer per gallon. Over 5 years, a pitcher system may cost $350-$500 in total (including filters), while an RO system costs $350-$450 total. The gap narrows considerably over time.` },
+  { question: 'How much more does an RO system cost compared to a carbon filter?', answer: `Upfront costs differ significantly. A Brita pitcher with carbon filter costs ${getPriceTier(britaUltramax.price)}. An under-sink RO system like the iSpring RCC7AK costs ${getPriceTier(ispring.price)}. However, the long-term cost per gallon is often lower for RO systems because their filters last longer per gallon. Over 5 years, a pitcher system may cost $350-$500 in total (including filters), while an RO system costs $350-$450 total. The gap narrows considerably over time.` },
 ];
 
 const articleSchema = generateArticleSchema({
@@ -130,7 +130,7 @@ const relatedArticles = [
   <p><strong>Winner: Reverse Osmosis.</strong> RO removes virtually everything that carbon removes, plus dissolved solids, fluoride, nitrates, and a wider range of heavy metals. If you want the most comprehensive filtration possible, RO is unmatched.</p>
 
   <h3>Cost (Upfront)</h3>
-  <p><strong>Winner: Carbon.</strong> A Brita UltraMax dispenser costs ${britaUltramax.price}. A carbon-block under-sink filter like the <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200</a> costs more, but basic pitcher carbon filters start under $25. The cheapest RO system in our catalog is the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a>.</p>
+  <p><strong>Winner: Carbon.</strong> A Brita UltraMax dispenser costs {getPriceTier(britaUltramax.price)}. A carbon-block under-sink filter like the <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200</a> costs more, but basic pitcher carbon filters start under $25. The cheapest RO system in our catalog is the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at {getPriceTier(ispring.price)}</a>.</p>
 
   <h3>Cost (Long-Term Per Gallon)</h3>
   <p><strong>Winner: Depends on usage.</strong> Carbon pitcher filters cost roughly $0.12-$0.15 per gallon in filter replacements. Under-sink RO systems cost roughly $0.02-$0.05 per gallon because their filters serve far more water before replacement. Over 3-5 years, the total cost of ownership can actually be lower for RO if you consume significant volumes.</p>
@@ -161,9 +161,9 @@ const relatedArticles = [
   </ul>
   <p><strong>Our carbon filter recommendations:</strong></p>
   <ul>
-    <li>Best pitcher: <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} (${britaUltramax.price})</a> with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a></li>
-    <li>Best under-sink carbon: <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 (${pentairH1200.price})</a></li>
-    <li>Best fridge filter: <a href={`/reviews/${geXwfe.slug}/`}>{geXwfe.name} (${geXwfe.price})</a></li>
+    <li>Best pitcher: <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} ({getPriceTier(britaUltramax.price)})</a> with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a></li>
+    <li>Best under-sink carbon: <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 ({getPriceTier(pentairH1200.price)})</a></li>
+    <li>Best fridge filter: <a href={`/reviews/${geXwfe.slug}/`}>{geXwfe.name} ({getPriceTier(geXwfe.price)})</a></li>
   </ul>
 
   <h2>When to Choose Reverse Osmosis</h2>
@@ -178,9 +178,9 @@ const relatedArticles = [
   </ul>
   <p><strong>Our RO recommendations:</strong></p>
   <ul>
-    <li>Best value under-sink RO: <a href={`/reviews/${ispring.slug}/`}>{ispring.name} (${ispring.price})</a></li>
-    <li>Best premium under-sink RO: <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} (${waterdrop.price})</a></li>
-    <li>Best no-install countertop RO: <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} (${bluevua.price})</a></li>
+    <li>Best value under-sink RO: <a href={`/reviews/${ispring.slug}/`}>{ispring.name} ({getPriceTier(ispring.price)})</a></li>
+    <li>Best premium under-sink RO: <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} ({getPriceTier(waterdrop.price)})</a></li>
+    <li>Best no-install countertop RO: <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} ({getPriceTier(bluevua.price)})</a></li>
     <li>Best budget countertop RO: <a href={`/reviews/${bluevuaLite.slug}/`}>{bluevuaLite.name} ($219.00)</a></li>
   </ul>
 

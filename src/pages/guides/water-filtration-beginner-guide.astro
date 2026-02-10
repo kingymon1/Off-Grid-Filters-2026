@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filtration-beginner-guide')!;
@@ -19,7 +19,7 @@ const timain = products.find(p => p.slug === 'timain-filter-straw-2pack')!;
 
 const faqs = [
   { question: 'Do I really need a water filter if I have city water?', answer: 'Municipal water in the US is generally safe to drink, but "safe" and "optimal" are different things. City water often contains chlorine (added for disinfection), trace amounts of lead (from old pipes), and sometimes PFAS or other contaminants that exceed recommended (not regulated) levels. A filter improves taste, reduces your exposure to these chemicals, and provides peace of mind. For most people, a simple pitcher filter is enough.' },
-  { question: 'What is the easiest water filter to start with?', answer: `A pitcher filter is the absolute easiest entry point. The Amazon Basics 10-Cup Pitcher ($${amazonPitcher.price}) or Brita UltraMax ($${britaUltramax.price}) requires zero installation — just fill the top with tap water and gravity does the work. For the best taste and contaminant removal from a pitcher, use Brita Elite replacement filters which are NSF 42/53/401 certified.` },
+  { question: 'What is the easiest water filter to start with?', answer: `A pitcher filter is the absolute easiest entry point. The Amazon Basics 10-Cup Pitcher (${getPriceTier(amazonPitcher.price)}) or Brita UltraMax (${getPriceTier(britaUltramax.price)}) requires zero installation — just fill the top with tap water and gravity does the work. For the best taste and contaminant removal from a pitcher, use Brita Elite replacement filters which are NSF 42/53/401 certified.` },
   { question: 'How much does a water filter cost to maintain?', answer: 'A basic pitcher filter system costs $20-$40 per year in replacement filters (assuming you change them every 2 months as recommended). Under-sink reverse osmosis systems cost $40-$70 per year in replacement filters. Compare this to bottled water: a family of 4 buying one 24-pack per week spends $800+ per year. Any filter pays for itself very quickly.' },
   { question: 'What is the difference between a water filter and a water purifier?', answer: 'A water filter physically removes contaminants by passing water through a medium (carbon, membrane, etc.). A water purifier kills or inactivates biological contaminants (bacteria, viruses, protozoa) using UV light, chemicals, or heat. Many home systems combine both — for example, the Bluevua RO100ROPOT-UV uses RO filtration plus UV purification. For US municipal water, a filter alone is sufficient since the water is already disinfected.' },
   { question: 'Can a water filter remove all contaminants?', answer: 'No single filter removes everything. Carbon filters excel at chlorine, taste, and some organic chemicals but miss dissolved minerals and fluoride. RO systems remove 93-98% of dissolved solids but waste water in the process. UV purifiers kill bacteria and viruses but do not remove chemicals. The best approach is matching your filter to your specific water quality issues rather than trying to remove everything.' },
@@ -78,7 +78,7 @@ const relatedArticles = [
   <p><strong>What it removes:</strong> Chlorine taste, some lead (with the right filter), mercury, copper, and basic sediment.</p>
   <p><strong>What it does not remove:</strong> Dissolved minerals (TDS), fluoride, most PFAS compounds, bacteria.</p>
   <p><strong>Best for:</strong> Beginners, renters, anyone who wants better-tasting water without any hassle.</p>
-  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser (${britaUltramax.price})</a> for families, or the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher (${amazonPitcher.price})</a> for the best budget option.</p>
+  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser ({getPriceTier(britaUltramax.price)})</a> for families, or the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher ({getPriceTier(amazonPitcher.price)})</a> for the best budget option.</p>
 
   <h3>2. Countertop Filters — Serious Filtration, No Plumbing</h3>
   <p><strong>What it is:</strong> A self-contained filtration unit that sits on your counter and plugs into a wall outlet. Some use reverse osmosis (RO) technology for deep purification.</p>
@@ -94,7 +94,7 @@ const relatedArticles = [
   <p><strong>Cost:</strong> $199-$505 for the system. $40-$70 per year for replacement filters.</p>
   <p><strong>What it removes:</strong> Depends on the system. Carbon-only under-sink filters handle chlorine and lead. RO under-sink systems remove 93-98% of all dissolved solids.</p>
   <p><strong>Best for:</strong> Homeowners who want set-and-forget filtration with the best long-term value.</p>
-  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> — the best value in under-sink RO filtration.</p>
+  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> — the best value in under-sink RO filtration.</p>
 
   <h3>4. Portable Filters — Water Safety on the Go</h3>
   <p><strong>What it is:</strong> Lightweight filter straws and purification tablets designed for hiking, camping, and emergencies.</p>
@@ -102,7 +102,7 @@ const relatedArticles = [
   <p><strong>Cost:</strong> $12-$39 depending on pack size.</p>
   <p><strong>What it removes:</strong> Bacteria and protozoa (filter straws). Viruses and bacteria (purification tablets).</p>
   <p><strong>Best for:</strong> Outdoor enthusiasts, emergency preparedness, travel.</p>
-  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack (${timain.price})</a> at $7.12 per straw.</p>
+  <p><strong>Our recommendation:</strong> The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack ({getPriceTier(timain.price)})</a> at $7.12 per straw.</p>
 
   <h2>Understanding NSF Certification (The Only Label That Matters)</h2>
   <p>When shopping for filters, you will see many claims: "removes 99% of contaminants," "pure water guaranteed," and so on. Ignore all of them unless they come with <strong>NSF certification</strong>.</p>
@@ -139,8 +139,8 @@ const relatedArticles = [
   <p>If you are ready to buy your first filter right now, answer one question:</p>
   <p><strong>"Do I just want better-tasting water, or am I worried about specific contaminants like lead or PFAS?"</strong></p>
   <ul>
-    <li><strong>Just better taste:</strong> Get the <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax (${britaUltramax.price})</a> or <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics Pitcher (${amazonPitcher.price})</a>. Upgrade to <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters (${britaElite.price})</a> for lead reduction.</li>
-    <li><strong>Concerned about contaminants:</strong> Get the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> for under-sink RO or the <a href={`/reviews/${bluevuaLite.slug}/`}>Bluevua Lite UV ($219.00)</a> for no-install countertop RO.</li>
+    <li><strong>Just better taste:</strong> Get the <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax ({getPriceTier(britaUltramax.price)})</a> or <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics Pitcher ({getPriceTier(amazonPitcher.price)})</a>. Upgrade to <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters ({getPriceTier(britaElite.price)})</a> for lead reduction.</li>
+    <li><strong>Concerned about contaminants:</strong> Get the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> for under-sink RO or the <a href={`/reviews/${bluevuaLite.slug}/`}>Bluevua Lite UV ($219.00)</a> for no-install countertop RO.</li>
   </ul>
   <p>Start with either of these and you are already ahead of the 60% of US households that do not use any water filtration at all.</p>
 

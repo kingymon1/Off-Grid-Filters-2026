@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories } from '../../lib/config';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const product = getProductBySlug('waterdrop-wd-pf01a-plus-3pack')!;
@@ -43,7 +43,7 @@ const relatedArticles = [
 
 <ContentLayout
   title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
-  description={`Honest review of the ${product.name}. ${product.bestFor}. Price: $${product.price}. Rating: ${product.rating}/5.`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}. Rating: ${product.rating}/5.`}
   canonical={`/reviews/${product.slug}/`}
   category="Reviews"
   currentPage={product.name}
@@ -56,8 +56,8 @@ const relatedArticles = [
 
   <div class="quick-specs">
     <div class="spec-item">
-      <span class="spec-label">Price</span>
-      <span class="spec-value">${product.price}</span>
+      <span class="spec-label">Price Range</span>
+      <span class="spec-value">{getPriceTier(product.price)}</span>
     </div>
     <div class="spec-item">
       <span class="spec-label">Rating</span>

@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-travel')!;
@@ -81,23 +81,23 @@ const relatedArticles = [
   <p>For international travel where viral contamination is a primary concern, Aquatabs are the single most important water purification item to carry. These EPA-registered tablets kill hepatitis A, norovirus, rotavirus, bacteria, and Giardia in 30 minutes using NaDCC chlorine-based chemistry. No iodine aftertaste, no complicated equipment, no batteries.</p>
   <p>The practical travel usage is straightforward: fill a water bottle with tap water (or pre-filtered water from your straw), drop in one tablet, shake gently, and wait 30 minutes. Treat a batch before bed and it is ready in the morning. Treat a batch at lunch and it is ready for your afternoon exploration. At 30 tablets in a pack that weighs half an ounce, you have 15 gallons of purification capacity — enough for a 2-week trip.</p>
   <p>In areas where water is visibly cloudy, pre-filter through your straw first. Turbid water reduces the effectiveness of chemical treatment because particles shield pathogens from the chlorine. Filter first, then treat — this two-step approach handles every water quality scenario.</p>
-  <p><strong>Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(aquatabs.price)} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {timain.name} — Best Lightweight Travel Filter</h3>
   <p>The Timain filter straw is the perfect complement to Aquatabs for travelers. While tablets handle viruses, the straw handles instant filtration for bacteria, protozoa, and sediment — no 30-minute wait required. When you are thirsty and need water now, the straw delivers.</p>
   <p>For travel, the dual-use design is especially practical. Use it as a direct straw to drink from tap water at your hotel (after checking that it is not chemically contaminated). Use it as a squeeze filter to fill your reusable bottle on the go. The 4-stage filtration with activated carbon even improves the taste of heavily chlorinated municipal water common in many countries.</p>
-  <p>The 2-pack at ${timain.price} means you can carry one and leave a backup at your hotel. At 2.1 ounces per straw, it takes up less space than a tube of sunscreen.</p>
-  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The 2-pack at {getPriceTier(timain.price)} means you can carry one and leave a backup at your hotel. At 2.1 ounces per straw, it takes up less space than a tube of sunscreen.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {membrane.name} — Best for Group Travel</h3>
-  <p>Traveling with family or friends? The Membrane Solutions 4-pack equips everyone with their own filter straw so no one has to share or go without. At ${membrane.price} for four straws, it works out to under $10 per person for the duration of the trip.</p>
+  <p>Traveling with family or friends? The Membrane Solutions 4-pack equips everyone with their own filter straw so no one has to share or go without. At {getPriceTier(membrane.price)} for four straws, it works out to under $10 per person for the duration of the trip.</p>
   <p>The 28mm bottle compatibility is particularly useful for travelers who buy sealed bottled water and want to refill the same bottle from filtered tap water later. Thread the straw onto the bottle opening, flip, and squeeze — filtered water on demand. Each straw's 1,500+ liter capacity far exceeds what any traveler would need on a single trip, so they can be used on future trips as well.</p>
-  <p><strong>Price:</strong> ${membrane.price} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {bluevuaLite.name} — Best for Extended Stays</h3>
   <p>For digital nomads, expats, or travelers on extended stays of a month or more, a countertop RO system transforms the quality of daily life. The Bluevua Lite UV provides full reverse osmosis with UV sterilization from any electrical outlet — no plumbing required. Set it up in your rental apartment or long-term hotel room, and you have hospital-grade purified water on demand.</p>
-  <p>The cost math favors the Bluevua on longer stays. At ${bluevuaLite.price} one-time, it replaces the daily cost of buying bottled water (typically $2-5/day in developing countries). Over a 3-month stay, bottled water costs $180-450 while the Bluevua costs the one-time investment plus electricity. For travelers who stay put for extended periods, it is the more economical and environmentally friendly choice.</p>
-  <p><strong>Price:</strong> ${bluevuaLite.price} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The cost math favors the Bluevua on longer stays. At {getPriceTier(bluevuaLite.price)} one-time, it replaces the daily cost of buying bottled water (typically $2-5/day in developing countries). Over a 3-month stay, bottled water costs $180-450 while the Bluevua costs the one-time investment plus electricity. For travelers who stay put for extended periods, it is the more economical and environmentally friendly choice.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(bluevuaLite.price)} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Travel Water Safety Tips by Region</h2>
   <ul>

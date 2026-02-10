@@ -2,6 +2,12 @@
 
 > Research completed February 2026 for 29 water filtration products across 6 categories.
 
+> **Note on pricing:** Prices listed below are point-in-time research data from February 2026.
+> On the live site, exact prices are **not displayed** per Amazon Associates compliance.
+> Instead, the site uses price tier brackets (e.g., "Under $25", "$100–$250") via the
+> `getPriceTier()` helper in `src/lib/config.ts`. All CTAs link to Amazon where users
+> can check the current price.
+
 ---
 
 ## Category 1: Countertop & Pitcher Filters (4 products)

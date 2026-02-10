@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'best-water-filters-under-50')!;
@@ -24,13 +24,13 @@ const membraneSediment = products.find(p => p.slug === 'membrane-solutions-sedim
 const aquacrest = products.find(p => p.slug === 'aquacrest-ukf8001-6pack')!;
 
 const faqs = [
-  { question: 'What is the best water filter I can buy for under $25?', answer: `The Amazon Basics 10-Cup Water Filter Pitcher at $${amazonPitcher.price} is our top pick under $25. It is NSF 42/53 certified for chlorine, lead, and mercury reduction — matching or beating filters at twice the price. For outdoor use, the Timain Filter Straw 2-Pack at $${timain.price} is an incredible deal at just $7.12 per straw.` },
+  { question: 'What is the best water filter I can buy for under $25?', answer: `The Amazon Basics 10-Cup Water Filter Pitcher at ${getPriceTier(amazonPitcher.price)} is our top pick under $25. It is NSF 42/53 certified for chlorine, lead, and mercury reduction — matching or beating filters at twice the price. For outdoor use, the Timain Filter Straw 2-Pack at ${getPriceTier(timain.price)} is an incredible deal at just $7.12 per straw.` },
   { question: 'Are cheap water filters actually effective?', answer: 'Yes, as long as they carry NSF certification. An NSF 42/53-certified $24 pitcher filter removes the same basic contaminants (chlorine, lead, mercury) as a $40 brand-name pitcher. The difference is usually in build quality, design, and brand cachet — not in filtration effectiveness. Always check for NSF certification rather than relying on price as a quality indicator.' },
-  { question: 'How much do replacement filters cost for budget water filters?', answer: `Replacement filter costs vary significantly. Amazon Basics Enhanced replacement filters cost $${amazonBasicsReplacement.price} for a 3-pack ($3.50 per filter). Brita Standard 3-packs are $${britaStandard3.price} ($6 per filter). Over a year, a budget pitcher system costs roughly $30-$70 in replacement filters, which is still far cheaper than buying bottled water.` },
+  { question: 'How much do replacement filters cost for budget water filters?', answer: `Replacement filter costs vary significantly. Amazon Basics Enhanced replacement filters cost ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack ($3.50 per filter). Brita Standard 3-packs are ${getPriceTier(britaStandard3.price)} ($6 per filter). Over a year, a budget pitcher system costs roughly $30-$70 in replacement filters, which is still far cheaper than buying bottled water.` },
   { question: 'Should I buy a cheap pitcher filter or save up for an under-sink system?', answer: 'If your water only needs basic chlorine and taste improvement, a pitcher filter is perfectly sufficient and a great value. However, if your water has serious contaminants like PFAS, high TDS, or significant lead levels, saving for an under-sink RO system like the iSpring RCC7AK ($198.78) is a better long-term investment. It removes far more contaminants at a lower cost per gallon over time.' },
-  { question: 'What is the cheapest way to get clean drinking water at home?', answer: `The absolute cheapest option is the Amazon Basics 10-Cup Pitcher at $${amazonPitcher.price} with Amazon Basics replacement filters at $${amazonBasicsReplacement.price} for a 3-pack. First-year cost is approximately $45. Compare that to bottled water: a family of four buying a 24-pack of water bottles weekly spends $800+ per year. Even the cheapest filter pays for itself within a month.` },
+  { question: 'What is the cheapest way to get clean drinking water at home?', answer: `The absolute cheapest option is the Amazon Basics 10-Cup Pitcher at ${getPriceTier(amazonPitcher.price)} with Amazon Basics replacement filters at ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack. First-year cost is approximately $45. Compare that to bottled water: a family of four buying a 24-pack of water bottles weekly spends $800+ per year. Even the cheapest filter pays for itself within a month.` },
   { question: 'Are generic or aftermarket water filters safe to use?', answer: 'Generic filters with NSF certification are safe and effective for the contaminants they are rated to remove. The AQUACREST 6-pack fridge filters ($16.88, NSF 42 certified) are a good example — they provide basic chlorine removal at a fraction of OEM prices. However, they typically lack the higher NSF 53/401 certifications of OEM filters, meaning they do not reduce lead or pharmaceuticals. Know your water quality needs before choosing aftermarket.' },
-  { question: 'Can I get PFAS removal for under $50?', answer: `PFAS removal at the under-$50 price point is limited. The Brita Elite 2-Pack at $${britaElite.price} is your best option — it is NSF 42/53/401 certified and targets some emerging contaminants. For comprehensive PFAS removal (96-99%), you will need to step up to a reverse osmosis system, which starts around $199. The Brita Elite is a good intermediate step.` },
+  { question: 'Can I get PFAS removal for under $50?', answer: `PFAS removal at the under-$50 price point is limited. The Brita Elite 2-Pack at ${getPriceTier(britaElite.price)} is your best option — it is NSF 42/53/401 certified and targets some emerging contaminants. For comprehensive PFAS removal (96-99%), you will need to step up to a reverse osmosis system, which starts around $199. The Brita Elite is a good intermediate step.` },
 ];
 
 const articleSchema = generateArticleSchema({
@@ -66,19 +66,19 @@ const relatedArticles = [
   <h2>Our Budget Picks at a Glance</h2>
   <p>Here is every product in our catalog priced under $50, ranked by overall value:</p>
   <ol>
-    <li><strong>Best Overall Budget Filter:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — ${amazonPitcher.price}</li>
-    <li><strong>Best for Families:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — ${britaUltramax.price}</li>
-    <li><strong>Best Replacement Filter Value:</strong> <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>{amazonBasicsReplacement.name}</a> — ${amazonBasicsReplacement.price}</li>
-    <li><strong>Best Premium Pitcher Filter:</strong> <a href={`/reviews/${britaElite.slug}/`}>{britaElite.name}</a> — ${britaElite.price}</li>
-    <li><strong>Best Samsung Fridge Filter:</strong> <a href={`/reviews/${samsungHaf.slug}/`}>{samsungHaf.name}</a> — ${samsungHaf.price}</li>
-    <li><strong>Best Budget Survival Filter:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — ${timain.price}</li>
-    <li><strong>Best Chemical Purification:</strong> <a href={`/reviews/${msrAquatabs.slug}/`}>{msrAquatabs.name}</a> — ${msrAquatabs.price}</li>
-    <li><strong>Best Budget Fridge Filter:</strong> <a href={`/reviews/${aquacrest.slug}/`}>{aquacrest.name}</a> — ${aquacrest.price}</li>
+    <li><strong>Best Overall Budget Filter:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — {getPriceTier(amazonPitcher.price)}</li>
+    <li><strong>Best for Families:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — {getPriceTier(britaUltramax.price)}</li>
+    <li><strong>Best Replacement Filter Value:</strong> <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>{amazonBasicsReplacement.name}</a> — {getPriceTier(amazonBasicsReplacement.price)}</li>
+    <li><strong>Best Premium Pitcher Filter:</strong> <a href={`/reviews/${britaElite.slug}/`}>{britaElite.name}</a> — {getPriceTier(britaElite.price)}</li>
+    <li><strong>Best Samsung Fridge Filter:</strong> <a href={`/reviews/${samsungHaf.slug}/`}>{samsungHaf.name}</a> — {getPriceTier(samsungHaf.price)}</li>
+    <li><strong>Best Budget Survival Filter:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — {getPriceTier(timain.price)}</li>
+    <li><strong>Best Chemical Purification:</strong> <a href={`/reviews/${msrAquatabs.slug}/`}>{msrAquatabs.name}</a> — {getPriceTier(msrAquatabs.price)}</li>
+    <li><strong>Best Budget Fridge Filter:</strong> <a href={`/reviews/${aquacrest.slug}/`}>{aquacrest.name}</a> — {getPriceTier(aquacrest.price)}</li>
   </ol>
 
-  <h2>1. Amazon Basics 10-Cup Water Filter Pitcher — ${amazonPitcher.price}</h2>
+  <h2>1. Amazon Basics 10-Cup Water Filter Pitcher — {getPriceTier(amazonPitcher.price)}</h2>
   <p><strong>Best Overall Budget Filter</strong></p>
-  <p>The Amazon Basics pitcher is proof that great water filtration does not require a premium price tag. At ${amazonPitcher.price}, it is the cheapest NSF 42/53-certified pitcher we have tested. That dual certification means it is independently verified to reduce chlorine taste, lead, mercury, and other health-related contaminants — the same claims Brita makes at nearly double the price.</p>
+  <p>The Amazon Basics pitcher is proof that great water filtration does not require a premium price tag. At {getPriceTier(amazonPitcher.price)}, it is the cheapest NSF 42/53-certified pitcher we have tested. That dual certification means it is independently verified to reduce chlorine taste, lead, mercury, and other health-related contaminants — the same claims Brita makes at nearly double the price.</p>
   <p>The 10-cup capacity fits most refrigerator doors, and the electronic filter change indicator takes the guesswork out of replacement timing. The filter uses activated carbon and ion exchange resin, compatible with Brita Standard replacement filters, giving you flexibility to use the cheapest option at any given time.</p>
   <p><strong>Pros:</strong> Lowest price for NSF 42/53 certification, compatible with Brita filters, electronic indicator.</p>
   <p><strong>Cons:</strong> Slower filtering speed (8-10 minutes for full pitcher), basic design, does not remove TDS or PFAS.</p>
@@ -86,59 +86,59 @@ const relatedArticles = [
 
   <ProTip>Pair the Amazon Basics pitcher with Amazon Basics Enhanced replacement filters ($10.49 for 3) instead of Brita-brand cartridges. The Amazon Basics replacements carry more NSF certifications (42/53/401/372) at a lower price — one of the best value combinations in water filtration.</ProTip>
 
-  <h2>2. Brita UltraMax 27-Cup Dispenser — ${britaUltramax.price}</h2>
+  <h2>2. Brita UltraMax 27-Cup Dispenser — {getPriceTier(britaUltramax.price)}</h2>
   <p><strong>Best for Families on a Budget</strong></p>
-  <p>At ${britaUltramax.price}, the Brita UltraMax is the best large-capacity filtered water solution under $50. The 27-cup (6.3-liter) capacity means a family of four can get through most of a day on a single fill. The precision-pour spigot is far more convenient than lifting a heavy pitcher.</p>
+  <p>At {getPriceTier(britaUltramax.price)}, the Brita UltraMax is the best large-capacity filtered water solution under $50. The 27-cup (6.3-liter) capacity means a family of four can get through most of a day on a single fill. The precision-pour spigot is far more convenient than lifting a heavy pitcher.</p>
   <p>With 42,000+ reviews and a 4.6-star rating, this is one of the most battle-tested water filtration products on Amazon. It comes with a Brita Standard filter, but we recommend upgrading to <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> — they last 3x longer (120 gallons vs 40) and reduce lead.</p>
   <p><strong>Pros:</strong> Massive capacity, spigot dispenser, trusted brand, compatible with Standard and Elite filters.</p>
   <p><strong>Cons:</strong> Large footprint in fridge, heavy when full, included Standard filter is basic.</p>
   <p><a href={getAffiliateUrl(britaUltramax.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${britaUltramax.slug}/`}>Read Full Review</a></p>
 
-  <h2>3. Amazon Basics Enhanced Replacement Filters (3-Pack) — ${amazonBasicsReplacement.price}</h2>
+  <h2>3. Amazon Basics Enhanced Replacement Filters (3-Pack) — {getPriceTier(amazonBasicsReplacement.price)}</h2>
   <p><strong>Best Replacement Filter Value</strong></p>
   <p>At $3.50 per filter, these are the best-value replacement filters available. What makes them remarkable is the NSF 42/53/401/372 quad certification — more certifications than Brita Standard filters at roughly half the price. Made in Europe, they are compatible with all Brita pitchers and dispensers (except Stream).</p>
   <p>Six months of filtered water for $10.49 is hard to argue with. The only caveat is a slightly slower flow rate compared to genuine Brita cartridges.</p>
   <p><a href={getAffiliateUrl(amazonBasicsReplacement.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>Read Full Review</a></p>
 
-  <h2>4. Brita Elite Replacement Filters (2-Pack) — ${britaElite.price}</h2>
+  <h2>4. Brita Elite Replacement Filters (2-Pack) — {getPriceTier(britaElite.price)}</h2>
   <p><strong>Best Premium Pitcher Filter Under $50</strong></p>
   <p>The Brita Elite (formerly Longlast) is the most capable pitcher filter you can buy. Each cartridge lasts 120 gallons — three times longer than standard filters — and removes 99% of lead, plus asbestos, benzene, and pharmaceuticals. The NSF 42/53/401 triple certification backs it up.</p>
   <p>At $14.89 per filter, the upfront cost is higher, but the cost per gallon ($0.12) is actually lower than Brita Standard ($0.15). It is the smartest upgrade for any existing Brita pitcher owner.</p>
   <p><a href={getAffiliateUrl(britaElite.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${britaElite.slug}/`}>Read Full Review</a></p>
 
-  <h2>5. Samsung HAF-QIN Refrigerator Filter — ${samsungHaf.price}</h2>
+  <h2>5. Samsung HAF-QIN Refrigerator Filter — {getPriceTier(samsungHaf.price)}</h2>
   <p><strong>Best Samsung Fridge Filter</strong></p>
-  <p>The most affordable OEM refrigerator filter in our catalog at ${samsungHaf.price}. The quarter-turn installation takes under 30 seconds, and it is compatible across Samsung's French door, side-by-side, and 4-Door Flex lineups. Carbon block filtration handles chlorine taste and sediment effectively.</p>
+  <p>The most affordable OEM refrigerator filter in our catalog at {getPriceTier(samsungHaf.price)}. The quarter-turn installation takes under 30 seconds, and it is compatible across Samsung's French door, side-by-side, and 4-Door Flex lineups. Carbon block filtration handles chlorine taste and sediment effectively.</p>
   <p>The limitation is basic NSF 42 certification — it does not cover lead or PFAS. If you need deeper filtration from your Samsung fridge, supplement with an under-sink system for drinking water.</p>
   <p><a href={getAffiliateUrl(samsungHaf.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${samsungHaf.slug}/`}>Read Full Review</a></p>
 
   <ProTip>Samsung fridge owners on a budget should pair the HAF-QIN for ice and cold water with a countertop pitcher for drinking water. This two-filter approach gives you better overall filtration than either solution alone.</ProTip>
 
-  <h2>6. Timain 4-Stage Water Filter Straw (2-Pack) — ${timain.price}</h2>
+  <h2>6. Timain 4-Stage Water Filter Straw (2-Pack) — {getPriceTier(timain.price)}</h2>
   <p><strong>Best Budget Survival Filter</strong></p>
   <p>At $7.12 per straw, the Timain is the most affordable personal water filter in existence. The 4-stage filtration system includes a 0.1-micron ultrafiltration membrane that removes 99.9999% of bacteria and 99.99% of protozoa. Each straw is rated for 1,500 liters.</p>
   <p>These belong in every hiking pack, vehicle glove box, and emergency kit. The dual-use design works as either a direct-sip straw or a squeeze filter when paired with a water bottle. At this price, there is zero reason not to have a pair on hand.</p>
   <p><strong>Limitation:</strong> Does not remove viruses, chemicals, or heavy metals. Not a replacement for home water filtration.</p>
   <p><a href={getAffiliateUrl(timain.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${timain.slug}/`}>Read Full Review</a></p>
 
-  <h2>7. MSR Aquatabs Water Purification Tablets (30-Pack) — ${msrAquatabs.price}</h2>
+  <h2>7. MSR Aquatabs Water Purification Tablets (30-Pack) — {getPriceTier(msrAquatabs.price)}</h2>
   <p><strong>Best Chemical Water Purification</strong></p>
   <p>The MSR Aquatabs are the essential companion to any filter straw. While filter straws remove bacteria and protozoa, they cannot kill viruses. Aquatabs use NaDCC (chlorine-based) chemistry to kill 99.99% of viruses, bacteria, and Giardia cysts — the things filters miss.</p>
   <p>Each tablet treats 2 quarts in 30 minutes. The 30-pack weighs virtually nothing and costs less than 40 cents per treatment. EPA-registered and WHO-recommended. Pair with a Timain straw for the cheapest complete water purification kit possible: $26.22 total.</p>
   <p><a href={getAffiliateUrl(msrAquatabs.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${msrAquatabs.slug}/`}>Read Full Review</a></p>
 
-  <h2>8. AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack) — ${aquacrest.price}</h2>
+  <h2>8. AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack) — {getPriceTier(aquacrest.price)}</h2>
   <p><strong>Best Budget Refrigerator Filter</strong></p>
-  <p>Six refrigerator filters for ${aquacrest.price} works out to $2.81 per filter — a full year of filter changes for what a single OEM filter costs. The coconut shell carbon block provides reliable chlorine taste and odor reduction, and the NSF 42 certification confirms it.</p>
+  <p>Six refrigerator filters for {getPriceTier(aquacrest.price)} works out to $2.81 per filter — a full year of filter changes for what a single OEM filter costs. The coconut shell carbon block provides reliable chlorine taste and odor reduction, and the NSF 42 certification confirms it.</p>
   <p>Compatible with Maytag UKF8001, Whirlpool EDR4RXD1, and many other models. The trade-off is basic filtration only — no lead or PFAS reduction. For homes with clean municipal water where taste improvement is the main goal, this is an outstanding value.</p>
   <p><a href={getAffiliateUrl(aquacrest.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${aquacrest.slug}/`}>Read Full Review</a></p>
 
   <h2>Other Budget Options Worth Considering</h2>
   <ul>
-    <li><strong><a href={`/reviews/${britaStandard3.slug}/`}>Brita Standard 3-Pack (${britaStandard3.price})</a>:</strong> The name you know and trust. Not the best per-filter value (the Amazon Basics Enhanced beats it), but universal compatibility and 95,000 reviews provide peace of mind.</li>
-    <li><strong><a href={`/reviews/${purFilter.slug}/`}>PUR Pitcher Filter 4-Pack (${purFilter.price})</a>:</strong> Better lead reduction than Brita Standard at a similar price point. The LockFit design prevents unfiltered bypass — a genuine safety advantage.</li>
-    <li><strong><a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions Sediment Filter 6-Pack (${membraneSediment.price})</a>:</strong> Not a drinking water filter, but essential pre-filtration for well water homes. A year of sediment protection for under $27.</li>
-    <li><strong><a href={`/reviews/${geXwfe.slug}/`}>GE XWFE Refrigerator Filter (${geXwfe.price})</a>:</strong> Just under the $50 mark. Removes 50+ contaminants including PFOA, PFOS, and microplastics. The best fridge filter for the money if your GE model supports it.</li>
+    <li><strong><a href={`/reviews/${britaStandard3.slug}/`}>Brita Standard 3-Pack ({getPriceTier(britaStandard3.price)})</a>:</strong> The name you know and trust. Not the best per-filter value (the Amazon Basics Enhanced beats it), but universal compatibility and 95,000 reviews provide peace of mind.</li>
+    <li><strong><a href={`/reviews/${purFilter.slug}/`}>PUR Pitcher Filter 4-Pack ({getPriceTier(purFilter.price)})</a>:</strong> Better lead reduction than Brita Standard at a similar price point. The LockFit design prevents unfiltered bypass — a genuine safety advantage.</li>
+    <li><strong><a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions Sediment Filter 6-Pack ({getPriceTier(membraneSediment.price)})</a>:</strong> Not a drinking water filter, but essential pre-filtration for well water homes. A year of sediment protection for under $27.</li>
+    <li><strong><a href={`/reviews/${geXwfe.slug}/`}>GE XWFE Refrigerator Filter ({getPriceTier(geXwfe.price)})</a>:</strong> Just under the $50 mark. Removes 50+ contaminants including PFOA, PFOS, and microplastics. The best fridge filter for the money if your GE model supports it.</li>
   </ul>
 
   <ProTip>The absolute cheapest path to clean drinking water: Amazon Basics pitcher ($23.64) + Amazon Basics Enhanced replacement 3-pack ($10.49) = $34.13 for your first 6 months of NSF-certified filtered water. That is less than a week of bottled water for a family.</ProTip>

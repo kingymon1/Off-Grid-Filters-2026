@@ -1,6 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { products, categories, comparisons, guides, getProductBySlug, isPublished } from '../../lib/config';
+import { products, categories, comparisons, guides, getProductBySlug, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema } from '../../lib/schema';
 
 const year = new Date().getFullYear();
@@ -44,7 +44,7 @@ const relatedArticles = [
     {publishedProducts.map(p => (
       <a href={`/reviews/${p.slug}/`} class="resource-card">
         <span class="resource-title">{p.name}</span>
-        <span class="resource-meta">{p.rating}&#9733; &middot; ${p.price}</span>
+        <span class="resource-meta">{p.rating}&#9733; &middot; {getPriceTier(p.price)}</span>
       </a>
     ))}
   </div>

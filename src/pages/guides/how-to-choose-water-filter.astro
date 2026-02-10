@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'how-to-choose-water-filter')!;
@@ -72,25 +72,25 @@ const relatedArticles = [
   <h3>Pitcher and Dispenser Filters</h3>
   <p><strong>Best for:</strong> Renters, small budgets, basic taste improvement.</p>
   <p>Pitcher filters are the simplest entry point into filtered water. Fill the top, gravity pulls water through a carbon cartridge, and you pour from the pitcher. No installation, no plumbing, no tools.</p>
-  <p>The <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser (${britaUltramax.price})</a> is our top pick for families — its massive capacity means fewer refills. For budget buyers, the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher (${amazonPitcher.price})</a> delivers NSF 42/53 certified filtration at roughly half the price of brand-name alternatives.</p>
+  <p>The <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser ({getPriceTier(britaUltramax.price)})</a> is our top pick for families — its massive capacity means fewer refills. For budget buyers, the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher ({getPriceTier(amazonPitcher.price)})</a> delivers NSF 42/53 certified filtration at roughly half the price of brand-name alternatives.</p>
   <p><strong>Limitations:</strong> Pitcher filters cannot remove TDS, fluoride, or most PFAS. Slow flow rate. Filter replacement every 2 months adds up.</p>
 
   <h3>Countertop Reverse Osmosis Systems</h3>
   <p><strong>Best for:</strong> Renters who need serious filtration, health-conscious users, apartments without under-sink access.</p>
   <p>Countertop RO systems sit on your counter and plug into a standard outlet — no plumbing required. They push water through a semi-permeable membrane that removes 93-99% of dissolved solids, including lead, fluoride, PFAS, and heavy metals.</p>
-  <p>The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV (${bluevua.price})</a> adds UV sterilization and a glass carafe, making it the top-tier countertop choice. For a more affordable option, its <a href="/reviews/bluevua-ro100ropot-lite-uv/">Lite UV sibling ($219.00)</a> delivers 90% of the performance at 70% of the price.</p>
+  <p>The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV ({getPriceTier(bluevua.price)})</a> adds UV sterilization and a glass carafe, making it the top-tier countertop choice. For a more affordable option, its <a href="/reviews/bluevua-ro100ropot-lite-uv/">Lite UV sibling ($219.00)</a> delivers 90% of the performance at 70% of the price.</p>
   <p><strong>Limitations:</strong> Uses counter space. Produces water slowly. Creates wastewater (2:1 to 3:1 pure-to-drain ratio).</p>
 
   <h3>Under-Sink Filters</h3>
   <p><strong>Best for:</strong> Homeowners wanting permanent, high-performance filtration that stays hidden.</p>
   <p>Under-sink systems connect directly to your cold water line, either through a dedicated faucet or inline with your existing one. They offer higher flow rates and more thorough filtration than countertop options.</p>
-  <p>The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> is our best-value under-sink RO, delivering 6-stage filtration with alkaline remineralization for under $200. If you want cutting-edge tankless design with real-time TDS monitoring, the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> is the premium choice at 600 GPD.</p>
+  <p>The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> is our best-value under-sink RO, delivering 6-stage filtration with alkaline remineralization for under $200. If you want cutting-edge tankless design with real-time TDS monitoring, the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 ({getPriceTier(waterdrop.price)})</a> is the premium choice at 600 GPD.</p>
   <p><strong>Limitations:</strong> Requires basic plumbing skills or professional installation. Takes cabinet space. RO systems waste water.</p>
 
   <h3>Portable and Survival Filters</h3>
   <p><strong>Best for:</strong> Hikers, campers, emergency preparedness, off-grid living.</p>
   <p>These lightweight filters use hollow fiber or ultrafiltration membranes to remove bacteria and protozoa from untreated water sources. They are essential for backcountry travel and disaster kits.</p>
-  <p>The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack (${timain.price})</a> is our budget pick at just $7.12 per straw. For complete water safety, pair a filter straw with <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs ($11.99)</a> to kill viruses that filters miss.</p>
+  <p>The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack ({getPriceTier(timain.price)})</a> is our budget pick at just $7.12 per straw. For complete water safety, pair a filter straw with <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs ($11.99)</a> to kill viruses that filters miss.</p>
   <p><strong>Limitations:</strong> Do not remove chemicals, heavy metals, or TDS. Not designed for daily home use.</p>
 
   <h3>Whole-House and Sediment Filters</h3>
@@ -126,13 +126,13 @@ const relatedArticles = [
   <p>The sticker price of a water filter is only part of the equation. Replacement filter costs, energy use, and water waste all factor into the true cost of ownership.</p>
 
   <h3>Budget Tier: Under $50</h3>
-  <p>Pitcher filters dominate this range. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher at ${amazonPitcher.price}</a> is the best value entry point. Annual replacement filter costs run $20-$40. Total first-year cost: $45-$65.</p>
+  <p>Pitcher filters dominate this range. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher at {getPriceTier(amazonPitcher.price)}</a> is the best value entry point. Annual replacement filter costs run $20-$40. Total first-year cost: $45-$65.</p>
 
   <h3>Mid-Range: $50-$250</h3>
-  <p>This is where you get serious filtration. The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a> delivers full reverse osmosis with alkaline remineralization. Annual filter replacement costs are roughly $40-$60. First-year total: $240-$260.</p>
+  <p>This is where you get serious filtration. The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at {getPriceTier(ispring.price)}</a> delivers full reverse osmosis with alkaline remineralization. Annual filter replacement costs are roughly $40-$60. First-year total: $240-$260.</p>
 
   <h3>Premium: $250-$550</h3>
-  <p>Premium systems offer advanced features like UV sterilization, tankless design, or commercial-grade filtration. The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV at ${bluevua.price}</a> and <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 at ${waterdrop.price}</a> represent the best of this tier. The <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 at ${pentairH1200.price}</a> brings restaurant-grade filtration to your kitchen.</p>
+  <p>Premium systems offer advanced features like UV sterilization, tankless design, or commercial-grade filtration. The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV at {getPriceTier(bluevua.price)}</a> and <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 at {getPriceTier(waterdrop.price)}</a> represent the best of this tier. The <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 at {getPriceTier(pentairH1200.price)}</a> brings restaurant-grade filtration to your kitchen.</p>
   <p>For a comprehensive breakdown, read our <a href="/guides/water-filter-cost-analysis/">Water Filter Cost Analysis</a>.</p>
 
   <h2>Step 6: Check for NSF Certifications</h2>
@@ -170,12 +170,12 @@ const relatedArticles = [
   <h2>Product Recommendations by Use Case</h2>
   <p>Based on our testing and analysis of 29 water filters, here are our top picks for common scenarios:</p>
   <ul>
-    <li><strong>Best for most people:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — ${britaUltramax.price}, {britaUltramax.rating} stars. Upgrade to Elite filters for lead reduction.</li>
-    <li><strong>Best on a tight budget:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — ${amazonPitcher.price}. NSF 42/53 certified at the lowest price.</li>
-    <li><strong>Best for serious contaminants (RO):</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a> — ${ispring.price}. Full 6-stage RO under $200.</li>
-    <li><strong>Best no-install RO:</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name}</a> — ${bluevua.price}. UV sterilization plus glass carafe.</li>
-    <li><strong>Best premium under-sink:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name}</a> — ${waterdrop.price}. Tankless 600 GPD with smart TDS faucet.</li>
-    <li><strong>Best for emergencies:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — ${timain.price} for 2 straws. Pair with Aquatabs for complete safety.</li>
+    <li><strong>Best for most people:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — {getPriceTier(britaUltramax.price)}, {britaUltramax.rating} stars. Upgrade to Elite filters for lead reduction.</li>
+    <li><strong>Best on a tight budget:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — {getPriceTier(amazonPitcher.price)}. NSF 42/53 certified at the lowest price.</li>
+    <li><strong>Best for serious contaminants (RO):</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a> — {getPriceTier(ispring.price)}. Full 6-stage RO under $200.</li>
+    <li><strong>Best no-install RO:</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name}</a> — {getPriceTier(bluevua.price)}. UV sterilization plus glass carafe.</li>
+    <li><strong>Best premium under-sink:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name}</a> — {getPriceTier(waterdrop.price)}. Tankless 600 GPD with smart TDS faucet.</li>
+    <li><strong>Best for emergencies:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — {getPriceTier(timain.price)} for 2 straws. Pair with Aquatabs for complete safety.</li>
   </ul>
 
   <h2>Frequently Asked Questions</h2>

@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filter-sizing-guide')!;
@@ -79,7 +79,7 @@ const relatedArticles = [
   <p><strong>Monthly consumption:</strong> ~45-60 gallons</p>
   <p><strong>Best filter type:</strong> Pitcher filter or countertop system</p>
   <ul>
-    <li><a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher (${amazonPitcher.price})</a> — At 40-gallon filter capacity, you will replace filters roughly monthly. The 10-cup size is perfectly adequate for a couple.</li>
+    <li><a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher ({getPriceTier(amazonPitcher.price)})</a> — At 40-gallon filter capacity, you will replace filters roughly monthly. The 10-cup size is perfectly adequate for a couple.</li>
     <li><a href="/reviews/bluevua-ro100ropot-lite-uv/">Bluevua RO100ROPOT-Lite UV ($219.00)</a> — If you want serious filtration without plumbing, the 0.75-gallon batch capacity handles a couple's needs with 2-3 batches per day.</li>
   </ul>
 
@@ -87,23 +87,23 @@ const relatedArticles = [
   <p><strong>Monthly consumption:</strong> ~75-120 gallons</p>
   <p><strong>Best filter type:</strong> Large dispenser, countertop RO, or under-sink system</p>
   <ul>
-    <li><a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser (${britaUltramax.price})</a> — The 27-cup (6.3 liter) capacity means one fill covers most of a day's drinking water. With a Brita Standard filter (40-gallon capacity), you are replacing monthly. Upgrade to Elite filters (120 gallons) to replace just every 6 weeks.</li>
-    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK Under-Sink RO (${ispring.price})</a> — At 75 GPD capacity, a family of 4 uses less than 6% of the system's daily capacity. The tank refills continuously so filtered water is always ready.</li>
+    <li><a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax 27-Cup Dispenser ({getPriceTier(britaUltramax.price)})</a> — The 27-cup (6.3 liter) capacity means one fill covers most of a day's drinking water. With a Brita Standard filter (40-gallon capacity), you are replacing monthly. Upgrade to Elite filters (120 gallons) to replace just every 6 weeks.</li>
+    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK Under-Sink RO ({getPriceTier(ispring.price)})</a> — At 75 GPD capacity, a family of 4 uses less than 6% of the system's daily capacity. The tank refills continuously so filtered water is always ready.</li>
   </ul>
 
   <h3>5-6 People (4-6 Gallons/Day)</h3>
   <p><strong>Monthly consumption:</strong> ~120-180 gallons</p>
   <p><strong>Best filter type:</strong> Under-sink RO system. Pitcher filters become impractical at this scale.</p>
   <ul>
-    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK (${ispring.price})</a> — Still handles this load comfortably at 75 GPD with tank storage.</li>
-    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> — The 600 GPD tankless design delivers on-demand filtered water even during peak usage. No waiting for a tank to refill.</li>
+    <li><a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> — Still handles this load comfortably at 75 GPD with tank storage.</li>
+    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 ({getPriceTier(waterdrop.price)})</a> — The 600 GPD tankless design delivers on-demand filtered water even during peak usage. No waiting for a tank to refill.</li>
   </ul>
 
   <h3>7+ People or High-Demand Use</h3>
   <p><strong>Monthly consumption:</strong> 200+ gallons</p>
   <p><strong>Best filter type:</strong> Tankless under-sink RO or commercial-grade under-sink system</p>
   <ul>
-    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 (${waterdrop.price})</a> — 600 GPD is overkill for most families, but perfect for large households or homes that host frequently.</li>
+    <li><a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 ({getPriceTier(waterdrop.price)})</a> — 600 GPD is overkill for most families, but perfect for large households or homes that host frequently.</li>
     <li><a href="/reviews/pentair-everpure-h300/">Pentair Everpure H-300 ($505.00)</a> — Commercial-grade single cartridge system designed for continuous use.</li>
   </ul>
 
@@ -132,7 +132,7 @@ const relatedArticles = [
   <h3>Well Water Considerations</h3>
   <ul>
     <li><strong>Filter lifespan is shorter.</strong> Expect filters to last 30-50% less time than rated for municipal water. A 40-gallon pitcher filter may only last 25-30 gallons on well water.</li>
-    <li><strong>Pre-filtration is essential.</strong> A whole-house sediment filter like the <a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions 5-Micron String Wound (${membraneSediment.price} for 6-pack)</a> protects downstream filters from premature clogging.</li>
+    <li><strong>Pre-filtration is essential.</strong> A whole-house sediment filter like the <a href={`/reviews/${membraneSediment.slug}/`}>Membrane Solutions 5-Micron String Wound ({getPriceTier(membraneSediment.price)} for 6-pack)</a> protects downstream filters from premature clogging.</li>
     <li><strong>TDS is typically higher.</strong> Well water often has TDS readings of 200-500+ ppm versus 50-200 ppm for municipal water. RO membranes work harder and may need earlier replacement.</li>
     <li><strong>Biological contamination risk is higher.</strong> Unlike municipal water, well water is not chlorinated. UV sterilization or chemical treatment may be needed in addition to filtration.</li>
   </ul>
@@ -164,11 +164,11 @@ const relatedArticles = [
 
   <h2>Our Recommendations by Household Size</h2>
   <ul>
-    <li><strong>Solo or couple, budget-focused:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name} (${amazonPitcher.price})</a></li>
-    <li><strong>Family of 3-4, want convenience:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} (${britaUltramax.price})</a> with Elite filters</li>
-    <li><strong>Family of 3-4, want best filtration:</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name} (${ispring.price})</a></li>
-    <li><strong>Large family or high demand:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} (${waterdrop.price})</a></li>
-    <li><strong>Apartment or rental (any size):</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} (${bluevua.price})</a></li>
+    <li><strong>Solo or couple, budget-focused:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name} ({getPriceTier(amazonPitcher.price)})</a></li>
+    <li><strong>Family of 3-4, want convenience:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name} ({getPriceTier(britaUltramax.price)})</a> with Elite filters</li>
+    <li><strong>Family of 3-4, want best filtration:</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name} ({getPriceTier(ispring.price)})</a></li>
+    <li><strong>Large family or high demand:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name} ({getPriceTier(waterdrop.price)})</a></li>
+    <li><strong>Apartment or rental (any size):</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name} ({getPriceTier(bluevua.price)})</a></li>
   </ul>
 
   <h2>Frequently Asked Questions</h2>

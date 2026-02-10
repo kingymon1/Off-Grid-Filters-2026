@@ -1317,6 +1317,19 @@ export const guides: GuideConfig[] = [
   { title: 'History of Water Filtration: From Ancient Methods to Modern RO', slug: 'history-of-water-filtration', description: 'How humans have purified drinking water throughout history and the technologies that changed everything.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave7 },
 ];
 
+// ── Price Tier Helper ────────────────────────────────────────
+// Amazon policy forbids hard-coding exact prices (they change daily).
+// Use descriptive price brackets instead.
+export function getPriceTier(price: string): string {
+  const num = parseFloat(price);
+  if (num < 25) return 'Under $25';
+  if (num < 50) return '$25–$50';
+  if (num < 100) return '$50–$100';
+  if (num < 250) return '$100–$250';
+  if (num < 500) return '$250–$500';
+  return '$500+';
+}
+
 // ── Helper lookups ───────────────────────────────────────────
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find(p => p.slug === slug);

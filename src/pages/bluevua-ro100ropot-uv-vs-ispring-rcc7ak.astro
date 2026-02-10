@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
-import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished, getPriceTier } from '../lib/config';
 import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const comp = comparisons.find(c => c.slug === 'bluevua-ro100ropot-uv-vs-ispring-rcc7ak')!;
@@ -106,7 +106,7 @@ const relatedArticles = [
         <li>You need a portable system you can move between homes</li>
         <li>Water efficiency is important — 2:1 pure-to-drain ratio</li>
       </ul>
-      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price on Amazon</span></a>
     </div>
     <div class="rec-card rec-b">
       <h3>Get the {productB.name} if...</h3>
@@ -116,7 +116,7 @@ const relatedArticles = [
         <li>You want the best RO value under $200 with alkaline remineralization</li>
         <li>You prefer a clean countertop with the system hidden under the sink</li>
       </ul>
-      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price on Amazon</span></a>
     </div>
   </div>
 

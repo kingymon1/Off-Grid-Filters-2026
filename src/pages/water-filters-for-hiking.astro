@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-hiking')!;
@@ -71,27 +71,27 @@ const relatedArticles = [
   </ul>
 
   <ProTip title="The Ultralight Water Kit">
-    The lightest possible water purification setup we have tested: one Timain filter straw (2.1 oz) plus a 30-pack of MSR Aquatabs (0.5 oz). Total weight: 2.6 ounces. Total cost: ${(parseFloat(timain.price)/2 + parseFloat(aquatabs.price)).toFixed(2)}. This gives you instant filtration for bacteria and protozoa from the straw, plus virus-killing chemical purification from the tablets. Ultralight hikers and thru-hikers cannot justify carrying anything heavier.
+    The lightest possible water purification setup we have tested: one Timain filter straw (2.1 oz) plus a 30-pack of MSR Aquatabs (0.5 oz). Total weight: 2.6 ounces. Total cost: {getPriceTier(timain.price)} for the straw pair plus {getPriceTier(aquatabs.price)} for the tablets. This gives you instant filtration for bacteria and protozoa from the straw, plus virus-killing chemical purification from the tablets. Ultralight hikers and thru-hikers cannot justify carrying anything heavier.
   </ProTip>
 
   <h2>Top Picks for Hiking</h2>
 
   <h3>1. {timain.name} — Best Ultralight Filter</h3>
   <p>The Timain straw is our top pick for hikers because it delivers serious filtration at a nearly negligible weight. At 2.1 ounces per straw, you genuinely forget it is in your pack. The 4-stage filtration system with a 0.1-micron ultrafiltration membrane removes 99.9999% of bacteria and 99.99% of protozoa — the two primary threats in North American backcountry water.</p>
-  <p>For trail use, the dual-mode design is invaluable. On the move, dip the straw directly into a stream and drink. At camp or a water stop, use it as a squeeze filter to fill your water bottles or hydration bladder. The 2-pack at ${timain.price} means you get a primary and a backup for less than the cost of a camp meal.</p>
+  <p>For trail use, the dual-mode design is invaluable. On the move, dip the straw directly into a stream and drink. At camp or a water stop, use it as a squeeze filter to fill your water bottles or hydration bladder. The 2-pack at {getPriceTier(timain.price)} means you get a primary and a backup for less than the cost of a camp meal.</p>
   <p>The one caveat: the Timain does not come with a squeeze bag. Bring your own or use a disposable plastic bottle with a 28mm opening. Many thru-hikers use a Smart Water bottle, which fits perfectly.</p>
-  <p><strong>Price:</strong> ${timain.price} | <strong>Weight:</strong> 2.1 oz/straw | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <strong>Weight:</strong> 2.1 oz/straw | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {membrane.name} — Best for Reliability</h3>
-  <p>With 8,500+ reviews and a 4.5-star rating, the Membrane Solutions straw has the most proven track record among budget filter straws. The hollow fiber membrane technology is the same fundamental design used in premium filters costing $30-40 for a single unit. At ${membrane.price} for four straws, you can stash backups in your pack, car, and emergency kit.</p>
+  <p>With 8,500+ reviews and a 4.5-star rating, the Membrane Solutions straw has the most proven track record among budget filter straws. The hollow fiber membrane technology is the same fundamental design used in premium filters costing $30-40 for a single unit. At {getPriceTier(membrane.price)} for four straws, you can stash backups in your pack, car, and emergency kit.</p>
   <p>For hikers, the 28mm bottle compatibility is a standout feature. Thread the straw onto a standard water bottle, flip it upside down, and squeeze filtered water into your mouth or another container. This is faster and more practical than suction drinking from a stream, especially when refilling on the trail.</p>
   <p>Each straw is rated for 1,500+ liters, which translates to roughly 500 days of typical hiking use at 3 liters per day. Realistically, sediment buildup will reduce flow rate before you hit that capacity, but even at half the rated life, the per-liter cost is nearly zero.</p>
-  <p><strong>Price:</strong> ${membrane.price} | <strong>Weight:</strong> 2.0 oz/straw | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <strong>Weight:</strong> 2.0 oz/straw | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {aquatabs.name} — Essential Backup for Thru-Hikers</h3>
   <p>Aquatabs are the ultimate insurance policy for hikers. The entire 30-pack weighs 0.5 ounces — barely noticeable in any pack. Each tablet treats 2 quarts of water in 30 minutes, killing viruses, bacteria, and Giardia that filter straws cannot address.</p>
   <p>On the trail, Aquatabs shine in two scenarios: as a backup if your filter straw fails or freezes, and as a virus-killing supplement in areas where animal or human waste contamination is likely. At water sources near heavily-used campsites or trail shelters, viral contamination is more likely, making chemical purification a smart addition to your filter straw.</p>
-  <p><strong>Price:</strong> ${aquatabs.price} | <strong>Weight:</strong> 0.5 oz | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(aquatabs.price)} | <strong>Weight:</strong> 0.5 oz | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Hiking-Specific Water Filtration Tips</h2>
   <ul>
@@ -117,5 +117,5 @@ const relatedArticles = [
   </div>
 
   <h2>Our Top Pick for Hiking</h2>
-  <p>The <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> is our top recommendation for hikers and backpackers. At 2.1 ounces and ${timain.price} for a pair, it offers the best weight-to-value ratio of any filter we tested. Pair it with <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for complete biological protection at under 3 ounces, and you have a trail-ready water purification system that would satisfy the most demanding ultralight hiker.</p>
+  <p>The <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> is our top recommendation for hikers and backpackers. At 2.1 ounces and {getPriceTier(timain.price)} for a pair, it offers the best weight-to-value ratio of any filter we tested. Pair it with <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for complete biological protection at under 3 ounces, and you have a trail-ready water purification system that would satisfy the most demanding ultralight hiker.</p>
 </ContentLayout>

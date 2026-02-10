@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-off-grid')!;
@@ -86,27 +86,27 @@ const relatedArticles = [
   <h3>1. {ispring.name} — Best Under-Sink RO for Off-Grid</h3>
   <p>The iSpring RCC7AK is the cornerstone of an off-grid drinking water system. Its 6-stage reverse osmosis removes 93-98% of TDS, over 98.9% of lead, and 96-99% of PFAS — addressing the dissolved contaminants that are common in well water and that sediment filters cannot touch. The alkaline remineralization stage adds back beneficial minerals, improving both taste and pH balance.</p>
   <p>Critically for off-grid use, this system operates entirely on water pressure — no electricity required. If your well system produces at least 40 PSI (standard for most submersible well pumps), the iSpring works exactly as it would in a grid-connected home. The 75 GPD production rate is more than sufficient for a household's drinking and cooking needs.</p>
-  <p>At ${ispring.price}, it is the most cost-effective RO system on the market with this level of filtration. Annual replacement filter costs run approximately $50-70. Over a 5-year span, the total cost of ownership is under $600 — less than $0.33 per day for laboratory-grade drinking water from your well.</p>
-  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(ispring.price)}, it is the most cost-effective RO system on the market with this level of filtration. Annual replacement filter costs run approximately $50-70. Over a 5-year span, the total cost of ownership is under $600 — less than $0.33 per day for laboratory-grade drinking water from your well.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(ispring.price)} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {sediment.name} — Whole-House Pre-Filtration</h3>
   <p>Every off-grid water system starts with sediment filtration. The Membrane Solutions 5-micron cartridges fit standard 10x2.5-inch housings and capture 99% of the sand, silt, rust, and debris that well water and surface water carry. Without this first line of defense, sediment clogs and damages everything downstream — your RO membrane, water heater, faucet aerators, and appliances.</p>
-  <p>For off-grid properties, install the sediment filter housing as close to the water entry point as possible, before the pressure tank if your system has one. The 6-pack at ${sediment.price} provides a full year of filters, and having a year's supply on hand means you are never caught without a replacement on your remote property.</p>
+  <p>For off-grid properties, install the sediment filter housing as close to the water entry point as possible, before the pressure tank if your system has one. The 6-pack at {getPriceTier(sediment.price)} provides a full year of filters, and having a year's supply on hand means you are never caught without a replacement on your remote property.</p>
   <p>Change cartridges every 1-3 months depending on sediment load. In spring when runoff increases sediment in well water, you may need monthly changes. In winter with stable groundwater, cartridges last longer. The visual inspection tells the story — when the white cartridge turns brown, it is time.</p>
-  <p><strong>Price:</strong> ${sediment.price} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(sediment.price)} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {bluevua.name} — Best for Properties Without Plumbing</h3>
   <p>For off-grid cabins, tiny homes, or properties without under-sink plumbing, the Bluevua countertop RO provides full reverse osmosis with UV sterilization from any surface and electrical outlet. Fill the reservoir manually from your water supply, plug it in, and the 6-stage system produces purified water into the glass carafe. No plumbing connections needed.</p>
   <p>The UV sterilization is particularly valuable for off-grid properties that rely on rainwater or surface water. These sources can harbor bacteria and viruses that even RO membranes may not fully address at their seals. The UV light kills 99.99% of biological threats as a final safety stage. The glass carafe prevents plastic leaching that becomes a concern in off-grid environments where containers may sit in warm conditions.</p>
   <p>The Bluevua draws approximately 100-150 watts during operation — easily supplied by a modest solar panel and battery system. A single filtering cycle runs about 15-20 minutes, consuming less energy than a light bulb running for an hour.</p>
-  <p><strong>Price:</strong> ${bluevua.price} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(bluevua.price)} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {timain.name} + {aquatabs.name} — Portable Backup System</h3>
   <p>No off-grid water plan is complete without a portable backup. If your primary well pump fails, your power system goes down during bad weather, or you need water while working away from the cabin, a filter straw and purification tablets provide immediate water access from any natural source.</p>
-  <p>The Timain 2-pack provides two straws: one for your person and one stashed at a water source access point. Aquatabs add virus protection that the straw alone cannot provide. Together at ${timain.price} + ${aquatabs.price}, this backup kit costs under $27 and could sustain your drinking water needs for weeks if your primary system goes offline.</p>
+  <p>The Timain 2-pack provides two straws: one for your person and one stashed at a water source access point. Aquatabs add virus protection that the straw alone cannot provide. Together at {getPriceTier(timain.price)} + {getPriceTier(aquatabs.price)}, this backup kit costs under $27 and could sustain your drinking water needs for weeks if your primary system goes offline.</p>
   <p>For off-grid living, consider keeping backup filter straws at multiple locations: your cabin, your workshop or outbuilding, and in your vehicle. The cost of redundancy is trivial compared to the risk of being without safe water when your well pump needs repair.</p>
-  <p><strong>Timain Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
-  <p><strong>Aquatabs Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
+  <p><strong>Timain Price Range:</strong> {getPriceTier(timain.price)} | <a href={`/reviews/${timain.slug}/`}>Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
+  <p><strong>Aquatabs Price Range:</strong> {getPriceTier(aquatabs.price)} | <a href={`/reviews/${aquatabs.slug}/`}>Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price</a></p>
 
   <h2>Off-Grid Water System Design Tips</h2>
   <ul>
