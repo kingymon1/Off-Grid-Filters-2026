@@ -1,6 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import ProductImage from '../../components/ProductImage.astro';
+import ProductHero from '../../components/ProductHero.astro';
 import ProTip from '../../components/ProTip.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
@@ -52,28 +52,7 @@ const relatedArticles = [
 >
   <!-- HERO -->
   <h1>{product.name} Review {new Date().getFullYear()}</h1>
-  <p class="lead"><strong>Verdict:</strong> {product.verdict}</p>
-
-  <div class="quick-specs">
-    <div class="spec-item">
-      <span class="spec-label">Price Range</span>
-      <span class="spec-value">{getPriceTier(product.price)}</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Rating</span>
-      <span class="spec-value">{product.rating}/5</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Micron Rating</span>
-      <span class="spec-value">{product.specs.micronRating}μm</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Pack Size</span>
-      <span class="spec-value">{product.specs.packSize} Filters</span>
-    </div>
-  </div>
-
-  <ProductImage alt={product.name} icon="house" aspect="hero" />
+  <ProductHero product={product} />
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
@@ -153,11 +132,6 @@ const relatedArticles = [
 </ContentLayout>
 
 <style>
-  .quick-specs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; padding: 1.5rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 0.75rem; margin-bottom: 1.5rem; }
-  @media (min-width: 768px) { .quick-specs { grid-template-columns: repeat(4, 1fr); } }
-  .spec-item { text-align: center; }
-  .spec-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); margin-bottom: 0.25rem; }
-  .spec-value { display: block; font-size: 1rem; font-weight: 700; color: hsl(var(--foreground)); }
   .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
   .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
   @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }

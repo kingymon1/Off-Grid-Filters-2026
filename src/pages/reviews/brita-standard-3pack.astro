@@ -1,6 +1,6 @@
 ---
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import ProductImage from '../../components/ProductImage.astro';
+import ProductHero from '../../components/ProductHero.astro';
 import ProTip from '../../components/ProTip.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
@@ -52,34 +52,7 @@ const relatedArticles = [
 >
   <h1>{product.name} Review ({new Date().getFullYear()})</h1>
 
-  <p class="lead">
-    The Brita Standard 3-Pack remains the most recognizable name in pitcher filtration, backed by 95,000+ reviews and a near-perfect 4.7-star rating. At $17.98, you get six months of reliable chlorine taste reduction — but you are paying a brand premium when cheaper alternatives offer more certifications.
-  </p>
-
-  <div class="quick-specs">
-    <div class="spec-item">
-      <span class="spec-label">Price Range</span>
-      <span class="spec-value">{getPriceTier(product.price)}</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Rating</span>
-      <span class="spec-value">{product.rating}/5 ({product.reviewCount} reviews)</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Filter Life</span>
-      <span class="spec-value">40 gal (~2 months each)</span>
-    </div>
-    <div class="spec-item">
-      <span class="spec-label">Pack Size</span>
-      <span class="spec-value">3 filters</span>
-    </div>
-  </div>
-
-  <ProductImage
-    alt="Brita Standard Replacement Filters 3-Pack"
-    icon="filter"
-    aspect="wide"
-  />
+  <ProductHero product={product} />
 
   <h2>Overview</h2>
   <p>
@@ -184,37 +157,7 @@ const relatedArticles = [
 </ContentLayout>
 
 <style>
-  .quick-specs {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin: 1.5rem 0 2rem;
-  }
   @media (min-width: 768px) {
-    .quick-specs {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-  .spec-item {
-    background: hsl(var(--muted));
-    border: 1px solid hsl(var(--border));
-    border-radius: 0.75rem;
-    padding: 1rem;
-    text-align: center;
-  }
-  .spec-label {
-    display: block;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: hsl(var(--muted-foreground));
-    margin-bottom: 0.25rem;
-  }
-  .spec-value {
-    display: block;
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: hsl(var(--foreground));
   }
   .best-for-box {
     background: hsl(var(--primary) / 0.06);
