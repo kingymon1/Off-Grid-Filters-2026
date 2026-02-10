@@ -4,6 +4,7 @@ import HeaderAstro from '../components/HeaderAstro.astro';
 import FooterAstro from '../components/FooterAstro.astro';
 import BreadcrumbsAstro from '../components/BreadcrumbsAstro.astro';
 import RelatedArticlesAstro from '../components/RelatedArticlesAstro.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
 import { generateBreadcrumbSchema, combineSchemas, SITE_URL } from '../lib/schema';
 import { siteConfig } from '../lib/config';
 
@@ -78,6 +79,7 @@ if (schema) {
 
   <main id="main-content" class="content-main">
     <div class="container">
+      <AffiliateDisclosure />
       <article class="content-card">
         <slot />
 

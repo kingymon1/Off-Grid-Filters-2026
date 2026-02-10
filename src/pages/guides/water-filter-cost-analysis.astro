@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filter-cost-analysis')!;
@@ -25,13 +25,13 @@ const geXwfe = products.find(p => p.slug === 'ge-xwfe')!;
 const everydrop1 = products.find(p => p.slug === 'everydrop-filter-1-edr1rxd1')!;
 
 const faqs = [
-  { question: 'What is the cheapest water filter to own long-term?', answer: `The Amazon Basics pitcher with Amazon Basics Enhanced replacement filters is the cheapest overall system. The pitcher costs $${amazonPitcher.price}, and replacement filters cost $${amazonBasicsReplacement.price} for a 3-pack (about $3.50 each). At 6 filters per year for a family of 4, that is roughly $21 per year in replacements after the initial $24 pitcher. Total 5-year cost: approximately $128. That is about $0.07 per gallon of filtered water.` },
-  { question: 'Is a reverse osmosis system worth the investment?', answer: `For households with serious water quality issues (high TDS, lead, PFAS), absolutely. The iSpring RCC7AK costs $${ispring.price} upfront, but replacement filters cost only $50-$70 per year. Over 5 years, the total cost is approximately $450-$550 — comparable to a pitcher system that provides far less filtration. The cost per gallon drops below $0.05 over time, making RO the most cost-effective serious filtration option.` },
+  { question: 'What is the cheapest water filter to own long-term?', answer: `The Amazon Basics pitcher with Amazon Basics Enhanced replacement filters is the cheapest overall system. The pitcher costs ${getPriceTier(amazonPitcher.price)}, and replacement filters cost ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack (about $3.50 each). At 6 filters per year for a family of 4, that is roughly $21 per year in replacements after the initial $24 pitcher. Total 5-year cost: approximately $128. That is about $0.07 per gallon of filtered water.` },
+  { question: 'Is a reverse osmosis system worth the investment?', answer: `For households with serious water quality issues (high TDS, lead, PFAS), absolutely. The iSpring RCC7AK costs ${getPriceTier(ispring.price)} upfront, but replacement filters cost only $50-$70 per year. Over 5 years, the total cost is approximately $450-$550 — comparable to a pitcher system that provides far less filtration. The cost per gallon drops below $0.05 over time, making RO the most cost-effective serious filtration option.` },
   { question: 'How does filtered water compare to bottled water cost?', answer: 'Bottled water typically costs $0.50-$2.00 per gallon depending on the brand. A family of 4 consuming 3 gallons per day spends $550-$2,200 per year on bottled water. The most expensive filtration system in our analysis (Waterdrop G3P600) costs about $0.09 per gallon — 5-22x cheaper than bottled. The cheapest option (Amazon Basics pitcher) costs $0.07 per gallon — 7-28x cheaper.' },
   { question: 'Do RO systems cost more in water waste?', answer: 'Yes, water waste adds to the cost. Traditional RO systems waste 3-4 gallons per filtered gallon, adding roughly $0.01-$0.03 per gallon at average US water rates ($0.004/gallon). Modern efficient systems like the Waterdrop G3P600 (2:1 ratio) waste less. For most households, the wastewater cost adds $10-$30 per year — noticeable but not significant compared to filter costs.' },
-  { question: 'Which pitcher filter has the lowest cost per gallon?', answer: `The Amazon Basics Enhanced replacement filter at $${amazonBasicsReplacement.price} for a 3-pack, with each filter rated at 40 gallons, costs about $0.09 per gallon. The Brita Elite at $${britaElite.price} for a 2-pack, with each filter rated at 120 gallons, costs about $0.12 per gallon. Despite the higher upfront cost, the Brita Elite is competitive because of its longer filter life. ZeroWater is the most expensive at $0.60-$1.00 per gallon due to its very short filter life.` },
+  { question: 'Which pitcher filter has the lowest cost per gallon?', answer: `The Amazon Basics Enhanced replacement filter at ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack, with each filter rated at 40 gallons, costs about $0.09 per gallon. The Brita Elite at ${getPriceTier(britaElite.price)} for a 2-pack, with each filter rated at 120 gallons, costs about $0.12 per gallon. Despite the higher upfront cost, the Brita Elite is competitive because of its longer filter life. ZeroWater is the most expensive at $0.60-$1.00 per gallon due to its very short filter life.` },
   { question: 'Should I factor in electricity costs for RO systems?', answer: 'Tankless RO systems like the Waterdrop G3P600 and countertop RO systems like the Bluevua models require electricity for their pumps. The energy consumption is minimal — roughly $5-$15 per year. Tank-based systems like the iSpring RCC7AK use only water pressure (no electricity), making them the most economical to operate. Electricity costs are a minor factor in total cost of ownership.' },
-  { question: 'How much does it cost to maintain a refrigerator water filter?', answer: `Refrigerator filter costs depend on OEM vs aftermarket. OEM GE XWFE filters cost $${geXwfe.price} every 6 months ($99/year). OEM everydrop Filter 1 costs $${everydrop1.price} every 6 months ($108/year). Aftermarket alternatives like the AQUACREST 6-pack at $16.88 bring the annual cost down to just $5.63 — an enormous savings. The trade-off is fewer NSF certifications.` },
+  { question: 'How much does it cost to maintain a refrigerator water filter?', answer: `Refrigerator filter costs depend on OEM vs aftermarket. OEM GE XWFE filters cost ${getPriceTier(geXwfe.price)} every 6 months ($99/year). OEM everydrop Filter 1 costs ${getPriceTier(everydrop1.price)} every 6 months ($108/year). Aftermarket alternatives like the AQUACREST 6-pack at $16.88 bring the annual cost down to just $5.63 — an enormous savings. The trade-off is fewer NSF certifications.` },
 ];
 
 const articleSchema = generateArticleSchema({
@@ -81,8 +81,8 @@ const relatedArticles = [
   <h3>Amazon Basics Pitcher + Amazon Basics Enhanced Filters</h3>
   <p><strong>The budget champion.</strong></p>
   <ul>
-    <li>Pitcher: <a href={`/reviews/${amazonPitcher.slug}/`}>${amazonPitcher.price}</a></li>
-    <li>Replacement filters: <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>${amazonBasicsReplacement.price} for 3-pack</a> ($3.50 each, 40 gallons per filter)</li>
+    <li>Pitcher: <a href={`/reviews/${amazonPitcher.slug}/`}>{getPriceTier(amazonPitcher.price)}</a></li>
+    <li>Replacement filters: <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>{getPriceTier(amazonBasicsReplacement.price)} for 3-pack</a> ($3.50 each, 40 gallons per filter)</li>
     <li>Filters needed per year (family of 4): ~27 filters (1,095 gallons / 40 gallons per filter)</li>
     <li>Annual filter cost: ~$95</li>
     <li><strong>Year 1 total: ~$119</strong></li>
@@ -93,8 +93,8 @@ const relatedArticles = [
   <h3>Brita UltraMax + Brita Standard Filters</h3>
   <p><strong>The most popular option.</strong></p>
   <ul>
-    <li>Dispenser: <a href={`/reviews/${britaUltramax.slug}/`}>${britaUltramax.price}</a></li>
-    <li>Replacement filters: <a href={`/reviews/${britaStandard3.slug}/`}>${britaStandard3.price} for 3-pack</a> ($6.00 each, 40 gallons per filter)</li>
+    <li>Dispenser: <a href={`/reviews/${britaUltramax.slug}/`}>{getPriceTier(britaUltramax.price)}</a></li>
+    <li>Replacement filters: <a href={`/reviews/${britaStandard3.slug}/`}>{getPriceTier(britaStandard3.price)} for 3-pack</a> ($6.00 each, 40 gallons per filter)</li>
     <li>Filters needed per year: ~27 filters</li>
     <li>Annual filter cost: ~$162</li>
     <li><strong>Year 1 total: ~$197</strong></li>
@@ -105,8 +105,8 @@ const relatedArticles = [
   <h3>Brita UltraMax + Brita Elite Filters</h3>
   <p><strong>The smart upgrade — cheaper per gallon than Standard.</strong></p>
   <ul>
-    <li>Dispenser: <a href={`/reviews/${britaUltramax.slug}/`}>${britaUltramax.price}</a></li>
-    <li>Replacement filters: <a href={`/reviews/${britaElite.slug}/`}>${britaElite.price} for 2-pack</a> ($14.89 each, 120 gallons per filter)</li>
+    <li>Dispenser: <a href={`/reviews/${britaUltramax.slug}/`}>{getPriceTier(britaUltramax.price)}</a></li>
+    <li>Replacement filters: <a href={`/reviews/${britaElite.slug}/`}>{getPriceTier(britaElite.price)} for 2-pack</a> ($14.89 each, 120 gallons per filter)</li>
     <li>Filters needed per year: ~9 filters (1,095 / 120)</li>
     <li>Annual filter cost: ~$134</li>
     <li><strong>Year 1 total: ~$169</strong></li>
@@ -118,7 +118,7 @@ const relatedArticles = [
   <p><strong>The premium pitcher — with a painful cost surprise.</strong></p>
   <ul>
     <li>Pitcher: ~$35 (varies by model)</li>
-    <li>Replacement filters: <a href="/reviews/zerowater-5stage-4pack/">${zeroWater4.price} for 4-pack</a> ($15.00 each, ~20 gallons per filter at average TDS)</li>
+    <li>Replacement filters: <a href="/reviews/zerowater-5stage-4pack/">{getPriceTier(zeroWater4.price)} for 4-pack</a> ($15.00 each, ~20 gallons per filter at average TDS)</li>
     <li>Filters needed per year: ~55 filters (1,095 / 20)</li>
     <li>Annual filter cost: ~$825</li>
     <li><strong>Year 1 total: ~$860</strong></li>
@@ -134,7 +134,7 @@ const relatedArticles = [
   <h3>iSpring RCC7AK (75 GPD, Tank-Based)</h3>
   <p><strong>The best overall value for serious filtration.</strong></p>
   <ul>
-    <li>System: <a href={`/reviews/${ispring.slug}/`}>${ispring.price}</a></li>
+    <li>System: <a href={`/reviews/${ispring.slug}/`}>{getPriceTier(ispring.price)}</a></li>
     <li>Annual filter replacement: ~$50-$60 (3 pre-filters at $10 each, 1 post-carbon at $12, 1 remineralization at $8)</li>
     <li>RO membrane replacement: ~$25 every 2.5 years ($10/year amortized)</li>
     <li>Water waste cost: ~$13/year (1:3 ratio = 3,285 gallons waste at $0.004/gallon)</li>
@@ -148,7 +148,7 @@ const relatedArticles = [
   <h3>Waterdrop G3P600 (600 GPD, Tankless)</h3>
   <p><strong>The premium choice with higher ongoing costs.</strong></p>
   <ul>
-    <li>System: <a href={`/reviews/${waterdrop.slug}/`}>${waterdrop.price}</a></li>
+    <li>System: <a href={`/reviews/${waterdrop.slug}/`}>{getPriceTier(waterdrop.price)}</a></li>
     <li>Annual filter replacement: ~$80-$100 (CF filter every 6 months ~$30, MRO every 12 months ~$50, CB every 24 months ~$20/year amortized)</li>
     <li>Water waste cost: ~$9/year (2:1 ratio = 2,190 gallons waste at $0.004/gallon)</li>
     <li>Electricity: ~$10/year (pump requires power)</li>
@@ -162,7 +162,7 @@ const relatedArticles = [
 
   <h3>Bluevua RO100ROPOT-UV</h3>
   <ul>
-    <li>System: <a href={`/reviews/${bluevua.slug}/`}>${bluevua.price}</a></li>
+    <li>System: <a href={`/reviews/${bluevua.slug}/`}>{getPriceTier(bluevua.price)}</a></li>
     <li>Annual filter replacement: ~$70-$90 (RO membrane every 12 months, other filters every 6 months)</li>
     <li>Water waste cost: ~$9/year (2:1 ratio)</li>
     <li>Electricity: ~$8/year</li>
@@ -187,7 +187,7 @@ const relatedArticles = [
 
   <h3>Pentair Everpure H-1200 (Cartridge Replacements)</h3>
   <ul>
-    <li>Cartridges: <a href={`/reviews/${pentairH1200.slug}/`}>${pentairH1200.price}</a> (requires existing filter head)</li>
+    <li>Cartridges: <a href={`/reviews/${pentairH1200.slug}/`}>{getPriceTier(pentairH1200.price)}</a> (requires existing filter head)</li>
     <li>Replacement frequency: Every 12 months (1,000 gallons)</li>
     <li>Water waste: $0 (not RO)</li>
     <li>Electricity: $0</li>
@@ -201,8 +201,8 @@ const relatedArticles = [
 
   <h3>OEM Route (GE XWFE or everydrop Filter 1)</h3>
   <ul>
-    <li><a href={`/reviews/${geXwfe.slug}/`}>GE XWFE at ${geXwfe.price}</a> every 6 months = ~$99/year</li>
-    <li><a href={`/reviews/${everydrop1.slug}/`}>everydrop Filter 1 at ${everydrop1.price}</a> every 6 months = ~$108/year</li>
+    <li><a href={`/reviews/${geXwfe.slug}/`}>GE XWFE at {getPriceTier(geXwfe.price)}</a> every 6 months = ~$99/year</li>
+    <li><a href={`/reviews/${everydrop1.slug}/`}>everydrop Filter 1 at {getPriceTier(everydrop1.price)}</a> every 6 months = ~$108/year</li>
     <li><strong>5-year OEM cost: $495-$540</strong></li>
   </ul>
 

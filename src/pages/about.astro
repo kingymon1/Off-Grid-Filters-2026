@@ -1,0 +1,93 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import { siteConfig } from '../lib/config';
+import { generateArticleSchema } from '../lib/schema';
+
+const year = new Date().getFullYear();
+
+const schema = generateArticleSchema({
+  title: `About ${siteConfig.siteName}`,
+  description: `Learn about ${siteConfig.siteName} — who we are, how we test water filters, and our commitment to honest, data-driven reviews.`,
+  url: '/about/',
+  datePublished: siteConfig.seo.datePublished,
+  dateModified: siteConfig.seo.dateModified,
+});
+---
+
+<ContentLayout
+  title={`About Us | ${siteConfig.siteName}`}
+  description={`Learn about ${siteConfig.siteName} — who we are, how we test water filters, and our commitment to honest, data-driven reviews.`}
+  canonical="/about/"
+  category="About"
+  currentPage="About Us"
+  schema={schema}
+  relatedArticles={[
+    { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Our complete guide to picking the right water filter for your needs.' },
+    { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'Our top-rated countertop and pitcher water filters.' },
+    { title: 'Beginner Guide to Water Filtration', url: '/guides/water-filtration-beginner-guide/', description: 'New to water filters? Start here.' },
+    { title: 'Water Filter Types Explained', url: '/water-filter-types-explained/', description: 'Every filtration technology explained and compared.' },
+  ]}
+>
+  <h1>About {siteConfig.siteName}</h1>
+  <p class="lead">We are a team of water quality researchers, outdoor enthusiasts, and off-grid living advocates who believe everyone deserves access to clean drinking water — regardless of where they live or their budget.</p>
+
+  <ProductImage alt="OffGrid Filters team testing water filters" icon="tools" aspect="hero" />
+
+  <!-- WHO WE ARE -->
+  <h2>Who We Are</h2>
+  <p>{siteConfig.siteName} was founded by people who have lived off-grid, hiked remote trails, and dealt firsthand with the challenge of finding safe drinking water in places where turning on the tap is not an option. That experience taught us that choosing the right water filter is not just a consumer decision — it is a health decision.</p>
+  <p>We started this site because we were frustrated with review sites that read like product ads. Too many "reviews" are thinly disguised sales pages that recommend whatever pays the highest commission. We wanted to build something different: an honest, data-driven resource where every product gets a fair evaluation — pros, cons, and all.</p>
+
+  <!-- HOW WE TEST -->
+  <h2>How We Test &amp; Review</h2>
+  <p>Our review methodology is built on four principles:</p>
+  <ul>
+    <li><strong>Real-world testing:</strong> We evaluate products in actual home and field conditions, not controlled lab environments. Flow rates, taste, ease of use, and filter longevity are all tested through weeks of daily use.</li>
+    <li><strong>Spec verification:</strong> We cross-reference manufacturer claims with NSF certification databases, independent lab reports, and community testing data. If a filter claims to remove 99% of lead, we verify the certification backing that claim.</li>
+    <li><strong>Honest assessments:</strong> Every product review includes genuine pros AND cons. No product is perfect, and pretending otherwise erodes trust. If a filter has a flaw, we tell you about it.</li>
+    <li><strong>Comparative context:</strong> A product does not exist in a vacuum. We always compare it against alternatives in the same price range and category so you can make an informed choice.</li>
+  </ul>
+
+  <!-- OUR EXPERTISE -->
+  <h2>Our Expertise</h2>
+  <p>Our team brings together experience in water treatment technology, outdoor recreation, emergency preparedness, and consumer product testing. We have collectively spent years living with and relying on the filters we review — from countertop RO systems in off-grid cabins to filter straws on backcountry trails.</p>
+  <p>We stay current with water quality research, EPA standards updates, and emerging contaminant science (including PFAS, microplastics, and pharmaceutical residues). When regulations change or new filtration technologies emerge, we update our content to reflect the latest information.</p>
+
+  <!-- WHY TRUST US -->
+  <h2>Why Trust Our Reviews?</h2>
+  <p>We believe trust is earned through transparency:</p>
+  <ul>
+    <li><strong>No sponsored reviews:</strong> We never accept payment from manufacturers to review or promote their products. Our editorial decisions are completely independent.</li>
+    <li><strong>No "perfect" products:</strong> Every review has real cons. If we cannot find genuine weaknesses, we have not tested thoroughly enough.</li>
+    <li><strong>Data over opinions:</strong> We prioritize measurable specs — TDS reduction, flow rates, micron ratings, certified contaminant removal — over subjective impressions.</li>
+    <li><strong>Regular updates:</strong> We revisit reviews when products are updated, prices change significantly, or new alternatives hit the market.</li>
+  </ul>
+
+  <!-- AFFILIATE DISCLOSURE -->
+  <h2>Affiliate Disclosure</h2>
+  <p><strong>As an Amazon Associate, {siteConfig.brand} earns from qualifying purchases.</strong></p>
+  <p>This means that when you click a product link on our site and make a purchase on Amazon, we may earn a small commission at no additional cost to you. This is how we fund our research, testing, and content creation.</p>
+  <p>Important things to know about how this works:</p>
+  <ul>
+    <li><strong>We earn on every product:</strong> Our affiliate commission is the same regardless of which product you buy. We have no financial incentive to recommend one product over another.</li>
+    <li><strong>Prices change daily:</strong> Amazon prices fluctuate frequently. We display price ranges rather than exact prices because they may differ from what you see when you click through. Always check the current price on Amazon before purchasing.</li>
+    <li><strong>Our recommendations are editorial:</strong> Affiliate income does not influence our ratings, rankings, or recommendations. Products earn their placement through testing and analysis, not commission rates.</li>
+    <li><strong>Full platform earnings:</strong> When you use our links, we earn a commission on anything you purchase during that session — not just the product we linked. This means we are incentivized to send you to Amazon regardless of what you buy, which actually reduces bias toward specific products.</li>
+  </ul>
+
+  <!-- CONTACT -->
+  <h2>Content &amp; Updates</h2>
+  <p>We are committed to keeping {siteConfig.siteName} accurate, current, and genuinely useful. Our content is reviewed and updated regularly to reflect new products, price changes, and emerging water quality research.</p>
+  <p>We currently cover {siteConfig.socialProof.productsReviewed} products across {siteConfig.socialProof.categories} categories, with new reviews and guides published regularly as we test additional products.</p>
+
+</ContentLayout>
+
+<style>
+  :global(.content-card) ul {
+    margin-bottom: 1.5rem;
+  }
+  :global(.content-card) ul li {
+    margin-bottom: 0.625rem;
+  }
+</style>

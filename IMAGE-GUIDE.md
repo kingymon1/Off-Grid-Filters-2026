@@ -205,6 +205,14 @@ Each comparison has 1 hero image showing both products.
 
 ---
 
+## About Page (`src/pages/about.astro`)
+
+| Placeholder | Replace With | Aspect | Filename |
+|---|---|---|---|
+| Team testing water filters (tools icon) | Real photo of filter testing setup, workbench with filters, or hands-on testing | `hero` | `about-hero.webp` |
+
+---
+
 ## Total Placeholder Count
 
 | Page Type | Pages | Placeholders/Page | Total |
@@ -216,4 +224,5 @@ Each comparison has 1 hero image showing both products.
 | Buyer Guides | 8 | 1 | 8 |
 | Activity Guides | 10 | 1 | 10 |
 | Knowledge Base | 8 | 1 | 8 |
-| **Total** | | | **~112 images** |
+| About Page | 1 | 1 | 1 |
+| **Total** | | | **~113 images** |

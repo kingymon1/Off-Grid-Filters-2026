@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-well-water')!;
@@ -87,24 +87,24 @@ const relatedArticles = [
   <h3>1. {ispring.name} — Best Value RO for Well Water</h3>
   <p>The iSpring RCC7AK is our top recommendation for well water drinking water filtration. Its 6-stage design includes dedicated sediment and carbon pre-filter stages that handle the heavy particulate load common in well water before the RO membrane does its work removing dissolved contaminants. The result is 93-98% TDS reduction, removal of lead (>98.9%), arsenic, nitrates, fluoride, and PFAS (96-99%).</p>
   <p>The alkaline remineralization stage is a meaningful advantage for well water users. RO strips essentially everything from water, including beneficial minerals. The remineralization stage adds back calcium and magnesium, improving taste and raising pH to a healthy alkaline level. Many well water users report that their RO water tastes better than bottled water.</p>
-  <p>At ${ispring.price}, this system costs a fraction of a whole-house treatment system and addresses the most critical need: safe drinking water. The 18,000+ reviews with a 4.6-star rating provide strong evidence of reliability, including from many well water users.</p>
-  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(ispring.price)}, this system costs a fraction of a whole-house treatment system and addresses the most critical need: safe drinking water. The 18,000+ reviews with a 4.6-star rating provide strong evidence of reliability, including from many well water users.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(ispring.price)} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {sediment.name} — Essential Whole-House Pre-Filtration</h3>
   <p>Every well water system should start with a whole-house sediment filter, and the Membrane Solutions 6-pack offers a year's supply of filters at an outstanding value. The 5-micron string wound polypropylene cartridges fit standard 10x2.5-inch housings (sold separately) and capture 99% of sand, silt, rust, and debris before they reach your plumbing.</p>
-  <p>For well water, sediment filtration is not optional — it protects every downstream filter and appliance. Without it, your RO membrane will clog prematurely, your water heater will accumulate sediment, and faucet aerators will plug constantly. At ${sediment.price} for six filters, this is the cheapest and most impactful first step for any well water system.</p>
+  <p>For well water, sediment filtration is not optional — it protects every downstream filter and appliance. Without it, your RO membrane will clog prematurely, your water heater will accumulate sediment, and faucet aerators will plug constantly. At {getPriceTier(sediment.price)} for six filters, this is the cheapest and most impactful first step for any well water system.</p>
   <p>Plan to change filters every 2-3 months for typical well water, or monthly if your water is particularly sediment-heavy. You will be able to see the accumulated sediment on the used filter — this visual confirmation is a powerful reminder of what would otherwise be flowing through your pipes.</p>
-  <p><strong>Price:</strong> ${sediment.price} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(sediment.price)} | <a href={`/reviews/${sediment.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(sediment.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {everpure.name} — Best Commercial-Grade Option</h3>
   <p>For well water users who want the absolute best point-of-use filtration without RO, the Pentair Everpure H-1200 offers commercial restaurant-grade 0.5-micron filtration. This twin-cartridge system removes lead, cysts, chlorine, PFOA, and PFOS at a flow rate that keeps up with real kitchen demands. The 1,000-gallon capacity means fewer filter changes — typically once per year for a household.</p>
   <p>The Everpure does not remove TDS like an RO system, so it is best suited for well water that tests clean for dissolved minerals and metals but has concerns about bacteria, lead, and cysts. If your well water test shows elevated TDS, arsenic, or nitrates, the iSpring RO system is a better choice. The Everpure excels when you need premium taste and microbial protection without the waste water that RO produces.</p>
-  <p><strong>Price:</strong> ${everpure.price} (replacement cartridge set) | <a href={`/reviews/${everpure.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(everpure.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(everpure.price)} (replacement cartridge set) | <a href={`/reviews/${everpure.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(everpure.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {waterdrop.name} — Best Premium Tankless RO</h3>
   <p>For well water users who want the highest-performance RO system with real-time monitoring, the Waterdrop G3P600 provides 600 GPD production — eight times faster than the iSpring. The smart LED faucet displays TDS readings in real time, which is particularly valuable for well water users who want ongoing verification that their system is performing correctly.</p>
-  <p>The tankless design saves the significant under-sink space that a traditional RO tank occupies, and the 2:1 pure-to-drain ratio wastes less water than the iSpring's 1:3 ratio. The trade-off is price: at ${waterdrop.price}, it costs more than double the iSpring. For well water users with space constraints or high daily water needs, the premium is justified.</p>
-  <p><strong>Price:</strong> ${waterdrop.price} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The tankless design saves the significant under-sink space that a traditional RO tank occupies, and the 2:1 pure-to-drain ratio wastes less water than the iSpring's 1:3 ratio. The trade-off is price: at {getPriceTier(waterdrop.price)}, it costs more than double the iSpring. For well water users with space constraints or high daily water needs, the premium is justified.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(waterdrop.price)} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <ProTip title="The Ideal Well Water Filtration Stack">
     For comprehensive well water treatment, we recommend this stack: Membrane Solutions sediment filters ($26.35/year) as whole-house pre-filtration, plus an iSpring RCC7AK ($198.78) under the kitchen sink for drinking water. Total first-year cost: roughly $225 for the system plus $26 for sediment filters. Ongoing annual cost: approximately $80-100 for replacement filters across both systems. That is less than $0.25 per day for laboratory-grade drinking water from your well.

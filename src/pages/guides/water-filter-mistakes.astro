@@ -2,7 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
-import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
+import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filter-mistakes')!;
@@ -79,7 +79,7 @@ const relatedArticles = [
   <h2>Mistake #3: Choosing Based on Price Alone</h2>
   <p><strong>The problem:</strong> Both extremes cause issues. Buying the cheapest uncertified filter means you might not actually be filtering anything. But overspending on a premium system you do not need wastes money.</p>
   <p><strong>Real-world example:</strong> We see two common traps. First, people buy $8-$10 unbranded pitcher filters from marketplace sellers with zero NSF certification — these have no verified filtration claims. Second, people spend $300+ on countertop RO when their municipal water is already clean and they just needed a $25 pitcher for taste improvement.</p>
-  <p><strong>The fix:</strong> Focus on NSF certification first, then compare prices among certified options. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher at ${amazonPitcher.price}</a> proves that excellent filtration does not require a premium price — it carries NSF 42/53 certification (chlorine, lead, mercury) at the lowest price in our catalog. Pay for the certifications you need, not the brand name.</p>
+  <p><strong>The fix:</strong> Focus on NSF certification first, then compare prices among certified options. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics 10-Cup Pitcher at {getPriceTier(amazonPitcher.price)}</a> proves that excellent filtration does not require a premium price — it carries NSF 42/53 certification (chlorine, lead, mercury) at the lowest price in our catalog. Pay for the certifications you need, not the brand name.</p>
 
   <h2>Mistake #4: Ignoring NSF Certifications</h2>
   <p><strong>The problem:</strong> Marketing claims on water filter packaging are not regulated the way NSF certifications are. A filter can legally claim "removes contaminants" without specifying which ones or proving it. Only NSF (or equivalent IAPMO) certification means an independent lab has tested and verified the claim.</p>
@@ -91,7 +91,7 @@ const relatedArticles = [
     <li><strong>NSF 401:</strong> Reduces emerging contaminants — pharmaceuticals, pesticides, PFAS compounds.</li>
     <li><strong>NSF 372:</strong> Lead-free materials — the filter itself does not leach lead.</li>
   </ul>
-  <p><strong>The fix:</strong> Never buy a water filter without at least NSF 42 certification. For health protection, look for NSF 53. For the most comprehensive pitcher filtration, the <a href={`/reviews/${britaElite.slug}/`}>Brita Elite at ${britaElite.price}</a> carries NSF 42/53/401 triple certification.</p>
+  <p><strong>The fix:</strong> Never buy a water filter without at least NSF 42 certification. For health protection, look for NSF 53. For the most comprehensive pitcher filtration, the <a href={`/reviews/${britaElite.slug}/`}>Brita Elite at {getPriceTier(britaElite.price)}</a> carries NSF 42/53/401 triple certification.</p>
 
   <ProTip>You can verify any filter's NSF certification at nsf.org. Search by brand or model number to confirm the specific contaminants the filter is certified to reduce. Do not trust the box — trust the database.</ProTip>
 
@@ -102,7 +102,7 @@ const relatedArticles = [
 
   <h2>Mistake #6: Forgetting About Ongoing Costs</h2>
   <p><strong>The problem:</strong> People compare the purchase price of filters but ignore the replacement cartridge cost — which is always the bigger expense over time. A "cheap" filter with expensive or short-lived cartridges costs more than a "expensive" filter with long-lasting cartridges.</p>
-  <p><strong>Example that surprises people:</strong> The ZeroWater pitcher is about $35 upfront, but replacement filters cost $15 each and last only 15-25 gallons. A family of 4 may need 15-20 filters per year: $225-$300 annually in cartridges alone. Meanwhile, the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at ${ispring.price}</a> costs more upfront but only $50-$70 per year in replacement filters — and provides far superior filtration.</p>
+  <p><strong>Example that surprises people:</strong> The ZeroWater pitcher is about $35 upfront, but replacement filters cost $15 each and last only 15-25 gallons. A family of 4 may need 15-20 filters per year: $225-$300 annually in cartridges alone. Meanwhile, the <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at {getPriceTier(ispring.price)}</a> costs more upfront but only $50-$70 per year in replacement filters — and provides far superior filtration.</p>
   <p><strong>The fix:</strong> Calculate the total first-year cost (purchase + replacement filters) and the annual cost from year two onward before buying. Our <a href="/guides/water-filter-cost-analysis/">Water Filter Cost Analysis</a> guide breaks down the math for every system we review.</p>
 
   <ProTip>When comparing pitcher filters, calculate the cost per gallon. Brita Standard: $0.15/gallon. Brita Elite: $0.12/gallon. Amazon Basics Enhanced: $0.09/gallon. ZeroWater: $0.60-$1.00/gallon. The cheapest cartridge is not always the cheapest water.</ProTip>

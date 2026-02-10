@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-emergencies')!;
@@ -81,24 +81,24 @@ const relatedArticles = [
   <h3>1. {membrane.name} — Best for Family Emergency Kits</h3>
   <p>The Membrane Solutions 4-pack is purpose-built for emergency preparedness. Four individual filter straws mean a family of four each has their own dedicated water filtration device — no sharing, no waiting, no single point of failure. If one straw gets lost or damaged, three family members still have safe water access.</p>
   <p>The 0.1-micron hollow fiber membrane removes 99.999999% of bacteria and 99.99% of protozoa, which covers the primary biological threats in emergency freshwater sources. Each straw is rated for 1,500+ liters, giving a family of four roughly 375 liters per person — more than 90 days of drinking water at the recommended minimum intake.</p>
-  <p>At ${membrane.price} for four straws, equipping your family for water safety costs less than a single restaurant meal. These belong in every household emergency kit.</p>
-  <p><strong>Price:</strong> ${membrane.price} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(membrane.price)} for four straws, equipping your family for water safety costs less than a single restaurant meal. These belong in every household emergency kit.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {aquatabs.name} — Essential Virus Protection</h3>
   <p>Filter straws remove bacteria and protozoa but physically cannot capture viruses, which are as small as 0.02 microns. In emergency situations where water sources may be contaminated with sewage (common during flooding), viral threats like norovirus, hepatitis A, and rotavirus are real concerns. MSR Aquatabs kill all three.</p>
-  <p>Each tablet treats 2 quarts in 30 minutes using NaDCC chlorine-based chemistry. The 30-pack provides 60 quarts (15 gallons) of virus-free water — enough for one person for over two weeks. The tablets weigh practically nothing, have a 5-year shelf life sealed, and cost just ${aquatabs.price}. Buy multiple packs to cover your entire family.</p>
+  <p>Each tablet treats 2 quarts in 30 minutes using NaDCC chlorine-based chemistry. The 30-pack provides 60 quarts (15 gallons) of virus-free water — enough for one person for over two weeks. The tablets weigh practically nothing, have a 5-year shelf life sealed, and cost just {getPriceTier(aquatabs.price)}. Buy multiple packs to cover your entire family.</p>
   <p>The recommended emergency protocol: filter water through a straw first to remove bacteria, protozoa, and sediment. Then treat the filtered water with an Aquatab to neutralize any viruses. This two-step process provides the most comprehensive water purification possible without electricity.</p>
-  <p><strong>Price:</strong> ${aquatabs.price} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(aquatabs.price)} | <a href={`/reviews/${aquatabs.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(aquatabs.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {timain.name} — Best for Go-Bags and Vehicle Kits</h3>
   <p>The Timain 2-pack is ideal for splitting between emergency stashes. Put one straw in your home emergency kit and one in your car's glove compartment or go-bag. At just 2.1 ounces per straw, it adds virtually no weight to an evacuation bag while providing the ability to drink safely from any freshwater source.</p>
-  <p>The 4-stage filtration with activated carbon provides an advantage over membrane-only straws in emergency scenarios: the carbon stage reduces chlorine taste and odor, which matters if you are treating partially chlorinated municipal water that may have been compromised. At ${timain.price} for two straws, the cost is trivial for such critical insurance.</p>
-  <p><strong>Price:</strong> ${timain.price} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The 4-stage filtration with activated carbon provides an advantage over membrane-only straws in emergency scenarios: the carbon stage reduces chlorine taste and odor, which matters if you are treating partially chlorinated municipal water that may have been compromised. At {getPriceTier(timain.price)} for two straws, the cost is trivial for such critical insurance.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {naturenova.name} — Best for Base Camp Emergencies</h3>
   <p>When sheltering in place during an extended emergency, the NatureNova kit's included foldable water bag enables gravity filtration — a hands-free method that can produce larger quantities of filtered water for cooking, cleaning, and drinking. Fill the bag from any source, hang it from a hook or door frame, and let gravity pull water through the filter.</p>
-  <p>The backwash syringe is particularly valuable in extended emergencies where sediment-heavy water is the norm. Being able to maintain and restore your filter's flow rate can extend its life far beyond the rated 1,500 liters. At ${naturenova.price} for three complete kits, it provides redundancy and functionality that simpler straws lack.</p>
-  <p><strong>Price:</strong> ${naturenova.price} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The backwash syringe is particularly valuable in extended emergencies where sediment-heavy water is the norm. Being able to maintain and restore your filter's flow rate can extend its life far beyond the rated 1,500 liters. At {getPriceTier(naturenova.price)} for three complete kits, it provides redundancy and functionality that simpler straws lack.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(naturenova.price)} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Building Your Emergency Water Kit</h2>
   <p>Here is a step-by-step checklist for a complete family emergency water purification setup:</p>

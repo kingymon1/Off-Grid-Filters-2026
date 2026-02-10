@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-apartments')!;
@@ -81,24 +81,24 @@ const relatedArticles = [
   <h3>1. {britaUltramax.name} — Best for Families and Roommates</h3>
   <p>The Brita UltraMax is the most practical pitcher for shared living situations. Its massive 27-cup capacity means fewer refills throughout the day, and the precision-pour spigot eliminates the awkward lifting and pouring that smaller pitchers require. For a household of 2-4 people, a single fill provides enough filtered water for a full day of drinking and cooking.</p>
   <p>The UltraMax accepts both Brita Standard and Brita Elite filters. We strongly recommend upgrading to <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> for apartment use — they reduce 99% of lead (critical in older buildings), last 3 times longer than Standard (120 gallons vs 40), and carry NSF 42/53/401 certification. The per-gallon cost is actually lower with Elite despite the higher per-filter price.</p>
-  <p>At ${britaUltramax.price}, the UltraMax itself is affordable enough that replacing it when you move is painless. With 42,000+ reviews and a 4.6-star rating, it is the most battle-tested dispenser on the market.</p>
-  <p><strong>Price:</strong> ${britaUltramax.price} | <a href={`/reviews/${britaUltramax.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaUltramax.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(britaUltramax.price)}, the UltraMax itself is affordable enough that replacing it when you move is painless. With 42,000+ reviews and a 4.6-star rating, it is the most battle-tested dispenser on the market.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(britaUltramax.price)} | <a href={`/reviews/${britaUltramax.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaUltramax.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {amazonPitcher.name} — Best Budget Option</h3>
   <p>For renters watching every dollar, the Amazon Basics pitcher delivers NSF 42/53 certified filtration for under $24. It reduces chlorine taste, lead, mercury, and copper using the same activated carbon and ion exchange technology found in pitchers costing 50% more. The 10-cup capacity is enough for 1-2 people, and it fits comfortably in a standard refrigerator door.</p>
   <p>The electronic filter change indicator removes the guesswork about when to swap cartridges, and the filter is compatible with Brita Standard filters — so you can use the cheapest compatible replacement from any brand. At this price point, there is no reason for any apartment dweller to drink unfiltered tap water.</p>
-  <p><strong>Price:</strong> ${amazonPitcher.price} | <a href={`/reviews/${amazonPitcher.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(amazonPitcher.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(amazonPitcher.price)} | <a href={`/reviews/${amazonPitcher.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(amazonPitcher.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {bluevua.name} — Best Premium No-Install Option</h3>
   <p>For apartment dwellers who want the best possible water quality without any plumbing work, the Bluevua RO100ROPOT-UV is a game-changer. This countertop unit delivers 6-stage reverse osmosis with UV sterilization and remineralization — filtration performance that rivals permanently installed under-sink systems. The glass carafe ensures no plastic contact with your purified water.</p>
   <p>The UV stage is particularly valuable for apartment dwellers concerned about building plumbing quality. It kills 99.99% of bacteria and viruses, providing a level of biological protection that no pitcher filter can match. The remineralization stage adds back healthy minerals after RO strips them, resulting in water that tastes clean and slightly mineralized rather than flat.</p>
-  <p>At ${bluevua.price}, it is a significant investment compared to a pitcher. But for health-conscious renters who would otherwise spend $30-50 per month on bottled water, the Bluevua pays for itself within a year while producing far less plastic waste.</p>
-  <p><strong>Price:</strong> ${bluevua.price} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(bluevua.price)}, it is a significant investment compared to a pitcher. But for health-conscious renters who would otherwise spend $30-50 per month on bottled water, the Bluevua pays for itself within a year while producing far less plastic waste.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(bluevua.price)} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {bluevuaLite.name} — Best Value Countertop RO</h3>
   <p>The Lite UV model delivers 90% of the premium Bluevua's performance at 70% of the price. It still features 7-stage filtration with UV sterilization, a glass carafe, and remineralization — the core features that make countertop RO worthwhile. The smart LED display adds real-time filter life monitoring that the standard model lacks.</p>
-  <p>The primary trade-off is a less efficient 3:1 pure-to-drain ratio (vs 2:1 for the premium model), which means slightly more water waste. In an apartment where water is typically included in rent, this is a minor concern. At ${bluevuaLite.price}, it makes countertop RO accessible to a much wider range of renters.</p>
-  <p><strong>Price:</strong> ${bluevuaLite.price} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The primary trade-off is a less efficient 3:1 pure-to-drain ratio (vs 2:1 for the premium model), which means slightly more water waste. In an apartment where water is typically included in rent, this is a minor concern. At {getPriceTier(bluevuaLite.price)}, it makes countertop RO accessible to a much wider range of renters.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(bluevuaLite.price)} | <a href={`/reviews/${bluevuaLite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevuaLite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Apartment Water Filtration Tips</h2>
   <ul>
@@ -124,5 +124,5 @@ const relatedArticles = [
   </div>
 
   <h2>Our Top Pick for Apartments</h2>
-  <p>For most apartment dwellers, the <strong><a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a></strong> paired with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> offers the best balance of convenience, performance, and value. It provides lead reduction, great taste, and a family-sized capacity with zero installation. For renters who want the absolute best water quality, the <a href={`/reviews/${bluevuaLite.slug}/`}>Bluevua Lite UV at ${bluevuaLite.price}</a> is a worthwhile step up that delivers RO-grade purification right on your countertop.</p>
+  <p>For most apartment dwellers, the <strong><a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a></strong> paired with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> offers the best balance of convenience, performance, and value. It provides lead reduction, great taste, and a family-sized capacity with zero installation. For renters who want the absolute best water quality, the <a href={`/reviews/${bluevuaLite.slug}/`}>Bluevua Lite UV at {getPriceTier(bluevuaLite.price)}</a> is a worthwhile step up that delivers RO-grade purification right on your countertop.</p>
 </ContentLayout>

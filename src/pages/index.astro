@@ -4,7 +4,7 @@ import HeaderAstro from '../components/HeaderAstro.astro';
 import FooterAstro from '../components/FooterAstro.astro';
 import StatCard from '../components/StatCard.astro';
 import ProductImage from '../components/ProductImage.astro';
-import { siteConfig, products, categories, comparisons, getProductBySlug, getProductsByCategory, getAffiliateUrl, isPublished } from '../lib/config';
+import { siteConfig, products, categories, comparisons, getProductBySlug, getProductsByCategory, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateFAQSchema, generateWebSiteSchema, combineSchemas } from '../lib/schema';
 
 const year = new Date().getFullYear();
@@ -162,7 +162,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
               <div class="featured-info">
                 <h3 class="featured-name">{pick.product!.name}</h3>
                 <div class="featured-meta">
-                  <span class="featured-price">${pick.product!.price}</span>
+                  <span class="featured-price">{getPriceTier(pick.product!.price)}</span>
                   <span class="featured-rating">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     {pick.product!.rating}
@@ -225,7 +225,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     {product.rating}
                   </span>
-                  <span class="review-price">${product.price}</span>
+                  <span class="review-price">{getPriceTier(product.price)}</span>
                 </div>
                 <p class="review-verdict">{product.bestFor}</p>
               </div>

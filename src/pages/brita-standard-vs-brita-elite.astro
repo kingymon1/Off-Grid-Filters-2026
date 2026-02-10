@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
-import { getProductBySlug, getAffiliateUrl, comparisons, isPublished } from '../lib/config';
+import { getProductBySlug, getAffiliateUrl, comparisons, isPublished, getPriceTier } from '../lib/config';
 import { generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const comp = comparisons.find(c => c.slug === 'brita-standard-vs-brita-elite')!;
@@ -115,7 +115,7 @@ const relatedArticles = [
         <li>Your municipal water is already clean and you just want taste improvement</li>
         <li>You prefer the lowest upfront cost and do not mind changing filters every 2 months</li>
       </ul>
-      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productA.price}</span></a>
+      <a href={getAffiliateUrl(productA.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price on Amazon</span></a>
     </div>
     <div class="rec-card rec-b">
       <h3>Get the {productB.name} if...</h3>
@@ -124,7 +124,7 @@ const relatedArticles = [
         <li>You prefer changing filters less often — every 6 months instead of every 2</li>
         <li>You want the lower cost-per-gallon option ($0.12/gal vs $0.15/gal)</li>
       </ul>
-      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price — ${productB.price}</span></a>
+      <a href={getAffiliateUrl(productB.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)"><span>Check Price on Amazon</span></a>
     </div>
   </div>
 

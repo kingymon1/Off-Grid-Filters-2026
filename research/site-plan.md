@@ -17,7 +17,7 @@
 
 ## Content Architecture
 
-### Total Pages: 77+
+### Total Pages: 80+
 
 | Content Type | Count | URL Pattern |
 |---|---|---|
@@ -29,6 +29,7 @@
 | Activity Guides | 10 | `/[niche]-for-[activity]/` |
 | Knowledge Base | 8 | `/[topic-slug]/` |
 | Resource Hub | 1 | `/guides/` |
+| About Us | 1 | `/about/` |
 | 404 Page | 1 | `/404` |
 
 ---
@@ -75,6 +76,8 @@
 - Water Filter Types
 
 **All Guides** → `/guides/`
+
+**About** → `/about/` (standalone link)
 
 ---
 
@@ -139,10 +142,14 @@ Every page links to 4 related articles:
 
 ### Trust Markers
 - Every review has real pros AND cons
-- Price source clearly stated (Amazon)
-- Affiliate relationship disclosed in footer
+- Price displayed as ranges/tiers (e.g., "Under $25", "$100–$250") per Amazon compliance — exact prices change daily
+- Affiliate disclosure displayed prominently:
+  - **AffiliateDisclosure component** at the top of every content page (above first affiliate link)
+  - **Footer disclosure** on every page with improved visibility
+  - **Full disclosure page** at `/about/` with detailed explanation
 - No fake urgency ("limited time", "selling fast")
 - No "best overall" that wins everything
+- About page establishes E-E-A-T signals (expertise, experience, authoritativeness, trustworthiness)
 
 ### CTA Language
 - Reviews: "Check Price on Amazon" (informational)
@@ -165,16 +172,17 @@ Every page links to 4 related articles:
 - Font: Inter (Google Fonts, weights 400-900)
 - Scale: Responsive clamp-based sizing
 
-### Components (9)
-- HeaderAstro (glassmorphism sticky nav)
-- FooterAstro (link grid + affiliate disclosure)
+### Components (10)
+- HeaderAstro (glassmorphism sticky nav with About link)
+- FooterAstro (link grid + affiliate disclosure + About link)
+- AffiliateDisclosure (prominent disclosure banner for content pages)
 - BreadcrumbsAstro (auto breadcrumbs with schema)
 - RelatedArticlesAstro (4-article grid)
 - StatCard (gradient counter)
 - ProTip (expert callout)
 - Callout (colored info/warning/tip/danger)
 - ProductImage (SVG placeholder with 20 icons)
-- ComparisonTable (responsive specs comparison)
+- ComparisonTable (responsive specs comparison with price tiers)
 
 ### Animations
 - 6 scroll reveal variants

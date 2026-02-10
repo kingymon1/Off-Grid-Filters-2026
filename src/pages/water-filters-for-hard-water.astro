@@ -2,7 +2,7 @@
 import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
-import { guides, getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-hard-water')!;
@@ -86,25 +86,25 @@ const relatedArticles = [
   <h3>1. {zerowater4.name} — Best Pitcher Filter for Hard Water</h3>
   <p>ZeroWater is the only pitcher filter system that achieves 0 TDS — literally removing every dissolved mineral from your water. The 5-stage ion exchange process strips calcium, magnesium, lead, chromium, PFOA, PFOS, and essentially everything else dissolved in your water. The included TDS meter lets you verify the result with every pour.</p>
   <p>For hard water users, the 0 TDS result is transformative. Coffee and tea taste dramatically different. The mineral film on glasses disappears. Water tastes ultra-clean and pure — though some people find the completely mineral-free taste a bit flat.</p>
-  <p>The caveat is filter life. ZeroWater filters are rated for 15-25 gallons in normal water, but hard water cuts that significantly. At TDS levels above 300, expect 8-15 gallons per filter. At ${zerowater4.price} for the 4-pack, the cost per gallon ranges from roughly $1 (in soft water) to $2+ (in very hard water). For small-volume drinking water in moderate hard water, ZeroWater delivers unmatched purity from a pitcher. For high-volume use in very hard water, RO is more economical.</p>
-  <p><strong>Price:</strong> ${zerowater4.price} (4-pack) | <a href={`/reviews/${zerowater4.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(zerowater4.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The caveat is filter life. ZeroWater filters are rated for 15-25 gallons in normal water, but hard water cuts that significantly. At TDS levels above 300, expect 8-15 gallons per filter. At {getPriceTier(zerowater4.price)} for the 4-pack, the cost per gallon ranges from roughly $1 (in soft water) to $2+ (in very hard water). For small-volume drinking water in moderate hard water, ZeroWater delivers unmatched purity from a pitcher. For high-volume use in very hard water, RO is more economical.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(zerowater4.price)} (4-pack) | <a href={`/reviews/${zerowater4.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(zerowater4.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {ispring.name} — Best Value RO for Hard Water</h3>
   <p>For households with hard water that want an economical long-term solution, the iSpring RCC7AK is the clear winner. Its 6-stage RO system reduces TDS by 93-98%, turning 400 ppm hard water into 8-28 ppm purified water. The dedicated sediment and carbon pre-filter stages protect the RO membrane from the scale deposits that hard water would otherwise cause.</p>
   <p>The cost-per-gallon math heavily favors the iSpring over pitcher filters in hard water areas. At approximately $0.03-0.05 per gallon for RO water versus $1-2 per gallon for ZeroWater filters in hard water, the iSpring pays for itself within a few months of heavy use. The alkaline remineralization stage adds back a controlled amount of beneficial minerals, giving the water a pleasant, slightly mineralized taste rather than the flat profile of pure RO water.</p>
   <p>One important consideration for very hard water: the pre-filters will need more frequent replacement. Plan to change the sediment and carbon pre-filters every 3-6 months instead of the standard 6-12 months. The RO membrane itself is protected by these pre-filters and should still last 2-3 years.</p>
-  <p><strong>Price:</strong> ${ispring.price} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p><strong>Price Range:</strong> {getPriceTier(ispring.price)} | <a href={`/reviews/${ispring.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(ispring.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {waterdrop.name} — Best Premium RO for Hard Water</h3>
   <p>The Waterdrop G3P600 excels in hard water environments thanks to its smart LED faucet with real-time TDS monitoring. You can see your water's TDS reading every time you fill a glass — instant verification that the RO membrane is performing correctly. When the reading starts to rise, you know it is time for maintenance before water quality degrades.</p>
   <p>The 600 GPD production rate means faster water availability than the iSpring's 75 GPD tank system, and the tankless design eliminates the storage tank that can accumulate scale in hard water over time. The 2:1 pure-to-drain ratio also wastes less water than the iSpring's 1:3 ratio — a meaningful difference in areas where water is expensive or limited.</p>
-  <p>At ${waterdrop.price}, it is more than double the iSpring's price. For hard water users who want the convenience of tankless design, real-time monitoring, and superior water efficiency, the premium is warranted. For budget-conscious users, the iSpring delivers comparable water quality at a lower investment.</p>
-  <p><strong>Price:</strong> ${waterdrop.price} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>At {getPriceTier(waterdrop.price)}, it is more than double the iSpring's price. For hard water users who want the convenience of tankless design, real-time monitoring, and superior water efficiency, the premium is warranted. For budget-conscious users, the iSpring delivers comparable water quality at a lower investment.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(waterdrop.price)} | <a href={`/reviews/${waterdrop.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(waterdrop.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {britaElite.name} — Best for Mildly Hard Water</h3>
   <p>If your water is only mildly hard (TDS 150-250 ppm) and you do not need full TDS removal, the Brita Elite offers a practical middle ground. While it does not significantly reduce TDS, its 120-gallon capacity and NSF 42/53/401 certification address chlorine taste, lead (99% reduction), pharmaceuticals, and 30+ other contaminants. The longer filter life compared to ZeroWater means less frequent replacement in hard water areas.</p>
-  <p>The Brita Elite will not make hard water soft, but it will make it taste better by removing chlorine and organic taste compounds. For users whose primary concern is taste rather than scale prevention, this may be sufficient. At ${britaElite.price} for a 2-pack providing up to 240 gallons, the per-gallon cost is far lower than ZeroWater.</p>
-  <p><strong>Price:</strong> ${britaElite.price} (2-pack) | <a href={`/reviews/${britaElite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaElite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
+  <p>The Brita Elite will not make hard water soft, but it will make it taste better by removing chlorine and organic taste compounds. For users whose primary concern is taste rather than scale prevention, this may be sufficient. At {getPriceTier(britaElite.price)} for a 2-pack providing up to 240 gallons, the per-gallon cost is far lower than ZeroWater.</p>
+  <p><strong>Price Range:</strong> {getPriceTier(britaElite.price)} (2-pack) | <a href={`/reviews/${britaElite.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaElite.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Hard Water Filtration Tips</h2>
   <ul>
@@ -130,5 +130,5 @@ const relatedArticles = [
   </div>
 
   <h2>Our Top Pick for Hard Water</h2>
-  <p>For most hard water households, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at ${ispring.price} is the best long-term solution. It reduces TDS by 93-98%, produces water that tastes better than bottled, and costs a fraction of the per-gallon expense of pitcher filters in hard water. For renters or those who want a zero-installation option, the <a href={`/reviews/${zerowater4.slug}/`}>ZeroWater 4-pack</a> achieves the most complete mineral removal of any pitcher system — just be prepared for more frequent filter changes if your water is very hard.</p>
+  <p>For most hard water households, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at {getPriceTier(ispring.price)} is the best long-term solution. It reduces TDS by 93-98%, produces water that tastes better than bottled, and costs a fraction of the per-gallon expense of pitcher filters in hard water. For renters or those who want a zero-installation option, the <a href={`/reviews/${zerowater4.slug}/`}>ZeroWater 4-pack</a> achieves the most complete mineral removal of any pitcher system — just be prepared for more frequent filter changes if your water is very hard.</p>
 </ContentLayout>
