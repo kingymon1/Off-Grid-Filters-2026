@@ -35,15 +35,14 @@ if (!imageSrc && slug) {
 
 const hasImage = !!imageSrc;
 
-// For real product images (which are square from Amazon), use a 4:5 portrait
-// container instead of wide/hero ratios — it better frames the product.
-// Placeholders keep their original requested aspect.
+// For real product images (square Amazon photos), use a compact square
+// container instead of wide/hero ratios. Constrained via max-width in CSS.
 const showcaseAspect = hasImage && (aspect === 'hero' || aspect === 'wide')
-  ? 'aspect-[4/5]'
+  ? 'aspect-square'
   : hasImage && aspect === 'square'
     ? 'aspect-square'
     : hasImage && aspect === 'tall'
-      ? 'aspect-[2/3]'
+      ? 'aspect-[4/5]'
       : null;
 
 const aspectMap = {
@@ -123,7 +122,8 @@ const iconSvg = icons[icon] || icons.filter;
 <style>
   /* ── Spotlight Vignette Showcase ── */
   .product-image-real {
-    margin: 2rem 0;
+    margin: 2rem auto;
+    max-width: 480px;
     border-radius: 1rem;
     overflow: hidden;
   }
