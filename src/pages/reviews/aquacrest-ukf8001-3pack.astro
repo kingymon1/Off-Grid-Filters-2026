@@ -5,7 +5,7 @@ import ProTip from '../../components/ProTip.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
 
-const product = getProductBySlug('aquacrest-ukf8001-6pack')!;
+const product = getProductBySlug('aquacrest-ukf8001-3pack')!;
 if (!isPublished(product.publishDate)) return Astro.redirect('/404');
 
 const relatedProducts = getRelatedProducts(product);
@@ -14,7 +14,7 @@ const category = categories.find(c => c.slug === product.category);
 const faqs = [
   { question: 'Is the AQUACREST UKF8001 as good as the genuine Maytag/Whirlpool filter?', answer: 'For basic chlorine taste and odor reduction, the AQUACREST performs comparably to OEM filters. However, it only carries NSF 42 certification (taste/odor), while genuine everydrop filters carry NSF 42/53/401 (lead, pharmaceuticals, pesticides). If your primary concern is taste improvement, the AQUACREST is excellent. If you need certified lead or pharmaceutical reduction, invest in the OEM filter.' },
   { question: 'Which refrigerators are compatible with the AQUACREST UKF8001?', answer: 'The UKF8001 is compatible with Maytag UKF8001, Whirlpool EDR4RXD1, Viking RWFFR, KitchenAid 67003523, and many other refrigerator models that use the standard UKF8001 form factor. Check your current filter model number against the AQUACREST compatibility list before ordering. The filter may trigger a "replace filter" indicator on some fridge models.' },
-  { question: 'How long does each AQUACREST UKF8001 filter last?', answer: 'Each filter is rated for 6 months of use. For a typical household of 2-4 people, this estimate is accurate. The 6-pack therefore provides a full 3 years of filter replacements. In households with very high water usage or heavily sediment-laden water, effective life may be shorter. Replace sooner if you notice decreased flow rate or taste degradation.' },
+  { question: 'How long does each AQUACREST UKF8001 filter last?', answer: 'Each filter is rated for 6 months of use. For a typical household of 2-4 people, this estimate is accurate. The 3-pack therefore provides 18 months of filter replacements. In households with very high water usage or heavily sediment-laden water, effective life may be shorter. Replace sooner if you notice decreased flow rate or taste degradation.' },
   { question: 'Will the AQUACREST filter trigger a warning light on my refrigerator?', answer: 'It may. Some newer refrigerators have filter detection systems designed to identify OEM cartridges. The AQUACREST lacks the proprietary chips or encoders that some fridges require. The water will still flow and filter correctly, but you may see a persistent "replace filter" or "water filter" warning on your fridge display. This is cosmetic and does not affect water quality.' },
 ];
 
@@ -75,9 +75,9 @@ const relatedArticles = [
   <ProductImage alt={product.name} icon="fridge" aspect="hero" />
 
   <h2>Overview</h2>
-  <p>The AQUACREST UKF8001 6-Pack is the budget king of aftermarket refrigerator filters. At $16.88 for six filters, you are paying just $2.81 per cartridge — roughly 5% of what a genuine everydrop or GE filter costs. The math is staggering: a full three years of filter changes for less than the price of a single OEM replacement. The catch, predictably, is in the certifications.</p>
+  <p>The AQUACREST UKF8001 3-Pack is the budget king of aftermarket refrigerator filters. At $16.88 for three filters, you are paying just $5.63 per cartridge — a fraction of what a genuine everydrop or GE filter costs. That is 18 months of filter changes for less than the price of a single OEM replacement. The catch, predictably, is in the certifications.</p>
   <p>These coconut shell carbon block filters carry NSF 42 certification for chlorine taste and odor reduction but lack the NSF 53 (lead, cysts) and NSF 401 (pharmaceuticals, pesticides) certifications that OEM filters provide. For households where tap water is already reasonably clean and the primary goal is better taste, the AQUACREST delivers excellent value. For homes with known lead, PFAS, or pharmaceutical concerns, this is not the right filter.</p>
-  <p>The 6-pack is compatible with Maytag UKF8001, Whirlpool EDR4RXD1, Viking, KitchenAid, and many other refrigerators that use the standard UKF8001 form factor. With 9,500+ reviews and a 4.3-star rating, the AQUACREST has earned its reputation as a reliable budget alternative.</p>
+  <p>The 3-pack is compatible with Maytag UKF8001, Whirlpool EDR4RXD1, Viking, KitchenAid, and many other refrigerators that use the standard UKF8001 form factor. With 9,500+ reviews and a 4.3-star rating, the AQUACREST has earned its reputation as a reliable budget alternative.</p>
 
   <div class="best-for-box">
     <strong>Best For:</strong> {product.bestFor}
@@ -112,8 +112,8 @@ const relatedArticles = [
   <p>Where the AQUACREST shows its budget roots is in longevity and consistency. Some users report that taste improvement begins to fade around 4-5 months rather than the full 6. Water with high sediment content will clog these filters faster than OEM equivalents with denser carbon blocks. The quality control across a 6-pack can also vary — occasional reports of carbon fines in the first few gallons are more common than with OEM filters. These are acceptable trade-offs at $2.81 per filter.</p>
 
   <h2>Value Analysis</h2>
-  <p>The value proposition is almost comically good. At $2.81 per filter with a 6-month rated life, annual filtration costs $5.62. Compare that to the everydrop Filter 1 at $107.98/year or the GE XWFE at $98.98/year. Over three years, you save $300+ versus OEM filters. The 6-pack also reduces the hassle of frequent ordering — one purchase covers 3 years.</p>
-  <p>The caveat is the certification gap. If you view NSF 53/401 certifications as essential insurance for your family's health, the AQUACREST is the wrong filter regardless of price. But for the majority of households on clean municipal water where the primary need is taste improvement, the AQUACREST 6-pack represents extraordinary value that is genuinely hard to argue against.</p>
+  <p>The value proposition is excellent. At $5.63 per filter with a 6-month rated life, annual filtration costs $11.25. Compare that to the everydrop Filter 1 at $107.98/year or the GE XWFE at $98.98/year. Over three years, you save $250+ versus OEM filters. The 3-pack also reduces the hassle of frequent ordering — one purchase covers 18 months.</p>
+  <p>The caveat is the certification gap. If you view NSF 53/401 certifications as essential insurance for your family's health, the AQUACREST is the wrong filter regardless of price. But for the majority of households on clean municipal water where the primary need is taste improvement, the AQUACREST 3-pack represents extraordinary value that is genuinely hard to argue against.</p>
 
   <h2>Frequently Asked Questions</h2>
   <div class="faq-section">
