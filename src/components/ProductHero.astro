@@ -50,7 +50,6 @@ const specs = specEntries.slice(0, 6);
         <span class="star-icon" aria-hidden="true">★</span>
         <span class="rating-value">{product.rating}</span>
         <span class="rating-max">/5</span>
-        {product.reviewCount && <span class="review-count">({product.reviewCount} reviews)</span>}
       </div>
     </div>
 
@@ -114,13 +113,6 @@ const specs = specEntries.slice(0, 6);
     display: flex;
     align-items: baseline;
     gap: 0.15rem;
-  }
-
-  .review-count {
-    font-size: 0.85rem;
-    color: hsl(var(--muted-foreground));
-    font-weight: 400;
-    margin-left: 0.25rem;
   }
 
   .star-icon {
