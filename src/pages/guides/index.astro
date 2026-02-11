@@ -44,7 +44,7 @@ const relatedArticles = [
     {publishedProducts.map(p => (
       <a href={`/reviews/${p.slug}/`} class="resource-card">
         <span class="resource-title">{p.name}</span>
-        <span class="resource-meta">{p.rating}&#9733; &middot; {getPriceTier(p.price)}</span>
+        <span class="resource-meta">{getPriceTier(p.price)}</span>
       </a>
     ))}
   </div>

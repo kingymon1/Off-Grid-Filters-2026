@@ -44,15 +44,6 @@ const specs = specEntries.slice(0, 6);
   </div>
 
   <div class="hero-details">
-    <!-- Rating header -->
-    <div class="hero-topline">
-      <div class="hero-rating">
-        <span class="star-icon" aria-hidden="true">★</span>
-        <span class="rating-value">{product.rating}</span>
-        <span class="rating-max">/5</span>
-      </div>
-    </div>
-
     <!-- Key Specs Grid -->
     <div class="hero-specs">
       {specs.map(s => (
@@ -101,38 +92,6 @@ const specs = specEntries.slice(0, 6);
     flex-direction: column;
     gap: 1.25rem;
   }
-
-  /* Rating */
-  .hero-topline {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .hero-rating {
-    display: flex;
-    align-items: baseline;
-    gap: 0.15rem;
-  }
-
-  .star-icon {
-    color: hsl(var(--accent));
-    font-size: 1.25rem;
-    margin-right: 0.25rem;
-  }
-
-  .rating-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: hsl(var(--foreground));
-  }
-
-  .rating-max {
-    font-size: 0.9rem;
-    color: hsl(var(--muted-foreground));
-    font-weight: 500;
-  }
-
 
   /* Key Specs Grid */
   .hero-specs {
@@ -241,9 +200,5 @@ const specs = specEntries.slice(0, 6);
       margin: 0 auto;
     }
 
-    .hero-topline {
-      justify-content: flex-start;
-      gap: 2rem;
-    }
   }
 </style>
