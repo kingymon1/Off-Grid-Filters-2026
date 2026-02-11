@@ -73,7 +73,6 @@ const relatedArticles = [
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[
     { label: 'Price', key: 'price' },
-    { label: 'Rating', key: 'rating' },
     { label: 'Capacity', key: 'capacity' },
     { label: 'Certifications', key: 'certifications' },
     { label: 'Filter Life', key: 'filterLife' },
@@ -145,8 +144,9 @@ const relatedArticles = [
   .winner-badge { display:inline-block; padding:0.375rem 1rem; border-radius:9999px; background:hsl(var(--primary)/0.1); color:hsl(var(--primary)); font-weight:700; font-size:0.8125rem; margin:0.75rem 0 1.5rem; border:1px solid hsl(var(--primary)/0.2); }
   .recommendation-grid { display:grid; grid-template-columns:1fr; gap:1.5rem; margin:1.5rem 0; }
   @media(min-width:768px) { .recommendation-grid { grid-template-columns:1fr 1fr; } }
-  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); }
+  .rec-card { padding:1.5rem; border-radius:1rem; border:1px solid hsl(var(--border)); background:hsl(var(--card)); display:flex; flex-direction:column; }
   .rec-card h3 { font-size:1rem; margin-bottom:0.75rem; margin-top:0; color:hsl(var(--primary)); }
   .rec-card ul { padding-left:1.25rem; margin-bottom:1.25rem; }
   .rec-card li { margin-bottom:0.375rem; font-size:0.9375rem; }
+  .rec-card > a { margin-top:auto; align-self:flex-start; }
 </style>

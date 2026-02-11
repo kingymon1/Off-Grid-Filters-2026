@@ -43,7 +43,7 @@ const relatedArticles = [
 
 <ContentLayout
   title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
-  description={`Honest review of the ${product.name}. ${product.bestFor}. ${product.rating}/5 stars.`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
   canonical={`/reviews/${product.slug}/`}
   category="Reviews"
   currentPage={product.name}
@@ -141,12 +141,7 @@ const relatedArticles = [
   </div>
 
   <div class="verdict-card">
-    <h2>Final Verdict</h2>
-    <div class="verdict-rating">
-      <span class="rating-value">{product.rating}</span>
-      <span class="rating-max">/5</span>
-    </div>
-    <p>{product.verdict}</p>
+    <h2>Final Verdict</h2>    <p>{product.verdict}</p>
     <a href={getAffiliateUrl(product.asin)} target="_blank" rel="noopener noreferrer nofollow" class="btn-primary">
       Check Price on Amazon
     </a>
@@ -256,22 +251,6 @@ const relatedArticles = [
   .verdict-card h2 {
     border: none;
     margin-top: 0;
-  }
-  .verdict-rating {
-    margin-bottom: 1rem;
-  }
-  .rating-value {
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .rating-max {
-    font-size: 1.5rem;
-    color: hsl(var(--muted-foreground));
-    font-weight: 600;
   }
   .verdict-card p {
     max-width: 40rem;
