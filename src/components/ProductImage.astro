@@ -143,15 +143,15 @@ const iconSvg = icons[icon] || icons.filter;
     justify-content: center;
   }
 
-  /* Subtle backdrop that matches the page background */
+  /* Subtle backdrop that matches the content card background */
   .showcase-backdrop {
     position: absolute;
     inset: 0;
     background:
       radial-gradient(
         ellipse 60% 60% at 50% 48%,
-        hsl(var(--background) / 1) 0%,
-        hsl(var(--background) / 1) 100%
+        hsl(var(--card) / 1) 0%,
+        hsl(var(--card) / 1) 100%
       );
   }
 
@@ -180,20 +180,20 @@ const iconSvg = icons[icon] || icons.filter;
     height: auto;
     object-fit: contain;
     z-index: 1;
-    /* Radial mask: fully visible center, smooth fade at edges eliminates white bg */
+    /* Radial mask: fully visible center, gentle fade at edges */
     mask-image: radial-gradient(
-      ellipse 80% 80% at 50% 50%,
-      black 45%,
-      rgba(0, 0, 0, 0.6) 60%,
-      rgba(0, 0, 0, 0.2) 72%,
-      transparent 82%
+      ellipse 85% 85% at 50% 50%,
+      black 55%,
+      rgba(0, 0, 0, 0.8) 68%,
+      rgba(0, 0, 0, 0.4) 78%,
+      transparent 90%
     );
     -webkit-mask-image: radial-gradient(
-      ellipse 80% 80% at 50% 50%,
-      black 45%,
-      rgba(0, 0, 0, 0.6) 60%,
-      rgba(0, 0, 0, 0.2) 72%,
-      transparent 82%
+      ellipse 85% 85% at 50% 50%,
+      black 55%,
+      rgba(0, 0, 0, 0.8) 68%,
+      rgba(0, 0, 0, 0.4) 78%,
+      transparent 90%
     );
     filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.25));
     transition: transform 0.4s ease, filter 0.4s ease;
@@ -278,7 +278,7 @@ const iconSvg = icons[icon] || icons.filter;
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: hsl(var(--background) / 0.7);
+    background: hsl(var(--card) / 0.7);
     backdrop-filter: blur(8px);
     border: 1px solid hsl(var(--border) / 0.5);
     border-radius: 9999px;
