@@ -11,26 +11,42 @@
 
 ## Quick Start — Checklist Runner
 
-Run the automated checklist dashboard from a fresh terminal:
+Open a **new terminal window** and follow these steps in order:
 
+**Step 1.** Navigate to the project folder:
 ```bash
-cd Off-Grid-Filters-2026   # Navigate to the project root
-npm install                 # Install dependencies (required first)
-npm run checklist           # Open dashboard at http://localhost:3200
+cd Off-Grid-Filters-2026
 ```
 
-The dashboard automates **Sections 1-5** (build, SEO, schema, linking, content) and provides
-a pass/fail UI for **Sections 6-12** (manual human checks). Click **"Run Automated Checks"**
-in the web UI to start.
-
-**CLI mode** (no browser, outputs to terminal):
-
+**Step 2.** Install dependencies (skip if you already ran this):
 ```bash
-npm run checklist:auto
+npm install
 ```
 
-Results are saved to `checklist-results.json`. Use the **"Export Report"** button in the
-dashboard to download a Markdown sign-off report.
+**Step 3.** Start the checklist dashboard:
+```bash
+npm run checklist
+```
+
+**Step 4.** Open your browser and go to:
+```
+http://localhost:3200
+```
+
+**Step 5.** Click the **"Run Automated Checks (S1-S5)"** button in the dashboard. This runs
+the build pipeline, SEO audit, schema validation, link crawling, and content quality checks.
+Results appear in the UI as they complete.
+
+**Step 6.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
+manual check item (Lighthouse, security headers, accessibility, etc.).
+
+**Step 7.** Use the dropdown next to **"Export"** to download a filtered Markdown report
+(Full Report, Failures + Warnings, Failures Only, or Warnings Only).
+
+> **CLI mode (no browser):** If you prefer terminal-only output, run `npm run checklist:auto`
+> instead of Step 3. This prints results to stdout and exits with code 1 if any checks fail.
+>
+> **To stop the server:** Press `Ctrl+C` in the terminal where it's running.
 
 ---
 

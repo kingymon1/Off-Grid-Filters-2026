@@ -1179,12 +1179,15 @@ GEMINI_API_KEY=
 **Claude does this.** The site should build and pass all checks before the owner touches images.
 
 **Quick start — run the automated checklist from a fresh terminal:**
-```bash
-cd Off-Grid-Filters-2026   # Navigate to the project root
-npm install                 # Install dependencies first
-npm run checklist           # Open dashboard at http://localhost:3200
-```
-Click **"Run Automated Checks (S1-S5)"** in the dashboard. For CLI-only: `npm run checklist:auto`.
+
+1. `cd Off-Grid-Filters-2026` — navigate to the project root
+2. `npm install` — install dependencies (skip if already done)
+3. `npm run checklist` — starts the dashboard server
+4. Open **http://localhost:3200** in your browser
+5. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
+6. Use the dropdown next to **Export** to download a filtered report
+
+For CLI-only (no browser): `npm run checklist:auto`
 
 **This phase uses two reference documents:**
 - **`LAUNCH-CHECKLIST.md`** — Complete 12-section sign-off checklist. Sections 1-5 are
