@@ -831,6 +831,10 @@ header{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.92);backdrop-f
 .btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{opacity:.9}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.control-divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.filter-label{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.filter-select{background:var(--bg);color:var(--text);border:1px solid var(--primary-dim);padding:.45rem .6rem;border-radius:var(--radius);font-size:.78rem;cursor:pointer;outline:none;min-width:140px}
+.filter-select:hover,.filter-select:focus{border-color:var(--primary)}
 
 .summary{max-width:1200px;margin:1rem auto;padding:0 1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
 .summary-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem 1rem;text-align:center;min-width:100px}
@@ -891,13 +895,15 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
   <div class="controls">
     <button class="btn btn-ghost" id="resetBtn" onclick="resetResults()">Reset</button>
     <button class="btn btn-accent" id="runBtn" onclick="runAutomated()">Run Automated Checks (S1-S5)</button>
-    <select id="exportFilter" style="background:var(--card);color:var(--text);border:1px solid var(--border);padding:.4rem .5rem;border-radius:var(--radius);font-size:.75rem">
+    <span class="control-divider"></span>
+    <label for="exportFilter" class="filter-label">Filter:</label>
+    <select id="exportFilter" class="filter-select">
       <option value="all">Full Report</option>
       <option value="issues">Failures + Warnings</option>
       <option value="fail">Failures Only</option>
       <option value="warn">Warnings Only</option>
     </select>
-    <button class="btn btn-ghost" onclick="exportReport()">Export</button>
+    <button class="btn btn-primary" onclick="exportReport()">Export</button>
   </div>
 </div>
 </header>
