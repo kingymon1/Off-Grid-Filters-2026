@@ -11,6 +11,31 @@
 
 ---
 
+## WORK PHILOSOPHY
+
+**Autonomy:** Carry out all work autonomously from start to finish. Do not stop to ask questions
+mid-build. If you encounter decisions that need user input, collect them in a list and present
+them all at the end — never interrupt the workflow for a single question.
+
+**Research depth:** Do not skimp on research. Go deep. Every product should be thoroughly
+understood — real specs, real strengths, real weaknesses. Shallow research produces generic
+content that doesn't rank or convert. Spend the time to understand what makes each product
+genuinely different.
+
+**Quality bar:** Everything should be world-class — visually and technically. This is non-negotiable:
+- **Visually stunning** — modern design, polished animations, smooth interactions, attention to
+  spacing, typography, and color. The site should feel premium and authoritative at first glance.
+- **Technically superior** — clean code, proper schema markup, fast builds, accessibility,
+  WCAG contrast ratios, responsive at every breakpoint, no console errors.
+- **Content excellence** — every review, guide, and comparison should read like it was written
+  by a genuine expert. Specific data, honest opinions, real trade-offs. Never generic filler.
+
+**No rushing:** Do not cut corners or simplify things to save time. We are not in a hurry.
+A thorough 80-page site with excellent content beats a rushed 90-page site with thin content.
+Every page should justify its existence.
+
+---
+
 ## PHASE 1: RESEARCH (Do this first, before any code)
 
 ### 1.1 Product Catalog Research
@@ -931,59 +956,9 @@ GEMINI_API_KEY=
 
 ---
 
-## PHASE 3.5: IMAGES (After build, before quality check)
-
-The site initially builds with SVG placeholder images. This phase replaces them with real photos.
-
-### 3.5.1 Download Product Photos from Amazon
-
-**This is a manual step that must be done by the site owner.**
-
-For each product in `product-brief.yaml`:
-1. Go to the Amazon product listing
-2. Download the main product image (the white-background cutout photo)
-3. Rename following the convention: `[product-slug]-hero.webp`
-   - Example: `bluevua-ro100ropot-uv-hero.webp`
-4. Place in `public/assets/`
-5. Generate responsive variants using Sharp:
-   ```bash
-   node scripts/convert-to-webp.mjs
-   ```
-6. Commit and push to GitHub
-
-These product photos render in **product showcase mode** — the `ProductImage` component
-applies a radial CSS mask that blends away the white background automatically.
-
-### 3.5.2 Generate AI Editorial Images
-
-After product photos are in place, generate scene/lifestyle images for all other pages:
-
-1. Create `.env` from `.env.example` and add your `GEMINI_API_KEY`
-2. Run: `npm run images` (admin UI) or `npm run images -- --auto` (CLI)
-3. The script generates images for: roundups, comparisons, guides, knowledge base, about, homepage categories, and featured picks
-4. Images are saved to `public/assets/` with responsive variants automatically
-
-**Alternative (no API key):** Run `node scripts/generate-local-images.mjs` to generate
-branded SVG-based placeholder images. These look professional but aren't real photos.
-
-### 3.5.3 Register Images in the Map
-
-After images are in `public/assets/`, ensure every image has an entry in `src/lib/image-map.ts`:
-- Product slugs → add to `productSlugs` Set
-- All slugs → add to `heroImages` Record with path to `/assets/[filename].webp`
-
-### 3.5.4 Verify Images
-
-Run `npm run build` and check:
-- No pages show SVG placeholder icons
-- Product photos render with dark backdrop and radial mask (no white background visible)
-- Editorial images fill their containers with `object-fit: cover`
-- Homepage hero product image has radial mask (no white background edges)
-- Responsive variants load at appropriate breakpoints
-
----
-
 ## PHASE 4: QUALITY (Verify everything works)
+
+**Claude does this.** The site should build and pass all checks before the owner touches images.
 
 ### 4.1 Install & Build
 ```bash
@@ -1012,8 +987,65 @@ For every page, verify:
 - [ ] Schema markup is valid
 - [ ] No placeholder text remains
 - [ ] Affiliate disclosure is in footer
-- [ ] ProductImage is present
+- [ ] ProductImage is present (renders as SVG placeholder at this stage — that's expected)
 - [ ] All links work
+
+**After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
+placeholder images. Push to GitHub, deploy to Vercel. Then proceed to Phase 5 for real images.
+
+---
+
+## PHASE 5: IMAGES (Post-deploy — manual owner steps)
+
+**The site owner does this, not Claude.** These steps require downloading files from Amazon
+and optionally using a Gemini API key. The site is already live and functional with SVG
+placeholders — this phase upgrades the visuals.
+
+### 5.1 Download Product Photos from Amazon
+
+**This is a manual step that must be done by the site owner.**
+
+For each product in `product-brief.yaml`:
+1. Go to the Amazon product listing
+2. Download the main product image (the white-background cutout photo)
+3. Rename following the convention: `[product-slug]-hero.webp`
+   - Example: `bluevua-ro100ropot-uv-hero.webp`
+4. Place in `public/assets/`
+5. Generate responsive variants using Sharp:
+   ```bash
+   node scripts/convert-to-webp.mjs
+   ```
+6. Commit and push to GitHub
+
+These product photos render in **product showcase mode** — the `ProductImage` component
+applies a radial CSS mask that blends away the white background automatically.
+
+### 5.2 Generate AI Editorial Images
+
+After product photos are in place, generate scene/lifestyle images for all other pages:
+
+1. Create `.env` from `.env.example` and add your `GEMINI_API_KEY`
+2. Run: `npm run images` (admin UI) or `npm run images -- --auto` (CLI)
+3. The script generates images for: roundups, comparisons, guides, knowledge base, about, homepage categories, and featured picks
+4. Images are saved to `public/assets/` with responsive variants automatically
+
+**Alternative (no API key):** Run `node scripts/generate-local-images.mjs` to generate
+branded SVG-based placeholder images. These look professional but aren't real photos.
+
+### 5.3 Register Images in the Map
+
+After images are in `public/assets/`, ensure every image has an entry in `src/lib/image-map.ts`:
+- Product slugs → add to `productSlugs` Set
+- All slugs → add to `heroImages` Record with path to `/assets/[filename].webp`
+
+### 5.4 Verify Images
+
+Run `npm run build` and check:
+- No pages show SVG placeholder icons
+- Product photos render with dark backdrop and radial mask (no white background visible)
+- Editorial images fill their containers with `object-fit: cover`
+- Homepage hero product image has radial mask (no white background edges)
+- Responsive variants load at appropriate breakpoints
 
 ---
 
