@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>Amazon Basics Enhanced ($10.49/3-pack)</strong> is the better value by every measurable metric — more NSF certifications (42/53/401/372 vs 42), lead reduction capability, and nearly half the price of Brita Standard. The <strong>Brita Standard ($17.98/3-pack)</strong> has the trusted brand name and 95,000+ reviews, but pays a premium for fewer certifications. For most buyers, Amazon Basics is the smarter pick.</p>
   </div>
 
-  <ProductImage alt="Amazon Basics Enhanced vs Brita Standard filter comparison" icon="pitcher" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

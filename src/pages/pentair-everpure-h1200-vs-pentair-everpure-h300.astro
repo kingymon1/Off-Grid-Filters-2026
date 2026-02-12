@@ -67,7 +67,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> If you already own a Pentair Everpure system, the <strong>H-1200 cartridge set ($390)</strong> is the better long-term investment with 3x the capacity and broader NSF certifications. If you are starting from scratch and want a ready-to-install system, the <strong>H-300 ($505)</strong> gets you everything in one box — but at a higher per-gallon cost.</p>
   </div>
 
-  <ProductImage alt="Pentair Everpure H-1200 vs H-300 under-sink filter comparison" icon="compare" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} />

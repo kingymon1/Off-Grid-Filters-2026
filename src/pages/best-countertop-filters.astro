@@ -69,7 +69,7 @@ const relatedArticles = [
   <h1>Best {category.name} {year}: Expert Picks</h1>
   <p class="lead">We evaluated {allProducts.length} countertop and pitcher filters across filtration quality, capacity, ongoing filter costs, and ease of use. Whether you need a budget-friendly pitcher for basic chlorine reduction or a countertop reverse osmosis system that eliminates 99% of dissolved contaminants, our picks cover every budget and need.</p>
 
-  <ProductImage alt={`Best ${category.name} ${year}`} icon="pitcher" aspect="hero" />
+  <ProductImage alt={`Best ${category.name} ${year}`} icon="pitcher" aspect="hero" slug="best-countertop-filters" />
 
   <h2>Quick Picks: Our Top Recommendations</h2>
   <ComparisonTable products={tableProducts} />
@@ -81,7 +81,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon={i < 2 ? 'uv' : 'pitcher'} aspect="wide" />
+      <ProductImage alt={product.name} icon={i < 2 ? 'uv' : 'pitcher'} aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The Bluevua RO100ROPOT-UV earns our top spot as the most capable countertop filtration system you can buy. Its 6-stage reverse osmosis process paired with UV-C sterilization eliminates bacteria, viruses, heavy metals, fluoride, and PFAS that no pitcher filter can touch. The glass carafe is a thoughtful detail that keeps purified water free from plastic contact.</p>

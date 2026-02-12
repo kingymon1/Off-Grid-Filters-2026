@@ -69,7 +69,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>Brita Elite ($29.78/2-pack)</strong> is the better choice for most households — it removes 99% of lead, lasts 120 gallons per filter, and costs about $0.12/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper TDS reduction (0 ppm) and removes fluoride, but filters deplete 5-8x faster and cost roughly $0.60-1.00/gallon. Choose ZeroWater only if you need maximum TDS reduction or fluoride removal.</p>
   </div>
 
-  <ProductImage alt="Brita Elite vs ZeroWater 5-Stage filter comparison" icon="pitcher" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[
