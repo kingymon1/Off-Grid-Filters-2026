@@ -110,14 +110,12 @@ Claude will:
 |----------|---------|
 | `src/components/*.astro` | 12 UI components (including ProductImage with 3-mode rendering, ProductHero for review pages, AffiliateDisclosure for compliance, EmailCapture with Buttondown) |
 | `src/layouts/*.astro` | 2 page layouts (ContentLayout supports visible `lastUpdated` dates) |
-| `src/index.css` | Full design system with animations |
+| `src/index.css` | Full design system with animations (Claude updates `:root` colors per niche) |
 | `src/lib/schema.ts` | Schema.org generators |
 | `src/lib/schema.test.ts` | Tests |
 | `src/pages/404.astro` | Generic 404 |
-| Config files | package.json, tailwind, tsconfig, etc. |
+| Config files | package.json, astro.config.mjs, tailwind, tsconfig, etc. |
 | `scripts/convert-to-webp.mjs` | Image conversion to responsive WebP variants |
-| `scripts/image-gen-server.mjs` | AI image generation admin (Gemini API) |
-| `scripts/generate-local-images.mjs` | Local SVG-to-WebP fallback generator |
 | `public/` | Favicons, robots.txt |
 | `.github/workflows/ci.yml` | CI pipeline |
 
@@ -125,7 +123,7 @@ Claude will:
 
 | File/Dir | Purpose |
 |----------|---------|
-| `src/lib/config.ts` | Full product catalog config |
+| `src/lib/config.ts` | Full product catalog config (includes niche-specific `specLabels` map) |
 | `src/lib/image-map.ts` | Static image path map (slug → `/assets/` path) |
 | `src/pages/index.astro` | Authority hub homepage |
 | `src/pages/reviews/*.astro` | Product review pages |
@@ -136,6 +134,8 @@ Claude will:
 | `src/pages/*.astro` | Knowledge base pages |
 | `public/robots.txt` | With your domain |
 | `src/pages/llms.txt.ts` | Dynamic AI-discoverable content index with per-page descriptions (Astro API route) |
+| `scripts/image-gen-server.mjs` | AI image generation admin with per-page prompts (Gemini API) |
+| `scripts/generate-local-images.mjs` | Local SVG-to-WebP fallback generator with niche icons |
 | research/*.md | Research findings |
 | `IMAGE-GUIDE.md` | Complete image system documentation |
 
