@@ -1214,7 +1214,11 @@ async function readBody(req) {
   return JSON.parse(Buffer.concat(chunks).toString());
 }
 
-function startServer() {
+async function startServer() {
+  // Always start with a clean slate — clear any stale results from previous runs
+  const fresh = { lastRun: null, sections: {}, manual: {} };
+  await writeFile(RESULTS_FILE, JSON.stringify(fresh, null, 2));
+
   const server = createServer(async (req, res) => {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     const path = url.pathname;
