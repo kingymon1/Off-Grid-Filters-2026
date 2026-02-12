@@ -1182,11 +1182,10 @@ GEMINI_API_KEY=
 
 1. `cd Off-Grid-Filters-2026` — navigate to the project root
 2. `npm install` — install dependencies (skip if already done)
-3. `npm run checklist` — starts the dashboard server
+3. `npm run checklist` — starts the dashboard server (old results are cleared automatically)
 4. Open **http://localhost:3200** in your browser
-5. Click **"Reset"** if old results are showing — clears previous data
-6. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
-7. Use the dropdown next to **Export** to download a filtered report
+5. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
+6. Pick a filter from the **"Filter:"** dropdown, then click **"Export"** to download a report
 
 For CLI-only (no browser): `npm run checklist:auto`
 
