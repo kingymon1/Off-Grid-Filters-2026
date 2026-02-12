@@ -921,9 +921,7 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
   <span id="statusText">Running automated checks...</span>
 </div>
 
-<main id="app">
-  <div style="text-align:center;padding:3rem;color:var(--muted)">Loading checklist data...</div>
-</main>
+<main id="app"></main>
 
 <div class="toast-container" id="toasts"></div>
 
@@ -1142,6 +1140,8 @@ async function resetResults() {
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+// Render clean UI immediately, then hydrate from server (which clears stale data on startup).
+render();
 loadState();
 </script>
 </body>
@@ -1328,5 +1328,5 @@ async function autoMode() {
 if (process.argv.includes('--auto')) {
   await autoMode();
 } else {
-  startServer();
+  await startServer();
 }
