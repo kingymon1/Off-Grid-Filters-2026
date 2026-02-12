@@ -14,8 +14,9 @@
 Run the automated checklist dashboard from a fresh terminal:
 
 ```bash
-npm install          # Install dependencies (required first)
-npm run checklist    # Open dashboard at http://localhost:3200
+cd Off-Grid-Filters-2026   # Navigate to the project root
+npm install                 # Install dependencies (required first)
+npm run checklist           # Open dashboard at http://localhost:3200
 ```
 
 The dashboard automates **Sections 1-5** (build, SEO, schema, linking, content) and provides
