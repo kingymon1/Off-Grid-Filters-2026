@@ -27,9 +27,13 @@ const {
 // Resolve image source: explicit src > auto-detect from slug > fallback to placeholder
 let imageSrc = srcProp;
 if (!imageSrc && slug) {
+  // Check public/assets/ first, then public/assets/images/
   const candidate = `/assets/${slug}-hero.webp`;
+  const candidate2 = `/assets/images/${slug}-hero.webp`;
   if (existsSync(join(process.cwd(), 'public', candidate))) {
     imageSrc = candidate;
+  } else if (existsSync(join(process.cwd(), 'public', candidate2))) {
+    imageSrc = candidate2;
   }
 }
 

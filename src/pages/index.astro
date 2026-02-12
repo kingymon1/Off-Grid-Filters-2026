@@ -158,7 +158,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
           {featuredPicks.map((pick, i) => (
             <a href={`/reviews/${pick.product!.slug}/`} class="featured-card spotlight-card" style={`--delay: ${i * 100}ms`}>
               <div class="featured-badge">{pick.badge}</div>
-              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" />
+              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" src={`/assets/images/${pick.slug}-featured.webp`} />
               <div class="featured-info">
                 <h3 class="featured-name">{pick.product!.name}</h3>
                 <div class="featured-meta">
@@ -188,7 +188,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             return (
               <a href={`/best-${cat.slug}/`} class="category-card" style={`--delay: ${i * 80}ms`}>
                 <div class="category-icon">
-                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" />
+                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" src={`/assets/images/category-${cat.slug}.webp`} />
                 </div>
                 <h3 class="category-name">{cat.name}</h3>
                 <p class="category-count">{productCount} products reviewed</p>
@@ -212,7 +212,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
         <div class="reviews-grid stagger-grid">
           {recentReviews.map((product, i) => (
             <a href={`/reviews/${product.slug}/`} class="review-card" style={`--delay: ${i * 80}ms`}>
-              <ProductImage alt={product.name} icon={product.category === 'survival-filters' ? 'straw' : product.category === 'refrigerator-filters' ? 'fridge' : 'filter'} aspect="wide" />
+              <ProductImage alt={product.name} icon={product.category === 'survival-filters' ? 'straw' : product.category === 'refrigerator-filters' ? 'fridge' : 'filter'} aspect="wide" slug={product.slug} />
               <div class="review-info">
                 <span class="review-category">{product.categoryName}</span>
                 <h3 class="review-name">{product.name}</h3>
