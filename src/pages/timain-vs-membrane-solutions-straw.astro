@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>Timain 2-Pack ($14.23)</strong> wins on per-straw value ($7.12) and offers 4-stage filtration with chlorine and odor reduction. The <strong>Membrane Solutions 4-Pack ($38.98)</strong> wins for families and group preparedness with 4 straws, a stronger review profile (4.5 stars, 8,500+ reviews), and proven 28mm bottle compatibility. Both remove 99.99%+ of bacteria and protozoa.</p>
   </div>
 
-  <ProductImage alt="Timain vs Membrane Solutions survival filter straw comparison" icon="straw" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

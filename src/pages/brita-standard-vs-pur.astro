@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> delivers better filtration with NSF 42/53 certification, lead reduction, and the LockFit design — all at a competitive price. The <strong>Brita Standard 3-Pack ($17.98)</strong> has the brand name, faster flow, and a wider pitcher ecosystem, but its NSF 42-only certification leaves a gap in contaminant removal. PUR wins on filtration; Brita wins on availability.</p>
   </div>
 
-  <ProductImage alt="Brita Standard vs PUR pitcher filter comparison" icon="pitcher" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

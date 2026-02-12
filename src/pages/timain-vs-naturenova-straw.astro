@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>NatureNova 3-Pack ($28.99)</strong> is the better overall kit with included water bags and backwash syringes that make it field-ready out of the box. The <strong>Timain 2-Pack ($14.23)</strong> is the budget king at $7.12/straw for the same 4-stage filtration technology. Both share identical filtration specs — the difference is in accessories and completeness.</p>
   </div>
 
-  <ProductImage alt="Timain vs NatureNova survival filter straw comparison" icon="straw" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

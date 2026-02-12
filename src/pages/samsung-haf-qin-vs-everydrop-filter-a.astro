@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>everydrop Filter A ($48)</strong> is the objectively better filter with triple NSF 42/53/401 certification covering lead, pharmaceuticals, and pesticides. The <strong>Samsung HAF-QIN ($37.52)</strong> is more affordable but only certified for chlorine taste and odor (NSF 42). As always with fridge filters, <strong>your refrigerator brand dictates your choice</strong>.</p>
   </div>
 
-  <ProductImage alt="Samsung HAF-QIN vs everydrop Filter A refrigerator filter" icon="fridge" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

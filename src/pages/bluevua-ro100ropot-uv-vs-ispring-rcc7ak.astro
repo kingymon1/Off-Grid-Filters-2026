@@ -67,7 +67,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>iSpring RCC7AK ($198.78)</strong> is the better system overall — higher capacity, faster flow, alkaline remineralization, and a lower price. But the <strong>Bluevua RO100ROPOT-UV ($317)</strong> wins for renters and apartment dwellers who cannot modify plumbing, with the added benefit of UV sterilization for virus protection.</p>
   </div>
 
-  <ProductImage alt="Bluevua RO100ROPOT-UV countertop vs iSpring RCC7AK under-sink RO" icon="compare" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} />
