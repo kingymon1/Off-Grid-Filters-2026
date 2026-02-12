@@ -95,6 +95,26 @@ export interface NavLink {
   url: string;
 }
 
+// ── Spec display labels (niche-specific) ─────────────────────
+// Maps ProductSpecs keys to human-readable labels for ProductHero and ComparisonTable.
+// When building a new site, update this map to match your niche's spec fields.
+export const specLabels: Record<string, string> = {
+  filtrationStages: 'Stages',
+  filtrationTechnology: 'Technology',
+  packSize: 'Pack Size',
+  capacity: 'Capacity',
+  flowRate: 'Flow Rate',
+  micronRating: 'Micron Rating',
+  filterLife: 'Filter Life',
+  pureToWaste: 'Pure:Drain',
+  compatibility: 'Fits',
+  certifications: 'Certified',
+  dimensions: 'Dimensions',
+  weight: 'Weight',
+  contaminantsRemoved: 'Key Contaminants',
+  gpd: 'GPD',
+};
+
 // ── Helper to generate Amazon affiliate URL ──────────────────
 export const AFFILIATE_TAG = 'offgrid09a-20';
 

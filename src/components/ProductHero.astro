@@ -1,7 +1,7 @@
 ---
 import ProductImage from './ProductImage.astro';
 import type { Product } from '../lib/config';
-import { getAffiliateUrl } from '../lib/config';
+import { getAffiliateUrl, specLabels } from '../lib/config';
 
 interface Props {
   product: Product;
@@ -10,29 +10,14 @@ interface Props {
 const { product } = Astro.props;
 const affiliateUrl = getAffiliateUrl(product.asin);
 
-// Build specs list dynamically from available product data
+// Build specs list dynamically from available product data using specLabels map
 const specEntries: { label: string; value: string }[] = [];
-
-if (product.specs.filtrationStages)
-  specEntries.push({ label: 'Stages', value: `${product.specs.filtrationStages}-Stage` });
-if (product.specs.filtrationTechnology)
-  specEntries.push({ label: 'Technology', value: product.specs.filtrationTechnology });
-if (product.specs.packSize)
-  specEntries.push({ label: 'Pack Size', value: product.specs.packSize });
-if (product.specs.capacity)
-  specEntries.push({ label: 'Capacity', value: product.specs.capacity });
-if (product.specs.flowRate)
-  specEntries.push({ label: 'Flow Rate', value: product.specs.flowRate });
-if (product.specs.micronRating)
-  specEntries.push({ label: 'Micron Rating', value: `${product.specs.micronRating}μm` });
-if (product.specs.filterLife)
-  specEntries.push({ label: 'Filter Life', value: product.specs.filterLife });
-if (product.specs.pureToWaste)
-  specEntries.push({ label: 'Pure:Drain', value: product.specs.pureToWaste });
-if (product.specs.compatibility)
-  specEntries.push({ label: 'Fits', value: product.specs.compatibility });
-if (product.specs.certifications)
-  specEntries.push({ label: 'Certified', value: product.specs.certifications });
+for (const [key, label] of Object.entries(specLabels)) {
+  const val = product.specs[key];
+  if (val) {
+    specEntries.push({ label, value: val });
+  }
+}
 
 // Cap at 6 specs for a clean layout
 const specs = specEntries.slice(0, 6);

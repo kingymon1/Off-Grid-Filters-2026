@@ -236,7 +236,7 @@ export function generateActivitySchema(activityName: string) {
   return {
     "@type": "SportsActivityLocation",
     name: activityName,
-    description: `Water filtration solutions for ${activityName.toLowerCase()}.`,
+    description: `${siteConfig.niche.charAt(0).toUpperCase() + siteConfig.niche.slice(1)} solutions for ${activityName.toLowerCase()}.`,
   };
 }
 
