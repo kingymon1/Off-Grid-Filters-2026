@@ -1131,9 +1131,12 @@ Every page links to 4 related articles:
 20. **Disclose affiliate relationship** in footer on every page.
 21. **No fake urgency.** No "limited time" or "selling fast" language.
 
+### CSS Grid Overflow
+22. **Always set `min-width: 0` on CSS Grid children that contain text.** Grid items default to `min-width: auto`, which prevents them from shrinking below their content width — causing text overflow in multi-column layouts (e.g., the resource hub card grid).
+
 ### Build
-22. **Always run `npm run build`** before committing. Fix all errors.
-23. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
+23. **Always run `npm run build`** before committing. Fix all errors.
+24. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
 
 ---
 
