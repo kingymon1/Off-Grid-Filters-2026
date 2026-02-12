@@ -1180,8 +1180,9 @@ GEMINI_API_KEY=
 
 **Quick start — run the automated checklist from a fresh terminal:**
 ```bash
-npm install          # Install dependencies first
-npm run checklist    # Open dashboard at http://localhost:3200
+cd Off-Grid-Filters-2026   # Navigate to the project root
+npm install                 # Install dependencies first
+npm run checklist           # Open dashboard at http://localhost:3200
 ```
 Click **"Run Automated Checks (S1-S5)"** in the dashboard. For CLI-only: `npm run checklist:auto`.
 
