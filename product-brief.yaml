@@ -23,7 +23,7 @@ wikidata_entity: "https://www.wikidata.org/entity/Q842467"
 # --- OPTIONAL: Email capture (Buttondown) ---
 # Leave email_username empty to hide the email capture form on all pages.
 # When ready, create a free Buttondown account and set your username here.
-email_username: ""
+email_username: "offgridfilters"
 email_heading: "Get Filter Picks Delivered"
 email_subheading: "One email per week. Honest reviews, no spam."
 

@@ -1424,7 +1424,7 @@ export const siteConfig = {
 
   email: {
     provider: 'buttondown' as const,
-    username: '', // Owner fills this — empty string = EmailCapture component hidden
+    username: 'offgridfilters', // Buttondown username — empty string = EmailCapture hidden
     heading: 'Get Filter Picks Delivered',
     subheading: 'One email per week. Honest reviews, no spam.',
     ctaText: 'Subscribe',
