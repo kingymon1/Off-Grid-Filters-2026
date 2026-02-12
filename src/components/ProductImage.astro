@@ -1,7 +1,4 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-
 interface Props {
   alt: string;
   aspect?: 'hero' | 'square' | 'wide' | 'tall';
@@ -24,15 +21,20 @@ const {
   slug,
 } = Astro.props;
 
+// Build a set of known image files using Vite's import.meta.glob (works on all platforms)
+const assetGlob = import.meta.glob<boolean>('/public/assets/*-hero.webp');
+const imageGlob = import.meta.glob<boolean>('/public/assets/images/*-hero.webp');
+const assetFiles = new Set(Object.keys(assetGlob).map(p => p.replace('/public', '')));
+const imageFiles = new Set(Object.keys(imageGlob).map(p => p.replace('/public', '')));
+
 // Resolve image source: explicit src > auto-detect from slug > fallback to placeholder
 let imageSrc = srcProp;
 if (!imageSrc && slug) {
-  // Check public/assets/ first, then public/assets/images/
   const candidate = `/assets/${slug}-hero.webp`;
   const candidate2 = `/assets/images/${slug}-hero.webp`;
-  if (existsSync(join(process.cwd(), 'public', candidate))) {
+  if (assetFiles.has(candidate)) {
     imageSrc = candidate;
-  } else if (existsSync(join(process.cwd(), 'public', candidate2))) {
+  } else if (imageFiles.has(candidate2)) {
     imageSrc = candidate2;
   }
 }
