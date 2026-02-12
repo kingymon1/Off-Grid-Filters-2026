@@ -44,6 +44,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -64,6 +67,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Lead in drinking water is an invisible, odorless, tasteless threat that affects millions of American homes. There is no safe level of lead exposure — particularly for children, who absorb lead at 4 to 5 times the rate of adults. The good news: certified water filters can remove over 99% of lead. The critical step is knowing which filters actually work and which only claim to.</p>

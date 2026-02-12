@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'reverse-osmosis-vs-carbon-filters')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -33,6 +34,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -53,6 +57,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Reverse osmosis and activated carbon are the two dominant water filtration technologies on the market. They work in fundamentally different ways, remove different contaminants, and come at different price points. This guide explains the science behind each, compares their strengths and weaknesses, and helps you decide which one your household actually needs.</p>
@@ -207,4 +212,6 @@ const relatedArticles = [
 
   <h2>Make Your Decision</h2>
   <p>If you are still unsure, start by <a href="/guides/how-to-choose-water-filter/">testing your water</a>. The results will make the decision clear: basic taste issues point to carbon, while dissolved contaminants point to RO. For a deeper understanding of RO technology, read our <a href="/what-is-reverse-osmosis/">What Is Reverse Osmosis?</a> knowledge base article. And for side-by-side product matchups, see our <a href="/ispring-rcc7ak-vs-waterdrop-g3p600/">iSpring vs Waterdrop comparison</a>.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

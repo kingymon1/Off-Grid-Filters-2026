@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-camping')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -30,6 +31,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -50,6 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Whether you are car camping at an established site or setting up a remote backcountry base camp, access to clean water is the single most important element of any camping trip. We tested the top portable water filters to find the best options for every camping style and group size.</p>
@@ -123,4 +128,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Camping</h2>
   <p>For most campers, the <strong>{naturenova.name}</strong> offers the best combination of value, convenience, and field-readiness. The included water bag and backwash syringe mean you can set up a complete gravity-feed filtration system at camp without purchasing anything extra. For budget-conscious campers or those who just need a simple straw to toss in their pack, the <a href={`/reviews/${timain.slug}/`}>Timain 2-pack at {getPriceTier(timain.price)}</a> is an unbeatable deal. And regardless of which filter you choose, always carry a pack of <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for virus protection and backup.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

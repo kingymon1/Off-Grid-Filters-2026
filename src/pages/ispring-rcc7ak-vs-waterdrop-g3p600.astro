@@ -41,6 +41,9 @@ const articleSchema = generateArticleSchema({
   title: `${productA.name} vs ${productB.name}`,
   description: `Head-to-head comparison of the iSpring RCC7AK and Waterdrop G3P600 under-sink reverse osmosis systems. We compare price, speed, space, water efficiency, and filtration.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -61,6 +64,7 @@ const relatedArticles = [
   currentPage="iSpring vs Waterdrop"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 

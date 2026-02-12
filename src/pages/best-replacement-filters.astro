@@ -4,7 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
 import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
-import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'replacement-filters';
 const category = getCategoryBySlug(categorySlug)!;
@@ -49,8 +49,16 @@ const itemListSchema = generateItemListSchema(
     position: i + 1,
   }))
 );
+const articleSchema = generateArticleSchema({
+  title: `Best ${category.name} ${year}: Expert Picks`,
+  description: `We tested ${allProducts.length} pitcher and dispenser replacement filters. Here are the best for ${year}, ranked by cost-per-gallon, filtration quality, and value.`,
+  url: `/best-${categorySlug}/`,
+  datePublished: category.publishDate,
+  dateModified: category.publishDate,
+  about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
+});
 const faqSchema = generateFAQSchema(faqs);
-const schema = combineSchemas(itemListSchema, faqSchema);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
 
 const relatedArticles = [
   { title: 'Best Countertop & Pitcher Filters', url: '/best-countertop-filters/', description: 'Our top pitcher and countertop filter systems to pair with these replacement cartridges.' },
@@ -68,6 +76,7 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={category.publishDate}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
   <p class="lead">Replacement filters are the hidden ongoing cost of pitcher filtration, and the wrong choice can mean overpaying by 5-10x per gallon of filtered water. We analyzed {allProducts.length} replacement cartridges across Brita, ZeroWater, PUR, Waterdrop, and Amazon Basics to find the best value, the best filtration, and the smartest long-term investment for your pitcher or dispenser.</p>

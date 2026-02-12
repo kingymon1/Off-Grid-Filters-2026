@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'how-to-choose-water-filter')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -32,6 +33,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -52,6 +56,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Choosing a water filter should not feel overwhelming. With dozens of filter types, hundreds of models, and a blizzard of marketing claims, we built this guide to cut through the noise. Whether you are filtering city tap water for better taste or tackling lead and PFAS in well water, we will walk you through every decision — from testing your water to picking the exact product that fits your household, budget, and health goals.</p>
@@ -190,4 +195,6 @@ const relatedArticles = [
 
   <h2>Start Filtering Smarter</h2>
   <p>The best water filter is the one matched to your actual water quality, household size, and budget. Test your water first, understand what you need to remove, then use this guide to find the right product. Every filter we recommend has been researched, compared, and evaluated against its competitors. Browse our <a href="/guides/">complete guide library</a> for deeper dives on any topic, or jump to our <a href="/best-countertop-filters/">Best Countertop Filters</a> and <a href="/best-under-sink-filters/">Best Under-Sink Filters</a> roundups to see our ranked picks.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-apartments')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Renting an apartment does not mean settling for unfiltered water. From budget pitchers to advanced countertop reverse osmosis systems, we review the best no-installation filtration options that provide clean water without any plumbing modifications or landlord permission.</p>
@@ -125,4 +130,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Apartments</h2>
   <p>For most apartment dwellers, the <strong><a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a></strong> paired with <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> offers the best balance of convenience, performance, and value. It provides lead reduction, great taste, and a family-sized capacity with zero installation. For renters who want the absolute best water quality, the <a href={`/reviews/${bluevuaLite.slug}/`}>Bluevua Lite UV at {getPriceTier(bluevuaLite.price)}</a> is a worthwhile step up that delivers RO-grade purification right on your countertop.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

@@ -4,7 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
 import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
-import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'survival-filters';
 const category = getCategoryBySlug(categorySlug)!;
@@ -47,8 +47,16 @@ const itemListSchema = generateItemListSchema(
     position: i + 1,
   }))
 );
+const articleSchema = generateArticleSchema({
+  title: `Best ${category.name} ${year}: Expert Picks`,
+  description: `We tested ${allProducts.length} survival and portable water filters. Here are the best for ${year}, ranked by filtration effectiveness, weight, durability, and value.`,
+  url: `/best-${categorySlug}/`,
+  datePublished: category.publishDate,
+  dateModified: category.publishDate,
+  about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
+});
 const faqSchema = generateFAQSchema(faqs);
-const schema = combineSchemas(itemListSchema, faqSchema);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
 
 const relatedArticles = [
   { title: 'Water Filters for Camping', url: '/water-filters-for-camping/', description: 'The best portable water filters for car camping, backpacking base camps, and group camping trips.' },
@@ -66,6 +74,7 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={category.publishDate}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
   <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws under $8 to EPA-registered purification tablets, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>

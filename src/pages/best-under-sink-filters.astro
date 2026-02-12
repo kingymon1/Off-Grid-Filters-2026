@@ -4,7 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
 import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
-import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'under-sink-filters';
 const category = getCategoryBySlug(categorySlug)!;
@@ -47,8 +47,16 @@ const itemListSchema = generateItemListSchema(
     position: i + 1,
   }))
 );
+const articleSchema = generateArticleSchema({
+  title: `Best ${category.name} ${year}: Expert Picks`,
+  description: `We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by performance, value, and reliability.`,
+  url: `/best-${categorySlug}/`,
+  datePublished: category.publishDate,
+  dateModified: category.publishDate,
+  about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
+});
 const faqSchema = generateFAQSchema(faqs);
-const schema = combineSchemas(itemListSchema, faqSchema);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
 
 const relatedArticles = [
   { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.' },
@@ -66,6 +74,7 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={category.publishDate}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
   <p class="lead">Under-sink filters deliver the highest flow rates, deepest filtration, and most convenient daily experience of any home water filtration category. We tested {allProducts.length} systems ranging from a $199 6-stage RO to a $505 commercial-grade Pentair to find the best options for every budget and water quality challenge.</p>

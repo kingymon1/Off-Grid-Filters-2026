@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'best-water-filters-under-50')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -37,6 +38,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -57,6 +61,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>Best Water Filters Under $50: Budget Picks for {year}</h1>
   <p class="lead">You do not need to spend hundreds of dollars to drink cleaner, better-tasting water. We found 10 effective water filtration products under $50 — from a $23.64 pitcher that rivals brand-name performance to survival straws at $7.12 each. Every pick below is NSF or independently certified, because a cheap filter without certification is not a deal — it is a gamble.</p>
@@ -166,4 +171,6 @@ const relatedArticles = [
 
   <h2>Start Filtering on Any Budget</h2>
   <p>Clean water is not a luxury reserved for those who can afford premium systems. Every product on this page is under $50, independently certified, and capable of meaningfully improving your water quality. Start with the <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher</a> if you are on a tight budget, or the <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax</a> if you need family-size capacity. For our complete filter rankings across all price points, see our <a href="/guides/how-to-choose-water-filter/">How to Choose a Water Filter</a> guide.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

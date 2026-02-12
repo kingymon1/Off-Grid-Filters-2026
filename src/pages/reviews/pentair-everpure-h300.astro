@@ -3,7 +3,7 @@ import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import ProTip from '../../components/ProTip.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
-import { generateProductSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
 
 const product = getProductBySlug('pentair-everpure-h300')!;
 if (!isPublished(product.publishDate)) return Astro.redirect('/404');
@@ -20,7 +20,16 @@ const faqs = [
 
 const productSchema = generateProductSchema(product);
 const faqSchema = generateFAQSchema(faqs);
-const schema = combineSchemas(productSchema, faqSchema);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
 
 const relatedArticles = [
   ...relatedProducts.slice(0, 2).map(p => ({
@@ -49,6 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
 >
   <!-- HERO -->
   <h1>{product.name} Review {new Date().getFullYear()}</h1>

@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-emergencies')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">When municipal water systems fail after hurricanes, earthquakes, winter storms, or infrastructure breakdowns, access to clean drinking water becomes the most urgent survival need. We break down exactly how to build a water purification kit that keeps your family safe when the taps stop flowing.</p>
@@ -127,4 +132,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Emergency Preparedness</h2>
   <p>For comprehensive family emergency water preparedness, we recommend the <strong><a href={`/reviews/${membrane.slug}/`}>{membrane.name}</a></strong> combined with multiple packs of <strong><a href={`/reviews/${aquatabs.slug}/`}>{aquatabs.name}</a></strong>. The filter straws handle bacteria and protozoa while the tablets kill viruses — together, they cover every biological threat. Total cost for a family of four: roughly $63. That is an investment in peace of mind that could quite literally save lives.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

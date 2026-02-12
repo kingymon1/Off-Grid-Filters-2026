@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filter-sizing-guide')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -30,6 +31,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -50,6 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Buying the wrong size water filter means either constant refilling and premature filter changes (too small) or wasted money on capacity you never use (too large). This guide helps you calculate exactly how much filtered water your household actually needs, then match that number to the right product category and model.</p>
@@ -183,4 +188,6 @@ const relatedArticles = [
 
   <h2>Find Your Perfect Fit</h2>
   <p>The right filter size saves you money and frustration. Use the calculations above to determine your actual daily usage, then pick a filter system that handles that demand comfortably. For full product comparisons, visit our <a href="/best-countertop-filters/">Best Countertop Filters</a> or <a href="/best-under-sink-filters/">Best Under-Sink Filters</a> roundups. And if you are still unsure where to start, our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a> walks through every decision step by step.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

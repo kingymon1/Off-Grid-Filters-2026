@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filter-mistakes')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">After reviewing 29 water filters and reading thousands of customer reviews, we see the same mistakes repeated over and over. Some waste money, some reduce filter effectiveness, and a few can actually make your water quality worse. Here are the eight most common water filter mistakes — and exactly how to avoid each one.</p>
@@ -150,4 +155,6 @@ const relatedArticles = [
 
   <h2>Filter Smart, Not Expensive</h2>
   <p>Avoiding these mistakes saves you money, protects your health, and ensures your filter actually does its job. The common thread is simple: <strong>know your water, match the filter, maintain the schedule.</strong> For a step-by-step guide to making the right choice from day one, start with our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a>. And if you are on a tight budget, our <a href="/guides/best-water-filters-under-50/">Best Filters Under $50</a> guide proves that great filtration is affordable for everyone.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

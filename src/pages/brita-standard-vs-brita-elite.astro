@@ -42,6 +42,9 @@ const articleSchema = generateArticleSchema({
   title: `Brita Standard vs Brita Elite Filters`,
   description: `Brita Standard vs Elite replacement filter comparison. We compare filtration quality, filter life, cost per gallon, and certifications.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -62,6 +65,7 @@ const relatedArticles = [
   currentPage="Brita Standard vs Elite"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>Brita Standard vs Brita Elite: Which Filter Is Better in {year}?</h1>
 

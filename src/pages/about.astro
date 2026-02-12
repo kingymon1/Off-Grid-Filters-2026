@@ -12,6 +12,7 @@ const schema = generateArticleSchema({
   url: '/about/',
   datePublished: siteConfig.seo.datePublished,
   dateModified: siteConfig.seo.dateModified,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 ---
 
@@ -22,6 +23,7 @@ const schema = generateArticleSchema({
   category="About"
   currentPage="About Us"
   schema={schema}
+  lastUpdated={siteConfig.seo.dateModified}
   relatedArticles={[
     { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Our complete guide to picking the right water filter for your needs.' },
     { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'Our top-rated countertop and pitcher water filters.' },

@@ -41,6 +41,9 @@ const articleSchema = generateArticleSchema({
   title: `Amazon Basics Enhanced vs Brita Standard: Which Is Better?`,
   description: `Amazon Basics Enhanced vs Brita Standard replacement filter comparison. We compare certifications, contaminant removal, price, compatibility, and overall value.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -61,6 +64,7 @@ const relatedArticles = [
   currentPage="Amazon Basics vs Brita"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>Amazon Basics Enhanced vs Brita Standard: Which Pitcher Filter Is Better in {year}?</h1>
 

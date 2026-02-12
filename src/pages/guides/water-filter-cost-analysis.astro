@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filter-cost-analysis')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -38,6 +39,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -58,6 +62,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">The price on the box is only the beginning. Replacement filters, water waste, electricity, and maintenance all contribute to the true cost of owning a water filter. We calculated the 1-year and 5-year total cost of ownership for every major filter type in our catalog — from budget pitchers to premium RO systems — so you can make a genuinely informed decision about where your money goes.</p>
@@ -260,4 +265,6 @@ const relatedArticles = [
 
   <h2>Invest in the Right System</h2>
   <p>The cheapest filter to buy is not always the cheapest filter to own. Use the cost breakdowns above to find the system that matches both your water quality needs and your budget over time. For help choosing the right type, start with our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a>. If you are budget-constrained, see our <a href="/guides/best-water-filters-under-50/">Best Filters Under $50</a>. And for full product rankings, visit our <a href="/best-countertop-filters/">Best Countertop Filters</a> and <a href="/best-under-sink-filters/">Best Under-Sink Filters</a> roundups.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

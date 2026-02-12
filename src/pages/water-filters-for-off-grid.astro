@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-off-grid')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Off-grid living means being your own water utility. Whether you source water from a well, spring, rainwater collection, or surface water, you need a multi-layer filtration strategy that works without municipal infrastructure. We design a complete system using products we have tested and trust.</p>
@@ -133,4 +138,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Off-Grid Living</h2>
   <p>The <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> combined with <strong><a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filters</a></strong> is the foundation of any serious off-grid water system. The sediment filter protects your plumbing infrastructure, and the RO system produces drinking water that is cleaner than most municipal supplies. Add a <a href={`/reviews/${timain.slug}/`}>Timain filter straw</a> and <a href={`/reviews/${aquatabs.slug}/`}>Aquatabs</a> as portable backup, and you have complete water independence for under $275 in the first year.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-rv')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -30,6 +31,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -50,6 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">RV and van life mean connecting to a different water source at every stop. From campground hookups with unknown water quality to boondocking with limited tank supply, we cover the filtration setups that keep your drinking water safe and great-tasting on the road.</p>
@@ -123,4 +128,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for RV Life</h2>
   <p>The <strong><a href={`/reviews/${bluevuaLite.slug}/`}>{bluevuaLite.name}</a></strong> is our top recommendation for RVers. At {getPriceTier(bluevuaLite.price)}, it provides countertop RO with UV sterilization — the most thorough purification available without installation. Pair it with a <a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filter</a> on your hookup hose, and you have a complete water quality system that works at every campground, from five-star RV resorts to rustic boondocking spots.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

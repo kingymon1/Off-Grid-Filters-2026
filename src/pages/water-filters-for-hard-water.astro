@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-hard-water')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Hard water affects an estimated 85% of American households, causing scale buildup, poor-tasting water, and frustrating white residue on fixtures. We test and recommend the filters that actually reduce TDS and hardness minerals for noticeably better water, from budget pitcher options to full reverse osmosis systems.</p>
@@ -131,4 +136,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Hard Water</h2>
   <p>For most hard water households, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at {getPriceTier(ispring.price)} is the best long-term solution. It reduces TDS by 93-98%, produces water that tastes better than bottled, and costs a fraction of the per-gallon expense of pitcher filters in hard water. For renters or those who want a zero-installation option, the <a href={`/reviews/${zerowater4.slug}/`}>ZeroWater 4-pack</a> achieves the most complete mineral removal of any pitcher system — just be prepared for more frequent filter changes if your water is very hard.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

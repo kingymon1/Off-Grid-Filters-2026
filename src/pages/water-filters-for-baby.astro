@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-baby')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">When it comes to water for your infant, "probably safe" is not good enough. We break down the specific contaminants that pose the greatest risk to babies, the NSF certifications that matter most, and the filters that provide the highest level of protection for formula preparation and infant drinking water.</p>
@@ -131,4 +136,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Baby Water Safety</h2>
   <p>For families who can install an under-sink system, the <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> at {getPriceTier(ispring.price)} provides the most comprehensive protection available at a reasonable price. The combination of >98.9% lead removal, 96-99% PFAS removal, nitrate elimination, and alkaline remineralization makes it the gold standard for infant water safety. For renters, the <a href={`/reviews/${britaUltramax.slug}/`}>Brita UltraMax</a> with <a href={`/reviews/${britaElite.slug}/`}>Elite filters</a> delivers certified lead reduction without any installation — ready to use the day it arrives.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>
