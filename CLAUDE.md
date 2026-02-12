@@ -1145,6 +1145,24 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
 - **Setup:** Create `.env` with `GEMINI_API_KEY=your-key-here`
 - Add `"images": "node scripts/image-gen-server.mjs"` to package.json scripts
 
+**`scripts/checklist-server.mjs`:**
+- Launch checklist runner — self-contained HTTP server with built-in web dashboard
+- Automates LAUNCH-CHECKLIST.md Sections 1-5: build pipeline, SEO audit, schema validation,
+  internal link crawling, and content quality checks
+- Provides pass/fail UI for manual Sections 6-12
+- Parses all HTML files in `dist/` for titles, metas, canonicals, headings, OG tags, JSON-LD,
+  internal links, affiliate link attributes, content length, placeholder text, and more
+- Exports Markdown sign-off reports
+- **Usage:**
+  ```bash
+  # Start dashboard at http://localhost:3200
+  npm run checklist
+
+  # Run automated checks in CLI mode (no browser)
+  npm run checklist:auto
+  ```
+- Add `"checklist": "node scripts/checklist-server.mjs"` to package.json scripts
+
 ### 3.10 `.env.example`
 
 Create a `.env.example` file (committed to repo, unlike `.env`):
@@ -1160,6 +1178,19 @@ GEMINI_API_KEY=
 
 **Claude does this.** The site should build and pass all checks before the owner touches images.
 
+**Quick start — run the automated checklist from a fresh terminal:**
+```bash
+npm install          # Install dependencies first
+npm run checklist    # Open dashboard at http://localhost:3200
+```
+Click **"Run Automated Checks (S1-S5)"** in the dashboard. For CLI-only: `npm run checklist:auto`.
+
+**This phase uses two reference documents:**
+- **`LAUNCH-CHECKLIST.md`** — Complete 12-section sign-off checklist. Sections 1-5 are
+  automated (Claude completes during build). Sections 6-12 require tools or human verification.
+- **`GOOGLE-READINESS.md`** — Google Search Console compliance guide and indexing diagnostics.
+  The Pre-Submission Checklist (Section 2) must be fully confirmed before submitting to GSC.
+
 ### 4.1 Install & Build
 ```bash
 npm install
@@ -1170,15 +1201,34 @@ npm run build
 
 Fix any errors before proceeding.
 
-### 4.2 Verify Output
-- `dist/index.html` exists
-- `dist/sitemap-index.xml` exists
-- All page routes resolve
-- No broken internal links
-- No console errors
+### 4.2 Complete LAUNCH-CHECKLIST.md Sections 1-5
 
-### 4.3 Content Quality Checklist
-For every page, verify:
+Work through each section sequentially. Every item must pass:
+
+**Section 1: Build & Infrastructure** — Build pipeline, file inventory, configuration integrity.
+**Section 2: On-Page SEO** — Unique titles, unique meta descriptions, heading hierarchy,
+canonical URLs, OG tags, HTML fundamentals.
+**Section 3: Structured Data & Schema** — Schema presence by page type, schema quality,
+visible-to-schema correspondence.
+**Section 4: Internal Linking & Architecture** — Zero orphan pages, 3-click depth, cross-linking,
+navigation completeness, link health.
+**Section 5: Content Quality** — Per-page content checks, review quality, comparison quality,
+affiliate compliance, content uniqueness, information gain.
+
+### 4.3 Complete GOOGLE-READINESS.md Pre-Submission Checklist
+
+Work through Section 2 of GOOGLE-READINESS.md. All 7 subsections must pass:
+- 2.1 Content Readiness
+- 2.2 Technical Readiness
+- 2.3 Structured Data Readiness
+- 2.4 Crawl Readiness
+- 2.5 Internal Linking Readiness
+- 2.6 Affiliate Compliance
+- 2.7 Security & Deployment
+
+### 4.4 Legacy Quick Checklist (Summary)
+
+For every page, verify at minimum:
 - [ ] H1 contains target keyword naturally
 - [ ] Meta description is unique and under 160 characters
 - [ ] Breadcrumbs are correct
@@ -1191,7 +1241,10 @@ For every page, verify:
 - [ ] Affiliate disclosure is in footer
 - [ ] ProductImage is present (renders as SVG placeholder at this stage — that's expected)
 - [ ] EmailCapture present on guide pages, homepage, and resource hub
-- [ ] All links work
+- [ ] All affiliate links use `rel="nofollow sponsored noopener"`
+- [ ] All internal links resolve (zero broken links)
+- [ ] Zero orphan pages (every page has 2+ contextual inbound links)
+- [ ] Canonical URLs match sitemap URLs exactly
 
 **After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
 placeholder images. Push to GitHub, deploy to Vercel. Then proceed to Phase 5 for real images.
@@ -1276,6 +1329,33 @@ Every product review follows:
 2. **Reality:** How it actually performs (honest, specific)
 3. **Context:** How it compares to alternatives
 4. **Verdict:** Who should buy it and who shouldn't
+
+### Direct Answer Pattern (BLUF — Bottom Line Up Front)
+Every section on every page follows the **direct answer first** principle. The first 1-2
+sentences after any heading must directly answer the implicit question of that heading.
+Supporting detail, nuance, and explanation follow after.
+
+AI systems and Google's featured snippets pull citations from the **leading sentence** of a
+section. If that sentence is preamble instead of an answer, your content won't be cited.
+
+**Good:**
+```
+## Is the Bluevua RO100ROPOT Worth It?
+At $317, the Bluevua RO100ROPOT is worth it for households that want
+reverse osmosis + UV sterilization without plumbing installation.
+Here's why: [supporting detail]
+```
+
+**Bad:**
+```
+## Is the Bluevua RO100ROPOT Worth It?
+When evaluating a countertop RO system, there are several factors to
+consider. Price, filtration quality, and ease of installation all
+play a role in determining overall value...
+```
+
+This applies to: review sections, guide sections, comparison breakdowns, knowledge base
+explanations, and FAQ answers. **Never open with throat-clearing preamble.**
 
 ### FAQ Answer Pattern
 Every FAQ answer follows: **Direct answer** → **Technical explanation** → **Specific recommendation**
@@ -1377,7 +1457,7 @@ Every page links to 4 related articles:
 
 When complete, the project should contain:
 
-### Root (13 files)
+### Root (15 files)
 - [ ] `package.json`
 - [ ] `astro.config.mjs`
 - [ ] `tailwind.config.ts`
@@ -1391,6 +1471,8 @@ When complete, the project should contain:
 - [ ] `CLAUDE.md`
 - [ ] `TEMPLATE-GUIDE.md`
 - [ ] `IMAGE-GUIDE.md` (generated)
+- [ ] `LAUNCH-CHECKLIST.md` (12-section sign-off checklist)
+- [ ] `GOOGLE-READINESS.md` (Google Search Console compliance guide)
 
 ### .github (1 file)
 - [ ] `.github/workflows/ci.yml`
@@ -1446,7 +1528,8 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (3 files)
+### Scripts (4 files)
 - [ ] `scripts/convert-to-webp.mjs`
 - [ ] `scripts/generate-local-images.mjs`
 - [ ] `scripts/image-gen-server.mjs`
+- [ ] `scripts/checklist-server.mjs`
