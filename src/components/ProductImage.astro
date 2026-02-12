@@ -1,5 +1,5 @@
 ---
-import { heroImages } from '../lib/image-map';
+import { heroImages, productSlugs } from '../lib/image-map';
 
 interface Props {
   alt: string;
@@ -31,9 +31,9 @@ if (!imageSrc && slug && heroImages[slug]) {
 
 const hasImage = !!imageSrc;
 
-// Editorial images (AI-generated scene photos in /assets/images/) render full-width.
-// Product images (cropped product photos in /assets/) render in a compact showcase.
-const isEditorial = hasImage && imageSrc!.includes('/assets/images/');
+// Editorial images (AI-generated scene photos) render full-width.
+// Product images (cropped product photos) render in a compact showcase.
+const isEditorial = hasImage && !!slug && !productSlugs.has(slug);
 
 // For product photos, use compact square. For editorial, keep the requested aspect.
 const showcaseAspect = hasImage && !isEditorial && (aspect === 'hero' || aspect === 'wide')
