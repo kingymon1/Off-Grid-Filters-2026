@@ -889,6 +889,7 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
 <div class="header-inner">
   <h1><span>OffGrid Filters</span> — Launch Checklist</h1>
   <div class="controls">
+    <button class="btn btn-ghost" id="resetBtn" onclick="resetResults()">Reset</button>
     <button class="btn btn-accent" id="runBtn" onclick="runAutomated()">Run Automated Checks (S1-S5)</button>
     <select id="exportFilter" style="background:var(--card);color:var(--text);border:1px solid var(--border);padding:.4rem .5rem;border-radius:var(--radius);font-size:.75rem">
       <option value="all">Full Report</option>
@@ -1123,6 +1124,16 @@ async function exportReport() {
   } catch(e) { toast('Export error: '+e.message,'error'); }
 }
 
+async function resetResults() {
+  if (!confirm('Clear all checklist results and start fresh?')) return;
+  try {
+    const r = await fetch('/api/reset', {method:'POST'});
+    state = await r.json();
+    toast('Results cleared — ready for a fresh run','success');
+  } catch(e) { toast('Reset error: '+e.message,'error'); }
+  render();
+}
+
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 loadState();
@@ -1218,6 +1229,13 @@ function startServer() {
       if (path === '/api/results' && req.method === 'GET') {
         const results = await loadResults();
         return json(res, 200, results);
+      }
+
+      // API: Reset — clear all saved results
+      if (path === '/api/reset' && req.method === 'POST') {
+        const fresh = { lastRun: null, sections: {}, manual: {} };
+        await saveResults(fresh);
+        return json(res, 200, fresh);
       }
 
       // API: Run automated checks

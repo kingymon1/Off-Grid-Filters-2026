@@ -1184,8 +1184,9 @@ GEMINI_API_KEY=
 2. `npm install` — install dependencies (skip if already done)
 3. `npm run checklist` — starts the dashboard server
 4. Open **http://localhost:3200** in your browser
-5. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
-6. Use the dropdown next to **Export** to download a filtered report
+5. Click **"Reset"** if old results are showing — clears previous data
+6. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
+7. Use the dropdown next to **Export** to download a filtered report
 
 For CLI-only (no browser): `npm run checklist:auto`
 
