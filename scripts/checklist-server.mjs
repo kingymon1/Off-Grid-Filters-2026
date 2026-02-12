@@ -545,7 +545,31 @@ async function runSection4() {
 
   checks.push({ id: '4.1.no-orphans', label: `Zero orphan pages (${orphanPages.length} found)`, status: orphanPages.length === 0 ? 'pass' : 'fail', detail: orphanPages.length === 0 ? 'All pages have inbound links' : `Orphans: ${orphanPages.slice(0, 10).join(', ')}` });
 
-  checks.push({ id: '4.3.related-articles', label: 'Cross-linking via related articles', status: 'info', detail: 'Inspect pages manually for RelatedArticlesAstro component with 4 articles each' });
+  // 4.3 Related articles cross-linking — automated check
+  let pagesWithoutRelated = [];
+  let pagesWithWrongCount = [];
+  for (const file of htmlFiles) {
+    const html = await readHtml(file);
+    const url = urlFromFile(file);
+    // Skip homepage, 404, resource hub — they don't use RelatedArticles
+    if (url === '/' || url === '/404/' || url === '/guides/') continue;
+    // Count related article links inside a related-articles section
+    const relatedMatch = html.match(/related-articles|RelatedArticles|related-reads/i);
+    if (!relatedMatch) {
+      pagesWithoutRelated.push(url);
+    } else {
+      // Count links inside the related articles section (look for the section and count <a> tags)
+      const relatedSection = html.slice(html.search(/related-articles|RelatedArticles|related-reads/i));
+      const sectionEnd = relatedSection.indexOf('</section>') > 0 ? relatedSection.indexOf('</section>') + 10 : relatedSection.indexOf('</footer>');
+      const section = sectionEnd > 0 ? relatedSection.slice(0, sectionEnd) : relatedSection.slice(0, 2000);
+      const linkCount = (section.match(/<a\s/gi) || []).length;
+      if (linkCount < 4) pagesWithWrongCount.push(`${url} (${linkCount} links, need 4)`);
+    }
+  }
+  const contentPages = htmlFiles.length - 3; // minus homepage, 404, resource hub
+  const pagesWithRelated = contentPages - pagesWithoutRelated.length;
+  checks.push({ id: '4.3.related-articles', label: `Related articles present (${pagesWithRelated}/${contentPages} content pages)`, status: pagesWithoutRelated.length === 0 ? 'pass' : 'fail', detail: pagesWithoutRelated.length === 0 ? 'All content pages have related articles' : `Missing on: ${pagesWithoutRelated.slice(0, 8).join(', ')}${pagesWithoutRelated.length > 8 ? ` +${pagesWithoutRelated.length - 8} more` : ''}` });
+  checks.push({ id: '4.3.related-count', label: `Related articles have 4 links each (${pagesWithWrongCount.length} issues)`, status: pagesWithWrongCount.length === 0 ? 'pass' : 'warn', detail: pagesWithWrongCount.length === 0 ? 'All have 4+ links' : `Issues: ${pagesWithWrongCount.slice(0, 5).join('; ')}` });
 
   checks.push({ id: '4.5.broken-links', label: `Zero broken internal links (${brokenLinks} found)`, status: brokenLinks === 0 ? 'pass' : 'fail', detail: brokenLinks === 0 ? 'All links resolve' : `Broken: ${brokenLinkDetails.join('; ')}` });
 
@@ -866,7 +890,13 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
   <h1><span>OffGrid Filters</span> — Launch Checklist</h1>
   <div class="controls">
     <button class="btn btn-accent" id="runBtn" onclick="runAutomated()">Run Automated Checks (S1-S5)</button>
-    <button class="btn btn-ghost" onclick="exportReport()">Export Report</button>
+    <select id="exportFilter" style="background:var(--card);color:var(--text);border:1px solid var(--border);padding:.4rem .5rem;border-radius:var(--radius);font-size:.75rem">
+      <option value="all">Full Report</option>
+      <option value="issues">Failures + Warnings</option>
+      <option value="fail">Failures Only</option>
+      <option value="warn">Warnings Only</option>
+    </select>
+    <button class="btn btn-ghost" onclick="exportReport()">Export</button>
   </div>
 </div>
 </header>
@@ -1077,17 +1107,19 @@ async function runAutomated() {
 }
 
 async function exportReport() {
+  const filter = document.getElementById('exportFilter').value;
   try {
-    const r = await fetch('/api/report');
+    const r = await fetch('/api/report?filter='+filter);
     const text = await r.text();
     const blob = new Blob([text], {type:'text/markdown'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'checklist-report-'+new Date().toISOString().slice(0,10)+'.md';
+    const suffix = filter === 'all' ? '' : '-'+filter;
+    a.download = 'checklist-report'+suffix+'-'+new Date().toISOString().slice(0,10)+'.md';
     a.click();
     URL.revokeObjectURL(url);
-    toast('Report downloaded','success');
+    toast('Report downloaded ('+filter+')','success');
   } catch(e) { toast('Export error: '+e.message,'error'); }
 }
 
@@ -1100,21 +1132,33 @@ loadState();
 }
 
 // ─── Report Generator ─────────────────────────────────────
-function generateReport(results) {
+// filter: 'all' (default), 'fail', 'warn', 'issues' (fail+warn)
+function generateReport(results, filter = 'all') {
+  const filterLabel = { all: 'Full Report', fail: 'Failures Only', warn: 'Warnings Only', issues: 'Failures + Warnings' }[filter] || 'Full Report';
   const lines = [
-    '# Launch Checklist Report',
+    `# Launch Checklist Report — ${filterLabel}`,
     `Generated: ${new Date().toISOString()}`,
     '',
   ];
 
+  function includeCheck(status) {
+    if (filter === 'all') return true;
+    if (filter === 'fail') return status === 'fail';
+    if (filter === 'warn') return status === 'warn';
+    if (filter === 'issues') return status === 'fail' || status === 'warn';
+    return true;
+  }
+
   // Automated sections
   for (let i = 1; i <= 5; i++) {
     const checks = results.sections['' + i] || [];
+    const filtered = checks.filter(c => includeCheck(c.status));
+    if (filter !== 'all' && filtered.length === 0) continue;
     const pass = checks.filter(c => c.status === 'pass').length;
     lines.push(`## Section ${i}: ${['','Build & Infrastructure','On-Page SEO','Structured Data','Internal Linking','Content Quality'][i]}`);
     lines.push(`**${pass}/${checks.length} passed**`);
     lines.push('');
-    for (const c of checks) {
+    for (const c of filtered) {
       const icon = c.status === 'pass' ? '[PASS]' : c.status === 'fail' ? '[FAIL]' : '[WARN]';
       lines.push(`- ${icon} ${c.label}`);
       if (c.detail && c.status !== 'pass') lines.push(`  - ${c.detail}`);
@@ -1124,13 +1168,17 @@ function generateReport(results) {
 
   // Manual sections
   for (const ms of MANUAL_SECTIONS) {
-    lines.push(`## Section ${ms.id}: ${ms.title}`);
+    const items = [];
     for (let j = 0; j < ms.items.length; j++) {
       const key = ms.id + '.' + j;
       const v = results.manual?.[key] || 'pending';
+      if (!includeCheck(v === 'fail' ? 'fail' : v === 'pass' ? 'pass' : 'pending')) continue;
       const icon = v === 'pass' ? '[PASS]' : v === 'fail' ? '[FAIL]' : v === 'na' ? '[N/A]' : '[ ]';
-      lines.push(`- ${icon} ${ms.items[j]}`);
+      items.push(`- ${icon} ${ms.items[j]}`);
     }
+    if (filter !== 'all' && items.length === 0) continue;
+    lines.push(`## Section ${ms.id}: ${ms.title}`);
+    lines.push(...items);
     lines.push('');
   }
 
@@ -1188,10 +1236,11 @@ function startServer() {
         return json(res, 200, { ok: true });
       }
 
-      // API: Export report
+      // API: Export report — accepts ?filter=all|fail|warn|issues
       if (path === '/api/report' && req.method === 'GET') {
+        const filter = url.searchParams.get('filter') || 'all';
         const results = await loadResults();
-        const report = generateReport(results);
+        const report = generateReport(results, filter);
         res.writeHead(200, { 'Content-Type': 'text/markdown; charset=utf-8' });
         return res.end(report);
       }
