@@ -82,7 +82,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon="faucet" aspect="wide" />
+      <ProductImage alt={product.name} icon="faucet" aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The Pentair Everpure H-1200 cartridge set represents the pinnacle of non-RO under-sink filtration. These are the same cartridges used in Starbucks, McDonald's, and thousands of commercial kitchens worldwide. The twin-cartridge design provides 1,000 gallons of capacity at 0.5-micron filtration, catching lead, cysts, PFOA, PFOS, and chlorine with NSF 42/53/401 certification.</p>

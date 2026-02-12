@@ -83,7 +83,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon="fridge" aspect="wide" />
+      <ProductImage alt={product.name} icon="fridge" aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The everydrop Filter 1 earns our top spot thanks to its triple NSF 42/53/401 certification, which covers chlorine, lead (99% reduction), pharmaceuticals, and pesticides. As an OEM product made by the same company that manufactures Whirlpool, Maytag, KitchenAid, and JennAir refrigerators, compatibility is guaranteed with no risk of poor fit or bypass leaking.</p>

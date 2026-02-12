@@ -84,7 +84,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon={i === 2 ? 'water' : 'house'} aspect="wide" />
+      <ProductImage alt={product.name} icon={i === 2 ? 'water' : 'house'} aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The Membrane Solutions 6-pack is the clear value leader in whole-house sediment filtration. At $4.39 per filter, a full year of bi-monthly filter changes costs under $27. The string wound polypropylene construction effectively traps sand, silt, rust, and sediment at 5 microns — the standard residential rating that balances filtration quality with adequate water flow and pressure.</p>

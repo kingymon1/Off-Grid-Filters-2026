@@ -282,6 +282,9 @@ const schema = combineSchemas(faqSchema, websiteSchema);
           <div class="comparisons-grid stagger-grid">
             {popularComparisons.map((comp, i) => (
               <a href={`/${comp.slug}/`} class="comparison-card" style={`--delay: ${i * 100}ms`}>
+                <div class="comparison-image">
+                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="wide" slug={comp.slug} />
+                </div>
                 <div class="comparison-vs">
                   <div class="comparison-product">
                     <span class="comparison-brand">{comp.a!.brand}</span>
@@ -879,11 +882,20 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
     border-radius: 1rem;
-    padding: 1.5rem;
+    overflow: hidden;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+  }
+
+  .comparison-image {
+    width: 100%;
+  }
+
+  .comparison-image :global(.product-image-real),
+  .comparison-image :global(.product-image-placeholder) {
+    border-radius: 0;
+    margin: 0;
   }
 
   .comparison-card:hover {
@@ -896,6 +908,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding: 1rem 1.5rem 0;
   }
 
   .comparison-product {
@@ -937,6 +950,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     font-weight: 600;
     color: hsl(var(--primary));
     text-align: center;
+    padding: 0 1.5rem 1.5rem;
   }
 
   /* ── FAQ ──────────────────────────────────────────────── */

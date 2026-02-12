@@ -81,7 +81,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon={i < 2 ? 'uv' : 'pitcher'} aspect="wide" />
+      <ProductImage alt={product.name} icon={i < 2 ? 'uv' : 'pitcher'} aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The Bluevua RO100ROPOT-UV earns our top spot as the most capable countertop filtration system you can buy. Its 6-stage reverse osmosis process paired with UV-C sterilization eliminates bacteria, viruses, heavy metals, fluoride, and PFAS that no pitcher filter can touch. The glass carafe is a thoughtful detail that keeps purified water free from plastic contact.</p>

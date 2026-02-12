@@ -84,7 +84,7 @@ const relatedArticles = [
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon="filter" aspect="wide" />
+      <ProductImage alt={product.name} icon="filter" aspect="wide" slug={product.slug} />
       {i === 0 && (
         <>
           <p>The Amazon Basics Enhanced 3-pack is a genuinely surprising product. At $3.50 per filter, it carries quad NSF certification (42/53/401/372) — more certifications than the Brita Standard at roughly half the price. The NSF 53 certification means independently verified lead reduction, while NSF 401 covers pharmaceuticals. Most people assume the Amazon house brand would be inferior, but the certification data tells a different story.</p>
