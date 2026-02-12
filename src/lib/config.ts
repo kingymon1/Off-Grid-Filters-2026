@@ -1384,6 +1384,8 @@ export const siteConfig = {
   affiliateTag: AFFILIATE_TAG,
   productDescription: 'Expert reviews and buying guides for water filters — from countertop RO systems to survival filter straws. We test, compare, and recommend the best water filtration products for every need and budget.',
 
+  heroPreloadImage: '/assets/bluevua-ro100ropot-uv-hero.webp', // LCP preload — set to top product hero image
+
   seo: {
     datePublished: '2026-02-11',
     dateModified: '2026-02-08',
