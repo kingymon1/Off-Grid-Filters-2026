@@ -1160,6 +1160,12 @@ GEMINI_API_KEY=
 
 **Claude does this.** The site should build and pass all checks before the owner touches images.
 
+**This phase uses two reference documents:**
+- **`LAUNCH-CHECKLIST.md`** — Complete 12-section sign-off checklist. Sections 1-5 are
+  automated (Claude completes during build). Sections 6-12 require tools or human verification.
+- **`GOOGLE-READINESS.md`** — Google Search Console compliance guide and indexing diagnostics.
+  The Pre-Submission Checklist (Section 2) must be fully confirmed before submitting to GSC.
+
 ### 4.1 Install & Build
 ```bash
 npm install
@@ -1170,15 +1176,34 @@ npm run build
 
 Fix any errors before proceeding.
 
-### 4.2 Verify Output
-- `dist/index.html` exists
-- `dist/sitemap-index.xml` exists
-- All page routes resolve
-- No broken internal links
-- No console errors
+### 4.2 Complete LAUNCH-CHECKLIST.md Sections 1-5
 
-### 4.3 Content Quality Checklist
-For every page, verify:
+Work through each section sequentially. Every item must pass:
+
+**Section 1: Build & Infrastructure** — Build pipeline, file inventory, configuration integrity.
+**Section 2: On-Page SEO** — Unique titles, unique meta descriptions, heading hierarchy,
+canonical URLs, OG tags, HTML fundamentals.
+**Section 3: Structured Data & Schema** — Schema presence by page type, schema quality,
+visible-to-schema correspondence.
+**Section 4: Internal Linking & Architecture** — Zero orphan pages, 3-click depth, cross-linking,
+navigation completeness, link health.
+**Section 5: Content Quality** — Per-page content checks, review quality, comparison quality,
+affiliate compliance, content uniqueness, information gain.
+
+### 4.3 Complete GOOGLE-READINESS.md Pre-Submission Checklist
+
+Work through Section 2 of GOOGLE-READINESS.md. All 7 subsections must pass:
+- 2.1 Content Readiness
+- 2.2 Technical Readiness
+- 2.3 Structured Data Readiness
+- 2.4 Crawl Readiness
+- 2.5 Internal Linking Readiness
+- 2.6 Affiliate Compliance
+- 2.7 Security & Deployment
+
+### 4.4 Legacy Quick Checklist (Summary)
+
+For every page, verify at minimum:
 - [ ] H1 contains target keyword naturally
 - [ ] Meta description is unique and under 160 characters
 - [ ] Breadcrumbs are correct
@@ -1191,7 +1216,10 @@ For every page, verify:
 - [ ] Affiliate disclosure is in footer
 - [ ] ProductImage is present (renders as SVG placeholder at this stage — that's expected)
 - [ ] EmailCapture present on guide pages, homepage, and resource hub
-- [ ] All links work
+- [ ] All affiliate links use `rel="nofollow sponsored noopener"`
+- [ ] All internal links resolve (zero broken links)
+- [ ] Zero orphan pages (every page has 2+ contextual inbound links)
+- [ ] Canonical URLs match sitemap URLs exactly
 
 **After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
 placeholder images. Push to GitHub, deploy to Vercel. Then proceed to Phase 5 for real images.
@@ -1377,7 +1405,7 @@ Every page links to 4 related articles:
 
 When complete, the project should contain:
 
-### Root (13 files)
+### Root (15 files)
 - [ ] `package.json`
 - [ ] `astro.config.mjs`
 - [ ] `tailwind.config.ts`
@@ -1391,6 +1419,8 @@ When complete, the project should contain:
 - [ ] `CLAUDE.md`
 - [ ] `TEMPLATE-GUIDE.md`
 - [ ] `IMAGE-GUIDE.md` (generated)
+- [ ] `LAUNCH-CHECKLIST.md` (12-section sign-off checklist)
+- [ ] `GOOGLE-READINESS.md` (Google Search Console compliance guide)
 
 ### .github (1 file)
 - [ ] `.github/workflows/ci.yml`
