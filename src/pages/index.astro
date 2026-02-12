@@ -283,7 +283,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             {popularComparisons.map((comp, i) => (
               <a href={`/${comp.slug}/`} class="comparison-card" style={`--delay: ${i * 100}ms`}>
                 <div class="comparison-image">
-                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="wide" slug={comp.slug} />
+                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="hero" slug={comp.slug} />
                 </div>
                 <div class="comparison-vs">
                   <div class="comparison-product">
@@ -695,7 +695,10 @@ const schema = combineSchemas(faqSchema, websiteSchema);
 
   .category-icon {
     margin: 0 auto 0.75rem;
-    max-width: 80px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
   }
 
   .category-icon :global(.product-image-placeholder),
