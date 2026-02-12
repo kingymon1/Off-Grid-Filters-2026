@@ -1,4 +1,6 @@
 ---
+import { heroImages } from '../lib/image-map';
+
 interface Props {
   alt: string;
   aspect?: 'hero' | 'square' | 'wide' | 'tall';
@@ -21,33 +23,24 @@ const {
   slug,
 } = Astro.props;
 
-// Build a set of known image files using Vite's import.meta.glob (works on all platforms)
-const assetGlob = import.meta.glob<boolean>('/public/assets/*-hero.webp');
-const imageGlob = import.meta.glob<boolean>('/public/assets/images/*-hero.webp');
-const assetFiles = new Set(Object.keys(assetGlob).map(p => p.replace('/public', '')));
-const imageFiles = new Set(Object.keys(imageGlob).map(p => p.replace('/public', '')));
-
-// Resolve image source: explicit src > auto-detect from slug > fallback to placeholder
+// Resolve image source: explicit src > static map lookup > fallback to placeholder
 let imageSrc = srcProp;
-if (!imageSrc && slug) {
-  const candidate = `/assets/${slug}-hero.webp`;
-  const candidate2 = `/assets/images/${slug}-hero.webp`;
-  if (assetFiles.has(candidate)) {
-    imageSrc = candidate;
-  } else if (imageFiles.has(candidate2)) {
-    imageSrc = candidate2;
-  }
+if (!imageSrc && slug && heroImages[slug]) {
+  imageSrc = heroImages[slug];
 }
 
 const hasImage = !!imageSrc;
 
-// For real product images (square Amazon photos), use a compact square
-// container instead of wide/hero ratios. Constrained via max-width in CSS.
-const showcaseAspect = hasImage && (aspect === 'hero' || aspect === 'wide')
+// Editorial images (AI-generated scene photos in /assets/images/) render full-width.
+// Product images (cropped product photos in /assets/) render in a compact showcase.
+const isEditorial = hasImage && imageSrc!.includes('/assets/images/');
+
+// For product photos, use compact square. For editorial, keep the requested aspect.
+const showcaseAspect = hasImage && !isEditorial && (aspect === 'hero' || aspect === 'wide')
   ? 'aspect-square'
-  : hasImage && aspect === 'square'
+  : hasImage && !isEditorial && aspect === 'square'
     ? 'aspect-square'
-    : hasImage && aspect === 'tall'
+    : hasImage && !isEditorial && aspect === 'tall'
       ? 'aspect-[4/5]'
       : null;
 
@@ -84,13 +77,29 @@ const icons: Record<string, string> = {
 const iconSvg = icons[icon] || icons.filter;
 ---
 
-{hasImage ? (
+{hasImage && isEditorial ? (
+  <!-- Editorial image: full-width, cover fit, landscape aspect -->
+  <figure class:list={['product-image-editorial', className]}>
+    <div class:list={['editorial-container', aspectMap[aspect]]}>
+      <img
+        src={imageSrc}
+        srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
+        sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
+        alt={alt}
+        loading={priority ? 'eager' : 'lazy'}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={priority ? 'high' : undefined}
+        class="editorial-image"
+      />
+    </div>
+    {caption && <figcaption class="image-caption">{caption}</figcaption>}
+  </figure>
+) : hasImage ? (
+  <!-- Product photo: compact square showcase with vignette -->
   <figure class:list={['product-image-real', className]}>
     <div class:list={['image-showcase', showcaseAspect || aspectMap[aspect]]}>
       <div class="showcase-inner">
-        <!-- Subtle dark-to-lighter radial gradient backdrop -->
         <div class="showcase-backdrop"></div>
-        <!-- Ambient brand-colored glow behind the product -->
         <div class="showcase-glow"></div>
         <img
           src={imageSrc}
@@ -107,6 +116,7 @@ const iconSvg = icons[icon] || icons.filter;
     {caption && <figcaption class="image-caption">{caption}</figcaption>}
   </figure>
 ) : (
+  <!-- Placeholder: SVG icon with gradient background -->
   <figure class:list={['product-image-placeholder', className]}>
     <div class:list={['image-container', aspectMap[aspect]]}>
       <div class="image-inner">
@@ -126,7 +136,30 @@ const iconSvg = icons[icon] || icons.filter;
 )}
 
 <style>
-  /* ── Spotlight Vignette Showcase ── */
+  /* ── Editorial Images (full-width, landscape) ── */
+  .product-image-editorial {
+    margin: 2rem 0;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .editorial-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .editorial-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  /* ── Product Photo Showcase (compact, centered) ── */
   .product-image-real {
     margin: 2rem auto;
     max-width: 480px;
@@ -149,7 +182,6 @@ const iconSvg = icons[icon] || icons.filter;
     justify-content: center;
   }
 
-  /* Subtle backdrop that matches the content card background */
   .showcase-backdrop {
     position: absolute;
     inset: 0;
@@ -161,7 +193,6 @@ const iconSvg = icons[icon] || icons.filter;
       );
   }
 
-  /* Brand-colored ambient glow */
   .showcase-glow {
     position: absolute;
     inset: 15%;
@@ -177,7 +208,6 @@ const iconSvg = icons[icon] || icons.filter;
     z-index: 0;
   }
 
-  /* The product image with radial mask vignette */
   .showcase-image {
     position: relative;
     max-width: 88%;
@@ -186,7 +216,6 @@ const iconSvg = icons[icon] || icons.filter;
     height: auto;
     object-fit: contain;
     z-index: 1;
-    /* Radial mask: fully visible center, gentle fade at edges */
     mask-image: radial-gradient(
       ellipse 85% 85% at 50% 50%,
       black 55%,
@@ -221,6 +250,7 @@ const iconSvg = icons[icon] || icons.filter;
     transition: background 0.4s ease;
   }
 
+  /* ── Placeholder (SVG icon) ── */
   .product-image-placeholder {
     margin: 2rem 0;
     border-radius: 1rem;
@@ -308,8 +338,9 @@ const iconSvg = icons[icon] || icons.filter;
     font-style: italic;
   }
 
-  /* Shimmer on showcase (real images) */
-  .image-showcase::after {
+  /* Shimmer effects */
+  .image-showcase::after,
+  .editorial-container::after {
     content: '';
     position: absolute;
     inset: 0;
