@@ -1145,6 +1145,24 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
 - **Setup:** Create `.env` with `GEMINI_API_KEY=your-key-here`
 - Add `"images": "node scripts/image-gen-server.mjs"` to package.json scripts
 
+**`scripts/checklist-server.mjs`:**
+- Launch checklist runner — self-contained HTTP server with built-in web dashboard
+- Automates LAUNCH-CHECKLIST.md Sections 1-5: build pipeline, SEO audit, schema validation,
+  internal link crawling, and content quality checks
+- Provides pass/fail UI for manual Sections 6-12
+- Parses all HTML files in `dist/` for titles, metas, canonicals, headings, OG tags, JSON-LD,
+  internal links, affiliate link attributes, content length, placeholder text, and more
+- Exports Markdown sign-off reports
+- **Usage:**
+  ```bash
+  # Start dashboard at http://localhost:3200
+  npm run checklist
+
+  # Run automated checks in CLI mode (no browser)
+  npm run checklist:auto
+  ```
+- Add `"checklist": "node scripts/checklist-server.mjs"` to package.json scripts
+
 ### 3.10 `.env.example`
 
 Create a `.env.example` file (committed to repo, unlike `.env`):
@@ -1159,6 +1177,13 @@ GEMINI_API_KEY=
 ## PHASE 4: QUALITY (Verify everything works)
 
 **Claude does this.** The site should build and pass all checks before the owner touches images.
+
+**Quick start — run the automated checklist from a fresh terminal:**
+```bash
+npm install          # Install dependencies first
+npm run checklist    # Open dashboard at http://localhost:3200
+```
+Click **"Run Automated Checks (S1-S5)"** in the dashboard. For CLI-only: `npm run checklist:auto`.
 
 **This phase uses two reference documents:**
 - **`LAUNCH-CHECKLIST.md`** — Complete 12-section sign-off checklist. Sections 1-5 are
@@ -1503,7 +1528,8 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (3 files)
+### Scripts (4 files)
 - [ ] `scripts/convert-to-webp.mjs`
 - [ ] `scripts/generate-local-images.mjs`
 - [ ] `scripts/image-gen-server.mjs`
+- [ ] `scripts/checklist-server.mjs`

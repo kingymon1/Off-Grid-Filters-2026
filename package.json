@@ -11,7 +11,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "images": "node scripts/image-gen-server.mjs",
-    "images:auto": "node scripts/image-gen-server.mjs --auto"
+    "images:auto": "node scripts/image-gen-server.mjs --auto",
+    "checklist": "node scripts/checklist-server.mjs",
+    "checklist:auto": "node scripts/checklist-server.mjs --auto"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

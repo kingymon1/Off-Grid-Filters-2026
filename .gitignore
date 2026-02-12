@@ -24,5 +24,8 @@ Thumbs.db
 *.swp
 *.swo
 
+# Checklist runner state
+checklist-results.json
+
 # Vercel
 .vercel/

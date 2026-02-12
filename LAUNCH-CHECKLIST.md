@@ -9,6 +9,30 @@
 
 ---
 
+## Quick Start — Checklist Runner
+
+Run the automated checklist dashboard from a fresh terminal:
+
+```bash
+npm install          # Install dependencies (required first)
+npm run checklist    # Open dashboard at http://localhost:3200
+```
+
+The dashboard automates **Sections 1-5** (build, SEO, schema, linking, content) and provides
+a pass/fail UI for **Sections 6-12** (manual human checks). Click **"Run Automated Checks"**
+in the web UI to start.
+
+**CLI mode** (no browser, outputs to terminal):
+
+```bash
+npm run checklist:auto
+```
+
+Results are saved to `checklist-results.json`. Use the **"Export Report"** button in the
+dashboard to download a Markdown sign-off report.
+
+---
+
 ## How to Use This Checklist
 
 **During Build (Phase 4):** Claude works through Sections 1-5 autonomously. Every automated
