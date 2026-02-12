@@ -108,7 +108,7 @@ Claude will:
 
 | File/Dir | Purpose |
 |----------|---------|
-| `src/components/*.astro` | 10 UI components (including ProductImage with 3-mode rendering, EmailCapture with Buttondown) |
+| `src/components/*.astro` | 12 UI components (including ProductImage with 3-mode rendering, ProductHero for review pages, AffiliateDisclosure for compliance, EmailCapture with Buttondown) |
 | `src/layouts/*.astro` | 2 page layouts (ContentLayout supports visible `lastUpdated` dates) |
 | `src/index.css` | Full design system with animations |
 | `src/lib/schema.ts` | Schema.org generators |

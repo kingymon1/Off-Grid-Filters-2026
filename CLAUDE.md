@@ -364,6 +364,8 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateOrganizationSchema()` — For brand/site info
 - `generateWebSiteSchema()` — For site-level schema (NO SearchAction — the site has no search)
 - `generateItemListSchema(items)` — For roundup/list pages
+- `generateActivitySchema(activityName)` — For activity/use-case pages
+- `combineSchemas(...schemas)` — Combines multiple schemas into a `@graph` array
 - `createPageSchema(props)` — Convenience helper combining article + breadcrumbs + optional FAQ/product
 
 **Entity linking interfaces (for AI search hardening):**
@@ -528,7 +530,7 @@ The `ProductImage` component imports from this map and determines render mode:
 **`src/layouts/ContentLayout.astro`** must include:
 - Wraps BaseLayout
 - Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles, `lastUpdated?: string`
-- Renders: Header → Breadcrumbs → **Visible "Last Updated" date** → Main Content (slot) → Related Articles → Footer
+- Renders: Header → Breadcrumbs → **Visible "Last Updated" date** → AffiliateDisclosure → Main Content (slot) → Related Articles → Footer
 - The `lastUpdated` prop renders a human-readable date (`<time>` element) between breadcrumbs and
   content. This visible date **must match** the `dateModified` in the page's Article schema —
   Google requires visible dates to correspond to structured data dates.
@@ -538,7 +540,7 @@ The `ProductImage` component imports from this map and determines render mode:
 
 ### 3.5 Source: Components
 
-**All 10 components must read brand/config data from `src/lib/config.ts`.**
+**All 12 components must read brand/config data from `src/lib/config.ts`.**
 
 **`HeaderAstro.astro`:**
 - Site name/logo (text-based initially)
@@ -655,6 +657,23 @@ The `ProductImage` component imports from this map and determines render mode:
 more likely to subscribe. Transactional pages (reviews, comparisons) are closer to purchase
 and adding email capture would distract from the conversion path. The homepage captures
 browse-mode visitors.
+
+**`AffiliateDisclosure.astro`:**
+- No props — reads `siteConfig.brand` from config
+- Renders a small disclosure banner at the top of every content page (inside ContentLayout)
+- Text: "As an Amazon Associate, [brand] earns from qualifying purchases. Prices and availability are subject to change. Learn more."
+- Info icon + link to about page
+- Styled as muted, non-intrusive banner with card background
+- **Required for Amazon Associates compliance** — must appear on every page with affiliate links
+
+**`ProductHero.astro`:**
+- Props: `product: Product` (from `src/lib/config`)
+- Used on product review pages — renders a 2-column hero with product image and key details
+- Left column: `<ProductImage>` in square aspect
+- Right column: key specs grid (up to 6 specs, dynamically selected from available product data), verdict box with "Best for" callout, and "Check Price on Amazon" CTA button
+- Specs are pulled dynamically: filtrationStages, filtrationTechnology, packSize, capacity, flowRate, micronRating, filterLife, pureToWaste, compatibility, certifications
+- Responsive: stacks vertically on mobile (<768px)
+- CTA button uses accent gradient with `color: #fff !important` and text-shadow
 
 ### 3.6 Source: Pages
 
@@ -1354,7 +1373,7 @@ Every page links to 4 related articles:
 
 When complete, the project should contain:
 
-### Root (12 files)
+### Root (13 files)
 - [ ] `package.json`
 - [ ] `astro.config.mjs`
 - [ ] `tailwind.config.ts`
@@ -1363,6 +1382,7 @@ When complete, the project should contain:
 - [ ] `eslint.config.js`
 - [ ] `vercel.json`
 - [ ] `.gitignore`
+- [ ] `.env.example`
 - [ ] `product-brief.yaml`
 - [ ] `CLAUDE.md`
 - [ ] `TEMPLATE-GUIDE.md`
@@ -1390,7 +1410,7 @@ When complete, the project should contain:
 - [ ] `src/layouts/BaseLayout.astro`
 - [ ] `src/layouts/ContentLayout.astro`
 
-### Source: Components (10 files)
+### Source: Components (12 files)
 - [ ] `src/components/HeaderAstro.astro`
 - [ ] `src/components/FooterAstro.astro`
 - [ ] `src/components/BreadcrumbsAstro.astro`
@@ -1401,6 +1421,8 @@ When complete, the project should contain:
 - [ ] `src/components/ProductImage.astro`
 - [ ] `src/components/ComparisonTable.astro`
 - [ ] `src/components/EmailCapture.astro`
+- [ ] `src/components/AffiliateDisclosure.astro`
+- [ ] `src/components/ProductHero.astro`
 
 ### Source: Pages
 - [ ] `src/pages/index.astro` (homepage — authority hub)
