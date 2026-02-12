@@ -260,7 +260,7 @@ Create these files in this order:
 
 **6. `eslint.config.js`** — JS recommended + TypeScript ESLint.
 
-**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (1yr for assets, 24hr for sitemaps), redirect .html to trailing slash.
+**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (24hr for `/assets/*` images to allow updates, 1yr immutable for `/_astro/*` hash-named bundles, 24hr for sitemaps), redirect .html to trailing slash.
 
 **8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
 
@@ -302,6 +302,80 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateItemListSchema(items)` — For roundup/list pages
 
 **`src/lib/schema.test.ts`** — Vitest tests for all schema generators.
+
+**`src/lib/image-map.ts`** — Static image path map for platform-agnostic image resolution.
+
+**Why a static map?** Astro builds run on Vercel's serverless environment where `fs.existsSync`
+and `import.meta.glob` don't reliably detect files in `public/`. A static TypeScript map
+guarantees correct image resolution across all build environments. **Do NOT use filesystem
+detection.** It will work locally but break on Vercel.
+
+Generate this file with entries for EVERY page in the site:
+
+```typescript
+// Product slugs — these render in "showcase" mode (compact, centered, radial
+// CSS mask to blend away white Amazon product-photo backgrounds)
+export const productSlugs = new Set([
+  // One entry per product from config.ts products array
+  'product-slug-1',
+  'product-slug-2',
+  // ... all product slugs
+]);
+
+// Hero image paths — maps page slugs to /assets/ image paths
+// Slugs NOT in productSlugs render in "editorial" mode (full-width, object-fit: cover)
+export const heroImages: Record<string, string> = {
+  // ── Product review heroes (1 per product) ──
+  'product-slug-1': '/assets/product-slug-1-hero.webp',
+
+  // ── Category roundup heroes (1 per category) ──
+  'best-category-slug': '/assets/best-category-slug-hero.webp',
+
+  // ── Comparison heroes (1 per comparison) ──
+  'product-a-vs-product-b': '/assets/product-a-vs-product-b-hero.webp',
+
+  // ── Buyer guide heroes ──
+  'how-to-choose-niche': '/assets/how-to-choose-niche-hero.webp',
+
+  // ── Activity guide heroes ──
+  'niche-for-activity': '/assets/niche-for-activity-hero.webp',
+
+  // ── Knowledge base heroes ──
+  'topic-slug': '/assets/topic-slug-hero.webp',
+
+  // ── About page ──
+  'about': '/assets/about-hero.webp',
+
+  // ── Homepage featured picks (use product slug + "-featured") ──
+  'product-slug-1-featured': '/assets/product-slug-1-featured.webp',
+
+  // ── Homepage category browser (use "category-" + category slug) ──
+  'category-category-slug': '/assets/category-category-slug.webp',
+};
+```
+
+**Naming conventions for image files (all in `public/assets/`):**
+
+| Page type | Slug pattern | Filename pattern |
+|-----------|-------------|------------------|
+| Product review | `product-slug` | `product-slug-hero.webp` |
+| Category roundup | `best-category-slug` | `best-category-slug-hero.webp` |
+| Comparison | `product-a-vs-product-b` | `product-a-vs-product-b-hero.webp` |
+| Buyer guide | `guide-slug` | `guide-slug-hero.webp` |
+| Activity guide | `niche-for-activity` | `niche-for-activity-hero.webp` |
+| Knowledge base | `topic-slug` | `topic-slug-hero.webp` |
+| Homepage featured | `product-slug-featured` | `product-slug-featured.webp` |
+| Homepage category | `category-cat-slug` | `category-cat-slug.webp` |
+
+**Every image must have 3 responsive variants:**
+- `[name].webp` — full size (1200px wide)
+- `[name]-medium.webp` — medium (800px wide)
+- `[name]-small.webp` — small (400px wide)
+
+The `ProductImage` component imports from this map and determines render mode:
+- Slug in `productSlugs` → **product showcase** (compact, white-bg mask)
+- Slug NOT in `productSlugs` → **editorial** (full-width cover)
+- No image found → **SVG placeholder** (icon + label fallback)
 
 ### 3.3 Source: Global CSS
 
@@ -407,11 +481,39 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - Slot for content
 
 **`ProductImage.astro`:**
-- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string`
-- SVG-based placeholder system — no real images needed initially
-- 15+ contextual icons (filter, water, camping, hiking, gravity, pump, bottle, straw, uv, rv, backpack, compare, tools, shield, gear)
+- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string, slug?: string, src?: string`
+- **3-mode rendering system** powered by `src/lib/image-map.ts`:
+
+  **Mode 1: Editorial** (scene/lifestyle photos — roundups, comparisons, guides, knowledge base, about)
+  - Triggers when: `slug` resolves to an image AND slug is NOT in `productSlugs`
+  - Renders: full-width container with `object-fit: cover`, aspect ratio from `aspect` prop
+  - CSS: `.product-image-editorial` → `.editorial-container` (aspect ratio) → `.editorial-image` (absolute fill)
+  - Best for: AI-generated scene photos, landscape editorial images
+
+  **Mode 2: Product Showcase** (Amazon product cutouts — review pages, featured picks)
+  - Triggers when: `slug` resolves to an image AND slug IS in `productSlugs`
+  - Renders: compact centered container (max-width 480px) with dark backdrop gradient
+  - CSS mask removes white background: `mask-image: radial-gradient(ellipse 85% 85% at 50% 50%, black 55%, rgba(0,0,0,0.8) 68%, rgba(0,0,0,0.4) 78%, transparent 90%)`
+  - Includes subtle glow effect behind product using `hsl(var(--primary) / 0.1)`
+  - Best for: Product photos downloaded from Amazon (white background cutouts)
+
+  **Mode 3: SVG Placeholder** (fallback when no image exists)
+  - Triggers when: no image found for the slug
+  - Renders: gradient background + dot pattern + contextual SVG icon + label
+  - 15+ icons: filter, water, camping, hiking, gravity, pump, bottle, straw, uv, rv, backpack, compare, tools, shield, gear
+
+- **Responsive srcset** auto-generated from the image path:
+  - `[name]-small.webp 400w` + `[name]-medium.webp 800w` + `[name].webp 1200w`
+  - `sizes="(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px"`
+  - All 3 variant files must exist in `public/assets/` or srcset breaks
+- **`src` prop** overrides image-map lookup (used when the same image serves multiple contexts, e.g., category browser cards using `src={/assets/category-slug.webp}`)
+- **`slug` prop** controls image-map lookup AND render mode selection
 - **EVERY content page MUST have at least one ProductImage** — no exceptions
 - Place after the intro paragraph on every page
+- **Homepage special cases:**
+  - Category browser cards: pass both `src` and `slug` (slug enables editorial mode, src provides the path)
+  - Comparison cards on homepage: use `aspect="hero"` (16:9) not `aspect="wide"` (3:2) — cards need shorter images
+  - Featured picks: use product slug so they render in showcase mode
 
 **`ComparisonTable.astro`:**
 - Props: `products: Product[], features?: Feature[]`
@@ -751,18 +853,133 @@ export const GET: APIRoute = () => {
 ### 3.8 IMAGE-GUIDE.md
 
 Generate an `IMAGE-GUIDE.md` at the project root that documents:
-- Every page that has a `<ProductImage>` placeholder
-- What real photo should replace each placeholder
-- Recommended image dimensions per aspect ratio
+- The image system architecture (image-map.ts, ProductImage 3-mode rendering, cache headers)
+- Image generation workflow (download Amazon photos → generate AI editorial → register in map)
+- Every page and its image filename, render mode, and aspect ratio
 - File naming convention: `[product-slug]-[context].webp`
-- Where to place real images: `public/assets/images/`
+- Responsive variant convention: `[name].webp`, `[name]-medium.webp`, `[name]-small.webp`
+- Where to place images: `public/assets/` (flat directory, no subdirectories)
+- How to add or replace images (Sharp commands for responsive variants)
+- Complete image inventory organized by page type
 
 ### 3.9 Scripts
 
 **`scripts/convert-to-webp.mjs`:**
-- Uses Sharp library to convert JPG/PNG images to WebP
+- Uses Sharp library to batch-convert JPG/PNG source images to WebP
+- Creates 3 responsive variants per image:
+  - Full: 1200px wide, quality 82
+  - Medium: 800px wide, quality 78
+  - Small: 400px wide, quality 72
+- Output naming: `[name].webp`, `[name]-medium.webp`, `[name]-small.webp`
+- Outputs to `public/assets/`
+- Usage: `node scripts/convert-to-webp.mjs`
+
+**`scripts/generate-local-images.mjs`:**
+- SVG-to-WebP fallback generator — creates branded placeholder images locally without any API
+- Uses Sharp to render SVG templates into WebP images
+- Applies the site's color scheme (HSL values from `src/index.css`)
+- Includes 40+ contextual SVG icon paths (filter, water, mountain, tent, house, etc.)
+- Generates images for all page types with appropriate icons, labels, and gradient backgrounds
+- Creates responsive variants (small, medium, full) for each image
+- Outputs to `public/assets/`
+- Usage: `node scripts/generate-local-images.mjs`
+- **Use case:** Initial build when no AI API key is available, or as a baseline before real photos
+
+**`scripts/image-gen-server.mjs`:**
+- AI image generation admin — self-contained HTTP server with built-in web UI
+- Uses Google Gemini API (`gemini-2.5-flash-image` model) to generate editorial/scene photos
+- Reads `GEMINI_API_KEY` from `.env` file
+- Contains IMAGE_PROMPTS array with a prompt for EVERY editorial image in the site:
+  - Product review heroes (1 per product)
+  - Homepage featured picks (3-4 products)
+  - Homepage category browser images (1 per category)
+  - Category roundup heroes (1 per category)
+  - Comparison heroes (1 per comparison)
+  - Buyer guide heroes (1 per guide)
+  - Activity guide heroes (1 per activity)
+  - Knowledge base heroes (1 per article)
+  - About page hero (1)
+- **5 style prefixes** for different image types:
+  - `product`: Professional product photography, studio lighting, dark background
+  - `lifestyle`: Editorial photograph, natural setting, cinematic color grading
+  - `educational`: Clean informational photograph, scientific style
+  - `collection`: Multiple products artfully arranged, studio lighting
+  - `comparison`: Two products side by side, symmetrical composition
+- Each prompt includes: `id`, `filename`, `category`, `pagePath`, `aspectRatio`, `description`, `prompt`
+- Automatically converts AI output to WebP with Sharp
 - Creates responsive variants (small, medium, full)
-- Outputs to public/assets/
+- Saves to `public/assets/`
+- **Usage:**
+  ```bash
+  # Start admin UI at http://localhost:3100
+  npm run images
+
+  # Auto-generate all missing images (CLI mode)
+  npm run images -- --auto
+  ```
+- **Setup:** Create `.env` with `GEMINI_API_KEY=your-key-here`
+- Add `"images": "node scripts/image-gen-server.mjs"` to package.json scripts
+
+### 3.10 `.env.example`
+
+Create a `.env.example` file (committed to repo, unlike `.env`):
+```
+# Google Gemini API Key for AI image generation
+# Get yours at: https://aistudio.google.com/apikey
+GEMINI_API_KEY=
+```
+
+---
+
+## PHASE 3.5: IMAGES (After build, before quality check)
+
+The site initially builds with SVG placeholder images. This phase replaces them with real photos.
+
+### 3.5.1 Download Product Photos from Amazon
+
+**This is a manual step that must be done by the site owner.**
+
+For each product in `product-brief.yaml`:
+1. Go to the Amazon product listing
+2. Download the main product image (the white-background cutout photo)
+3. Rename following the convention: `[product-slug]-hero.webp`
+   - Example: `bluevua-ro100ropot-uv-hero.webp`
+4. Place in `public/assets/`
+5. Generate responsive variants using Sharp:
+   ```bash
+   node scripts/convert-to-webp.mjs
+   ```
+6. Commit and push to GitHub
+
+These product photos render in **product showcase mode** — the `ProductImage` component
+applies a radial CSS mask that blends away the white background automatically.
+
+### 3.5.2 Generate AI Editorial Images
+
+After product photos are in place, generate scene/lifestyle images for all other pages:
+
+1. Create `.env` from `.env.example` and add your `GEMINI_API_KEY`
+2. Run: `npm run images` (admin UI) or `npm run images -- --auto` (CLI)
+3. The script generates images for: roundups, comparisons, guides, knowledge base, about, homepage categories, and featured picks
+4. Images are saved to `public/assets/` with responsive variants automatically
+
+**Alternative (no API key):** Run `node scripts/generate-local-images.mjs` to generate
+branded SVG-based placeholder images. These look professional but aren't real photos.
+
+### 3.5.3 Register Images in the Map
+
+After images are in `public/assets/`, ensure every image has an entry in `src/lib/image-map.ts`:
+- Product slugs → add to `productSlugs` Set
+- All slugs → add to `heroImages` Record with path to `/assets/[filename].webp`
+
+### 3.5.4 Verify Images
+
+Run `npm run build` and check:
+- No pages show SVG placeholder icons
+- Product photos render with dark backdrop and radial mask (no white background visible)
+- Editorial images fill their containers with `object-fit: cover`
+- Homepage hero product image has radial mask (no white background edges)
+- Responsive variants load at appropriate breakpoints
 
 ---
 
@@ -858,25 +1075,33 @@ Every page links to 4 related articles:
 4. **EVERY content page must have a `<ProductImage>`** component. No exceptions.
 5. **Import ProductImage** at the top of every content page.
 6. **Homepage uses ProductImage** in featured picks section.
+7. **Use `src/lib/image-map.ts`** for all image path resolution. Never use `fs.existsSync` or `import.meta.glob` to detect images — they don't work reliably on Vercel.
+8. **Product photos** (white background cutouts) go in `productSlugs` set → renders with radial mask.
+9. **Editorial/scene photos** stay out of `productSlugs` → renders full-width with `object-fit: cover`.
+10. **All images need 3 responsive variants**: `[name].webp` (1200w), `[name]-medium.webp` (800w), `[name]-small.webp` (400w).
+
+### Cache Headers
+11. **Never use `immutable` on `/assets/*` images.** Images can be replaced at the same URL. Use `max-age=86400` with `stale-while-revalidate` instead. Only `/_astro/*` bundles (hash-named) should be `immutable`.
+12. **After replacing images**, allow up to 24 hours for CDN cache to expire, or instruct users to hard-refresh.
 
 ### Button/Text Contrast
-7. **Never rely on CSS custom properties for button text color in Astro scoped styles.** Use `color: #fff !important` with `text-shadow` for text on primary-colored buttons.
-8. **`--primary-foreground` must be near-white.** If it's dark, all buttons become unreadable.
+13. **Never rely on CSS custom properties for button text color in Astro scoped styles.** Use `color: #fff !important` with `text-shadow` for text on primary-colored buttons.
+14. **`--primary-foreground` must be near-white.** If it's dark, all buttons become unreadable.
 
 ### Reviews & Comparisons
-9. **Every product must have real cons.** A review with only pros reads as an ad.
-10. **Comparisons must be balanced.** Each product wins some categories.
-11. **No "best overall" that wins everything.** Use "best for [specific use case]" framing.
-12. **All products use the SAME affiliate tag.** You earn commission on every product.
+15. **Every product must have real cons.** A review with only pros reads as an ad.
+16. **Comparisons must be balanced.** Each product wins some categories.
+17. **No "best overall" that wins everything.** Use "best for [specific use case]" framing.
+18. **All products use the SAME affiliate tag.** You earn commission on every product.
 
 ### Authority & Trust
-13. **No hard-sell language.** "Check Price" not "Buy Now." "We recommend" not "You need this."
-14. **Disclose affiliate relationship** in footer on every page.
-15. **No fake urgency.** No "limited time" or "selling fast" language.
+19. **No hard-sell language.** "Check Price" not "Buy Now." "We recommend" not "You need this."
+20. **Disclose affiliate relationship** in footer on every page.
+21. **No fake urgency.** No "limited time" or "selling fast" language.
 
 ### Build
-16. **Always run `npm run build`** before committing. Fix all errors.
-17. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
+22. **Always run `npm run build`** before committing. Fix all errors.
+23. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
 
 ---
 
@@ -907,8 +1132,9 @@ When complete, the project should contain:
 - [ ] `public/favicon.ico`
 - [ ] `public/favicon.png`
 
-### Source: Lib (3 files)
+### Source: Lib (4 files)
 - [ ] `src/lib/config.ts`
+- [ ] `src/lib/image-map.ts`
 - [ ] `src/lib/schema.ts`
 - [ ] `src/lib/schema.test.ts`
 
@@ -948,5 +1174,7 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (1 file)
+### Scripts (3 files)
 - [ ] `scripts/convert-to-webp.mjs`
+- [ ] `scripts/generate-local-images.mjs`
+- [ ] `scripts/image-gen-server.mjs`

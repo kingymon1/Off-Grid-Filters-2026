@@ -188,7 +188,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             return (
               <a href={`/best-${cat.slug}/`} class="category-card" style={`--delay: ${i * 80}ms`}>
                 <div class="category-icon">
-                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" src={`/assets/category-${cat.slug}.webp`} />
+                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" src={`/assets/category-${cat.slug}.webp`} slug={`category-${cat.slug}`} />
                 </div>
                 <h3 class="category-name">{cat.name}</h3>
                 <p class="category-count">{productCount} products reviewed</p>
@@ -283,7 +283,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             {popularComparisons.map((comp, i) => (
               <a href={`/${comp.slug}/`} class="comparison-card" style={`--delay: ${i * 100}ms`}>
                 <div class="comparison-image">
-                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="wide" slug={comp.slug} />
+                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="hero" slug={comp.slug} />
                 </div>
                 <div class="comparison-vs">
                   <div class="comparison-product">
@@ -695,11 +695,23 @@ const schema = combineSchemas(faqSchema, websiteSchema);
 
   .category-icon {
     margin: 0 auto 0.75rem;
-    max-width: 80px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.75rem;
   }
 
-  .category-icon :global(.product-image-placeholder) {
+  .category-icon :global(.product-image-placeholder),
+  .category-icon :global(.product-image-editorial),
+  .category-icon :global(.product-image-real) {
     margin: 0;
+    max-width: 100%;
+    border-radius: 0.75rem;
+  }
+
+  .category-icon :global(.editorial-container),
+  .category-icon :global(.image-showcase) {
+    border-radius: 0.75rem;
   }
 
   .category-name {
@@ -893,9 +905,14 @@ const schema = combineSchemas(faqSchema, websiteSchema);
   }
 
   .comparison-image :global(.product-image-real),
+  .comparison-image :global(.product-image-editorial),
   .comparison-image :global(.product-image-placeholder) {
     border-radius: 0;
     margin: 0;
+  }
+
+  .comparison-image :global(.editorial-container) {
+    border-radius: 0;
   }
 
   .comparison-card:hover {
@@ -1101,6 +1118,21 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.4));
     animation: hero-product-enter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both,
                hero-product-float 5s ease-in-out 0.8s infinite;
+    /* Mask to blend away the white product-photo background */
+    mask-image: radial-gradient(
+      ellipse 85% 85% at 50% 50%,
+      black 55%,
+      rgba(0, 0, 0, 0.8) 68%,
+      rgba(0, 0, 0, 0.4) 78%,
+      transparent 90%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 85% 85% at 50% 50%,
+      black 55%,
+      rgba(0, 0, 0, 0.8) 68%,
+      rgba(0, 0, 0, 0.4) 78%,
+      transparent 90%
+    );
   }
 
   @keyframes hero-product-enter {

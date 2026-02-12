@@ -94,15 +94,17 @@ Claude will:
 
 | File/Dir | Purpose |
 |----------|---------|
-| `src/components/*.astro` | 9 UI components |
+| `src/components/*.astro` | 9 UI components (including ProductImage with 3-mode rendering) |
 | `src/layouts/*.astro` | 2 page layouts |
 | `src/index.css` | Full design system with animations |
 | `src/lib/schema.ts` | Schema.org generators |
 | `src/lib/schema.test.ts` | Tests |
 | `src/pages/404.astro` | Generic 404 |
 | Config files | package.json, tailwind, tsconfig, etc. |
-| `scripts/convert-to-webp.mjs` | Image conversion |
-| `public/` | Favicons, placeholder |
+| `scripts/convert-to-webp.mjs` | Image conversion to responsive WebP variants |
+| `scripts/image-gen-server.mjs` | AI image generation admin (Gemini API) |
+| `scripts/generate-local-images.mjs` | Local SVG-to-WebP fallback generator |
+| `public/` | Favicons, robots.txt |
 | `.github/workflows/ci.yml` | CI pipeline |
 
 ## What Claude Generates
@@ -110,6 +112,7 @@ Claude will:
 | File/Dir | Purpose |
 |----------|---------|
 | `src/lib/config.ts` | Full product catalog config |
+| `src/lib/image-map.ts` | Static image path map (slug → `/assets/` path) |
 | `src/pages/index.astro` | Authority hub homepage |
 | `src/pages/reviews/*.astro` | Product review pages |
 | `src/pages/best-*.astro` | Category roundup pages |
@@ -120,7 +123,7 @@ Claude will:
 | `public/robots.txt` | With your domain |
 | `src/pages/llms.txt.ts` | Dynamic AI-discoverable content index (Astro API route) |
 | `research/*.md` | Research findings |
-| `IMAGE-GUIDE.md` | Photo replacement guide |
+| `IMAGE-GUIDE.md` | Complete image system documentation |
 
 ## After the Build
 
@@ -129,15 +132,53 @@ Claude will:
 2. Connect repo to Vercel
 3. Vercel auto-detects Astro and deploys
 
-### Add Real Product Photos
-1. Read `IMAGE-GUIDE.md` for what photos to add where
-2. Place in `public/assets/images/`
-3. Run `node scripts/convert-to-webp.mjs`
+### Step 1: Add Real Product Photos (Do This First)
+Product photos must be manually downloaded from Amazon before AI images can be generated.
+1. For each product in `product-brief.yaml`, download the main product image from Amazon
+2. Rename using the naming convention: `[product-slug]-hero.webp`
+3. Place in `public/assets/` (flat directory)
+4. Run `node scripts/convert-to-webp.mjs` to create responsive variants (small/medium/full)
+5. Push to GitHub
+6. The `ProductImage` component automatically applies a radial CSS mask to blend away the white Amazon background — no manual editing needed
+
+### Step 2: Generate AI Editorial Images
+After product photos are in place, generate the scene/lifestyle images for all other pages.
+1. Copy `.env.example` to `.env` and add your `GEMINI_API_KEY`
+2. Run `npm run images` for the admin UI, or `npm run images -- --auto`
+3. All 101 prompts are pre-configured in `scripts/image-gen-server.mjs`
+4. This generates editorial images for: category roundups, comparisons, guides, knowledge base, about page, homepage categories, and featured picks
+
+### Step 3: Register Images in the Map
+1. Add slug-to-path entries in `src/lib/image-map.ts`
+2. Product photos go in `productSlugs` set (compact showcase with white-bg mask)
+3. Scene/editorial photos stay out of `productSlugs` (full-width cover mode)
 
 ### Connect Domain
 - Point your domain to Vercel
 - Update `siteUrl` in `src/lib/config.ts`
 - Update `site` in `astro.config.mjs`
+
+## Image System Architecture
+
+The site uses a 3-tier image system:
+
+1. **`ProductImage` component** — renders images in editorial, product showcase, or SVG placeholder mode based on whether an image exists and its type
+2. **`image-map.ts`** — static TypeScript map connecting slugs to `/assets/` paths (no filesystem access at build time, works on all platforms including Vercel)
+3. **`public/assets/`** — flat directory of WebP images with responsive variants (small/medium/full)
+
+See `IMAGE-GUIDE.md` for the complete inventory, naming conventions, and how to add/replace images.
+
+## Cache Headers
+
+Configured in `vercel.json`:
+- **HTML pages**: `max-age=0, must-revalidate` (always fresh)
+- **Asset images** (`/assets/*`): `max-age=86400` (24hr, revalidatable — allows image updates)
+- **Astro bundles** (`/_astro/*`): `max-age=31536000, immutable` (1yr, hash-based filenames)
+- **Sitemaps/robots**: `max-age=86400` (24hr)
+
+**Note:** Asset images intentionally use 24-hour caching instead of immutable. This allows
+updated images to propagate within a day. Astro's CSS/JS bundles use immutable caching
+because their filenames include content hashes that change on every rebuild.
 
 ## Key Differences from Single-Product Template
 
@@ -147,3 +188,4 @@ Claude will:
 - **Softer CTAs** — "Check Price" not "Buy on Amazon"
 - **No floating CTA** — trust is built through content, not pressure
 - **Homepage = hub** — categories and featured picks, not a sales page
+- **Image map system** — static TypeScript map for platform-agnostic image resolution
