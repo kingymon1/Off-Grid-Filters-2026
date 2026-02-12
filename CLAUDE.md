@@ -260,7 +260,7 @@ Create these files in this order:
 
 **6. `eslint.config.js`** — JS recommended + TypeScript ESLint.
 
-**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (1yr for assets, 24hr for sitemaps), redirect .html to trailing slash.
+**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (24hr for `/assets/*` images to allow updates, 1yr immutable for `/_astro/*` hash-named bundles, 24hr for sitemaps), redirect .html to trailing slash.
 
 **8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
 
@@ -302,6 +302,28 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateItemListSchema(items)` — For roundup/list pages
 
 **`src/lib/schema.test.ts`** — Vitest tests for all schema generators.
+
+**`src/lib/image-map.ts`** — Static image path map for platform-agnostic image resolution:
+```typescript
+// Product slugs render in "showcase" mode (compact, centered, radial mask for white bg)
+export const productSlugs = new Set(['bluevua-ro100ropot-uv', ...]);
+
+// All other slugs render in "editorial" mode (full-width, object-fit: cover)
+export const heroImages: Record<string, string> = {
+  'bluevua-ro100ropot-uv': '/assets/bluevua-ro100ropot-uv-hero.webp',
+  'best-countertop-filters': '/assets/best-countertop-filters-hero.webp',
+  // ... all page slugs mapped to /assets/ paths
+};
+```
+
+**Why a static map?** Astro builds run on Vercel's serverless environment where `fs.existsSync`
+and `import.meta.glob` don't reliably detect files in `public/`. A static TypeScript map
+guarantees correct image resolution across all build environments.
+
+The `ProductImage` component imports from this map and determines render mode:
+- Slug in `productSlugs` → **product showcase** (compact, white-bg mask)
+- Slug NOT in `productSlugs` → **editorial** (full-width cover)
+- No image found → **SVG placeholder** (icon + label fallback)
 
 ### 3.3 Source: Global CSS
 
@@ -407,9 +429,15 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - Slot for content
 
 **`ProductImage.astro`:**
-- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string`
-- SVG-based placeholder system — no real images needed initially
-- 15+ contextual icons (filter, water, camping, hiking, gravity, pump, bottle, straw, uv, rv, backpack, compare, tools, shield, gear)
+- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string, slug?: string, src?: string`
+- **3-mode rendering system** powered by `src/lib/image-map.ts`:
+  - **Editorial mode**: `slug` resolves to image, slug NOT in `productSlugs` → full-width `object-fit: cover`
+  - **Product showcase mode**: `slug` in `productSlugs` → compact centered with radial CSS mask (blends away white product-photo backgrounds)
+  - **SVG placeholder mode**: no image found → icon + label fallback
+- Responsive `srcset` with small/medium/full variants automatically generated
+- Pass `src` prop to override image-map lookup (used for category browser, featured picks)
+- Pass `slug` prop to control render mode (editorial vs product showcase)
+- 15+ contextual SVG icons for fallback (filter, water, camping, hiking, etc.)
 - **EVERY content page MUST have at least one ProductImage** — no exceptions
 - Place after the intro paragraph on every page
 
@@ -858,25 +886,33 @@ Every page links to 4 related articles:
 4. **EVERY content page must have a `<ProductImage>`** component. No exceptions.
 5. **Import ProductImage** at the top of every content page.
 6. **Homepage uses ProductImage** in featured picks section.
+7. **Use `src/lib/image-map.ts`** for all image path resolution. Never use `fs.existsSync` or `import.meta.glob` to detect images — they don't work reliably on Vercel.
+8. **Product photos** (white background cutouts) go in `productSlugs` set → renders with radial mask.
+9. **Editorial/scene photos** stay out of `productSlugs` → renders full-width with `object-fit: cover`.
+10. **All images need 3 responsive variants**: `[name].webp` (1200w), `[name]-medium.webp` (800w), `[name]-small.webp` (400w).
+
+### Cache Headers
+11. **Never use `immutable` on `/assets/*` images.** Images can be replaced at the same URL. Use `max-age=86400` with `stale-while-revalidate` instead. Only `/_astro/*` bundles (hash-named) should be `immutable`.
+12. **After replacing images**, allow up to 24 hours for CDN cache to expire, or instruct users to hard-refresh.
 
 ### Button/Text Contrast
-7. **Never rely on CSS custom properties for button text color in Astro scoped styles.** Use `color: #fff !important` with `text-shadow` for text on primary-colored buttons.
-8. **`--primary-foreground` must be near-white.** If it's dark, all buttons become unreadable.
+13. **Never rely on CSS custom properties for button text color in Astro scoped styles.** Use `color: #fff !important` with `text-shadow` for text on primary-colored buttons.
+14. **`--primary-foreground` must be near-white.** If it's dark, all buttons become unreadable.
 
 ### Reviews & Comparisons
-9. **Every product must have real cons.** A review with only pros reads as an ad.
-10. **Comparisons must be balanced.** Each product wins some categories.
-11. **No "best overall" that wins everything.** Use "best for [specific use case]" framing.
-12. **All products use the SAME affiliate tag.** You earn commission on every product.
+15. **Every product must have real cons.** A review with only pros reads as an ad.
+16. **Comparisons must be balanced.** Each product wins some categories.
+17. **No "best overall" that wins everything.** Use "best for [specific use case]" framing.
+18. **All products use the SAME affiliate tag.** You earn commission on every product.
 
 ### Authority & Trust
-13. **No hard-sell language.** "Check Price" not "Buy Now." "We recommend" not "You need this."
-14. **Disclose affiliate relationship** in footer on every page.
-15. **No fake urgency.** No "limited time" or "selling fast" language.
+19. **No hard-sell language.** "Check Price" not "Buy Now." "We recommend" not "You need this."
+20. **Disclose affiliate relationship** in footer on every page.
+21. **No fake urgency.** No "limited time" or "selling fast" language.
 
 ### Build
-16. **Always run `npm run build`** before committing. Fix all errors.
-17. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
+22. **Always run `npm run build`** before committing. Fix all errors.
+23. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
 
 ---
 
@@ -907,8 +943,9 @@ When complete, the project should contain:
 - [ ] `public/favicon.ico`
 - [ ] `public/favicon.png`
 
-### Source: Lib (3 files)
+### Source: Lib (4 files)
 - [ ] `src/lib/config.ts`
+- [ ] `src/lib/image-map.ts`
 - [ ] `src/lib/schema.ts`
 - [ ] `src/lib/schema.test.ts`
 
@@ -948,5 +985,7 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (1 file)
+### Scripts (3 files)
 - [ ] `scripts/convert-to-webp.mjs`
+- [ ] `scripts/generate-local-images.mjs`
+- [ ] `scripts/image-gen-server.mjs`
