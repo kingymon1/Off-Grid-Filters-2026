@@ -202,7 +202,7 @@ const CATEGORIES = [
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 async function generateWithGeminiFlash(prompt, aspectRatio, apiKey) {
-  const model = 'gemini-2.0-flash-exp';
+  const model = 'gemini-2.0-flash';
   const url = `${API_BASE}/${model}:generateContent?key=${apiKey}`;
 
   const res = await fetch(url, {
@@ -270,7 +270,7 @@ async function generateWithImagen(prompt, aspectRatio, apiKey) {
   };
 }
 
-async function generateImage(prompt, aspectRatio, apiKey, model = 'gemini-2.0-flash-exp') {
+async function generateImage(prompt, aspectRatio, apiKey, model = 'gemini-2.0-flash') {
   const maxRetries = 3;
   let lastError;
 
@@ -440,7 +440,7 @@ main{max-width:1400px;margin:0 auto;padding:1.5rem}
   <div class="controls">
     <input type="password" id="apiKey" placeholder="Gemini API Key" autocomplete="off">
     <select id="model">
-      <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash</option>
+      <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
       <option value="imagen-3.0-generate-002">Imagen 3</option>
     </select>
     <label style="font-size:.75rem;color:var(--muted)">Delay:
@@ -493,7 +493,7 @@ const apiKeyEl = document.getElementById('apiKey');
 const modelEl = document.getElementById('model');
 const delayEl = document.getElementById('delay');
 apiKeyEl.value = localStorage.getItem('gemini_api_key') || '';
-modelEl.value = localStorage.getItem('gemini_model') || 'gemini-2.0-flash-exp';
+modelEl.value = localStorage.getItem('gemini_model') || 'gemini-2.0-flash';
 apiKeyEl.addEventListener('input', () => localStorage.setItem('gemini_api_key', apiKeyEl.value));
 modelEl.addEventListener('change', () => localStorage.setItem('gemini_model', modelEl.value));
 
@@ -823,7 +823,7 @@ async function autoMode() {
     process.exit(1);
   }
 
-  const model = process.argv.includes('--imagen') ? 'imagen-3.0-generate-002' : 'gemini-2.0-flash-exp';
+  const model = process.argv.includes('--imagen') ? 'imagen-3.0-generate-002' : 'gemini-2.0-flash';
   const delay = parseInt(process.argv.find(a => a.startsWith('--delay='))?.split('=')[1] || '6000');
 
   console.log('');
