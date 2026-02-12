@@ -1305,6 +1305,33 @@ Every product review follows:
 3. **Context:** How it compares to alternatives
 4. **Verdict:** Who should buy it and who shouldn't
 
+### Direct Answer Pattern (BLUF — Bottom Line Up Front)
+Every section on every page follows the **direct answer first** principle. The first 1-2
+sentences after any heading must directly answer the implicit question of that heading.
+Supporting detail, nuance, and explanation follow after.
+
+AI systems and Google's featured snippets pull citations from the **leading sentence** of a
+section. If that sentence is preamble instead of an answer, your content won't be cited.
+
+**Good:**
+```
+## Is the Bluevua RO100ROPOT Worth It?
+At $317, the Bluevua RO100ROPOT is worth it for households that want
+reverse osmosis + UV sterilization without plumbing installation.
+Here's why: [supporting detail]
+```
+
+**Bad:**
+```
+## Is the Bluevua RO100ROPOT Worth It?
+When evaluating a countertop RO system, there are several factors to
+consider. Price, filtration quality, and ease of installation all
+play a role in determining overall value...
+```
+
+This applies to: review sections, guide sections, comparison breakdowns, knowledge base
+explanations, and FAQ answers. **Never open with throat-clearing preamble.**
+
 ### FAQ Answer Pattern
 Every FAQ answer follows: **Direct answer** → **Technical explanation** → **Specific recommendation**
 

@@ -403,7 +403,20 @@ Google's review system specifically looks for these signals. Each review should 
 - Content that reads like an advertisement rather than an expert assessment
 - FAQ questions that are really just keyword stuffing disguised as questions
 
-### 7.4 E-E-A-T Implementation
+### 7.4 Direct Answer Pattern (BLUF — Bottom Line Up Front)
+
+AI systems and Google's featured snippets extract citations from the **first 1-2 sentences**
+after a heading. If those sentences are preamble instead of answers, your content won't be
+cited or featured.
+
+**Rule:** Every section on every page must open with a direct answer to the implicit question
+of that heading. Supporting detail, nuance, and caveats follow after.
+
+This applies to: review sections, guide sections, comparison category breakdowns, knowledge
+base explanations, and FAQ answers. Never open with throat-clearing ("When considering...",
+"There are many factors...", "It's important to understand...").
+
+### 7.5 E-E-A-T Implementation
 
 | Signal | How We Implement It |
 |--------|-------------------|
@@ -551,7 +564,48 @@ Indicators: Sudden traffic drop coinciding with a confirmed Google core update.
 5. Improve content based on findings
 6. Recovery from core updates typically takes 1-3 months after improvements
 
-### 9.4 Emergency: Manual Action
+### 9.4 Post-Launch Content Freshness Maintenance
+
+Starting 3-6 months after launch, begin content refresh cycles. Google rewards genuine updates
+but penalizes date manipulation (changing `dateModified` without visible changes).
+
+**When updating a page, always include a visible changelog note:**
+
+```
+**Updated February 2026:** Refreshed pricing for Bluevua RO100ROPOT ($317 → $299),
+added comparison to new Waterdrop K6 model, updated flow rate testing data.
+```
+
+**Rules for content freshness:**
+- Only update `dateModified` when the page content has genuinely changed
+- Add a visible changelog note describing what changed and when
+- Changelog goes between the "Last updated" date and the opening content
+- Re-verify prices against Amazon (update `product-brief.yaml` first, then rebuild)
+- Re-check that updated visible dates still match `dateModified` in schema
+- After updating, use GSC URL Inspection to request re-crawl of changed pages
+
+**Refresh priority (every 3-6 months):**
+1. Category roundup pages (highest SEO value — refresh first)
+2. Product reviews with price changes
+3. Buyer guides (update recommendations if product landscape changed)
+4. Comparison pages (add new products to "alternatives" if relevant)
+5. Activity guides and knowledge base (lowest urgency unless outdated)
+
+**What counts as a genuine update:**
+- Price changes
+- New product additions or removals
+- Updated testing data or observations
+- New competitor products mentioned
+- Corrected specifications
+- Added user feedback or FAQ questions
+
+**What does NOT justify a date change:**
+- Fixing typos
+- Reformatting text
+- Adding/changing images without content changes
+- Changing internal links
+
+### 9.5 Emergency: Manual Action
 
 If Google issues a manual action (visible in GSC under "Security & Manual Actions"):
 
