@@ -902,9 +902,14 @@ const schema = combineSchemas(faqSchema, websiteSchema);
   }
 
   .comparison-image :global(.product-image-real),
+  .comparison-image :global(.product-image-editorial),
   .comparison-image :global(.product-image-placeholder) {
     border-radius: 0;
     margin: 0;
+  }
+
+  .comparison-image :global(.editorial-container) {
+    border-radius: 0;
   }
 
   .comparison-card:hover {
