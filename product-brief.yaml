@@ -14,6 +14,19 @@ affiliate_tag: "offgrid09a-20"
 niche: "water filters"
 tagline: "Expert Water Filter Reviews & Guides"
 
+# --- REQUIRED: Entity linking (AI search hardening) ---
+# Wikidata URL for the niche topic — used in schema.org `about` entity references.
+# Find yours at https://www.wikidata.org — search for the niche topic.
+# Examples: Water Filtration = Q842467, Air Purification = Q1755068, Coffee = Q8486
+wikidata_entity: "https://www.wikidata.org/entity/Q842467"
+
+# --- OPTIONAL: Email capture (Buttondown) ---
+# Leave email_username empty to hide the email capture form on all pages.
+# When ready, create a free Buttondown account and set your username here.
+email_username: ""
+email_heading: "Get Filter Picks Delivered"
+email_subheading: "One email per week. Honest reviews, no spam."
+
 # --- REQUIRED: Product categories ---
 
 categories:

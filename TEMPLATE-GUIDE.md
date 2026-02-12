@@ -34,6 +34,15 @@ affiliate_tag: "offgrid0a-20"
 niche: "water filters"
 tagline: "Expert Water Filter Reviews & Guides"
 
+# Entity linking — Wikidata URL for the niche topic (AI search hardening)
+# Find yours at https://www.wikidata.org
+wikidata_entity: "https://www.wikidata.org/entity/Q842467"
+
+# Email capture — leave empty to hide, set Buttondown username to activate
+email_username: ""
+email_heading: "Get Filter Picks Delivered"
+email_subheading: "One email per week. Honest reviews, no spam."
+
 categories:
   - name: "Gravity Filters"
     slug: "gravity-filters"
@@ -90,12 +99,17 @@ Claude will:
 | Homepage + hub + 404 | 3 | Authority hub homepage |
 | **Total** | **70-90+** | |
 
+**Built-in features (automatic on every site):**
+- **Email capture** — Buttondown form on homepage, resource hub, buyer guides, activity guides (self-hides until username configured)
+- **AI search hardening** — per-page dates, entity linking (Wikidata + Amazon), enriched llms.txt, visible "Last updated" dates
+- **No SearchAction** in WebSite schema (static sites have no search)
+
 ## What's Already Included (Don't Edit)
 
 | File/Dir | Purpose |
 |----------|---------|
-| `src/components/*.astro` | 9 UI components (including ProductImage with 3-mode rendering) |
-| `src/layouts/*.astro` | 2 page layouts |
+| `src/components/*.astro` | 10 UI components (including ProductImage with 3-mode rendering, EmailCapture with Buttondown) |
+| `src/layouts/*.astro` | 2 page layouts (ContentLayout supports visible `lastUpdated` dates) |
 | `src/index.css` | Full design system with animations |
 | `src/lib/schema.ts` | Schema.org generators |
 | `src/lib/schema.test.ts` | Tests |
@@ -121,9 +135,15 @@ Claude will:
 | `src/pages/*-for-*.astro` | Activity guides |
 | `src/pages/*.astro` | Knowledge base pages |
 | `public/robots.txt` | With your domain |
-| `src/pages/llms.txt.ts` | Dynamic AI-discoverable content index (Astro API route) |
-| `research/*.md` | Research findings |
+| `src/pages/llms.txt.ts` | Dynamic AI-discoverable content index with per-page descriptions (Astro API route) |
+| research/*.md | Research findings |
 | `IMAGE-GUIDE.md` | Complete image system documentation |
+
+**Automatic per-page features Claude adds to every content page:**
+- `lastUpdated` prop on ContentLayout (renders visible date)
+- Per-page `datePublished`/`dateModified` in Article schema
+- Entity linking (`about`/`mentions`) in Article schema
+- EmailCapture component on guide pages and homepage
 
 ## After the Build
 
@@ -179,6 +199,41 @@ Configured in `vercel.json`:
 **Note:** Asset images intentionally use 24-hour caching instead of immutable. This allows
 updated images to propagate within a day. Astro's CSS/JS bundles use immutable caching
 because their filenames include content hashes that change on every rebuild.
+
+## Email Capture
+
+The site includes a Buttondown email capture component (`EmailCapture.astro`) that renders on
+the homepage, resource hub, buyer guides, and activity guides.
+
+**How it works:**
+- The component reads `siteConfig.email.username` from config
+- If username is empty (default), the component renders nothing — safe to include on any page
+- When the owner sets up Buttondown and fills in the username, it activates automatically
+- Each placement uses a different `tag` prop for subscriber segmentation
+
+**To activate after launch:**
+1. Create a free account at https://buttondown.com
+2. Set `email_username` in `product-brief.yaml` to your Buttondown username
+3. Rebuild and deploy
+
+**CSP note:** The `vercel.json` CSP `form-action` directive includes `https://buttondown.com`
+to allow the cross-origin form POST.
+
+## AI Search Hardening
+
+Every site built from this template includes AI search optimization out of the box:
+
+| Feature | What it does | Where |
+|---------|-------------|-------|
+| Per-page dates | `datePublished`/`dateModified` in Article schema from `publishDate` | All content pages |
+| Visible dates | "Last updated: [date]" rendered between breadcrumbs and content | All content pages |
+| Entity linking | `about`/`mentions` with Wikidata and Amazon `sameAs` URLs | All Article schemas |
+| Enriched llms.txt | Per-page descriptions (verdicts, category descriptions, guide descriptions) | `/llms.txt` API route |
+| No SearchAction | WebSite schema is clean — no dead search markup | Site-level schema |
+
+**Wikidata entity:** Set `wikidata_entity` in `product-brief.yaml` to the Wikidata URL for your
+niche topic. This is used in the `about` property of Article schemas on guide, roundup, and
+knowledge base pages.
 
 ## Key Differences from Single-Product Template
 

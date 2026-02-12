@@ -215,7 +215,37 @@ Authority sites should sound like a **trusted expert friend** — knowledgeable 
 - No product is perfect — every review has pros AND cons
 - "Best for [use case]" framing instead of "best overall" for everything
 
-### 2.6 Review Philosophy
+### 2.6 Email Capture Configuration
+
+The site includes a Buttondown email capture component that self-hides when no username is
+configured. During the build, Claude wires up the component on all appropriate pages. The
+site owner activates it post-launch by:
+
+1. Creating a free Buttondown account at https://buttondown.com
+2. Setting `email_username` in `product-brief.yaml` to their Buttondown username
+3. Rebuilding the site
+
+**Configuration in `product-brief.yaml`:**
+```yaml
+email_username: ""   # Buttondown username — leave empty to hide email capture
+email_heading: "Get [Niche] Picks Delivered"
+email_subheading: "One email per week. Honest reviews, no spam."
+```
+
+### 2.7 Entity Linking (AI Search Hardening)
+
+Every page's Article schema should include `about` and/or `mentions` entity references with
+`sameAs` URLs. This helps Google and AI systems understand what each page is about.
+
+**Required in `product-brief.yaml`:**
+```yaml
+wikidata_entity: "https://www.wikidata.org/entity/Q842467"  # Wikidata URL for the niche topic
+```
+
+Find the right Wikidata entity by searching https://www.wikidata.org for the niche topic.
+Examples: Water Filtration = Q842467, Air Purification = Q1755068, Coffee = Q8486.
+
+### 2.8 Review Philosophy
 
 **Credibility rules:**
 - Every product review must have genuine pros AND cons
@@ -285,7 +315,7 @@ Create these files in this order:
 
 **6. `eslint.config.js`** — JS recommended + TypeScript ESLint.
 
-**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (24hr for `/assets/*` images to allow updates, 1yr immutable for `/_astro/*` hash-named bundles, 24hr for sitemaps), redirect .html to trailing slash.
+**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (24hr for `/assets/*` images to allow updates, 1yr immutable for `/_astro/*` hash-named bundles, 24hr for sitemaps), redirect .html to trailing slash. **CSP `form-action` must include `https://buttondown.com`** for the email capture form to submit cross-origin.
 
 **8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
 
@@ -305,6 +335,14 @@ export const siteConfig = {
   categories: [...],
   products: [...],
   // Navigation, social proof, etc.
+  // Email capture
+  email: {
+    provider: 'buttondown' as const,
+    username: '', // From product-brief.yaml — empty string = EmailCapture hidden
+    heading: 'Get [Niche] Picks Delivered',
+    subheading: 'One email per week. Honest reviews, no spam.',
+    ctaText: 'Subscribe',
+  },
 }
 ```
 
@@ -313,6 +351,7 @@ The config must include:
 - Category definitions with descriptions
 - Navigation structure matching Phase 2 decisions
 - Social proof stats (total products reviewed, categories covered, etc.)
+- Email capture config (provider, username, copy) from `product-brief.yaml`
 
 This is the SINGLE SOURCE OF TRUTH. All components read from this.
 
@@ -323,10 +362,44 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateProductSchema(product)` — For product review pages
 - `generateHowToSchema(steps)` — For how-to guides
 - `generateOrganizationSchema()` — For brand/site info
-- `generateWebSiteSchema()` — For site-level schema
+- `generateWebSiteSchema()` — For site-level schema (NO SearchAction — the site has no search)
 - `generateItemListSchema(items)` — For roundup/list pages
+- `createPageSchema(props)` — Convenience helper combining article + breadcrumbs + optional FAQ/product
 
-**`src/lib/schema.test.ts`** — Vitest tests for all schema generators.
+**Entity linking interfaces (for AI search hardening):**
+```typescript
+export interface EntityRef {
+  name: string;
+  url: string;    // Wikidata or Amazon sameAs URL
+  type?: string;  // Schema.org type, defaults to "Thing"
+}
+```
+
+`ArticleSchemaProps` accepts two optional entity arrays:
+- `mentions?: EntityRef[]` — Products/entities discussed in the content
+- `about?: EntityRef[]` — The primary subject(s) of the page
+
+These render as `mentions` and `about` properties in the Article schema with `sameAs` URLs
+pointing to Wikidata (for topics) or Amazon (for products), helping AI systems and Google
+understand entity relationships.
+
+**Entity linking patterns by page type:**
+
+| Page type | `about` | `mentions` |
+|-----------|---------|------------|
+| Product review | The reviewed product (type: `Product`, sameAs: Amazon URL) | 2-3 related products from same category |
+| Category roundup | The category (sameAs: Wikidata entity for niche) | — |
+| Comparison | Both compared products (type: `Product`, sameAs: Amazon URLs) | — |
+| Buyer guide | The niche topic (sameAs: Wikidata entity) | — |
+| Activity guide | The niche topic (sameAs: Wikidata entity) | — |
+| Knowledge base | The niche topic (sameAs: Wikidata entity) | — |
+
+**Wikidata entity:** Use the `wikidata_entity` URL from `product-brief.yaml` as the `sameAs`
+URL for topic-level `about` references. Example: `https://www.wikidata.org/entity/Q842467`
+for water filtration.
+
+**`src/lib/schema.test.ts`** — Vitest tests for all schema generators (22 tests including
+entity linking tests for mentions/about).
 
 **`src/lib/image-map.ts`** — Static image path map for platform-agnostic image resolution.
 
@@ -454,14 +527,18 @@ The `ProductImage` component imports from this map and determines render mode:
 
 **`src/layouts/ContentLayout.astro`** must include:
 - Wraps BaseLayout
-- Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles
-- Renders: Header → Breadcrumbs → Main Content (slot) → Related Articles → Footer
+- Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles, `lastUpdated?: string`
+- Renders: Header → Breadcrumbs → **Visible "Last Updated" date** → Main Content (slot) → Related Articles → Footer
+- The `lastUpdated` prop renders a human-readable date (`<time>` element) between breadcrumbs and
+  content. This visible date **must match** the `dateModified` in the page's Article schema —
+  Google requires visible dates to correspond to structured data dates.
+- Format: "Last updated: February 8, 2026" — styled as small muted text
 - Consistent max-width container
 - Article schema injection
 
 ### 3.5 Source: Components
 
-**All 9 components must read brand/config data from `src/lib/config.ts`.**
+**All 10 components must read brand/config data from `src/lib/config.ts`.**
 
 **`HeaderAstro.astro`:**
 - Site name/logo (text-based initially)
@@ -549,6 +626,36 @@ The `ProductImage` component imports from this map and determines render mode:
 - **Button contrast CRITICAL:** Primary button uses `color: #fff !important` with `text-shadow`
 - All products use the SAME affiliate tag
 
+**`EmailCapture.astro`:**
+- Props: `tag?: string` (defaults to `'general'` — used as Buttondown subscriber tag for segmentation)
+- Reads `siteConfig.email` from config — if `email.username` is empty, renders nothing (returns undefined)
+- **Conditional rendering:** The component is safe to include on any page. It self-hides when
+  no Buttondown username is configured, so future sites start with email capture wired in but
+  invisible until the owner sets up their Buttondown account and fills in the username.
+- Renders: gradient-bordered card with mail icon, heading, subheading, email input + submit button
+- Form action: `https://buttondown.com/api/emails/embed-subscribe/{username}` (POST)
+- Hidden fields: `embed=1` (Buttondown embed mode), `tag={tag}` (subscriber segmentation)
+- Trust line: lock icon + "No spam. Unsubscribe anytime."
+- Responsive: stacks input/button vertically on mobile (<640px)
+- Button uses `color: #fff !important` with text-shadow (same contrast pattern as all primary buttons)
+- **Placement per page type:**
+
+| Page type | Placement | Tag value |
+|-----------|-----------|-----------|
+| Homepage | Between FAQ section and Final CTA | `homepage` |
+| Resource hub (`guides/index.astro`) | After content sections | `resource-hub` |
+| Buyer guides | After CTA section, before closing tag | `buying-guide` |
+| Activity guides | After CTA section, before closing tag | `activity-guide` |
+| Product reviews | NOT included (too transactional) | — |
+| Comparisons | NOT included (too transactional) | — |
+| Category roundups | NOT included (too transactional) | — |
+| Knowledge base | NOT included (informational pages keep focus on content) | — |
+
+**Why these placements:** Educational content (guides) attracts top-of-funnel readers who are
+more likely to subscribe. Transactional pages (reviews, comparisons) are closer to purchase
+and adding email capture would distract from the conversion path. The homepage captures
+browse-mode visitors.
+
 ### 3.6 Source: Pages
 
 #### Homepage (`src/pages/index.astro`)
@@ -607,7 +714,11 @@ The homepage is an **authority hub**, not a product landing page.
   5. "What's the difference between [type A] and [type B]?"
 - FAQPage schema markup
 
-**8. Final CTA Section**
+**8. Email Capture Section**
+- `<EmailCapture tag="homepage" />`
+- Placed between FAQ and Final CTA — captures browse-mode visitors
+
+**9. Final CTA Section**
 - "Find Your Perfect [Product]" headline
 - CTA to buying guide or resource hub
 - Trust badges
@@ -659,7 +770,13 @@ One page per product in the catalog. Follow this structure:
 
 **Every review page also includes:**
 - ContentLayout wrapper with breadcrumbs (Home → Reviews → [Product])
+- `lastUpdated={product.publishDate}` on ContentLayout
 - Product schema with rating
+- Article schema with per-page dates and entity linking:
+  - `datePublished: product.publishDate`
+  - `dateModified: product.publishDate`
+  - `about: [{ name: product.name, url: Amazon URL, type: 'Product' }]`
+  - `mentions: relatedProducts.slice(0, 3).map(...)` — up to 3 related products as Product entities
 - 4 related articles: 2 similar products, 1 category roundup, 1 buyer guide
 
 #### Category Roundup Pages (`src/pages/best-[category-slug].astro`)
@@ -701,6 +818,14 @@ One per category. These are high-value SEO pages.
 - Link to #1 pick with "Check Price"
 - Link to full buying guide
 
+**Every roundup page also includes:**
+- `lastUpdated={category.publishDate}` on ContentLayout
+- Article schema with per-page dates and entity linking:
+  - `datePublished: category.publishDate`
+  - `dateModified: category.publishDate`
+  - `about: [{ name: category.name, url: wikidata_entity URL }]`
+- ItemList schema listing all products
+
 #### Head-to-Head Comparison Pages (`src/pages/[product-a]-vs-[product-b].astro`)
 
 **Section 1: Hero**
@@ -729,6 +854,13 @@ One per category. These are high-value SEO pages.
 **Section 6: CTA**
 - "Check Price" buttons for BOTH products
 - Both use same affiliate tag
+
+**Every comparison page also includes:**
+- `lastUpdated={comparison.publishDate}` on ContentLayout
+- Article schema with per-page dates and entity linking:
+  - `datePublished: comparison.publishDate`
+  - `dateModified: comparison.publishDate`
+  - `about: [productA as Product entity, productB as Product entity]` — both products with Amazon sameAs URLs
 
 #### Buyer Guide Pages (`src/pages/guides/[guide-slug].astro`)
 
@@ -766,6 +898,17 @@ Educational content following the 8-section content page structure:
 - Link to top-pick review
 - Link to category roundup
 
+**Section 9: Email Capture**
+- `<EmailCapture tag="buying-guide" />`
+- Placed after CTA section, before closing tag
+
+**Every buyer guide page also includes:**
+- `lastUpdated={guide.publishDate}` on ContentLayout
+- Article schema with per-page dates and entity linking:
+  - `datePublished: guide.publishDate`
+  - `dateModified: guide.publishDate`
+  - `about: [{ name: niche topic, url: wikidata_entity URL }]`
+
 #### Activity/Use-Case Guide Pages (`src/pages/[niche]-for-[activity].astro`)
 
 Similar to buyer guides but focused on a specific activity or use case.
@@ -793,9 +936,27 @@ Similar to buyer guides but focused on a specific activity or use case.
 **Section 7: CTA**
 - Top pick for this activity + "Check Price"
 
+**Section 8: Email Capture**
+- `<EmailCapture tag="activity-guide" />`
+- Placed after CTA section, before closing tag
+
+**Every activity guide page also includes:**
+- `lastUpdated={guide.publishDate}` on ContentLayout
+- Article schema with per-page dates and entity linking:
+  - `datePublished: guide.publishDate`
+  - `dateModified: guide.publishDate`
+  - `about: [{ name: niche topic, url: wikidata_entity URL }]`
+
 #### Knowledge Base Pages (`src/pages/[topic-slug].astro`)
 
 Educational/reference content. Follows the standard content page structure but leans informational.
+
+**Every knowledge base page also includes:**
+- `lastUpdated={guide.publishDate}` on ContentLayout
+- Article schema with per-page dates and entity linking:
+  - `datePublished: guide.publishDate`
+  - `dateModified: guide.publishDate`
+  - `about: [{ name: niche topic, url: wikidata_entity URL }]`
 
 #### Resource Hub (`src/pages/guides/index.astro`)
 
@@ -803,6 +964,8 @@ Educational/reference content. Follows the standard content page structure but l
 - Sections: Reviews, Best Of, Comparisons, Guides, Knowledge Base
 - Card grid with hover effects
 - CollectionPage schema
+- `<EmailCapture tag="resource-hub" />` after content sections
+- `about` entity linking to Wikidata entity for niche topic
 
 #### 404 Page (`src/pages/404.astro`)
 
@@ -838,9 +1001,14 @@ Instead of a static file, create a dynamic Astro API route that auto-generates t
 content from `src/lib/config.ts` arrays. This ensures llms.txt stays in sync whenever products,
 categories, comparisons, or guides are added or removed — no manual updates needed.
 
+Each line includes a per-page description to help AI systems understand content without
+fetching the page. The description is pulled from config data (verdict, category description,
+guide description). Comparison titles are generated from product names using `getProductBySlug()`
+since the `Comparison` interface has no `title` field — only `productA`, `productB`, and `slug`.
+
 ```typescript
 import type { APIRoute } from 'astro';
-import { SITE_NAME, SITE_URL, products, categories, comparisons, guides, siteConfig } from '../lib/config';
+import { SITE_NAME, SITE_URL, products, categories, comparisons, guides, siteConfig, getProductBySlug } from '../lib/config';
 
 export const GET: APIRoute = () => {
   const buyerGuides = guides.filter(g => g.type === 'buyer');
@@ -852,17 +1020,22 @@ export const GET: APIRoute = () => {
     `> ${siteConfig.tagline}`,
     '', '## About', siteConfig.productDescription,
     '', '## Product Reviews',
-    ...products.map(p => `- ${SITE_URL}/reviews/${p.slug}/ — ${p.name}`),
+    ...products.map(p => `- ${SITE_URL}/reviews/${p.slug}/ — ${p.name} Review: ${p.verdict}`),
     '', '## Best Of / Roundups',
-    ...categories.map(c => `- ${SITE_URL}/best-${c.slug}/ — ${c.name}`),
+    ...categories.map(c => `- ${SITE_URL}/best-${c.slug}/ — Best ${c.name}: ${c.description}`),
     '', '## Comparisons',
-    ...comparisons.map(c => `- ${SITE_URL}/${c.slug}/ — ${c.title}`),
+    ...comparisons.map(c => {
+      const a = getProductBySlug(c.productA);
+      const b = getProductBySlug(c.productB);
+      const title = `${a?.name ?? c.productA} vs ${b?.name ?? c.productB}`;
+      return `- ${SITE_URL}/${c.slug}/ — ${title}: Side-by-side specs, performance, and value comparison`;
+    }),
     '', '## Buyer Guides',
-    ...buyerGuides.map(g => `- ${SITE_URL}/guides/${g.slug}/ — ${g.title}`),
+    ...buyerGuides.map(g => `- ${SITE_URL}/guides/${g.slug}/ — ${g.title}: ${g.description}`),
     '', '## Activity Guides',
-    ...activityGuides.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}`),
+    ...activityGuides.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}: ${g.description}`),
     '', '## Knowledge Base',
-    ...knowledgeBase.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}`),
+    ...knowledgeBase.map(g => `- ${SITE_URL}/${g.slug}/ — ${g.title}: ${g.description}`),
     '',
   ];
 
@@ -871,6 +1044,10 @@ export const GET: APIRoute = () => {
   });
 };
 ```
+
+**IMPORTANT:** The `Comparison` interface has NO `title` field. To generate comparison titles
+for llms.txt, use `getProductBySlug()` to resolve product names from slugs. Do NOT use
+`c.title` — it does not exist and will render as `undefined`.
 
 **`public/favicon.ico`** and **`public/favicon.png`:**
 - Generate text-based favicons using the site initial(s)
@@ -984,10 +1161,13 @@ For every page, verify:
 - [ ] Breadcrumbs are correct
 - [ ] Related articles link to 4 relevant pages
 - [ ] At least 1 CTA with affiliate link
-- [ ] Schema markup is valid
+- [ ] Schema markup is valid (includes per-page datePublished/dateModified)
+- [ ] Entity linking present (`about` and/or `mentions` in Article schema)
+- [ ] Visible "Last updated" date matches schema dateModified
 - [ ] No placeholder text remains
 - [ ] Affiliate disclosure is in footer
 - [ ] ProductImage is present (renders as SVG placeholder at this stage — that's expected)
+- [ ] EmailCapture present on guide pages, homepage, and resource hub
 - [ ] All links work
 
 **After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
@@ -1090,6 +1270,11 @@ Every page links to 4 related articles:
 - FAQPage schema on pages with FAQ sections
 - BreadcrumbList schema on all pages
 - ItemList schema on roundup pages
+- **Per-page `datePublished` and `dateModified`** in Article schema (using `publishDate` from config)
+- **Visible "Last updated" dates** matching structured data dates (Google requires correspondence)
+- **Entity linking** via `mentions` and `about` in Article schema (Wikidata sameAs for topics, Amazon sameAs for products)
+- **No SearchAction** in WebSite schema (static sites have no search — dead markup hurts)
+- **Enriched llms.txt** with per-page descriptions for AI crawler discovery
 - Meta descriptions: Target keyword + value prop (under 160 chars)
 - Natural keyword integration (never stuffed)
 - Heading hierarchy: H1 → H2 → H3
@@ -1133,6 +1318,31 @@ Every page links to 4 related articles:
 
 ### CSS Grid Overflow
 22. **Always set `min-width: 0` on CSS Grid children that contain text.** Grid items default to `min-width: auto`, which prevents them from shrinking below their content width — causing text overflow in multi-column layouts (e.g., the resource hub card grid).
+
+### Email Capture
+22.5. **EmailCapture component self-hides when `email.username` is empty.** Always include the
+   component on the pages listed in the placement table — it's safe to render even without a
+   Buttondown account configured.
+22.6. **CSP form-action must whitelist `https://buttondown.com`** in `vercel.json`. Without this,
+   the email form POST will be blocked by Content Security Policy.
+22.7. **Use `tag` prop for subscriber segmentation.** Each page type gets a different tag value
+   (homepage, buying-guide, activity-guide, resource-hub) so the site owner can segment their
+   email list by acquisition source.
+
+### AI Search Hardening
+22.8. **Every page must have per-page `datePublished` and `dateModified`** in its Article schema,
+   using the `publishDate` from config. Do NOT rely on site-level default dates.
+22.9. **Visible dates must match structured data dates.** Pass `lastUpdated={item.publishDate}`
+   to ContentLayout on every content page. Google penalizes mismatches between visible and
+   structured data dates.
+22.10. **Use entity linking on every Article schema.** `about` for the page's primary subject,
+   `mentions` for referenced products. Use Wikidata URLs for topics (from `product-brief.yaml`
+   `wikidata_entity`), Amazon URLs for products.
+22.11. **Do NOT add SearchAction to WebSite schema.** Static sites have no search functionality.
+   Dead markup signals low quality to search engines.
+22.12. **llms.txt must include per-page descriptions.** Product reviews include verdicts, categories
+   include descriptions, guides include descriptions. Comparison titles must be generated from
+   product names (the Comparison interface has no `title` field).
 
 ### Build
 23. **Always run `npm run build`** before committing. Fix all errors.
@@ -1180,7 +1390,7 @@ When complete, the project should contain:
 - [ ] `src/layouts/BaseLayout.astro`
 - [ ] `src/layouts/ContentLayout.astro`
 
-### Source: Components (9 files)
+### Source: Components (10 files)
 - [ ] `src/components/HeaderAstro.astro`
 - [ ] `src/components/FooterAstro.astro`
 - [ ] `src/components/BreadcrumbsAstro.astro`
@@ -1190,6 +1400,7 @@ When complete, the project should contain:
 - [ ] `src/components/Callout.astro`
 - [ ] `src/components/ProductImage.astro`
 - [ ] `src/components/ComparisonTable.astro`
+- [ ] `src/components/EmailCapture.astro`
 
 ### Source: Pages
 - [ ] `src/pages/index.astro` (homepage — authority hub)
