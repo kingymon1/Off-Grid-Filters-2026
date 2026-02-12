@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>iSpring RCC7AK ($198.78)</strong> is the best value in under-sink RO — it delivers 93-98% TDS reduction with alkaline remineralization for under $200. The <strong>Waterdrop G3P600 ($429)</strong> is the premium pick for those who need tankless space savings, 8x faster flow, and superior water efficiency. Both produce excellent water; the question is how much you value speed and space.</p>
   </div>
 
-  <ProductImage alt="iSpring RCC7AK vs Waterdrop G3P600 under-sink RO comparison" icon="compare" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} />

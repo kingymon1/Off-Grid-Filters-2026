@@ -68,7 +68,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> is the practical winner for most households — solid NSF 42/53 certified filtration with lead removal at $0.145/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper purification with 0 TDS and PFAS removal, but its 15-25 gallon filter life makes it 4-7x more expensive per gallon. Choose ZeroWater only if you have very hard water or need verified PFAS reduction.</p>
   </div>
 
-  <ProductImage alt="ZeroWater 5-Stage vs PUR pitcher filter comparison" icon="pitcher" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[

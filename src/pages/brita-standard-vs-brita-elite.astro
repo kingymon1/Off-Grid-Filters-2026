@@ -69,7 +69,17 @@ const relatedArticles = [
     <p><strong>Quick Verdict:</strong> The <strong>Brita Elite ($29.78/2-pack)</strong> is the smarter buy for nearly everyone. It removes 99% of lead and 30+ contaminants, lasts 3x longer per filter, and is actually <em>cheaper per gallon</em> than the Standard despite a higher sticker price. The <strong>Brita Standard ($17.98/3-pack)</strong> only makes sense if you prioritize fast filtering speed over contaminant reduction.</p>
   </div>
 
-  <ProductImage alt="Brita Standard vs Brita Elite replacement filter comparison" icon="pitcher" aspect="hero" />
+  <div class="comparison-products">
+    <div class="comparison-product">
+      <ProductImage alt={productA.name} slug={comp.productA} aspect="square" />
+      <p class="comparison-product-name">{productA.name}</p>
+    </div>
+    <div class="comparison-vs">VS</div>
+    <div class="comparison-product">
+      <ProductImage alt={productB.name} slug={comp.productB} aspect="square" />
+      <p class="comparison-product-name">{productB.name}</p>
+    </div>
+  </div>
 
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} features={[
