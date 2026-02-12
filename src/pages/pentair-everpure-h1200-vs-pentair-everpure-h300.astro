@@ -40,6 +40,9 @@ const articleSchema = generateArticleSchema({
   title: `${productA.name} vs ${productB.name}`,
   description: `Comparison of Pentair Everpure H-1200 replacement cartridges vs H-300 complete system. We compare capacity, certifications, price, and what each option includes.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -60,6 +63,7 @@ const relatedArticles = [
   currentPage="Everpure H-1200 vs H-300"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 

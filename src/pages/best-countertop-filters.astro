@@ -4,7 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
 import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
-import { generateItemListSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'countertop-filters';
 const category = getCategoryBySlug(categorySlug)!;
@@ -46,8 +46,16 @@ const itemListSchema = generateItemListSchema(
     position: i + 1,
   }))
 );
+const articleSchema = generateArticleSchema({
+  title: `Best ${category.name} ${year}: Expert Picks`,
+  description: `We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by performance, value, and reliability.`,
+  url: `/best-${categorySlug}/`,
+  datePublished: category.publishDate,
+  dateModified: category.publishDate,
+  about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
+});
 const faqSchema = generateFAQSchema(faqs);
-const schema = combineSchemas(itemListSchema, faqSchema);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
 
 const relatedArticles = [
   { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.' },
@@ -65,6 +73,7 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={category.publishDate}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
   <p class="lead">We evaluated {allProducts.length} countertop and pitcher filters across filtration quality, capacity, ongoing filter costs, and ease of use. Whether you need a budget-friendly pitcher for basic chlorine reduction or a countertop reverse osmosis system that eliminates 99% of dissolved contaminants, our picks cover every budget and need.</p>

@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filter-maintenance')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">A water filter is only as good as its maintenance. A neglected filter does not just stop working — it can become a breeding ground for bacteria and actually make your water worse. This guide covers replacement schedules, warning signs of filter failure, cleaning techniques, and maintenance best practices for every filter type we review.</p>
@@ -179,4 +184,6 @@ const relatedArticles = [
 
   <h2>Keep Your Filter Working for You</h2>
   <p>Consistent maintenance is the difference between a water filter that protects your health and an expensive paperweight. Set reminders, buy replacement filters in advance, and pay attention to the warning signs. For help choosing the right replacement filters, see our <a href="/best-replacement-filters/">Best Replacement Filters</a> roundup or use our <a href="/guides/how-to-choose-water-filter/">Complete Buying Guide</a> to find a system that fits your maintenance preferences.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

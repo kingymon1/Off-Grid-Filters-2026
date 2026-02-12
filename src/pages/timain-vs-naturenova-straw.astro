@@ -41,6 +41,9 @@ const articleSchema = generateArticleSchema({
   title: `Timain vs NatureNova Filter Straw: Which Is Better?`,
   description: `Timain 4-Stage vs NatureNova survival filter straw comparison. We compare included accessories, price per straw, filtration quality, and field readiness.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -61,6 +64,7 @@ const relatedArticles = [
   currentPage="Timain vs NatureNova"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>Timain vs NatureNova Filter Straw: Which Is Better in {year}?</h1>
 

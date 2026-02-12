@@ -41,6 +41,9 @@ const articleSchema = generateArticleSchema({
   title: `Waterdrop WD-PF-01A Plus vs Brita Elite: Which Is Better?`,
   description: `Waterdrop Plus vs Brita Elite replacement filter comparison. We compare PFAS reduction, filter life, cost per gallon, certifications, and overall value.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -61,6 +64,7 @@ const relatedArticles = [
   currentPage="Waterdrop Plus vs Brita Elite"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>Waterdrop Plus vs Brita Elite: Which Pitcher Filter Is Better in {year}?</h1>
 

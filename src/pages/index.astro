@@ -4,6 +4,7 @@ import HeaderAstro from '../components/HeaderAstro.astro';
 import FooterAstro from '../components/FooterAstro.astro';
 import StatCard from '../components/StatCard.astro';
 import ProductImage from '../components/ProductImage.astro';
+import EmailCapture from '../components/EmailCapture.astro';
 import { siteConfig, products, categories, comparisons, getProductBySlug, getProductsByCategory, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateFAQSchema, generateWebSiteSchema, combineSchemas } from '../lib/schema';
 
@@ -323,6 +324,11 @@ const schema = combineSchemas(faqSchema, websiteSchema);
         </div>
       </div>
     </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         EMAIL CAPTURE
+    ═══════════════════════════════════════════════════════════ -->
+    <EmailCapture tag="homepage" />
 
     <!-- ═══════════════════════════════════════════════════════════
          FINAL CTA

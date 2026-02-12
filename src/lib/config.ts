@@ -1421,4 +1421,12 @@ export const siteConfig = {
       ] as NavLink[],
     } as Record<string, NavLink[]>,
   },
+
+  email: {
+    provider: 'buttondown' as const,
+    username: 'offgridfilters', // Buttondown username — empty string = EmailCapture hidden
+    heading: 'Get Filter Picks Delivered',
+    subheading: 'One email per week. Honest reviews, no spam.',
+    ctaText: 'Subscribe',
+  },
 };

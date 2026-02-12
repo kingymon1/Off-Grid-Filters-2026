@@ -44,6 +44,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -64,6 +67,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Reverse osmosis is the most thorough water purification technology available for home use. It removes up to 99% of dissolved contaminants, including lead, PFAS, fluoride, bacteria, and viruses. In this guide, we explain exactly how RO works, what it removes, what it does not, and whether you actually need it.</p>

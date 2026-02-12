@@ -4,6 +4,7 @@ import ProductImage from '../../components/ProductImage.astro';
 import ProTip from '../../components/ProTip.astro';
 import { guides, products, getAffiliateUrl, isPublished, getPriceTier } from '../../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../../lib/schema';
+import EmailCapture from '../../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filtration-beginner-guide')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -31,6 +32,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/guides/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -51,6 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">If you have never owned a water filter and are not sure where to start, this guide is for you. We will explain why you might want one, break down the different types in plain language, bust common myths, and help you pick your first filter in under 10 minutes. No jargon, no overwhelm — just the essentials.</p>
@@ -167,4 +172,6 @@ const relatedArticles = [
 
   <h2>Start Your Filtration Journey</h2>
   <p>You now know more about water filtration than most people ever learn. The key takeaways: test your water (or at least read the free water quality report), buy an NSF-certified filter matched to your needs, and replace the cartridge on schedule. For most households, a simple pitcher filter is a great start. When you are ready to go deeper, explore our <a href="/guides/">complete guide library</a> or jump straight to our <a href="/best-countertop-filters/">Best Countertop Filters</a> rankings.</p>
+
+  <EmailCapture tag="buying-guide" />
 </ContentLayout>

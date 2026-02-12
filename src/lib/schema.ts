@@ -8,6 +8,12 @@ export { SITE_URL, SITE_NAME };
 
 export const DEFAULT_DATE_MODIFIED = siteConfig.seo.dateModified;
 
+export interface EntityRef {
+  name: string;
+  url: string;
+  type?: string;
+}
+
 export interface ArticleSchemaProps {
   title: string;
   description: string;
@@ -15,6 +21,8 @@ export interface ArticleSchemaProps {
   datePublished?: string;
   dateModified?: string;
   image?: string;
+  mentions?: EntityRef[];
+  about?: EntityRef[];
 }
 
 export interface FAQItem {
@@ -35,6 +43,8 @@ export function generateArticleSchema({
   datePublished = siteConfig.seo.datePublished,
   dateModified = DEFAULT_DATE_MODIFIED,
   image = `${SITE_URL}${siteConfig.seo.defaultOgImage}`,
+  mentions,
+  about,
 }: ArticleSchemaProps) {
   return {
     "@type": "Article",
@@ -59,6 +69,20 @@ export function generateArticleSchema({
       "@type": "WebPage",
       "@id": url,
     },
+    ...(mentions && mentions.length > 0 && {
+      mentions: mentions.map(m => ({
+        "@type": m.type || "Thing",
+        name: m.name,
+        sameAs: m.url,
+      })),
+    }),
+    ...(about && about.length > 0 && {
+      about: about.map(a => ({
+        "@type": a.type || "Thing",
+        name: a.name,
+        sameAs: a.url,
+      })),
+    }),
   };
 }
 
@@ -198,20 +222,12 @@ export function generateOrganizationSchema() {
   };
 }
 
-// Generate WebSite schema with search action
+// Generate WebSite schema
 export function generateWebSiteSchema() {
   return {
     "@type": "WebSite",
     name: SITE_NAME,
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}${siteConfig.navigation.hubUrl}?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
@@ -243,6 +259,8 @@ export function createPageSchema({
   includeProduct = false,
   datePublished,
   dateModified,
+  mentions,
+  about,
 }: {
   title: string;
   description: string;
@@ -253,6 +271,8 @@ export function createPageSchema({
   includeProduct?: boolean;
   datePublished?: string;
   dateModified?: string;
+  mentions?: EntityRef[];
+  about?: EntityRef[];
 }) {
   const schemas: object[] = [
     generateArticleSchema({
@@ -261,6 +281,8 @@ export function createPageSchema({
       url: `${SITE_URL}${url}`,
       datePublished,
       dateModified,
+      mentions,
+      about,
     }),
   ];
 

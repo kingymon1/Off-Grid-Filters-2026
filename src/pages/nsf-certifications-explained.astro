@@ -44,6 +44,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -64,6 +67,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">NSF certifications are the gold standard for verifying water filter performance. They tell you exactly what a filter has been independently proven to remove — not just what the manufacturer claims. Understanding these certifications is the single most important skill for choosing a water filter that actually protects your health.</p>

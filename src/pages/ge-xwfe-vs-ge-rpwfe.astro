@@ -41,6 +41,9 @@ const articleSchema = generateArticleSchema({
   title: `${productA.name} vs ${productB.name}`,
   description: `GE XWFE vs RPWFE refrigerator filter comparison. We compare capacity, contaminant removal, certifications, and compatibility to help you choose.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -61,6 +64,7 @@ const relatedArticles = [
   currentPage="GE XWFE vs RPWFE"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 

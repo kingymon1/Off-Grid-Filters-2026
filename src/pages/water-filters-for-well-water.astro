@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-well-water')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -30,6 +31,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -50,6 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Over 43 million Americans rely on private wells for drinking water, and unlike municipal systems, well water receives no centralized treatment. We outline the filtration strategies, testing protocols, and specific products that make well water safe and great-tasting.</p>
@@ -122,4 +127,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Well Water</h2>
   <p>The <strong><a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a></strong> is the best overall investment for well water drinking water safety. Combined with a <a href={`/reviews/${sediment.slug}/`}>Membrane Solutions sediment pre-filter</a> for whole-house protection, this two-layer approach addresses both the physical sediment and dissolved contaminants that make well water challenging. Start with a water test, then build your filtration system around the specific contaminants found in your well.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

@@ -42,6 +42,9 @@ const articleSchema = generateArticleSchema({
   title: `Brita Elite vs ZeroWater: Which Filter Is Better?`,
   description: `Brita Elite vs ZeroWater 5-Stage replacement filter comparison. We compare filtration depth, cost per gallon, filter life, taste, and overall value.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -62,6 +65,7 @@ const relatedArticles = [
   currentPage="Brita Elite vs ZeroWater"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>Brita Elite vs ZeroWater: Which Pitcher Filter Is Better in {year}?</h1>
 

@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-travel')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -30,6 +31,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -50,6 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">Traveler's diarrhea affects 30-70% of international travelers to developing regions, and contaminated water is the leading cause. We cover the portable water purification strategies that keep you healthy on the road, from weekend getaways to extended international trips.</p>
@@ -124,4 +129,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Travel</h2>
   <p>For international travel, the combination of <strong><a href={`/reviews/${aquatabs.slug}/`}>{aquatabs.name}</a></strong> and a <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> provides the most comprehensive portable water purification for under $20 and under 3 ounces. Aquatabs cover the critical virus threat that filters miss, while the Timain straw provides instant bacteria and protozoa filtration. Together, they handle every water scenario you will encounter on the road.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>

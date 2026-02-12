@@ -40,6 +40,9 @@ const articleSchema = generateArticleSchema({
   title: `${productA.name} vs ${productB.name}`,
   description: `Countertop vs under-sink RO comparison: Bluevua RO100ROPOT-UV vs iSpring RCC7AK. We compare installation, filtration, price, and daily usability.`,
   url: `/${comp.slug}/`,
+  datePublished: comp.publishDate,
+  dateModified: comp.publishDate,
+  about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -60,6 +63,7 @@ const relatedArticles = [
   currentPage="Bluevua UV vs iSpring"
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={comp.publishDate}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 

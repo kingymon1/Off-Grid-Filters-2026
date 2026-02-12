@@ -44,6 +44,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -64,6 +67,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">TDS — total dissolved solids — is one of the most commonly cited water quality metrics, but also one of the most misunderstood. A TDS reading tells you how much stuff is dissolved in your water, but not what that stuff is. Understanding TDS helps you evaluate water filter performance, but relying on it as the sole measure of water safety is a mistake we see too often.</p>

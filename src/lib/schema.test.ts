@@ -53,6 +53,48 @@ describe('generateArticleSchema', () => {
     expect(result.datePublished).toBe('2026-01-15');
     expect(result.dateModified).toBe('2026-02-04');
   });
+
+  it('includes mentions when provided', () => {
+    const result = generateArticleSchema({
+      title: 'Test',
+      description: 'Test',
+      url: `${SITE_URL}/test/`,
+      mentions: [
+        { name: 'Brita Elite', url: 'https://amazon.com/dp/B0CX5PV6LC', type: 'Product' },
+      ],
+    });
+
+    expect(result.mentions).toHaveLength(1);
+    expect(result.mentions[0]['@type']).toBe('Product');
+    expect(result.mentions[0].name).toBe('Brita Elite');
+    expect(result.mentions[0].sameAs).toBe('https://amazon.com/dp/B0CX5PV6LC');
+  });
+
+  it('includes about when provided', () => {
+    const result = generateArticleSchema({
+      title: 'Test',
+      description: 'Test',
+      url: `${SITE_URL}/test/`,
+      about: [
+        { name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' },
+      ],
+    });
+
+    expect(result.about).toHaveLength(1);
+    expect(result.about[0]['@type']).toBe('Thing');
+    expect(result.about[0].name).toBe('Water Filtration');
+  });
+
+  it('omits mentions and about when not provided', () => {
+    const result = generateArticleSchema({
+      title: 'Test',
+      description: 'Test',
+      url: `${SITE_URL}/test/`,
+    });
+
+    expect(result).not.toHaveProperty('mentions');
+    expect(result).not.toHaveProperty('about');
+  });
 });
 
 describe('generateFAQSchema', () => {
@@ -202,13 +244,13 @@ describe('generateOrganizationSchema', () => {
 });
 
 describe('generateWebSiteSchema', () => {
-  it('generates valid WebSite schema with search action', () => {
+  it('generates valid WebSite schema without search action', () => {
     const result = generateWebSiteSchema();
 
     expect(result['@type']).toBe('WebSite');
     expect(result.name).toBe(SITE_NAME);
-    expect(result.potentialAction['@type']).toBe('SearchAction');
-    expect(result.potentialAction.target.urlTemplate).toContain('{search_term_string}');
+    expect(result.url).toBe(SITE_URL);
+    expect(result).not.toHaveProperty('potentialAction');
   });
 });
 

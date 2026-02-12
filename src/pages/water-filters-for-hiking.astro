@@ -4,6 +4,7 @@ import ProductImage from '../components/ProductImage.astro';
 import ProTip from '../components/ProTip.astro';
 import { guides, getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateArticleSchema, generateFAQSchema, combineSchemas } from '../lib/schema';
+import EmailCapture from '../components/EmailCapture.astro';
 
 const guide = guides.find(g => g.slug === 'water-filters-for-hiking')!;
 if (!isPublished(guide.publishDate)) return Astro.redirect('/404');
@@ -29,6 +30,9 @@ const articleSchema = generateArticleSchema({
   title: guide.title,
   description: guide.description,
   url: `/${guide.slug}/`,
+  datePublished: guide.publishDate,
+  dateModified: guide.publishDate,
+  about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
 const schema = combineSchemas(articleSchema, faqSchema);
@@ -49,6 +53,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
+  lastUpdated={guide.publishDate}
 >
   <h1>{guide.title}</h1>
   <p class="lead">For hikers and backpackers, every ounce in your pack is a deliberate choice. We focus on the lightest, most reliable water filtration options that weigh under 3 ounces and deliver safe drinking water from any backcountry stream, lake, or spring.</p>
@@ -118,4 +123,6 @@ const relatedArticles = [
 
   <h2>Our Top Pick for Hiking</h2>
   <p>The <strong><a href={`/reviews/${timain.slug}/`}>{timain.name}</a></strong> is our top recommendation for hikers and backpackers. At 2.1 ounces and {getPriceTier(timain.price)} for a pair, it offers the best weight-to-value ratio of any filter we tested. Pair it with <a href={`/reviews/${aquatabs.slug}/`}>MSR Aquatabs</a> for complete biological protection at under 3 ounces, and you have a trail-ready water purification system that would satisfy the most demanding ultralight hiker.</p>
+
+  <EmailCapture tag="activity-guide" />
 </ContentLayout>
