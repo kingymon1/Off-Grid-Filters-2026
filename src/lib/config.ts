@@ -95,6 +95,26 @@ export interface NavLink {
   url: string;
 }
 
+// ── Spec display labels (niche-specific) ─────────────────────
+// Maps ProductSpecs keys to human-readable labels for ProductHero and ComparisonTable.
+// When building a new site, update this map to match your niche's spec fields.
+export const specLabels: Record<string, string> = {
+  filtrationStages: 'Stages',
+  filtrationTechnology: 'Technology',
+  packSize: 'Pack Size',
+  capacity: 'Capacity',
+  flowRate: 'Flow Rate',
+  micronRating: 'Micron Rating',
+  filterLife: 'Filter Life',
+  pureToWaste: 'Pure:Drain',
+  compatibility: 'Fits',
+  certifications: 'Certified',
+  dimensions: 'Dimensions',
+  weight: 'Weight',
+  contaminantsRemoved: 'Key Contaminants',
+  gpd: 'GPD',
+};
+
 // ── Helper to generate Amazon affiliate URL ──────────────────
 export const AFFILIATE_TAG = 'offgrid09a-20';
 
@@ -1363,6 +1383,8 @@ export const siteConfig = {
   niche: 'water filters',
   affiliateTag: AFFILIATE_TAG,
   productDescription: 'Expert reviews and buying guides for water filters — from countertop RO systems to survival filter straws. We test, compare, and recommend the best water filtration products for every need and budget.',
+
+  heroPreloadImage: '/assets/bluevua-ro100ropot-uv-hero.webp', // LCP preload — set to top product hero image
 
   seo: {
     datePublished: '2026-02-11',

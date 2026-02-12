@@ -352,6 +352,9 @@ The config must include:
 - Navigation structure matching Phase 2 decisions
 - Social proof stats (total products reviewed, categories covered, etc.)
 - Email capture config (provider, username, copy) from `product-brief.yaml`
+- `specLabels` — a `Record<string, string>` mapping `ProductSpecs` keys to human-readable
+  labels (e.g., `{ capacity: 'Capacity', flowRate: 'Flow Rate' }`). This map drives both
+  `ProductHero` and `ComparisonTable` generically — no niche-specific field names in components
 
 This is the SINGLE SOURCE OF TRUTH. All components read from this.
 
@@ -364,7 +367,7 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateOrganizationSchema()` — For brand/site info
 - `generateWebSiteSchema()` — For site-level schema (NO SearchAction — the site has no search)
 - `generateItemListSchema(items)` — For roundup/list pages
-- `generateActivitySchema(activityName)` — For activity/use-case pages
+- `generateActivitySchema(activityName)` — For activity/use-case pages (uses `siteConfig.niche` for description)
 - `combineSchemas(...schemas)` — Combines multiple schemas into a `@graph` array
 - `createPageSchema(props)` — Convenience helper combining article + breadcrumbs + optional FAQ/product
 
@@ -621,9 +624,10 @@ The `ProductImage` component imports from this map and determines render mode:
 
 **`ComparisonTable.astro`:**
 - Props: `products: Product[], features?: Feature[]`
-- Product interface: name, asin, tag, rating, price, specs (niche-specific)
+- Product interface: name, asin, tag, rating, price + generic `[key: string]` for niche specs
+- **Niche-agnostic:** Default features are auto-derived from `specLabels` in config — only shows
+  specs that at least one product has a value for. Pass `features` prop to override.
 - Responsive table with optional "Editor's Pick" badge
-- Specs rows with checkmarks and values
 - CTA row with "Check Price" buttons linking to Amazon with affiliate tag
 - **Button contrast CRITICAL:** Primary button uses `color: #fff !important` with `text-shadow`
 - All products use the SAME affiliate tag
@@ -670,8 +674,8 @@ browse-mode visitors.
 - Props: `product: Product` (from `src/lib/config`)
 - Used on product review pages — renders a 2-column hero with product image and key details
 - Left column: `<ProductImage>` in square aspect
-- Right column: key specs grid (up to 6 specs, dynamically selected from available product data), verdict box with "Best for" callout, and "Check Price on Amazon" CTA button
-- Specs are pulled dynamically: filtrationStages, filtrationTechnology, packSize, capacity, flowRate, micronRating, filterLife, pureToWaste, compatibility, certifications
+- Right column: key specs grid (up to 6 specs), verdict box with "Best for" callout, and "Check Price on Amazon" CTA button
+- **Niche-agnostic:** Iterates over `specLabels` from config to build the specs grid dynamically — no hardcoded field names. Works for any niche as long as `specLabels` maps the right keys.
 - Responsive: stacks vertically on mobile (<768px)
 - CTA button uses accent gradient with `color: #fff !important` and text-shadow
 

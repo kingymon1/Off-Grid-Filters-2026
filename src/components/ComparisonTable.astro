@@ -1,5 +1,5 @@
 ---
-import { AFFILIATE_TAG, getPriceTier } from '../lib/config';
+import { AFFILIATE_TAG, getPriceTier, specLabels } from '../lib/config';
 
 interface Product {
   name: string;
@@ -7,38 +7,29 @@ interface Product {
   tag?: string;
   rating: string;
   price: string;
-  filtrationStages?: string;
-  filtrationTechnology?: string;
-  micronRating?: string;
-  capacity?: string;
-  flowRate?: string;
-  certifications?: string;
-  filterLife?: string;
-  contaminantsRemoved?: string;
-  packSize?: string;
-  compatibility?: string;
   highlight?: string;
   isEditorsPick?: boolean;
+  [key: string]: string | boolean | undefined;
 }
 
 interface Props {
   products: Product[];
   features?: Array<{
     label: string;
-    key: keyof Product;
+    key: string;
   }>;
 }
 
 const { products, features } = Astro.props;
 
+// Build default features dynamically from specLabels — only include specs that
+// at least one product has a value for, keeping the table relevant per-niche.
 const defaultFeatures = [
-  { label: 'Price Range', key: 'price' as keyof Product },
-  { label: 'Filtration', key: 'filtrationTechnology' as keyof Product },
-  { label: 'Stages', key: 'filtrationStages' as keyof Product },
-  { label: 'Micron Rating', key: 'micronRating' as keyof Product },
-  { label: 'Capacity', key: 'capacity' as keyof Product },
-  { label: 'Certifications', key: 'certifications' as keyof Product },
-  { label: 'Filter Life', key: 'filterLife' as keyof Product },
+  { label: 'Price Range', key: 'price' },
+  ...Object.entries(specLabels)
+    .filter(([key]) => products.some(p => p[key]))
+    .slice(0, 6)
+    .map(([key, label]) => ({ label, key })),
 ];
 
 const displayFeatures = features || defaultFeatures;
@@ -74,16 +65,6 @@ const displayFeatures = features || defaultFeatures;
             })}
           </tr>
         ))}
-        {products.some(p => p.contaminantsRemoved) && (
-          <tr>
-            <td class="feature-label">Key Contaminants</td>
-            {products.map((product) => (
-              <td class:list={[{ 'editors-pick': product.isEditorsPick }]}>
-                <span class="contaminants-text">{product.contaminantsRemoved || '—'}</span>
-              </td>
-            ))}
-          </tr>
-        )}
         <tr class="cta-row">
           <td class="feature-label"></td>
           {products.map((product) => (
@@ -198,11 +179,6 @@ const displayFeatures = features || defaultFeatures;
 
   thead .editors-pick {
     border-top: 2px solid hsl(var(--primary) / 0.4);
-  }
-
-  .contaminants-text {
-    font-size: 0.8125rem;
-    line-height: 1.5;
   }
 
   .cta-row td {
