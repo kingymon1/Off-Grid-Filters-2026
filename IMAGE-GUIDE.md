@@ -66,9 +66,23 @@ npm run images -- --auto
 
 Requires `GEMINI_API_KEY` in `.env`. Uses `gemini-2.5-flash-image` model.
 
-### Product Photos
-Real product photos sourced from Amazon, stored as WebP with white-background
-removal handled by the ProductImage component's radial CSS mask.
+### Product Photos (Must Be Done First)
+Before AI editorial images can be generated, the 29 real product photos must be
+manually downloaded from Amazon and uploaded to the repo. This is a prerequisite
+because the AI image generation only covers editorial/scene images — not product cutouts.
+
+**Steps:**
+1. For each product in `product-brief.yaml`, go to its Amazon listing
+2. Download the main product image (the white-background cutout photo)
+3. Rename it following the naming convention: `[product-slug]-hero.webp`
+   (e.g., `bluevua-ro100ropot-uv-hero.webp`, `ispring-rcc7ak-hero.webp`)
+4. Place all images in `public/assets/`
+5. Run `node scripts/convert-to-webp.mjs` to generate responsive variants
+6. Upload/push to GitHub
+
+These product photos render in **product showcase mode** — the `ProductImage` component
+applies a radial CSS mask that blends away the white background so the product floats
+naturally on the dark site theme. No manual background removal is needed.
 
 ### Responsive Variants
 Use `scripts/convert-to-webp.mjs` to create responsive variants from source images:

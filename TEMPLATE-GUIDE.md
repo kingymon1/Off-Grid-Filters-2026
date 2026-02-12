@@ -132,18 +132,26 @@ Claude will:
 2. Connect repo to Vercel
 3. Vercel auto-detects Astro and deploys
 
-### Add Real Product Photos
-1. Read `IMAGE-GUIDE.md` for the complete image architecture
-2. Place images in `public/assets/` (flat directory)
-3. Run `node scripts/convert-to-webp.mjs` to create responsive variants
-4. Add slug-to-path entries in `src/lib/image-map.ts`
-5. Product photos go in `productSlugs` set (compact showcase with white-bg mask)
-6. Scene/editorial photos stay out of `productSlugs` (full-width cover mode)
+### Step 1: Add Real Product Photos (Do This First)
+Product photos must be manually downloaded from Amazon before AI images can be generated.
+1. For each product in `product-brief.yaml`, download the main product image from Amazon
+2. Rename using the naming convention: `[product-slug]-hero.webp`
+3. Place in `public/assets/` (flat directory)
+4. Run `node scripts/convert-to-webp.mjs` to create responsive variants (small/medium/full)
+5. Push to GitHub
+6. The `ProductImage` component automatically applies a radial CSS mask to blend away the white Amazon background — no manual editing needed
 
-### Generate AI Images (Optional)
+### Step 2: Generate AI Editorial Images
+After product photos are in place, generate the scene/lifestyle images for all other pages.
 1. Copy `.env.example` to `.env` and add your `GEMINI_API_KEY`
 2. Run `npm run images` for the admin UI, or `npm run images -- --auto`
 3. All 101 prompts are pre-configured in `scripts/image-gen-server.mjs`
+4. This generates editorial images for: category roundups, comparisons, guides, knowledge base, about page, homepage categories, and featured picks
+
+### Step 3: Register Images in the Map
+1. Add slug-to-path entries in `src/lib/image-map.ts`
+2. Product photos go in `productSlugs` set (compact showcase with white-bg mask)
+3. Scene/editorial photos stay out of `productSlugs` (full-width cover mode)
 
 ### Connect Domain
 - Point your domain to Vercel
