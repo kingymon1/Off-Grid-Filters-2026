@@ -200,6 +200,7 @@ Verify by parsing JSON-LD from build output. Every schema must be valid JSON.
 **Product review pages — each must have:**
 - [ ] Article schema with `headline`, `datePublished`, `dateModified`, `author`, `publisher`
 - [ ] Product schema with `name`, `description`, `image`, `offers` (price, priceCurrency, availability), `aggregateRating`
+- [ ] Review schema with `positiveNotes` and `negativeNotes` (structured pros/cons for Google rich result eligibility)
 - [ ] FAQPage schema (if page has FAQ section)
 - [ ] BreadcrumbList schema (Home -> Reviews -> [Product Name])
 - [ ] Entity linking: `about` = reviewed product (type: Product, sameAs: Amazon URL)
@@ -464,6 +465,7 @@ Test at least 1 URL per page template type:
 
 - [ ] Zero errors across all tested pages
 - [ ] Product pages show: Product, Review/AggregateRating eligible
+- [ ] Product pages show: Review with Pros/Cons (positiveNotes/negativeNotes) eligible
 - [ ] FAQ sections show: FAQPage eligible
 - [ ] Roundup pages show: ItemList eligible
 - [ ] Breadcrumbs show: BreadcrumbList eligible on all pages
