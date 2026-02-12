@@ -32,20 +32,26 @@ npm run checklist
 ```
 http://localhost:3200
 ```
-The dashboard always starts clean — any old results are cleared automatically when the server starts.
+The dashboard always starts clean — old results are cleared automatically on server startup.
+You should see all sections showing "Not run" badges with dashes in the summary cards.
 
-**Step 5.** Click the **"Run Automated Checks (S1-S5)"** button (orange). This runs
-the build pipeline, SEO audit, schema validation, link crawling, and content quality checks.
-Results appear in the UI as they complete.
+The header controls bar looks like this:
+```
+[Reset]  [Run Automated Checks (S1-S5)]  |  Filter: [Full Report ▾]  [Export]
+```
+
+**Step 5.** Click the orange **"Run Automated Checks (S1-S5)"** button. This runs the build
+pipeline, SEO audit, schema validation, link crawling, and content quality checks. Results
+appear in the UI when all checks complete (may take a few minutes).
 
 **Step 6.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
 manual check item (Lighthouse, security headers, accessibility, etc.).
 
 **Step 7.** To download results, pick a filter from the **"Filter:"** dropdown (Full Report,
-Failures + Warnings, Failures Only, or Warnings Only), then click **"Export"** (blue).
+Failures + Warnings, Failures Only, or Warnings Only), then click the blue **"Export"** button.
 
-> **Reset mid-session:** Click the **"Reset"** button to clear all results and start over
-> without restarting the server.
+> **Reset mid-session:** Click the **"Reset"** button (left side of controls) to clear all
+> results and start over without restarting the server.
 
 > **CLI mode (no browser):** If you prefer terminal-only output, run `npm run checklist:auto`
 > instead of Step 3. This prints results to stdout and exits with code 1 if any checks fail.
