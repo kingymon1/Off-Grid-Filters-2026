@@ -33,14 +33,17 @@ npm run checklist
 http://localhost:3200
 ```
 
-**Step 5.** Click the **"Run Automated Checks (S1-S5)"** button in the dashboard. This runs
+**Step 5.** If old results are showing, click the **"Reset"** button (top-left of the controls bar)
+to clear them and start fresh.
+
+**Step 6.** Click the **"Run Automated Checks (S1-S5)"** button in the dashboard. This runs
 the build pipeline, SEO audit, schema validation, link crawling, and content quality checks.
 Results appear in the UI as they complete.
 
-**Step 6.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
+**Step 7.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
 manual check item (Lighthouse, security headers, accessibility, etc.).
 
-**Step 7.** Use the dropdown next to **"Export"** to download a filtered Markdown report
+**Step 8.** Use the dropdown next to **"Export"** to download a filtered Markdown report
 (Full Report, Failures + Warnings, Failures Only, or Warnings Only).
 
 > **CLI mode (no browser):** If you prefer terminal-only output, run `npm run checklist:auto`
