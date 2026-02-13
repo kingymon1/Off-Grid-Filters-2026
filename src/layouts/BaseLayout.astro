@@ -11,7 +11,7 @@ interface Props {
   ogImage?: string;
   noindex?: boolean;
   schema?: object | object[];
-  preloadHero?: boolean;
+  heroImage?: string;
 }
 
 const {
@@ -23,7 +23,7 @@ const {
   ogImage = `${siteConfig.siteUrl}${siteConfig.seo.defaultOgImage}`,
   noindex = false,
   schema,
-  preloadHero = false
+  heroImage,
 } = Astro.props;
 
 const siteUrl = siteConfig.siteUrl;
@@ -49,14 +49,15 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
   <link id="google-fonts" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"></noscript>
 
-  <!-- Preload hero product image for LCP optimization -->
-  {preloadHero && siteConfig.heroPreloadImage && (
-    <link rel="preload" href={siteConfig.heroPreloadImage} as="image" type="image/webp" />
+  <!-- Preload hero image for LCP optimization (per-page) -->
+  {heroImage && (
+    <link rel="preload" href={heroImage} as="image" type="image/webp"
+      imagesrcset={heroImage.endsWith('.webp') ? `${heroImage.replace('.webp', '-small.webp')} 400w, ${heroImage.replace('.webp', '-medium.webp')} 800w, ${heroImage} 1200w` : undefined}
+      imagesizes={heroImage.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined} />
   )}
 
-  <!-- DNS prefetch for external resources -->
+  <!-- DNS prefetch for Amazon (dns-prefetch only — no preconnect since we don't fetch resources from Amazon) -->
   <link rel="dns-prefetch" href="https://www.amazon.com">
-  <link rel="preconnect" href="https://www.amazon.com">
 
   {noindex && (
     <>
@@ -273,8 +274,7 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
   <a class="skip-nav" href="#main-content">Skip to main content</a>
   <slot />
 
-  <!-- External scripts (CSP-safe, no 'unsafe-inline' needed) -->
-  <script src="../scripts/interactions.ts"></script>
-  <script src="../scripts/analytics.ts"></script>
+  <!-- Single bundled script entry (CSP-safe, eliminates JS waterfall) -->
+  <script src="../scripts/main.ts"></script>
 </body>
 </html>

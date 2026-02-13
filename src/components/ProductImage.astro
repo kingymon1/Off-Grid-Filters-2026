@@ -51,6 +51,16 @@ const aspectMap = {
   tall: 'aspect-[2/3]',
 };
 
+// Width/height hints for browser aspect-ratio calculation (prevents CLS)
+const dimensionMap = {
+  hero: { w: 1200, h: 675 },
+  square: { w: 800, h: 800 },
+  wide: { w: 1200, h: 800 },
+  tall: { w: 600, h: 900 },
+};
+const dims = dimensionMap[aspect];
+const showcaseDims = hasImage && !isEditorial ? { w: 480, h: 480 } : dims;
+
 const icons: Record<string, string> = {
   filter: `<path d="M28 28h40l-14 20v16l-12 0V48z" stroke="currentColor" stroke-width="3" fill="none" opacity="0.4"/><path d="M24 24h48" stroke="currentColor" stroke-width="3" opacity="0.5"/><circle cx="48" cy="20" r="2" fill="currentColor" opacity="0.3"/>`,
   water: `<path d="M48 24c-8 12-18 20-18 32a18 18 0 0036 0c0-12-10-20-18-32z" stroke="currentColor" stroke-width="3" fill="none" opacity="0.4"/><path d="M40 58c-2-2-3-5-3-8 0-6 5-10 11-16" stroke="currentColor" stroke-width="2" fill="none" opacity="0.25"/>`,
@@ -86,6 +96,8 @@ const iconSvg = icons[icon] || icons.filter;
         srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
         sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
         alt={alt}
+        width={dims.w}
+        height={dims.h}
         loading={priority ? 'eager' : 'lazy'}
         decoding={priority ? 'sync' : 'async'}
         fetchpriority={priority ? 'high' : undefined}
@@ -106,6 +118,8 @@ const iconSvg = icons[icon] || icons.filter;
           srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
           sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
           alt={alt}
+          width={showcaseDims.w}
+          height={showcaseDims.h}
           loading={priority ? 'eager' : 'lazy'}
           decoding={priority ? 'sync' : 'async'}
           fetchpriority={priority ? 'high' : undefined}

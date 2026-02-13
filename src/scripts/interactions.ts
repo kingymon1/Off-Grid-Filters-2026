@@ -35,16 +35,23 @@ if (scrollProgress) {
   }, { passive: true });
 }
 
-// Spotlight card effect (mouse-following glow)
+// Spotlight card effect (mouse-following glow) — cached rects to avoid forced reflow
+const cardRects = new WeakMap<Element, DOMRect>();
 document.querySelectorAll('.spotlight-card').forEach((card) => {
+  cardRects.set(card, card.getBoundingClientRect());
   card.addEventListener('mousemove', (e) => {
-    const rect = (card as HTMLElement).getBoundingClientRect();
+    const rect = cardRects.get(card)!;
     const x = ((e as MouseEvent).clientX - rect.left) + 'px';
     const y = ((e as MouseEvent).clientY - rect.top) + 'px';
     (card as HTMLElement).style.setProperty('--mouse-x', x);
     (card as HTMLElement).style.setProperty('--mouse-y', y);
   });
 });
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.spotlight-card').forEach((card) => {
+    cardRects.set(card, card.getBoundingClientRect());
+  });
+}, { passive: true });
 
 // Animated counters
 const counterObserver = new IntersectionObserver(
