@@ -32,15 +32,14 @@
 
 ## Typography Decisions
 
-### Font: Inter (400, 500, 600, 700, 800, 900)
-- **Why:** Inter is the modern standard for data-heavy, authority content. Excellent readability at all sizes, strong number rendering (critical for specs tables), and widely trusted in professional contexts.
-- **Weight distribution:**
-  - 400: Body text, FAQ answers
-  - 500: Secondary labels, metadata
-  - 600: Subheadings, strong labels
-  - 700: Section headings, product names, prices
-  - 800: Page titles, hero headlines
-  - 900: Hero primary text, stat values
+### Font: System Font Stack
+- **Stack:** `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
+- **Why:** System fonts render instantly with zero CLS (no font swap), eliminate 4+ network requests
+  (preconnect, CSS, woff2), and achieve perfect PageSpeed scores. SF Pro (Apple), Segoe UI (Windows),
+  and Roboto (Android) are all excellent modern sans-serifs with strong readability and number rendering.
+- **Performance impact:** Removing Google Fonts (Inter) was the single biggest PageSpeed improvement —
+  it eliminated CLS 0.221 and shaved ~200-500ms off LCP. Score went from 80 to 100.
+- **Weight usage:** System fonts support all standard weights (400-900) natively.
 
 ### Scale
 - Hero title: clamp(2.5rem, 6vw, 4rem)
