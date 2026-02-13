@@ -79,6 +79,11 @@
       "source": "/:path*.html",
       "destination": "/:path*/",
       "permanent": true
+    },
+    {
+      "source": "/guides/how-to-choose-off-grid-water-filter",
+      "destination": "/guides/how-to-choose-water-filter/",
+      "permanent": true
     }
   ]
 }
