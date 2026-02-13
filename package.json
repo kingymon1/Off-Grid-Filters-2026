@@ -13,7 +13,8 @@
     "images": "node scripts/image-gen-server.mjs",
     "images:auto": "node scripts/image-gen-server.mjs --auto",
     "checklist": "node scripts/checklist-server.mjs",
-    "checklist:auto": "node scripts/checklist-server.mjs --auto"
+    "checklist:auto": "node scripts/checklist-server.mjs --auto",
+    "postinstall": "node scripts/sanity-check.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
