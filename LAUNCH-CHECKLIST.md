@@ -156,6 +156,11 @@ Every file listed in CLAUDE.md FILE CHECKLIST must exist:
 - [ ] `src/lib/schema.ts`
 - [ ] `src/lib/schema.test.ts`
 
+**Source scripts (external JS — CSP-safe):**
+- [ ] `src/scripts/interactions.ts`
+- [ ] `src/scripts/analytics.ts`
+- [ ] `src/scripts/header.ts`
+
 **Layouts:**
 - [ ] `src/layouts/BaseLayout.astro`
 - [ ] `src/layouts/ContentLayout.astro`
@@ -204,11 +209,19 @@ Every file listed in CLAUDE.md FILE CHECKLIST must exist:
 - [ ] `astro.config.mjs` uses `output: 'static'` and `trailingSlash: 'always'`
 - [ ] `tailwind.config.ts` maps all CSS custom properties to Tailwind tokens
 - [ ] `tsconfig.json` has `@/*` path alias to `./src/*`
-- [ ] `vercel.json` has security headers (CSP, X-Frame-Options, HSTS, X-Content-Type-Options, Referrer-Policy)
+- [ ] `vercel.json` has security headers (CSP, X-Frame-Options, HSTS, COOP, X-Content-Type-Options, Referrer-Policy)
+- [ ] `vercel.json` CSP `script-src 'self'` with NO `'unsafe-inline'` (scripts must be external)
 - [ ] `vercel.json` CSP `form-action` includes `https://buttondown.com`
-- [ ] `vercel.json` cache headers: `max-age=86400` for `/assets/*`, `immutable` ONLY for `/_astro/*`
+- [ ] `vercel.json` has `Strict-Transport-Security` (HSTS) header with `max-age=63072000; includeSubDomains; preload`
+- [ ] `vercel.json` has `Cross-Origin-Opener-Policy: same-origin` (COOP) header
+- [ ] `vercel.json` has `Access-Control-Allow-Origin` set to production domain (NOT `*`)
+- [ ] `vercel.json` cache headers: `max-age=86400` for `/assets/*` images, `immutable` for `/assets/*.css|js`
 - [ ] `vercel.json` has `.html` to trailing-slash redirect rules
 - [ ] `.gitignore` excludes `node_modules`, `dist`, `.astro`, `.env`
+- [ ] No inline `<script type="module">` without `src` attribute in build output (CSP compliance — all scripts must be external)
+- [ ] Google Fonts `<link>` has `media="print"` in source (deferred, non-render-blocking loading)
+- [ ] `astro.config.mjs` has `vite.build.assetsInlineLimit: 0` (prevents Vite re-inlining scripts)
+- [ ] `public/assets/og-default.png` exists at 1200x630px (social preview image)
 
 **Sign-off: Section 1** — [ ] All items verified | Date: ________ | By: ________
 
@@ -638,8 +651,10 @@ This checks how your pages look when shared on Facebook, Twitter/X, LinkedIn, an
 
 | Header | Expected Value | Present? |
 |--------|---------------|----------|
-| Content-Security-Policy | Configured per vercel.json | [ ] |
-| Strict-Transport-Security | `max-age=31536000; includeSubDomains` | [ ] |
+| Content-Security-Policy | `script-src 'self'` (NO `'unsafe-inline'`); `style-src 'self' 'unsafe-inline'` | [ ] |
+| Strict-Transport-Security | `max-age=63072000; includeSubDomains; preload` | [ ] |
+| Cross-Origin-Opener-Policy | `same-origin` | [ ] |
+| Access-Control-Allow-Origin | `https://[site-domain]` (NOT `*`) | [ ] |
 | X-Content-Type-Options | `nosniff` | [ ] |
 | X-Frame-Options | `DENY` or `SAMEORIGIN` | [ ] |
 | Referrer-Policy | `strict-origin-when-cross-origin` | [ ] |

@@ -4,37 +4,50 @@
   "framework": "astro",
   "headers": [
     {
-      "source": "/(.*).html",
+      "source": "/:path*.html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]
     },
     {
-      "source": "/assets/images/(.*)",
+      "source": "/assets/images/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" }
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" }
       ]
     },
     {
-      "source": "/_astro/(.*)",
+      "source": "/_astro/:path*",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
-      "source": "/favicon.(ico|png)",
+      "source": "/favicon.ico",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
-      "source": "/sitemap(-index)?.xml",
+      "source": "/favicon.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" },
+        { "key": "Content-Type", "value": "application/xml" }
+      ]
+    },
+    {
+      "source": "/sitemap-index.xml",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" },
         { "key": "Content-Type", "value": "application/xml" }
@@ -47,7 +60,7 @@
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
@@ -56,7 +69,8 @@
         { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=(), interest-cohort=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://va.vercel-scripts.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://buttondown.com" }
+        { "key": "Access-Control-Allow-Origin", "value": "https://offgridfilters.com" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://va.vercel-scripts.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://buttondown.com" }
       ]
     }
   ],

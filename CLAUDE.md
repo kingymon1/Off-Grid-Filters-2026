@@ -133,11 +133,15 @@ Choose a color palette based on market research. Define these CSS custom propert
 | `--card` | Card/section backgrounds | `210 12% 9%` |
 | `--border` | Borders and dividers | `210 10% 16%` |
 | `--muted` | Secondary backgrounds | `210 10% 11%` |
-| `--muted-foreground` | Secondary text | `210 10% 55%` |
+| `--muted-foreground` | Secondary text | `210 8% 62%` |
 
 **CRITICAL: `--primary-foreground` must be LIGHT (near-white), not dark.**
 It's used for text on primary-colored buttons. If it's dark, button text is unreadable.
 For buttons with gradient primary backgrounds, also use `color: #fff !important` as a fallback.
+
+**WCAG contrast note:** `--muted-foreground` must maintain ≥5.5:1 contrast ratio against card
+backgrounds (`--card`). The example value `210 8% 62%` achieves this on dark cards. Do NOT use
+lower lightness values (e.g., 55%) — they fail WCAG AA on dark backgrounds.
 
 **Decision framework:**
 - Authority/review sites → clean, trustworthy blue or teal primary
@@ -146,9 +150,15 @@ For buttons with gradient primary backgrounds, also use `color: #fff !important`
 - Lifestyle/home niche → warmer tones, approachable
 - Always ensure WCAG 4.5:1 contrast ratio for text
 
-### 2.2 Hero Statement
+### 2.2 Hero Statement & Homepage Title
 
-The homepage hero is an AUTHORITY statement, not a product pitch:
+**Homepage `<title>` format:**
+```
+${siteName} | ${niche} Reviews & Buying Guides
+```
+Use a pipe `|` separator. Keep total ≤60 characters.
+
+**Homepage hero** is an AUTHORITY statement, not a product pitch:
 ```
 [Niche] [Content Type] You Can Trust
 ```
@@ -305,7 +315,7 @@ Create these files in this order:
 }
 ```
 
-**2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind).
+**2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind). Include `vite: { build: { assetsInlineLimit: 0 } }` to force all scripts to be emitted as external files (prevents Vite from re-inlining small scripts, which would break CSP `script-src 'self'`).
 
 **3. `tailwind.config.ts`** — Map CSS custom properties to Tailwind tokens. Use Inter font. Include tailwindcss-animate plugin.
 
@@ -315,7 +325,28 @@ Create these files in this order:
 
 **6. `eslint.config.js`** — JS recommended + TypeScript ESLint.
 
-**7. `vercel.json`** — Build config, security headers (CSP, X-Frame-Options, etc.), cache headers (24hr for `/assets/*` images to allow updates, 1yr immutable for `/_astro/*` hash-named bundles, 24hr for sitemaps), redirect .html to trailing slash. **CSP `form-action` must include `https://buttondown.com`** for the email capture form to submit cross-origin.
+**7. `vercel.json`** — Build config, security headers, cache headers, redirect .html to trailing slash.
+
+**Security headers (all required):**
+- `Content-Security-Policy` — `script-src 'self'` (NO `'unsafe-inline'`); `style-src 'self' 'unsafe-inline'` (Astro needs inline styles); `form-action 'self' https://buttondown.com`
+- `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` (HSTS)
+- `Cross-Origin-Opener-Policy: same-origin` (COOP)
+- `Access-Control-Allow-Origin: https://[site-domain]` (restrictive CORS — NOT `*`)
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: geolocation=(), camera=(), microphone=()`
+
+**WHY no `'unsafe-inline'` in `script-src`:** Astro inlines `<script>` content as
+`<script type="module">` in built HTML. CSP `script-src 'self'` blocks these. Using external
+`.ts` files referenced via `<script src="...">` produces `<script type="module" src="/assets/xxx.hash.js">`
+which is allowed by `script-src 'self'`. See Section 3.2a for the external script files.
+
+**Cache headers (split rules for `/assets/`):**
+- `/assets/(.*)\\.(?:css|js)$` → `Cache-Control: public, max-age=31536000, immutable` (hash-named build output)
+- `/assets/(.*)\\.(?:webp|png|jpg|svg|ico)$` → `Cache-Control: public, max-age=86400, stale-while-revalidate=86400` (images — can be replaced at same URL)
+- `/_astro/*` → `Cache-Control: public, max-age=31536000, immutable` (Astro hash-named bundles)
+- Sitemaps → `Cache-Control: public, max-age=86400`
 
 **8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
 
@@ -480,6 +511,35 @@ The `ProductImage` component imports from this map and determines render mode:
 - Slug NOT in `productSlugs` → **editorial** (full-width cover)
 - No image found → **SVG placeholder** (icon + label fallback)
 
+### 3.2a Source: External Scripts (3 files)
+
+Astro inlines `<script>` content as `<script type="module">` in built HTML. CSP `script-src 'self'`
+blocks these inline scripts. To stay CSP-safe, all client-side JavaScript MUST live in external
+`.ts` files referenced via `<script src="...">`. This produces
+`<script type="module" src="/assets/xxx.hash.js">` in the build output — allowed by CSP.
+
+**`src/scripts/interactions.ts`** — Page interaction behaviors:
+- Google Fonts activation: switches `media="print"` → `"all"` on the `#google-fonts` link element
+- Scroll reveal IntersectionObserver for all 6 reveal variants (`.reveal`, `.reveal-left`, etc.)
+- Scroll progress bar width update via `requestAnimationFrame`
+- Spotlight card mouse-tracking (updates `--mouse-x`/`--mouse-y` CSS custom properties on mousemove)
+- Animated counter IntersectionObserver (eased number animation, 1500ms duration)
+
+**`src/scripts/analytics.ts`** — Vercel Web Analytics:
+```typescript
+import { inject } from '@vercel/analytics';
+inject();
+```
+
+**`src/scripts/header.ts`** — Header navigation behaviors:
+- Sticky header scroll class toggle (`.scrolled` class added on scroll > 20px)
+- Mobile hamburger menu open/close
+- Dropdown keyboard navigation (Escape to close, focus management)
+
+**Why external files?** Without this pattern, removing `'unsafe-inline'` from CSP breaks all
+JavaScript interactions. The `assetsInlineLimit: 0` setting in `astro.config.mjs` prevents
+Vite from re-inlining small scripts during the build.
+
 ### 3.3 Source: Global CSS
 
 **`src/index.css`** must include:
@@ -517,18 +577,29 @@ The `ProductImage` component imports from this map and determines render mode:
 - `<head>`: charset, viewport, title, meta description, canonical URL
 - Open Graph tags (og:title, og:description, og:image, og:url, og:type)
 - Twitter Card tags
-- Google Fonts link (Inter, weights 400-900)
+- Google Fonts (Inter, weights 400-900) loaded with **deferred non-render-blocking pattern**:
+  ```html
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
+  <link id="google-fonts" href="...Inter..." rel="stylesheet" media="print">
+  <noscript><link rel="stylesheet" href="...Inter..."></noscript>
+  ```
+  The `media="print"` prevents render-blocking. `interactions.ts` switches it to `media="all"` on load.
+  **Do NOT use `onload` inline handler** — CSP blocks inline event handlers.
 - DNS prefetch for Amazon (`dns-prefetch` + `preconnect`)
 - Favicon links (ico + png)
 - Schema.org JSON-LD slot
 - Vercel Analytics import
 - `<body>`: skip nav link, scroll progress bar div, slot for content, noise overlay div
 - `id="main-content"` on main element
-- **JavaScript (in `<script>` tag):**
-  - IntersectionObserver for all 6 reveal variants
-  - Scroll progress bar JS updating width on scroll via `requestAnimationFrame`
-  - Spotlight card mouse-tracking JS (updates CSS custom properties on mousemove)
-  - Animated counter JS (eased number animation on intersection, 1500ms duration)
+- **External script references (CSP-safe, no inline JS):**
+  ```html
+  <script src="../scripts/interactions.ts"></script>
+  <script src="../scripts/analytics.ts"></script>
+  ```
+  These produce `<script type="module" src="/assets/xxx.hash.js">` in the build output.
+  **Do NOT use inline `<script>` tags** — Astro inlines them, breaking CSP.
 
 **`src/layouts/ContentLayout.astro`** must include:
 - Wraps BaseLayout
@@ -553,6 +624,11 @@ The `ProductImage` component imports from this map and determines render mode:
 - Sticky positioning
 - Active page highlighting
 - NO "Buy on Amazon" CTA in nav — authority sites don't hard-sell from the header
+- **External script reference** (CSP-safe):
+  ```html
+  <script src="../scripts/header.ts"></script>
+  ```
+  Do NOT use inline `<script>` — see Section 3.2a for why.
 
 **`FooterAstro.astro`:**
 - Site name and tagline
@@ -581,6 +657,9 @@ The `ProductImage` component imports from this map and determines render mode:
 - Props: `title?: string` (defaults to "Expert Tip")
 - Lightning bolt icon + accent border
 - Slot for content
+- **WCAG contrast:** ProTip header color uses brightened primary `hsl(205 70% 58%)` (vs primary's
+  48% lightness) for WCAG AA contrast on dark backgrounds. Do NOT use `hsl(var(--primary))`
+  directly — it fails contrast requirements.
 
 **`Callout.astro`:**
 - Props: `type?: 'info' | 'warning' | 'tip' | 'danger'`
@@ -770,6 +849,7 @@ One page per product in the catalog. Follow this structure:
 - Structured pros list (checkmarks)
 - Structured cons list (X marks)
 - **Every product MUST have real cons** — builds credibility
+- **Cons heading color:** Use `hsl(0 70% 62%)` (not 55%) for WCAG AA contrast on dark backgrounds
 
 **Section 5: Performance / Field Testing**
 - How the product performs in real-world scenarios
@@ -1071,6 +1151,19 @@ export const GET: APIRoute = () => {
 **IMPORTANT:** The `Comparison` interface has NO `title` field. To generate comparison titles
 for llms.txt, use `getProductBySlug()` to resolve product names from slugs. Do NOT use
 `c.title` — it does not exist and will render as `undefined`.
+
+**`public/assets/og-default.png`** — Default social preview (OG) image:
+- 1200x630px PNG generated via Sharp SVG rendering
+- Includes: site branding, tagline, CTA button(s) ("Find Your Perfect [Product]" + "Browse Reviews"), trust badges
+- Referenced by `siteConfig.seo.defaultOgImage` in config
+- Used as default for `og:image` and `twitter:image` meta tags on all pages
+- Generate using a Sharp script that renders an SVG template to PNG:
+  ```javascript
+  // scripts/gen-og.mjs — generates public/assets/og-default.png
+  import sharp from 'sharp';
+  const svg = `<svg width="1200" height="630">...</svg>`; // branded layout
+  await sharp(Buffer.from(svg)).png().toFile('public/assets/og-default.png');
+  ```
 
 **`public/favicon.ico`** and **`public/favicon.png`:**
 - Generate text-based favicons using the site initial(s)
@@ -1461,9 +1554,18 @@ Every page links to 4 related articles:
    include descriptions, guides include descriptions. Comparison titles must be generated from
    product names (the Comparison interface has no `title` field).
 
+### CSP (Content Security Policy)
+25. **NEVER write inline `<script>` tags.** Use external `.ts` files in `src/scripts/` referenced
+    via `<script src="...">`. Astro inlines them otherwise, producing `<script type="module">`
+    which CSP `script-src 'self'` blocks. See Section 3.2a.
+26. **Set `vite.build.assetsInlineLimit: 0`** in `astro.config.mjs` to prevent Vite from
+    re-inlining small scripts during the build.
+27. **Never use inline event handlers** (`onload`, `onclick`, `onmouseover`, etc.) in HTML —
+    CSP blocks them. Move all behavior to external scripts.
+
 ### Build
-23. **Always run `npm run build`** before committing. Fix all errors.
-24. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
+28. **Always run `npm run build`** before committing. Fix all errors.
+29. **Dark mode only** — deliberate design choice. Don't add light mode unless requested.
 
 ---
 
@@ -1491,17 +1593,23 @@ When complete, the project should contain:
 ### .github (1 file)
 - [ ] `.github/workflows/ci.yml`
 
-### Public (4+ files)
+### Public (5+ files)
 - [ ] `public/robots.txt`
 - [ ] `src/pages/llms.txt.ts` (dynamic API route — auto-generated from config)
 - [ ] `public/favicon.ico`
 - [ ] `public/favicon.png`
+- [ ] `public/assets/og-default.png` (1200x630 social preview image)
 
 ### Source: Lib (4 files)
 - [ ] `src/lib/config.ts`
 - [ ] `src/lib/image-map.ts`
 - [ ] `src/lib/schema.ts`
 - [ ] `src/lib/schema.test.ts`
+
+### Source: Scripts (3 files)
+- [ ] `src/scripts/interactions.ts`
+- [ ] `src/scripts/analytics.ts`
+- [ ] `src/scripts/header.ts`
 
 ### Source: CSS (1 file)
 - [ ] `src/index.css`
