@@ -28,7 +28,7 @@ const currentYear = new Date().getFullYear();
     <div class="footer-grid">
       {Object.entries(footerLinks).map(([category, links]) => (
         <div class="footer-column">
-          <h3 class="footer-heading">{category}</h3>
+          <div class="footer-heading" role="heading" aria-level="3">{category}</div>
           <ul class="footer-list">
             {links.map((link) => (
               <li>

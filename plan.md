@@ -1,425 +1,120 @@
-# Refined Implementation Plan: Email Capture + AI Search Hardening
+# Plan: Fix SEO Checklist Failures & Warnings
 
-> **Scope:** 2 features, ~75 file edits, 1 new file, 1 new component
-> **Quality bar:** World-class — every change must match the existing site's polish level.
-> **Branch:** `claude/fix-guides-layout-mEX75`
-
----
-
-## A. Email Capture — Buttondown Integration
-
-### A1. Research Summary
-
-**Provider:** Buttondown (free tier, 100 subscribers → migrate to Kit at scale)
-- Pure HTML `<form>` POST — zero JavaScript SDK, zero bundle size impact
-- Form action: `https://buttondown.com/api/emails/embed-subscribe/{username}`
-- Required fields: `email` (type=email) + `embed` (hidden, value="1")
-- Supports hidden `tag` fields for per-placement source tracking
-- Double opt-in by default (GDPR/CAN-SPAM compliant)
-- Rate limited to 100 req/hr (sufficient for a new site)
-
-**Why NOT Neon/Clerk/Resend:** Those are SaaS infrastructure tools (database, auth, transactional email). An affiliate site doesn't need user accounts or a database — just a newsletter service that handles the full lifecycle: capture → confirm → send → unsubscribe → compliance. Buttondown does all of this with a single form URL.
-
-**Migration path:** Export CSV from Buttondown → import as "confirmed" into Kit (ConvertKit) when approaching 100 subscribers. Kit allows confirmed imports (no re-confirmation emails). The only code change is swapping the form `action` URL — one line in `config.ts`.
-
-### A2. Placement Strategy (Research-Backed)
-
-Based on conversion research for authority/review sites:
-
-| # | Location | Page Type | Insert Point | Rationale | Expected CVR |
-|---|----------|-----------|-------------|-----------|-------------|
-| 1 | **After FAQ section, before Final CTA** | Homepage | `index.astro` ~line 325 | Highest-intent spot — readers who consumed FAQs are deeply engaged | 2-3% |
-| 2 | **Before final CTA section** | All 8 buyer guide pages | `guides/*.astro` | Guide completers are in active buying mode — peak newsletter receptivity | 3-5% |
-| 3 | **Before final CTA section** | All 10 activity guide pages | `water-filters-for-*.astro` | Same rationale as buyer guides | 3-5% |
-| 4 | **After all content sections** | Resource Hub | `guides/index.astro` | Discovery-mode users exploring the site | 1-2% |
-
-**Why NOT on review pages or comparisons:** These are transactional pages where the user's intent is to evaluate a specific product. Inserting an email form breaks the decision flow and risks undermining trust. The Wirecutter model confirms this — their review pages have zero interruptive capture. Guides and the homepage are informational contexts where "get more of this" is a natural next step.
-
-**Why only 4 touchpoints (not popups/modals/sticky bars):**
-- Authority sites earn trust through content, not aggressive capture
-- Google penalizes mobile interstitials on first page from search
-- Research shows 2-3 touchpoints per page is optimal; beyond 4 erodes trust
-- Inline forms convert 2-5% and produce the highest-quality subscribers
-- We can always add a non-intrusive sticky bar or exit-intent popup later as a Phase 2
-
-### A3. Component Design: `EmailCapture.astro`
-
-**Visual design — matches existing site language:**
-- Card container: `.cta-card` pattern (gradient top border, `hsl(var(--card))` background, `border-radius: 1.5rem`)
-- Section padding matching adjacent sections
-- `.reveal` scroll animation (consistent with all other sections)
-- Accent gradient top border (same as CTA card: `linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))`)
-
-**Layout:**
-```
-┌──────────────────────────────────────────────┐
-│ ═══ gradient top border ═══                  │
-│                                              │
-│   📧  Get Filter Picks Delivered             │  ← heading (h2 weight)
-│   One email per week. Honest reviews,        │  ← subheading (muted)
-│   no spam.                                   │
-│                                              │
-│   ┌──────────────────────┐ ┌──────────────┐  │
-│   │ you@example.com      │ │  Subscribe   │  │  ← email input + CTA button
-│   └──────────────────────┘ └──────────────┘  │
-│                                              │
-│   🔒 No spam. Unsubscribe anytime.          │  ← trust line (small, muted)
-│                                              │
-└──────────────────────────────────────────────┘
-```
-
-**HTML structure:**
-```html
-<section class="section email-section">
-  <div class="container">
-    <div class="email-card reveal">
-      <div class="email-icon"><!-- mail SVG --></div>
-      <h2 class="email-heading">{heading from config}</h2>
-      <p class="email-subheading">{subheading from config}</p>
-      <form
-        action="https://buttondown.com/api/emails/embed-subscribe/{username}"
-        method="post"
-        class="email-form"
-      >
-        <input type="email" name="email" placeholder="you@example.com" required
-               aria-label="Email address" autocomplete="email" />
-        <input type="hidden" name="embed" value="1" />
-        <input type="hidden" name="tag" value="{placement-tag}" />
-        <button type="submit" class="btn-primary">{ctaText from config}</button>
-      </form>
-      <p class="email-trust">
-        <svg><!-- lock icon --></svg>
-        No spam. Unsubscribe anytime.
-      </p>
-    </div>
-  </div>
-</section>
-```
-
-**Props:**
-```typescript
-interface Props {
-  tag?: string;  // Source tracking tag, e.g., "homepage", "buying-guide", "resource-hub"
-}
-```
-
-**Conditional rendering:** If `siteConfig.email.username` is empty string, the entire component renders nothing. Zero impact on existing site until the owner creates a Buttondown account.
-
-**Accessibility:**
-- `<label>` or `aria-label` on email input
-- `type="email"` with `required` attribute
-- `autocomplete="email"` for autofill
-- Focus-visible ring matching site's primary color
-- Form is keyboard-navigable (input → button via Tab)
-- `prefers-reduced-motion` respected (no animations)
-
-**Mobile:**
-- Input and button stack vertically below 640px
-- Input gets full width, button gets full width below it
-- Large tap targets (min 48px height)
-- No modal/popup — pure inline, zero Google interstitial penalty risk
-
-### A4. Config Changes: `src/lib/config.ts`
-
-Add to `siteConfig` object (after `navigation`):
-
-```typescript
-email: {
-  provider: 'buttondown' as const,
-  username: '',  // Owner fills this — empty = component hidden
-  heading: 'Get Filter Picks Delivered',
-  subheading: 'One email per week. Honest reviews, no spam.',
-  ctaText: 'Subscribe',
-},
-```
-
-**Why configurable:** Heading/subheading/CTA text in config allows A/B testing different copy without touching the component. The owner can try "Weekly Water Filter Picks" vs "Get Expert Picks Before You Buy" by editing one file.
-
-### A5. CSP Header Update: `vercel.json`
-
-The current CSP `form-action` directive is `'self'` only. Native form POST to `buttondown.com` will be blocked.
-
-**Change:**
-```
-form-action 'self'
-```
-**To:**
-```
-form-action 'self' https://buttondown.com
-```
-
-This is a one-line edit in the CSP header value at `vercel.json` line 57.
-
-### A6. Post-Submit UX
-
-**Default behavior (Phase 1):** Native form POST redirects to Buttondown's hosted confirmation page. This is acceptable for launch — it's a clean page that says "Check your email to confirm."
-
-**Phase 2 enhancement (not in this PR):** Configure custom redirect URLs in Buttondown dashboard to point to a `/subscribe/thank-you/` page on the site. Alternatively, intercept with JavaScript `fetch()` for inline success messaging. This is a future optimization, not needed for launch.
+> **Scope:** 2 failures, 5 warnings across Sections 2, 4, and 5.
+> **Branch:** `claude/fix-seo-checklist-bgf43`
 
 ---
 
-## B. AI Search Hardening (5 Changes)
+## Issue 1: [FAIL] noindex on content pages (1 page)
 
-### B1. Per-Page `dateModified` in Schema
+**Root cause:** The checklist server (`scripts/checklist-server.mjs:318`) does `html.includes('noindex')` on ALL HTML files including `dist/404.html`. The 404 page correctly has `noindex={true}` — it *should not* be indexed.
 
-**Problem:** Every page currently uses `siteConfig.seo.dateModified` (2026-02-08). Google and AI systems use freshness as a ranking signal — a global date wastes this for "best X 2026" queries.
+**Fix:** Update `scripts/checklist-server.mjs` to skip 404 pages when checking for noindex. At line ~318, wrap the check with a condition: only count noindex if the URL is not `/404/`.
 
-**Research finding:** Google cross-references structured data dates with visible page dates. They must match. Only update `dateModified` when content actually changes.
-
-**Changes:**
-- **Review pages** (`src/pages/reviews/*.astro`, 29 files): Pass `product.publishDate` to `generateProductSchema()` and `generateArticleSchema()` calls. The `createPageSchema()` helper already accepts `datePublished` and `dateModified` params — the pages just aren't using them.
-- **Category roundup pages** (`src/pages/best-*.astro`, 6 files): Use the latest `publishDate` among products in that category.
-- **Comparison pages** (`src/pages/*.astro`, 15 files): Use `comparison.publishDate` (currently all `2026-02-08`).
-- **Guide pages** (`src/pages/guides/*.astro` + `src/pages/water-filters-for-*.astro`, 18 files): Use `guide.publishDate`.
-
-**No config changes needed** — all interfaces already have `publishDate` fields.
-
-### B2. Visible "Last Updated" Date on Content Pages
-
-**Problem:** `dateModified` is only in JSON-LD (invisible to users). Google explicitly recommends "a prominent, user-visible date labeled as 'Published' or 'Last updated.'" AI systems also prefer pages with visible freshness signals.
-
-**Research finding:** Dates must match between visible content and structured data. Inconsistency is flagged as manipulation.
-
-**Changes:**
-
-**`src/layouts/ContentLayout.astro`** — Add optional `lastUpdated` prop:
-
-```typescript
-interface Props {
-  // ... existing props ...
-  lastUpdated?: string;  // ISO date string, e.g., "2026-02-08"
-}
-```
-
-When provided, render after breadcrumbs, before the article card:
-
-```html
-<p class="last-updated">
-  Last updated: <time datetime="2026-02-08">February 8, 2026</time>
-</p>
-```
-
-**Styling:**
-- `font-size: 0.8125rem` (13px) — same as `.resource-meta`
-- `color: hsl(var(--muted-foreground))` — doesn't compete with content
-- Positioned right after breadcrumbs, left-aligned
-- `margin-bottom: 0.5rem` — tight spacing before article card
-
-**All content pages** pass their respective dates via this prop. The format function converts ISO dates to human-readable: "February 8, 2026".
-
-### B3. Richer `llms.txt` with Per-Page Descriptions
-
-**Problem:** Current `llms.txt` lists URLs + titles but no content summaries. Richer context = better AI citation targeting.
-
-**Research finding:** While no major AI platform has confirmed reading `llms.txt` yet, it costs zero to maintain (auto-generated from config) and the format is aligned with how LLMs process Markdown.
-
-**Changes to `src/pages/llms.txt.ts`:**
-
-1. **Products:** Append `product.verdict` as description
-   ```
-   - https://offgridfilters.com/reviews/brita-elite-2pack/ — Brita Elite 2-Pack Review: NSF 401-certified pitcher filter removing 12+ contaminants including 99% of lead.
-   ```
-
-2. **Categories:** Append `category.description`
-   ```
-   - https://offgridfilters.com/best-countertop-filters/ — Best Countertop & Pitcher Filters: Our ranked picks for no-install water filtration.
-   ```
-
-3. **Comparisons:** Fix the `c.title` bug (Comparison interface has no `title` field). Generate title from product names:
-   ```typescript
-   ...comparisons.map(c => {
-     const a = getProductBySlug(c.productA);
-     const b = getProductBySlug(c.productB);
-     const title = `${a?.name ?? c.productA} vs ${b?.name ?? c.productB}`;
-     return `- ${SITE_URL}/${c.slug}/ — ${title}: Side-by-side specs, performance, and value comparison`;
-   }),
-   ```
-
-4. **Guides:** Append `guide.description`
-   ```
-   - https://offgridfilters.com/guides/how-to-choose-water-filter/ — How to Choose a Water Filter: Complete guide to choosing the right filter for your water, budget, and household.
-   ```
-
-### B4. Remove Broken `SearchAction` from WebSite Schema
-
-**Problem:** `generateWebSiteSchema()` declares a `SearchAction` with a URL template, but the site has no search functionality. This is dead markup pointing to a non-existent endpoint.
-
-**Research finding:** Google deprecated the Sitelinks Search Box rich result in June 2025. There is no benefit to including `SearchAction` even if search existed. No penalty for having it, but removing dead markup keeps schema clean and focused.
-
-**Changes:**
-
-**`src/lib/schema.ts` → `generateWebSiteSchema()`:**
-```typescript
-// Before
-export function generateWebSiteSchema() {
-  return {
-    "@type": "WebSite",
-    name: SITE_NAME,
-    url: SITE_URL,
-    potentialAction: { ... }  // REMOVE THIS
-  };
-}
-
-// After
-export function generateWebSiteSchema() {
-  return {
-    "@type": "WebSite",
-    name: SITE_NAME,
-    url: SITE_URL,
-  };
-}
-```
-
-**`src/lib/schema.test.ts`:** Update the `generateWebSiteSchema` test to no longer assert `potentialAction` exists. Instead verify just `@type`, `name`, `url`.
-
-### B5. Entity Linking via `mentions` and `about` Schema Properties
-
-**Problem:** No `mentions`/`about` schema properties. These help AI systems understand entity relationships and increase citation probability.
-
-**Research finding:** Pages with comprehensive entity-linked schema get a 36% citation advantage in AI-generated summaries. `about` declares the primary topic; `mentions` declares secondary entities. `sameAs` links to Wikipedia/Wikidata for disambiguation.
-
-**Changes:**
-
-**`src/lib/schema.ts` → `generateArticleSchema()`:**
-
-Extend the `ArticleSchemaProps` interface:
-
-```typescript
-export interface ArticleSchemaProps {
-  // ... existing props ...
-  mentions?: Array<{ name: string; url: string; type?: string }>;
-  about?: Array<{ name: string; url: string; type?: string }>;
-}
-```
-
-When provided, add to the Article schema output:
-
-```json
-"mentions": [
-  { "@type": "Product", "name": "Brita Elite 2-Pack", "sameAs": "https://amazon.com/dp/B0CX5PV6LC" }
-],
-"about": [
-  { "@type": "Thing", "name": "Water Filtration", "sameAs": "https://www.wikidata.org/entity/Q842467" }
-]
-```
-
-**Page-level integration:**
-
-- **Review pages (29 files):** `about` = the reviewed product (type: Product, sameAs: Amazon URL). `mentions` = related products in the same category.
-- **Comparison pages (15 files):** `about` = both compared products. `mentions` = category roundup.
-- **Guide pages (18 files):** `about` = the guide topic (type: Thing). `mentions` = recommended products.
-- **Category roundups (6 files):** `about` = the category (type: Thing). `mentions` = all products in the category.
-
-**`src/lib/schema.test.ts`:** Add tests for:
-- Article schema with `mentions` array
-- Article schema with `about` array
-- Article schema with both `mentions` and `about`
-- Article schema with neither (backward compatibility)
-
-### B5a. What We're NOT Implementing (and Why)
-
-**Speakable schema — SKIPPED:**
-Research conclusively shows speakable is beta-only, restricted to English-language US news content, and is on Google's deprecation shortlist for January 2026. It does not apply to affiliate review sites. Would add complexity with zero benefit.
-
-**Interactive quiz lead magnet — DEFERRED:**
-Research shows quizzes convert 70% better than static offers. A "Find Your Perfect Water Filter" quiz would be excellent, but it requires React client-side state management, multi-step form logic, and conditional routing — a separate feature that deserves its own focused implementation. Not in scope for this PR.
-
-**Exit-intent popup — DEFERRED:**
-Research shows 2.95-4.68% conversion rate, but authority sites benefit more from non-intrusive capture. Adding this later as a Phase 2 optimization if inline form performance plateaus below 2%.
+**Files:** `scripts/checklist-server.mjs`
 
 ---
 
-## C. CSP & Security
+## Issue 2: [FAIL] Affiliate links missing rel attributes (39 issues)
 
-### C1. Vercel CSP Header Update
+**Root cause:** `src/pages/guides/best-water-filters-under-50.astro` has 8 Amazon affiliate links (via `getAffiliateUrl()`) that are missing `rel="nofollow sponsored noopener"`. The checklist counts each missing attribute per link.
 
-**File:** `vercel.json` line 57
+**Fix:** Add `rel="nofollow sponsored noopener"` and `target="_blank"` to all 8 `<a>` tags with Amazon affiliate URLs in this file (~lines 90, 100, 106, 112, 118, 127, 133, 139).
 
-**Current `form-action` directive:** `form-action 'self'`
-**Updated:** `form-action 'self' https://buttondown.com`
-
-This is the ONLY security-relevant change. The form POST goes directly to Buttondown's embed-subscribe endpoint. No JavaScript SDK, no additional `connect-src` needed, no CORS concerns with native form submission.
+**Files:** `src/pages/guides/best-water-filters-under-50.astro`
 
 ---
 
-## D. File Change Summary
+## Issue 3: [WARN] 66 titles over 60 characters
 
-| # | File | Change | Description |
-|---|------|--------|-------------|
-| 1 | `src/lib/config.ts` | Edit | Add `email` config block to `siteConfig` |
-| 2 | `src/components/EmailCapture.astro` | **New** | Email capture form component |
-| 3 | `vercel.json` | Edit | Add `https://buttondown.com` to CSP `form-action` |
-| 4 | `src/lib/schema.ts` | Edit | Add `mentions`/`about` to ArticleSchema, remove SearchAction |
-| 5 | `src/lib/schema.test.ts` | Edit | Update WebSite test, add mentions/about tests |
-| 6 | `src/layouts/ContentLayout.astro` | Edit | Add `lastUpdated` prop + visible date display |
-| 7 | `src/pages/llms.txt.ts` | Edit | Add descriptions, fix comparison title bug |
-| 8 | `src/pages/index.astro` | Edit | Add EmailCapture between FAQ and Final CTA |
-| 9 | `src/pages/guides/index.astro` | Edit | Add EmailCapture before closing tag |
-| 10-17 | `src/pages/guides/*.astro` (8 files) | Edit | Add EmailCapture + lastUpdated + per-page dates + mentions/about |
-| 18-27 | `src/pages/water-filters-for-*.astro` (10 files) | Edit | Add EmailCapture + lastUpdated + per-page dates + mentions/about |
-| 28-56 | `src/pages/reviews/*.astro` (29 files) | Edit | Per-page dates + mentions/about schema |
-| 57-62 | `src/pages/best-*.astro` (6 files) | Edit | Per-page dates + mentions/about schema |
-| 63-77 | `src/pages/*.astro` (comparisons, 15 files) | Edit | Per-page dates + about schema |
+**Root cause:** Three title patterns are too long:
 
-**Total: 1 new file, ~76 file edits**
+1. **Review pages (29 pages):** `${product.name} Review (${year}) — OffGrid Filters` — product names are 30-60+ chars, making titles 70-100+
+2. **Comparison pages (15 pages):** `${productA.name} vs ${productB.name}: Which Is Better? (${year}) — OffGrid Filters` — 90-120+
+3. **Category/guide/knowledge pages (~22 pages):** Various patterns with `— OffGrid Filters` suffix
 
----
+**Fix — two-part approach:**
 
-## E. Execution Order
+**Part A: Add `shortName` to products in config.**
+Add a `shortName` field to the Product interface and all 29 products in `src/lib/config.ts`. Examples:
+- `"Bluevua RO100ROPOT-UV Countertop Reverse Osmosis System"` → shortName: `"Bluevua RO100ROPOT-UV"`
+- `"Samsung HAF-QIN/EXP Refrigerator Water Filter (DA97-17376B)"` → shortName: `"Samsung HAF-QIN"`
+- `"Brita Standard Replacement Filters (4-Pack)"` → shortName: `"Brita Standard 4-Pack"`
 
-### Phase 1: Foundation (config + component + schema)
-1. `src/lib/config.ts` — Add email config block
-2. `src/components/EmailCapture.astro` — Create the component with full styling
-3. `src/lib/schema.ts` — Add mentions/about to ArticleSchema, remove SearchAction
-4. `src/lib/schema.test.ts` — Update tests (must pass before continuing)
-5. `src/layouts/ContentLayout.astro` — Add lastUpdated prop + visible date
-6. `src/pages/llms.txt.ts` — Enrich descriptions, fix comparison bug
-7. `vercel.json` — Add buttondown.com to CSP form-action
+**Part B: Shorten title patterns across all page types.**
+- **Reviews (29 files):** Change to `${product.shortName} Review ${year} | OffGrid Filters`
+- **Comparisons (15 files):** Change to `${productA.shortName} vs ${productB.shortName} (${year})`  — drop "Which Is Better?" and site suffix
+- **Categories (6 files):** Change to `Best ${category.name} ${year} | OffGrid Filters` — drop "Expert Picks"
+- **Guides/Knowledge/Activity (~22 files):** Trim any `guide.title` values in config exceeding ~42 chars, or drop the `— OffGrid Filters` suffix for long titles
 
-### Phase 2: Homepage
-8. `src/pages/index.astro` — Add EmailCapture between FAQ and CTA sections
-
-### Phase 3: Guide pages (18 files)
-9. All 8 buyer guide pages — Add EmailCapture + lastUpdated + per-page dates + entity schema
-10. All 10 activity guide pages — Same changes as buyer guides
-
-### Phase 4: Review pages (29 files)
-11. All 29 review pages — Per-page dates + mentions/about entity schema
-
-### Phase 5: Roundup pages (6 files)
-12. All 6 category roundup pages — Per-page dates + entity schema
-
-### Phase 6: Comparison pages (15 files)
-13. All 15 comparison pages — Per-page dates + about entity schema
-
-### Phase 7: Resource Hub
-14. `src/pages/guides/index.astro` — Add EmailCapture
-
-### Phase 8: Verify
-15. `npm run test` — All schema tests pass
-16. `npm run lint` — No lint errors
-17. `npm run build` — Full build succeeds, all 80 pages output
-18. Spot-check: verify EmailCapture renders conditionally (hidden when username is empty)
-19. Spot-check: verify visible dates appear on content pages
-20. Spot-check: verify llms.txt includes descriptions and no broken comparison titles
-
-### Phase 9: Ship
-21. Commit with descriptive message
-22. Push to `claude/fix-guides-layout-mEX75`
+**Files:**
+- `src/lib/config.ts` — add `shortName` to interface + all 29 products
+- All 29 `src/pages/reviews/*.astro`
+- All 15 `src/pages/*-vs-*.astro`
+- All 6 `src/pages/best-*.astro`
+- ~22 guide/knowledge/activity pages (only where title exceeds 60 chars)
 
 ---
 
-## F. Success Criteria
+## Issue 4: [WARN] 6 meta descriptions over 160 characters
 
-- [ ] `npm run test` passes (19 existing + 3-4 new schema tests)
-- [ ] `npm run lint` passes
-- [ ] `npm run build` produces 80 pages with zero errors
-- [ ] EmailCapture component renders on homepage, 8 buyer guides, 10 activity guides, resource hub (20 pages total)
-- [ ] EmailCapture renders nothing when `siteConfig.email.username` is empty
-- [ ] Every content page shows visible "Last updated" date
-- [ ] `llms.txt` output includes per-page descriptions with no undefined/null values
-- [ ] WebSite schema no longer includes SearchAction
-- [ ] Article schema on review pages includes `mentions` and `about` properties
-- [ ] CSP header allows form-action to buttondown.com
-- [ ] No console errors in built output
-- [ ] All existing functionality unchanged — no regressions
+**Root cause:** Comparison pages and possibly some guide pages have descriptions exceeding 160 chars due to long product names or verbose descriptions.
+
+**Fix:** Build the site first to identify the exact 6 pages (from dist/ HTML output). Then shorten each page's `description` prop to under 160 characters. For comparison pages using product names, use `shortName` from the config changes in Issue 3.
+
+**Files:** Up to 6 page files (identified after build)
+
+---
+
+## Issue 5: [WARN] 1 page with skipped heading levels
+
+**Root cause:** Could not identify from source code alone — the skip may be introduced during Astro rendering (e.g., a component inserting headings at unexpected levels).
+
+**Fix:** Build the site, then search dist/ HTML for the page with skipped heading levels (e.g., H1→H3 or H2→H4). Fix the heading hierarchy in the source .astro file.
+
+**Files:** 1 page file (identified after build)
+
+---
+
+## Issue 6: [WARN] 80 internal links missing trailing slash
+
+**Root cause:** Despite `trailingSlash: 'always'` in astro.config.mjs, 80 links in the built HTML lack trailing slashes. Source .astro files appear correct, so these likely come from:
+- Links embedded in JavaScript template strings (FAQ answer HTML strings rendered via `set:html`)
+- Component-generated links (ComparisonTable CTA links, RelatedArticles, etc.)
+- Config-driven navigation links that are missing trailing slashes in specific contexts
+
+**Fix:** Build the site, then search dist/ HTML for `href="/[^"]*[^/]"` patterns (internal links not ending in `/` or `.ext`). Trace each pattern back to its source. This likely involves fixing a few systematic patterns (e.g., a component generating links without trailing slashes) rather than 80 individual edits.
+
+**Files:** Multiple (identified after build investigation)
+
+---
+
+## Issue 7: [WARN] 7 thin comparison pages (under 1500 words)
+
+**Root cause:** 7 comparison pages are 11-52 words short of the 1500 minimum:
+- `brita-standard-vs-pur` (1448w, need +52)
+- `everydrop-filter-1-vs-ge-xwfe` (1462w, need +38)
+- `ge-xwfe-vs-ge-rpwfe` (1451w, need +49)
+- `pentair-everpure-h1200-vs-pentair-everpure-h300` (1489w, need +11)
+- `samsung-haf-qin-vs-everydrop-filter-a` (1454w, need +46)
+- Plus 2 more (from the "7 thin" count — will identify after build)
+
+**Fix:** Expand content in each thin page by adding depth to the category-by-category breakdown sections. Each category section needs only 10-30 additional words to collectively bring the page over 1500. Add real-world context, testing observations, or technical explanation. The shortfalls are small enough that expanding 2-3 sections per page by a sentence each is sufficient.
+
+**Files:** 7 comparison page files in `src/pages/`
+
+---
+
+## Execution Order
+
+1. **Build** (`npm run build`) to get dist/ output for investigating Issues 4, 5, 6
+2. **Investigate** Issues 4, 5, 6 in the dist/ HTML to identify specific pages and patterns
+3. **Fix Issue 1** — checklist server noindex exclusion (quick, 1 file)
+4. **Fix Issue 2** — affiliate rel attributes (quick, 1 file)
+5. **Fix Issue 3** — add shortName to config + shorten titles across ~72 files
+6. **Fix Issue 4** — shorten 6 meta descriptions
+7. **Fix Issue 5** — fix 1 skipped heading
+8. **Fix Issue 6** — fix trailing slash patterns
+9. **Fix Issue 7** — expand 7 thin comparison pages
+10. **Rebuild + re-run checklist** to verify all fixes pass
+11. **Commit and push** to `claude/fix-seo-checklist-bgf43`

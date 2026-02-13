@@ -51,7 +51,7 @@ const relatedArticles = [
 ---
 
 <ContentLayout
-  title={`${product.name} Review (${new Date().getFullYear()}) — OffGrid Filters`}
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
   description={`Honest review of the ${product.name}. ${product.bestFor}.`}
   canonical={`/reviews/${product.slug}/`}
   category="Reviews"
@@ -152,7 +152,7 @@ const relatedArticles = [
 
   <div class="verdict-card">
     <h2>Final Verdict</h2>    <p>{product.verdict}</p>
-    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="noopener noreferrer nofollow" class="btn-primary">
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary">
       Check Price on Amazon
     </a>
     <p class="verdict-link">

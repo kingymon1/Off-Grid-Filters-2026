@@ -54,7 +54,7 @@ const relatedArticles = [
 ---
 
 <ContentLayout
-  title={`${guide.title} — OffGrid Filters`}
+  title={guide.title}
   description={guide.description}
   canonical={`/guides/${guide.slug}/`}
   category="Guides"
@@ -87,7 +87,7 @@ const relatedArticles = [
   <p>The 10-cup capacity fits most refrigerator doors, and the electronic filter change indicator takes the guesswork out of replacement timing. The filter uses activated carbon and ion exchange resin, compatible with Brita Standard replacement filters, giving you flexibility to use the cheapest option at any given time.</p>
   <p><strong>Pros:</strong> Lowest price for NSF 42/53 certification, compatible with Brita filters, electronic indicator.</p>
   <p><strong>Cons:</strong> Slower filtering speed (8-10 minutes for full pitcher), basic design, does not remove TDS or PFAS.</p>
-  <p><a href={getAffiliateUrl(amazonPitcher.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${amazonPitcher.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(amazonPitcher.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${amazonPitcher.slug}/`}>Read Full Review</a></p>
 
   <ProTip>Pair the Amazon Basics pitcher with Amazon Basics Enhanced replacement filters ($10.49 for 3) instead of Brita-brand cartridges. The Amazon Basics replacements carry more NSF certifications (42/53/401/372) at a lower price — one of the best value combinations in water filtration.</ProTip>
 
@@ -97,25 +97,25 @@ const relatedArticles = [
   <p>With 42,000+ reviews and a 4.6-star rating, this is one of the most battle-tested water filtration products on Amazon. It comes with a Brita Standard filter, but we recommend upgrading to <a href={`/reviews/${britaElite.slug}/`}>Brita Elite filters</a> — they last 3x longer (120 gallons vs 40) and reduce lead.</p>
   <p><strong>Pros:</strong> Massive capacity, spigot dispenser, trusted brand, compatible with Standard and Elite filters.</p>
   <p><strong>Cons:</strong> Large footprint in fridge, heavy when full, included Standard filter is basic.</p>
-  <p><a href={getAffiliateUrl(britaUltramax.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${britaUltramax.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(britaUltramax.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${britaUltramax.slug}/`}>Read Full Review</a></p>
 
   <h2>3. Amazon Basics Enhanced Replacement Filters (3-Pack) — {getPriceTier(amazonBasicsReplacement.price)}</h2>
   <p><strong>Best Replacement Filter Value</strong></p>
   <p>At $3.50 per filter, these are the best-value replacement filters available. What makes them remarkable is the NSF 42/53/401/372 quad certification — more certifications than Brita Standard filters at roughly half the price. Made in Europe, they are compatible with all Brita pitchers and dispensers (except Stream).</p>
   <p>Six months of filtered water for $10.49 is hard to argue with. The only caveat is a slightly slower flow rate compared to genuine Brita cartridges.</p>
-  <p><a href={getAffiliateUrl(amazonBasicsReplacement.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(amazonBasicsReplacement.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${amazonBasicsReplacement.slug}/`}>Read Full Review</a></p>
 
   <h2>4. Brita Elite Replacement Filters (2-Pack) — {getPriceTier(britaElite.price)}</h2>
   <p><strong>Best Premium Pitcher Filter Under $50</strong></p>
   <p>The Brita Elite (formerly Longlast) is the most capable pitcher filter you can buy. Each cartridge lasts 120 gallons — three times longer than standard filters — and removes 99% of lead, plus asbestos, benzene, and pharmaceuticals. The NSF 42/53/401 triple certification backs it up.</p>
   <p>At $14.89 per filter, the upfront cost is higher, but the cost per gallon ($0.12) is actually lower than Brita Standard ($0.15). It is the smartest upgrade for any existing Brita pitcher owner.</p>
-  <p><a href={getAffiliateUrl(britaElite.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${britaElite.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(britaElite.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${britaElite.slug}/`}>Read Full Review</a></p>
 
   <h2>5. Samsung HAF-QIN Refrigerator Filter — {getPriceTier(samsungHaf.price)}</h2>
   <p><strong>Best Samsung Fridge Filter</strong></p>
   <p>The most affordable OEM refrigerator filter in our catalog at {getPriceTier(samsungHaf.price)}. The quarter-turn installation takes under 30 seconds, and it is compatible across Samsung's French door, side-by-side, and 4-Door Flex lineups. Carbon block filtration handles chlorine taste and sediment effectively.</p>
   <p>The limitation is basic NSF 42 certification — it does not cover lead or PFAS. If you need deeper filtration from your Samsung fridge, supplement with an under-sink system for drinking water.</p>
-  <p><a href={getAffiliateUrl(samsungHaf.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${samsungHaf.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(samsungHaf.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${samsungHaf.slug}/`}>Read Full Review</a></p>
 
   <ProTip>Samsung fridge owners on a budget should pair the HAF-QIN for ice and cold water with a countertop pitcher for drinking water. This two-filter approach gives you better overall filtration than either solution alone.</ProTip>
 
@@ -124,19 +124,19 @@ const relatedArticles = [
   <p>At $7.12 per straw, the Timain is the most affordable personal water filter in existence. The 4-stage filtration system includes a 0.1-micron ultrafiltration membrane that removes 99.9999% of bacteria and 99.99% of protozoa. Each straw is rated for 1,500 liters.</p>
   <p>These belong in every hiking pack, vehicle glove box, and emergency kit. The dual-use design works as either a direct-sip straw or a squeeze filter when paired with a water bottle. At this price, there is zero reason not to have a pair on hand.</p>
   <p><strong>Limitation:</strong> Does not remove viruses, chemicals, or heavy metals. Not a replacement for home water filtration.</p>
-  <p><a href={getAffiliateUrl(timain.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${timain.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(timain.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${timain.slug}/`}>Read Full Review</a></p>
 
   <h2>7. MSR Aquatabs Water Purification Tablets (30-Pack) — {getPriceTier(msrAquatabs.price)}</h2>
   <p><strong>Best Chemical Water Purification</strong></p>
   <p>The MSR Aquatabs are the essential companion to any filter straw. While filter straws remove bacteria and protozoa, they cannot kill viruses. Aquatabs use NaDCC (chlorine-based) chemistry to kill 99.99% of viruses, bacteria, and Giardia cysts — the things filters miss.</p>
   <p>Each tablet treats 2 quarts in 30 minutes. The 30-pack weighs virtually nothing and costs less than 40 cents per treatment. EPA-registered and WHO-recommended. Pair with a Timain straw for the cheapest complete water purification kit possible: $26.22 total.</p>
-  <p><a href={getAffiliateUrl(msrAquatabs.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${msrAquatabs.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(msrAquatabs.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${msrAquatabs.slug}/`}>Read Full Review</a></p>
 
   <h2>8. AQUACREST UKF8001 Replacement Refrigerator Filter (6-Pack) — {getPriceTier(aquacrest.price)}</h2>
   <p><strong>Best Budget Refrigerator Filter</strong></p>
   <p>Six refrigerator filters for {getPriceTier(aquacrest.price)} works out to $2.81 per filter — a full year of filter changes for what a single OEM filter costs. The coconut shell carbon block provides reliable chlorine taste and odor reduction, and the NSF 42 certification confirms it.</p>
   <p>Compatible with Maytag UKF8001, Whirlpool EDR4RXD1, and many other models. The trade-off is basic filtration only — no lead or PFAS reduction. For homes with clean municipal water where taste improvement is the main goal, this is an outstanding value.</p>
-  <p><a href={getAffiliateUrl(aquacrest.asin)}>Check Price on Amazon</a> | <a href={`/reviews/${aquacrest.slug}/`}>Read Full Review</a></p>
+  <p><a href={getAffiliateUrl(aquacrest.asin)} rel="nofollow sponsored noopener" target="_blank">Check Price on Amazon</a> | <a href={`/reviews/${aquacrest.slug}/`}>Read Full Review</a></p>
 
   <h2>Other Budget Options Worth Considering</h2>
   <ul>
