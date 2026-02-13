@@ -1,0 +1,86 @@
+name: Content Generation Pipeline
+
+# This workflow generates new content pages from content-queue.yaml
+# and opens a PR for review.
+#
+# TOGGLE: The pipeline respects the `enabled` flag in content-queue.yaml.
+# When enabled: false, the script exits immediately without generating anything.
+# Set enabled: true and add queue items to activate.
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'   # Every Monday at 4:00 AM UTC
+  workflow_dispatch:        # Manual trigger from GitHub Actions UI
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check if pipeline is enabled
+        id: check
+        run: |
+          if grep -q "^enabled: true" content-queue.yaml 2>/dev/null; then
+            echo "enabled=true" >> $GITHUB_OUTPUT
+          else
+            echo "enabled=false" >> $GITHUB_OUTPUT
+            echo "Content pipeline is disabled. Set enabled: true in content-queue.yaml to activate."
+          fi
+
+      - name: Check for pending items
+        id: pending
+        if: steps.check.outputs.enabled == 'true'
+        run: |
+          if grep -q "status: pending" content-queue.yaml 2>/dev/null; then
+            echo "has_pending=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_pending=false" >> $GITHUB_OUTPUT
+            echo "No pending items in queue."
+          fi
+
+      - name: Generate content
+        if: steps.check.outputs.enabled == 'true' && steps.pending.outputs.has_pending == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-content.mjs
+
+      - name: Build and validate
+        if: steps.check.outputs.enabled == 'true' && steps.pending.outputs.has_pending == 'true'
+        run: |
+          npm run build
+          npm run checklist:auto || true
+
+      - name: Create Pull Request
+        if: steps.check.outputs.enabled == 'true' && steps.pending.outputs.has_pending == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: content/auto-${{ github.run_number }}
+          title: "content: auto-generated pages"
+          body: |
+            ## Auto-Generated Content
+
+            This PR was created by the content generation pipeline.
+            Review the generated pages for quality and accuracy before merging.
+
+            ### Checklist
+            - [ ] Content reads naturally (not AI-sounding)
+            - [ ] All facts and specs are accurate
+            - [ ] FAQs have detailed, helpful answers
+            - [ ] Related articles link to real pages
+            - [ ] Build passes without errors
+          commit-message: "content: add auto-generated pages"
+          delete-branch: true

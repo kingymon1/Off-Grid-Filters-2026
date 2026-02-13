@@ -14,6 +14,8 @@
     "images:auto": "node scripts/image-gen-server.mjs --auto",
     "checklist": "node scripts/checklist-server.mjs",
     "checklist:auto": "node scripts/checklist-server.mjs --auto",
+    "generate-content": "node scripts/generate-content.mjs",
+    "generate-content:dry": "node scripts/generate-content.mjs --dry-run",
     "postinstall": "node scripts/sanity-check.mjs"
   },
   "dependencies": {
