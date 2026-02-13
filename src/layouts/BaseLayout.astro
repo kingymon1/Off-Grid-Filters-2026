@@ -348,5 +348,11 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
 
     document.querySelectorAll('[data-counter]').forEach((el) => counterObserver.observe(el));
   </script>
+
+  <!-- Vercel Web Analytics -->
+  <script>
+    import { inject } from '@vercel/analytics';
+    inject();
+  </script>
 </body>
 </html>
