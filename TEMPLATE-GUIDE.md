@@ -116,8 +116,13 @@ Claude will:
 | `src/pages/404.astro` | Generic 404 |
 | Config files | package.json, astro.config.mjs, tailwind, tsconfig, etc. |
 | `scripts/convert-to-webp.mjs` | Image conversion to responsive WebP variants |
+| `scripts/generate-content.mjs` | Automated content generation (Claude API) |
+| `scripts/lib/template-reader.mjs` | Reads existing pages as AI templates |
+| `scripts/lib/config-patcher.mjs` | Patches config.ts and image-map.ts for new content |
+| `content-queue.yaml` | Content generation queue (disabled by default) |
 | `public/` | Favicons, robots.txt |
 | `.github/workflows/ci.yml` | CI pipeline |
+| `.github/workflows/content-pipeline.yml` | Weekly content generation action |
 
 ## What Claude Generates
 
@@ -234,6 +239,93 @@ Every site built from this template includes AI search optimization out of the b
 **Wikidata entity:** Set `wikidata_entity` in `product-brief.yaml` to the Wikidata URL for your
 niche topic. This is used in the `about` property of Article schemas on guide, roundup, and
 knowledge base pages.
+
+## Automated Content Pipeline (Post-Launch)
+
+The template includes a content generation pipeline that can automatically create new
+comparisons, guides, and knowledge base articles using the Claude API. It's disabled by
+default and designed to be activated after the initial site is live.
+
+### How It Works
+
+```
+content-queue.yaml              ← Define what to generate (type, slug, target date)
+        ↓
+scripts/generate-content.mjs    ← Reads queue, calls Claude API, writes .astro files
+        ↓
+Patches config.ts + image-map.ts automatically
+        ↓
+.github/workflows/content-pipeline.yml   ← Weekly GitHub Action (Mondays 4am UTC)
+        ↓
+Opens a PR for review → merge to deploy
+```
+
+### Activation Steps
+
+1. **Add your Anthropic API key** to GitHub repository secrets as `ANTHROPIC_API_KEY`
+2. **Set `enabled: true`** in `content-queue.yaml`
+3. **Add queue entries** — uncomment the examples or add your own
+4. **Push to main** — the weekly Action picks up pending items, or trigger manually from GitHub Actions UI
+
+### Adding Content to the Queue
+
+Edit `content-queue.yaml` and add entries:
+
+```yaml
+enabled: true
+
+queue:
+  - type: comparison
+    status: pending
+    target_date: "2026-03-01"
+    productA: "product-a-slug"
+    productB: "product-b-slug"
+    slug: "product-a-slug-vs-product-b-slug"
+
+  - type: activity-guide
+    status: pending
+    target_date: "2026-03-08"
+    slug: "water-filters-for-van-life"
+    title: "Best Water Filters for Van Life: 2026 Guide"
+    description: "How to choose water filters for van life and mobile living."
+
+  - type: knowledge
+    status: pending
+    target_date: "2026-03-15"
+    slug: "activated-carbon-explained"
+    title: "Activated Carbon Filters Explained"
+    description: "How activated carbon filtration works and when to use it."
+```
+
+Supported types: `comparison`, `activity-guide`, `buyer-guide`, `knowledge`
+
+### Running Locally
+
+```bash
+# Preview what would be generated (no files written)
+npm run generate-content:dry
+
+# Generate content (requires ANTHROPIC_API_KEY in .env)
+npm run generate-content
+```
+
+### Safety
+
+- The pipeline opens a **PR for review** — it never pushes directly to main
+- Build and checklist validation run before the PR is created
+- The `enabled: false` toggle ensures it does nothing until explicitly activated
+- Generated content uses existing pages as structural templates, so output matches the site's format
+
+### What Gets Automated
+
+| Content Type | Queue `type` | What the AI needs |
+|-------------|-------------|-------------------|
+| Comparisons | `comparison` | Two product slugs (must exist in config) |
+| Activity guides | `activity-guide` | Title, slug, description |
+| Buyer guides | `buyer-guide` | Title, slug, description |
+| Knowledge base | `knowledge` | Title, slug, description |
+
+Product reviews and category roundups are NOT automated — they require manual research and should be built with the full CLAUDE.md workflow.
 
 ## Key Differences from Single-Product Template
 

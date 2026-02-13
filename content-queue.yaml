@@ -1,0 +1,50 @@
+# ============================================================
+# Content Generation Queue
+# ============================================================
+#
+# Toggle the pipeline on/off with the `enabled` flag below.
+# When enabled: false, the generation script and GitHub Action
+# will exit immediately without generating anything.
+#
+# To add new content: append entries to the `queue` list with
+# status: pending. The generation script processes pending items
+# and marks them as `generated` after creating the files.
+#
+# Supported types: comparison, activity-guide, buyer-guide, knowledge
+#
+# ============================================================
+
+enabled: false   # <-- Set to true to activate content generation
+
+queue:
+  # ── Example: New comparison ────────────────────────────────
+  # - type: comparison
+  #   status: pending
+  #   target_date: "2026-03-01"
+  #   productA: "ispring-rcc7ak"
+  #   productB: "waterdrop-g3p600"
+  #   slug: "ispring-rcc7ak-vs-waterdrop-g3p600"
+
+  # ── Example: New activity guide ────────────────────────────
+  # - type: activity-guide
+  #   status: pending
+  #   target_date: "2026-03-08"
+  #   slug: "water-filters-for-van-life"
+  #   title: "Best Water Filters for Van Life: 2026 Guide"
+  #   description: "How to choose and use water filters for van life and mobile living."
+
+  # ── Example: New buyer guide ───────────────────────────────
+  # - type: buyer-guide
+  #   status: pending
+  #   target_date: "2026-03-15"
+  #   slug: "water-filter-installation-guide"
+  #   title: "Water Filter Installation Guide"
+  #   description: "Step-by-step installation instructions for every filter type."
+
+  # ── Example: New knowledge base article ────────────────────
+  # - type: knowledge
+  #   status: pending
+  #   target_date: "2026-03-22"
+  #   slug: "activated-carbon-explained"
+  #   title: "Activated Carbon Filters Explained"
+  #   description: "How activated carbon filtration works and when to use it."

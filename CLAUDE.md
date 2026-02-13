@@ -1263,6 +1263,51 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
   ```
 - Add `"checklist": "node scripts/checklist-server.mjs"` to package.json scripts
 
+**`scripts/generate-content.mjs`:**
+- Automated content generation pipeline — reads `content-queue.yaml`, generates new `.astro`
+  pages using the Claude API, patches `config.ts` and `image-map.ts`, and generates placeholder images
+- **Disabled by default** — controlled by `enabled: false` in `content-queue.yaml`
+- Reads existing pages as structural templates (no separate template files to maintain)
+- For comparisons, loads both products' full data from config for the AI prompt
+- Patches `config.ts` (adds comparison/guide entries) and `image-map.ts` (adds hero image paths)
+- Runs `generate-local-images.mjs` after generation for placeholder images
+- **Usage:**
+  ```bash
+  # Generate pending content (requires ANTHROPIC_API_KEY in .env)
+  npm run generate-content
+
+  # Preview what would be generated without writing files
+  npm run generate-content:dry
+  ```
+- Add `"generate-content": "node scripts/generate-content.mjs"` to package.json scripts
+- Add `"generate-content:dry": "node scripts/generate-content.mjs --dry-run"` to package.json scripts
+
+**`scripts/lib/template-reader.mjs`:**
+- Reads existing `.astro` pages as structural templates for AI content generation
+- Maps content types to example pages (comparison → `amazon-basics-vs-brita-standard.astro`, etc.)
+- Returns the template content and output directory for each content type
+
+**`scripts/lib/config-patcher.mjs`:**
+- Programmatically edits `config.ts` and `image-map.ts` using regex-based insertion
+- Adds comparisons to the `comparisons` array, guides to the `guides` array
+- Adds hero image entries to the `heroImages` object in `image-map.ts`
+- Skips entries that already exist (idempotent)
+
+**`content-queue.yaml`:**
+- Content generation queue with on/off toggle (`enabled: false` by default)
+- Each entry specifies: content type, slug, target publish date, and type-specific data
+- Supported types: `comparison`, `activity-guide`, `buyer-guide`, `knowledge`
+- The generation script processes `status: pending` entries and marks them `status: generated`
+- Example entries are included as comments
+
+**`.github/workflows/content-pipeline.yml`:**
+- Scheduled GitHub Action for automated content generation (every Monday at 4am UTC)
+- Checks the `enabled` flag in `content-queue.yaml` before doing anything
+- Checks for pending queue items before calling the generation script
+- Runs `npm run build` and `npm run checklist:auto` to validate generated content
+- Opens a PR for human review (does NOT auto-merge to main)
+- Requires `ANTHROPIC_API_KEY` in GitHub repository secrets
+
 ### 3.10 `.env.example`
 
 Create a `.env.example` file (committed to repo, unlike `.env`):
@@ -1270,6 +1315,11 @@ Create a `.env.example` file (committed to repo, unlike `.env`):
 # Google Gemini API Key for AI image generation
 # Get yours at: https://aistudio.google.com/apikey
 GEMINI_API_KEY=
+
+# Anthropic API Key for automated content generation
+# Get yours at: https://console.anthropic.com/
+# Required only if using the content generation pipeline
+ANTHROPIC_API_KEY=
 ```
 
 ---
@@ -1578,7 +1628,7 @@ Every page links to 4 related articles:
 
 When complete, the project should contain:
 
-### Root (15 files)
+### Root (16 files)
 - [ ] `package.json`
 - [ ] `astro.config.mjs`
 - [ ] `tailwind.config.ts`
@@ -1594,9 +1644,11 @@ When complete, the project should contain:
 - [ ] `IMAGE-GUIDE.md` (generated)
 - [ ] `LAUNCH-CHECKLIST.md` (12-section sign-off checklist)
 - [ ] `GOOGLE-READINESS.md` (Google Search Console compliance guide)
+- [ ] `content-queue.yaml` (content generation queue — disabled by default)
 
-### .github (1 file)
+### .github (2 files)
 - [ ] `.github/workflows/ci.yml`
+- [ ] `.github/workflows/content-pipeline.yml` (weekly content generation action)
 
 ### Public (5+ files)
 - [ ] `public/robots.txt`
@@ -1655,8 +1707,11 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (4 files)
+### Scripts (7 files)
 - [ ] `scripts/convert-to-webp.mjs`
 - [ ] `scripts/generate-local-images.mjs`
 - [ ] `scripts/image-gen-server.mjs`
 - [ ] `scripts/checklist-server.mjs`
+- [ ] `scripts/generate-content.mjs` (content generation orchestrator)
+- [ ] `scripts/lib/template-reader.mjs` (reads existing pages as AI templates)
+- [ ] `scripts/lib/config-patcher.mjs` (patches config.ts and image-map.ts)
