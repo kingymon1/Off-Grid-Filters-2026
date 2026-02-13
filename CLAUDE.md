@@ -345,8 +345,14 @@ which is allowed by `script-src 'self'`. See Section 3.2a for the external scrip
 **Cache headers:**
 
 **IMPORTANT: Vercel uses `path-to-regexp` syntax for route patterns — NOT regex.**
-Use `:path*` for wildcards (e.g., `/assets/:path*`), not `(.*)` or `\\.(?:css|js)$`.
+Use `:path*` for wildcards (e.g., `/assets/:path*`), not `\\.(?:css|js)$`.
 Regex patterns will cause Vercel build/deployment failures.
+
+**CRITICAL EXCEPTION — Security headers catch-all:** The security headers rule MUST use
+`"source": "/(.*)"` — NOT `"source": "/:path*"`. The `/:path*` pattern does NOT match
+the bare root path `/` in Vercel's path-to-regexp implementation, causing ALL security
+headers (CSP, HSTS, X-Frame-Options, etc.) to be missing on the homepage. The `/(.*)`
+pattern is valid path-to-regexp syntax and correctly matches every route including `/`.
 
 - `/assets/:path*` → `Cache-Control: public, max-age=86400, stale-while-revalidate=43200` (images can be replaced at same URL)
 - `/_astro/:path*` → `Cache-Control: public, max-age=31536000, immutable` (Astro hash-named bundles)
@@ -1528,7 +1534,7 @@ Every page links to 4 related articles:
 
 ### Cache Headers
 11. **Never use `immutable` on `/assets/*` images.** Images can be replaced at the same URL. Use `max-age=86400` with `stale-while-revalidate` instead. Only `/_astro/*` bundles (hash-named) should be `immutable`.
-11.5. **Vercel uses `path-to-regexp` syntax in `vercel.json`, NOT regex.** Use `/assets/:path*` not `/assets/(.*)`. Regex patterns like `\\.(?:css|js)$` cause deployment failures.
+11.5. **Vercel uses `path-to-regexp` syntax in `vercel.json`, NOT regex.** Use `/assets/:path*` not `/assets/(.*)` for asset routes. Exception: the security headers catch-all MUST use `"source": "/(.*)"` because `/:path*` does not match the bare root path `/`, causing all security headers to be missing on the homepage.
 12. **After replacing images**, allow up to 24 hours for CDN cache to expire, or instruct users to hard-refresh.
 
 ### Button/Text Contrast
