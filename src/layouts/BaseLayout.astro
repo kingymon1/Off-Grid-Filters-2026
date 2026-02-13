@@ -42,10 +42,12 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
 
   <link rel="icon" href="/favicon.png" type="image/png">
 
-  <!-- Inter font -->
+  <!-- Inter font (non-render-blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"></noscript>
 
   <!-- Preload hero product image for LCP optimization -->
   {preloadHero && siteConfig.heroPreloadImage && (
