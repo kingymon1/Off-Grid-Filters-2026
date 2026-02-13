@@ -20,6 +20,7 @@ interface Props {
   canonical: string;
   ogTitle?: string;
   ogDescription?: string;
+  ogImage?: string;
   category?: string;
   currentPage: string;
   schema?: object | object[];
@@ -34,6 +35,7 @@ const {
   canonical,
   ogTitle,
   ogDescription,
+  ogImage,
   category,
   currentPage,
   schema,
@@ -46,6 +48,9 @@ function formatDate(iso: string): string {
   const d = new Date(iso + 'T00:00:00Z');
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
+
+// Derive OG image: explicit ogImage > heroImage (as absolute URL) > BaseLayout default
+const resolvedOgImage = ogImage || (heroImage ? `${siteConfig.siteUrl}${heroImage}` : undefined);
 
 // Build breadcrumb schema automatically from category/currentPage props
 const breadcrumbItems = [
@@ -81,6 +86,7 @@ if (schema) {
   canonical={canonical}
   ogTitle={ogTitle}
   ogDescription={ogDescription}
+  ogImage={resolvedOgImage}
   schema={fullSchema}
   heroImage={heroImage}
 >
