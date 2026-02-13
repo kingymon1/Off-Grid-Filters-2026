@@ -11,52 +11,86 @@
 
 ## Quick Start — Checklist Runner
 
-Open a **new terminal window** and follow these steps in order:
+Open a **new terminal window** and run the following commands one at a time, in order.
+Copy-paste each line, press Enter, and wait for it to finish before running the next one.
 
 **Step 1.** Navigate to the project folder:
 ```bash
 cd Off-Grid-Filters-2026
 ```
 
-**Step 2.** Install dependencies (skip if you already ran this):
+**Step 2.** Pull the latest code (important — always do this before running the checklist):
+```bash
+git pull origin main
+```
+
+**Step 3.** Install dependencies:
 ```bash
 npm install
 ```
 
-**Step 3.** Start the checklist dashboard:
+**Step 4.** Start the checklist dashboard:
 ```bash
 npm run checklist
 ```
 
-**Step 4.** Open your browser and go to:
+**Step 5.** Verify the terminal output. You should see this:
+```
+  Dashboard v3 — clean start, no stale data
+  Controls: [Reset] [Run] | Filter: [▾] [Export]
+```
+If you do NOT see `Dashboard v3` in the output, stop (`Ctrl+C`), run `git pull origin main`
+again, and restart from Step 4. See **Troubleshooting** below for more help.
+
+**Step 6.** Open your browser and go to:
 ```
 http://localhost:3200
 ```
-The dashboard always starts clean — it never loads old results from previous sessions.
-You should see all sections showing **"Not run"** badges with dashes (`-`) in the summary cards.
-
-The header controls bar looks like this:
+You should see a clean dashboard with:
+- All sections showing **"Not run"** badges
+- Dashes (`-`) in the Passed / Failed / Warnings / Total summary cards
+- A header controls bar that looks like this:
 ```
 [Reset]  [Run Automated Checks (S1-S5)]  |  Filter: [Full Report ▾]  [Export]
 ```
 
-**Step 5.** Click the orange **"Run Automated Checks (S1-S5)"** button. This runs the build
+**Step 7.** Click the orange **"Run Automated Checks (S1-S5)"** button. This runs the build
 pipeline, SEO audit, schema validation, link crawling, and content quality checks. Results
 appear in the UI when all checks complete (may take a few minutes).
 
-**Step 6.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
+**Step 8.** Scroll down to Sections 6-12 and use the **Pass / Fail / N/A** buttons for each
 manual check item (Lighthouse, security headers, accessibility, etc.).
 
-**Step 7.** To download results, pick a filter from the **"Filter:"** dropdown (Full Report,
+**Step 9.** To download results, pick a filter from the **"Filter:"** dropdown (Full Report,
 Failures + Warnings, Failures Only, or Warnings Only), then click the blue **"Export"** button.
 
 > **Reset mid-session:** Click the **"Reset"** button (left side of controls) to clear all
 > results and start over without restarting the server.
 
 > **CLI mode (no browser):** If you prefer terminal-only output, run `npm run checklist:auto`
-> instead of Step 3. This prints results to stdout and exits with code 1 if any checks fail.
+> instead of Step 4. This prints results to stdout and exits with code 1 if any checks fail.
 >
 > **To stop the server:** Press `Ctrl+C` in the terminal where it's running.
+
+### Troubleshooting
+
+**Terminal does NOT show "Dashboard v3":**
+Your local code is outdated. Run `git pull origin main` to get the latest version, then
+restart with `npm run checklist`.
+
+**Browser shows old results or missing controls:**
+Hard-refresh the page to clear your browser cache: `Cmd+Shift+R` (Mac) or `Ctrl+Shift+R`
+(Windows/Linux). If that doesn't work, stop the server (`Ctrl+C`), run `git pull origin main`,
+and start again.
+
+**"address already in use" error:**
+Another checklist server is already running. Find the terminal where it's running and press
+`Ctrl+C` to stop it, then try again. If you can't find it, run:
+`lsof -ti:3200 | xargs kill` to force-stop whatever is using port 3200.
+
+**"npm run checklist" says "missing script: checklist":**
+Your local code is outdated and doesn't have the checklist script yet. Run
+`git pull origin main` then try again.
 
 ---
 
