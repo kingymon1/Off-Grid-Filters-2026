@@ -27,6 +27,7 @@ describe('generateArticleSchema', () => {
     expect(result.description).toBe('A test description');
     expect(result.mainEntityOfPage['@id']).toBe(`${SITE_URL}/test/`);
     expect(result.author.name).toBe(SITE_NAME);
+    expect(result.author.url).toBe(`${SITE_URL}/about/`);
     expect(result.publisher.name).toBe(SITE_NAME);
   });
 
@@ -50,8 +51,8 @@ describe('generateArticleSchema', () => {
       dateModified: '2026-02-04',
     });
 
-    expect(result.datePublished).toBe('2026-01-15');
-    expect(result.dateModified).toBe('2026-02-04');
+    expect(result.datePublished).toBe('2026-01-15T00:00:00+00:00');
+    expect(result.dateModified).toBe('2026-02-04T00:00:00+00:00');
   });
 
   it('includes mentions when provided', () => {
@@ -65,7 +66,7 @@ describe('generateArticleSchema', () => {
     });
 
     expect(result.mentions).toHaveLength(1);
-    expect(result.mentions[0]['@type']).toBe('Product');
+    expect(result.mentions[0]['@type']).toBe('Thing');
     expect(result.mentions[0].name).toBe('Brita Elite');
     expect(result.mentions[0].sameAs).toBe('https://amazon.com/dp/B0CX5PV6LC');
   });

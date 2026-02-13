@@ -35,6 +35,12 @@ export interface BreadcrumbItem {
   url: string;
 }
 
+// Ensure dates are full ISO 8601 with timezone (Google requires this)
+function toISO8601(date: string): string {
+  if (date.includes('T')) return date; // Already has time component
+  return `${date}T00:00:00+00:00`;
+}
+
 // Generate Article schema
 export function generateArticleSchema({
   title,
@@ -53,6 +59,7 @@ export function generateArticleSchema({
     author: {
       "@type": "Organization",
       name: SITE_NAME,
+      url: `${SITE_URL}/about/`,
     },
     publisher: {
       "@type": "Organization",
@@ -62,8 +69,8 @@ export function generateArticleSchema({
         url: `${SITE_URL}${siteConfig.seo.defaultOgImage}`,
       },
     },
-    datePublished,
-    dateModified,
+    datePublished: toISO8601(datePublished),
+    dateModified: toISO8601(dateModified),
     image,
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -71,14 +78,14 @@ export function generateArticleSchema({
     },
     ...(mentions && mentions.length > 0 && {
       mentions: mentions.map(m => ({
-        "@type": m.type || "Thing",
+        "@type": "Thing",
         name: m.name,
         sameAs: m.url,
       })),
     }),
     ...(about && about.length > 0 && {
       about: about.map(a => ({
-        "@type": a.type || "Thing",
+        "@type": "Thing",
         name: a.name,
         sameAs: a.url,
       })),
