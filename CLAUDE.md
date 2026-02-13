@@ -342,10 +342,14 @@ Create these files in this order:
 `.ts` files referenced via `<script src="...">` produces `<script type="module" src="/assets/xxx.hash.js">`
 which is allowed by `script-src 'self'`. See Section 3.2a for the external script files.
 
-**Cache headers (split rules for `/assets/`):**
-- `/assets/(.*)\\.(?:css|js)$` → `Cache-Control: public, max-age=31536000, immutable` (hash-named build output)
-- `/assets/(.*)\\.(?:webp|png|jpg|svg|ico)$` → `Cache-Control: public, max-age=86400, stale-while-revalidate=86400` (images — can be replaced at same URL)
-- `/_astro/*` → `Cache-Control: public, max-age=31536000, immutable` (Astro hash-named bundles)
+**Cache headers:**
+
+**IMPORTANT: Vercel uses `path-to-regexp` syntax for route patterns — NOT regex.**
+Use `:path*` for wildcards (e.g., `/assets/:path*`), not `(.*)` or `\\.(?:css|js)$`.
+Regex patterns will cause Vercel build/deployment failures.
+
+- `/assets/:path*` → `Cache-Control: public, max-age=86400, stale-while-revalidate=43200` (images can be replaced at same URL)
+- `/_astro/:path*` → `Cache-Control: public, max-age=31536000, immutable` (Astro hash-named bundles)
 - Sitemaps → `Cache-Control: public, max-age=86400`
 
 **8. `.gitignore`** — node_modules, dist, .astro, .env, logs, OS files.
@@ -1509,6 +1513,7 @@ Every page links to 4 related articles:
 
 ### Cache Headers
 11. **Never use `immutable` on `/assets/*` images.** Images can be replaced at the same URL. Use `max-age=86400` with `stale-while-revalidate` instead. Only `/_astro/*` bundles (hash-named) should be `immutable`.
+11.5. **Vercel uses `path-to-regexp` syntax in `vercel.json`, NOT regex.** Use `/assets/:path*` not `/assets/(.*)`. Regex patterns like `\\.(?:css|js)$` cause deployment failures.
 12. **After replacing images**, allow up to 24 hours for CDN cache to expire, or instruct users to hard-refresh.
 
 ### Button/Text Contrast
