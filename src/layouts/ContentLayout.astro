@@ -25,6 +25,7 @@ interface Props {
   schema?: object | object[];
   relatedArticles?: Article[];
   lastUpdated?: string;
+  heroImage?: string;
 }
 
 const {
@@ -38,6 +39,7 @@ const {
   schema,
   relatedArticles = [],
   lastUpdated,
+  heroImage,
 } = Astro.props;
 
 function formatDate(iso: string): string {
@@ -80,6 +82,7 @@ if (schema) {
   ogTitle={ogTitle}
   ogDescription={ogDescription}
   schema={fullSchema}
+  heroImage={heroImage}
 >
   <HeaderAstro />
   <BreadcrumbsAstro category={category} currentPage={currentPage} />

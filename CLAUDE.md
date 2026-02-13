@@ -315,7 +315,7 @@ Create these files in this order:
 }
 ```
 
-**2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind). Include `vite: { build: { assetsInlineLimit: 0 } }` to force all scripts to be emitted as external files (prevents Vite from re-inlining small scripts, which would break CSP `script-src 'self'`).
+**2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind). Set `build: { inlineStylesheets: 'always' }` to inline all CSS into HTML (eliminates render-blocking `<link>` stylesheet requests — critical for Core Web Vitals). Include `vite: { build: { assetsInlineLimit: 0 } }` to force all scripts to be emitted as external files (prevents Vite from re-inlining small scripts, which would break CSP `script-src 'self'`).
 
 **3. `tailwind.config.ts`** — Map CSS custom properties to Tailwind tokens. Use Inter font. Include tailwindcss-animate plugin.
 
@@ -515,18 +515,30 @@ The `ProductImage` component imports from this map and determines render mode:
 - Slug NOT in `productSlugs` → **editorial** (full-width cover)
 - No image found → **SVG placeholder** (icon + label fallback)
 
-### 3.2a Source: External Scripts (3 files)
+### 3.2a Source: External Scripts (4 files)
 
 Astro inlines `<script>` content as `<script type="module">` in built HTML. CSP `script-src 'self'`
 blocks these inline scripts. To stay CSP-safe, all client-side JavaScript MUST live in external
 `.ts` files referenced via `<script src="...">`. This produces
 `<script type="module" src="/assets/xxx.hash.js">` in the build output — allowed by CSP.
 
+**`src/scripts/main.ts`** — Single entry point that imports all other scripts:
+```typescript
+import './interactions';
+import './analytics';
+import './header';
+```
+**Why a single entry?** Multiple `<script src="...">` tags produce separate ES module downloads
+that load sequentially (JS waterfall). A single entry lets Vite bundle everything into one file,
+eliminating the waterfall. Only `main.ts` is referenced in BaseLayout — the other 3 files are
+imported by it, not loaded directly.
+
 **`src/scripts/interactions.ts`** — Page interaction behaviors:
 - Google Fonts activation: switches `media="print"` → `"all"` on the `#google-fonts` link element
 - Scroll reveal IntersectionObserver for all 6 reveal variants (`.reveal`, `.reveal-left`, etc.)
 - Scroll progress bar width update via `requestAnimationFrame`
-- Spotlight card mouse-tracking (updates `--mouse-x`/`--mouse-y` CSS custom properties on mousemove)
+- Spotlight card mouse-tracking (updates `--mouse-x`/`--mouse-y` CSS custom properties on mousemove,
+  with `getBoundingClientRect()` cached in a `WeakMap` and updated on resize to avoid forced reflow)
 - Animated counter IntersectionObserver (eased number animation, 1500ms duration)
 
 **`src/scripts/analytics.ts`** — Vercel Web Analytics:
@@ -591,18 +603,23 @@ Vite from re-inlining small scripts during the build.
   ```
   The `media="print"` prevents render-blocking. `interactions.ts` switches it to `media="all"` on load.
   **Do NOT use `onload` inline handler** — CSP blocks inline event handlers.
-- DNS prefetch for Amazon (`dns-prefetch` + `preconnect`)
+- DNS prefetch for Amazon (`dns-prefetch` only — no `preconnect`, since the page never fetches
+  resources from Amazon; all Amazon URLs are navigation `<a>` links)
+- **`heroImage` prop** (optional string) — when provided, renders a `<link rel="preload">` for the
+  hero image with responsive `imagesrcset`/`imagesizes` attributes. Each content page passes its
+  own hero image path (e.g., `/assets/product-slug-hero.webp`). This is critical for LCP — without
+  it, the hero image doesn't start downloading until after CSS and HTML are fully parsed.
 - Favicon links (ico + png)
 - Schema.org JSON-LD slot
 - Vercel Analytics import
 - `<body>`: skip nav link, scroll progress bar div, slot for content, noise overlay div
 - `id="main-content"` on main element
-- **External script references (CSP-safe, no inline JS):**
+- **Single bundled script entry (CSP-safe, no inline JS):**
   ```html
-  <script src="../scripts/interactions.ts"></script>
-  <script src="../scripts/analytics.ts"></script>
+  <script src="../scripts/main.ts"></script>
   ```
-  These produce `<script type="module" src="/assets/xxx.hash.js">` in the build output.
+  This imports interactions, analytics, and header scripts via a single entry point.
+  Vite bundles them into one file, eliminating the JS waterfall from multiple `<script>` tags.
   **Do NOT use inline `<script>` tags** — Astro inlines them, breaking CSP.
 
 **`src/layouts/ContentLayout.astro`** must include:
@@ -671,7 +688,12 @@ Vite from re-inlining small scripts during the build.
 - Slot for content
 
 **`ProductImage.astro`:**
-- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string, slug?: string, src?: string`
+- Props: `alt: string, aspect?: 'hero'|'square'|'wide'|'tall', icon?: string, caption?: string, slug?: string, src?: string, priority?: boolean`
+- **CLS prevention:** All `<img>` elements include `width` and `height` attributes computed from the
+  aspect ratio (e.g., `width="1200" height="800"` for `aspect="wide"`). These are intrinsic size
+  hints — the CSS still controls rendering, but the browser reserves the correct space before loading.
+- **`priority` prop:** When `true`, sets `loading="eager"`, `decoding="sync"`, and `fetchpriority="high"`
+  on the `<img>` tag. Use on hero images (ProductHero passes `priority={true}` by default).
 - **3-mode rendering system** powered by `src/lib/image-map.ts`:
 
   **Mode 1: Editorial** (scene/lifestyle photos — roundups, comparisons, guides, knowledge base, about)
@@ -1663,7 +1685,8 @@ When complete, the project should contain:
 - [ ] `src/lib/schema.ts`
 - [ ] `src/lib/schema.test.ts`
 
-### Source: Scripts (3 files)
+### Source: Scripts (4 files)
+- [ ] `src/scripts/main.ts` (single entry point — imports the other 3)
 - [ ] `src/scripts/interactions.ts`
 - [ ] `src/scripts/analytics.ts`
 - [ ] `src/scripts/header.ts`
