@@ -1210,21 +1210,44 @@ npm run test
 npm run build
 ```
 
-Fix any errors before proceeding.
+Fix any errors before proceeding. All four commands must exit with code 0.
 
-### 4.2 Complete LAUNCH-CHECKLIST.md Sections 1-5
+### 4.2 Run Automated Checklist and Fix All Failures
 
-Work through each section sequentially. Every item must pass:
+**This is a fix loop, not a one-time check.** Run the automated checklist, read the output,
+fix every failure and warning, then run it again. Repeat until the output is clean.
 
-**Section 1: Build & Infrastructure** — Build pipeline, file inventory, configuration integrity.
-**Section 2: On-Page SEO** — Unique titles, unique meta descriptions, heading hierarchy,
-canonical URLs, OG tags, HTML fundamentals.
-**Section 3: Structured Data & Schema** — Schema presence by page type, schema quality,
-visible-to-schema correspondence.
-**Section 4: Internal Linking & Architecture** — Zero orphan pages, 3-click depth, cross-linking,
-navigation completeness, link health.
-**Section 5: Content Quality** — Per-page content checks, review quality, comparison quality,
-affiliate compliance, content uniqueness, information gain.
+```bash
+npm run checklist:auto
+```
+
+This runs Sections 1-5 of LAUNCH-CHECKLIST.md in CLI mode and prints results to stdout.
+It checks ~50 items across 5 sections:
+- **S1: Build & Infrastructure** — file inventory, config integrity, page count, llms.txt
+- **S2: On-Page SEO** — unique titles, meta descriptions, heading hierarchy, canonicals, OG tags
+- **S3: Structured Data** — schema presence, valid JSON-LD, per-page dates, entity linking, no SearchAction
+- **S4: Internal Linking** — zero orphan pages, broken links, affiliate rel attributes, trailing slashes
+- **S5: Content Quality** — no placeholder text, word count minimums, ProductImage, review cons, disclosure
+
+**Fix loop:**
+1. Run `npm run checklist:auto`
+2. Read the full output — every line marked FAIL or WARN
+3. Fix the root cause of each failure in the source code
+4. Run `npm run build` to rebuild
+5. Run `npm run checklist:auto` again
+6. Repeat steps 2-5 until output shows **zero failures**
+
+**Common failures to watch for (fix these proactively during the build):**
+- **llms.txt "undefined"** — Comparison interface has no `title` field. Use `getProductBySlug()` to resolve names.
+- **Affiliate links missing `rel` attributes** — Every Amazon link needs `rel="nofollow sponsored noopener"`. Check ComparisonTable, ProductHero, and all inline CTAs.
+- **Article schema missing dates** — Every product, category, comparison, and guide in config needs a `publishDate`. Pass it through to Article schema as both `datePublished` and `dateModified`.
+- **Entity linking missing** — Every Article schema needs an `about` property. Reviews: product entity. Guides/roundups: Wikidata niche entity.
+- **SearchAction in schema** — WebSite schema must NOT include SearchAction. Static sites have no search.
+- **Orphan pages** — Every page needs 2+ inbound links. Resource hub must link to ALL content pages.
+- **Placeholder text** — Search for "TODO", "TBD", "lorem ipsum", "[placeholder]", "coming soon" — remove all.
+- **Review cons missing** — Every review page must contain the word "Cons" or "Weaknesses" as a heading/label.
+- **Related articles count** — Every content page needs exactly 4 related article links.
+- **Canonical trailing slash** — All canonical URLs must be absolute (`https://...`) and end with `/`.
 
 ### 4.3 Complete GOOGLE-READINESS.md Pre-Submission Checklist
 
@@ -1236,26 +1259,6 @@ Work through Section 2 of GOOGLE-READINESS.md. All 7 subsections must pass:
 - 2.5 Internal Linking Readiness
 - 2.6 Affiliate Compliance
 - 2.7 Security & Deployment
-
-### 4.4 Legacy Quick Checklist (Summary)
-
-For every page, verify at minimum:
-- [ ] H1 contains target keyword naturally
-- [ ] Meta description is unique and under 160 characters
-- [ ] Breadcrumbs are correct
-- [ ] Related articles link to 4 relevant pages
-- [ ] At least 1 CTA with affiliate link
-- [ ] Schema markup is valid (includes per-page datePublished/dateModified)
-- [ ] Entity linking present (`about` and/or `mentions` in Article schema)
-- [ ] Visible "Last updated" date matches schema dateModified
-- [ ] No placeholder text remains
-- [ ] Affiliate disclosure is in footer
-- [ ] ProductImage is present (renders as SVG placeholder at this stage — that's expected)
-- [ ] EmailCapture present on guide pages, homepage, and resource hub
-- [ ] All affiliate links use `rel="nofollow sponsored noopener"`
-- [ ] All internal links resolve (zero broken links)
-- [ ] Zero orphan pages (every page has 2+ contextual inbound links)
-- [ ] Canonical URLs match sitemap URLs exactly
 
 **After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
 placeholder images. Push to GitHub, deploy to Vercel. Then proceed to Phase 5 for real images.
