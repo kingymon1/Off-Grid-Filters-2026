@@ -31,6 +31,8 @@ If `npm install` shows a "NESTED DIRECTORY" error, see [Troubleshooting](#troubl
 | `npm run checklist:auto` | Run all quality checks (should show 59/59 pass) |
 | `npm run checklist` | Open quality check dashboard at http://localhost:3200 |
 | `npm run images` | Open image generation dashboard at http://localhost:3100 |
+| `npm run generate-content:dry` | Preview what the content pipeline would generate |
+| `npm run generate-content` | Generate new content from queue (needs API key) |
 | `npm run lint` | Check code for errors |
 | `npm run test` | Run unit tests |
 
@@ -44,6 +46,16 @@ git pull origin main
 npm install
 npm run build
 ```
+
+## Automated Content Pipeline
+
+The site includes an automated content generation pipeline (disabled by default). See [TEMPLATE-GUIDE.md](TEMPLATE-GUIDE.md#automated-content-pipeline-post-launch) for activation steps.
+
+Quick summary:
+1. Add `ANTHROPIC_API_KEY` to GitHub secrets
+2. Set `enabled: true` in `content-queue.yaml`
+3. Add queue entries (comparisons, guides, knowledge base articles)
+4. The weekly GitHub Action generates content and opens a PR for review
 
 ## Adding Product Images
 
