@@ -1184,13 +1184,17 @@ GEMINI_API_KEY=
 **Quick start — run the automated checklist from a fresh terminal:**
 
 1. `cd Off-Grid-Filters-2026` — navigate to the project root
-2. `npm install` — install dependencies (skip if already done)
-3. `npm run checklist` — starts the dashboard server at http://localhost:3200
-4. Open **http://localhost:3200** — dashboard always opens clean (never loads old results)
-5. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
-6. Pick a filter from the **"Filter:"** dropdown, then click **"Export"** to download a report
+2. `git pull origin main` — **always pull latest code first**
+3. `npm install` — install dependencies
+4. `npm run checklist` — starts the dashboard server at http://localhost:3200
+5. Verify terminal shows `Dashboard v3 — clean start, no stale data` (if not, re-pull and restart)
+6. Open **http://localhost:3200** — dashboard always opens clean (never loads old results)
+7. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
+8. Pick a filter from the **"Filter:"** dropdown, then click **"Export"** to download a report
 
 For CLI-only (no browser): `npm run checklist:auto`
+
+See the **Troubleshooting** section in LAUNCH-CHECKLIST.md if anything looks wrong.
 
 **This phase uses two reference documents:**
 - **`LAUNCH-CHECKLIST.md`** — Complete 12-section sign-off checklist. Sections 1-5 are
