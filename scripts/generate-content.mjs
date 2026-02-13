@@ -84,6 +84,40 @@ function markGenerated(slug) {
   writeFileSync(QUEUE_PATH, yaml, 'utf-8');
 }
 
+// ── Read site identity from config.ts + product-brief.yaml (niche-agnostic) ──
+function loadSiteIdentity() {
+  const config = readFileSync(join(ROOT, 'src/lib/config.ts'), 'utf-8');
+
+  const siteName = config.match(/SITE_NAME\s*=\s*'([^']+)'/)?.[1]
+    || config.match(/SITE_NAME\s*=\s*"([^"]+)"/)?.[1]
+    || 'Authority Site';
+
+  const niche = config.match(/niche:\s*'([^']+)'/)?.[1]
+    || config.match(/niche:\s*"([^"]+)"/)?.[1]
+    || 'products';
+
+  const tagline = config.match(/tagline:\s*'([^']+)'/)?.[1]
+    || config.match(/tagline:\s*"([^"]+)"/)?.[1]
+    || '';
+
+  // Extract Wikidata entity from product-brief.yaml (authoritative source)
+  let wikidataEntity = '';
+  const briefPath = join(ROOT, 'product-brief.yaml');
+  if (existsSync(briefPath)) {
+    const brief = readFileSync(briefPath, 'utf-8');
+    const wdMatch = brief.match(/wikidata_entity:\s*"?(https:\/\/www\.wikidata\.org\/entity\/Q\d+)"?/);
+    if (wdMatch) wikidataEntity = wdMatch[1];
+  }
+
+  // Fallback: scan an existing page file for the Wikidata URL
+  if (!wikidataEntity) {
+    const wdMatch = config.match(/https:\/\/www\.wikidata\.org\/entity\/Q\d+/);
+    if (wdMatch) wikidataEntity = wdMatch[0];
+  }
+
+  return { siteName, niche, tagline, wikidataEntity };
+}
+
 // ── Load product data from config.ts (simple extraction) ────
 function loadProductData(slug) {
   const config = readFileSync(join(ROOT, 'src/lib/config.ts'), 'utf-8');
@@ -109,8 +143,9 @@ function loadProductData(slug) {
 // ── Build AI prompt for content generation ──────────────────
 function buildPrompt(item, templateContent, productDataA, productDataB) {
   const year = new Date().getFullYear();
+  const site = loadSiteIdentity();
 
-  let prompt = `You are an expert content writer for OffGrid Filters, a water filter review authority site.
+  let prompt = `You are an expert content writer for ${site.siteName}, a ${site.niche} review authority site.
 
 IMPORTANT RULES:
 - Write in first person plural ("we tested", "we recommend")
@@ -122,7 +157,7 @@ IMPORTANT RULES:
 - Use getAffiliateUrl(product.asin) for Amazon links
 - Include proper schema setup (Article + FAQ)
 - Include entity linking in Article schema (about/mentions with sameAs URLs)
-- The Wikidata entity for water filtration is: https://www.wikidata.org/entity/Q842467
+${site.wikidataEntity ? `- The Wikidata entity for this niche is: ${site.wikidataEntity}` : '- Include appropriate Wikidata entity linking in about/mentions'}
 - Every page needs exactly 4 related articles
 - Content must be 1500+ words for comparisons, 2000+ for guides
 - Include 4-6 FAQs with detailed answers
