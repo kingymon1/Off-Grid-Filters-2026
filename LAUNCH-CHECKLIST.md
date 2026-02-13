@@ -219,7 +219,7 @@ Every file listed in CLAUDE.md FILE CHECKLIST must exist:
 - [ ] `vercel.json` has `.html` to trailing-slash redirect rules
 - [ ] `.gitignore` excludes `node_modules`, `dist`, `.astro`, `.env`
 - [ ] No inline `<script type="module">` without `src` attribute in build output (CSP compliance — all scripts must be external)
-- [ ] Google Fonts `<link>` has `media="print"` in source (deferred, non-render-blocking loading)
+- [ ] No Google Fonts or external font loading (system fonts only — eliminates CLS and network requests)
 - [ ] `astro.config.mjs` has `vite.build.assetsInlineLimit: 0` (prevents Vite re-inlining scripts)
 - [ ] `public/assets/og-default.png` exists at 1200x630px (social preview image)
 
@@ -281,7 +281,7 @@ Every content page must pass ALL of these checks. Verify by parsing build output
 - [ ] `<meta charset="UTF-8">` on every page
 - [ ] `<meta name="viewport" content="width=device-width, initial-scale=1">` on every page
 - [ ] DNS prefetch for Amazon: `<link rel="dns-prefetch" href="https://www.amazon.com">`
-- [ ] Preconnect for Google Fonts: `<link rel="preconnect" href="https://fonts.googleapis.com">`
+- [ ] No external font preconnects (system fonts only — no Google Fonts links in `<head>`)
 - [ ] No `<meta name="robots" content="noindex">` on any content page
 - [ ] No duplicate `<meta>` tags on any page
 
@@ -557,7 +557,7 @@ Check these while you have Lighthouse and DevTools open:
 - [ ] No render-blocking CSS or JS flagged by Lighthouse (check "Performance" → "Opportunities")
 - [ ] All images use WebP format with responsive `srcset` (check "Performance" → "Diagnostics")
 - [ ] Images have explicit `width` and `height` (or aspect-ratio CSS) to prevent CLS
-- [ ] Google Fonts loaded with `font-display: swap` or equivalent
+- [ ] System font stack used (no external font loading — zero font-related CLS)
 - [ ] No unused CSS/JS flagged by Lighthouse (check "Performance" → "Diagnostics")
 - [ ] No console errors in browser DevTools (click the **"Console"** tab in DevTools — should be empty/clean)
 - [ ] HTTPS on all pages — the URL bar shows a lock icon, no "Not Secure" warning
@@ -687,10 +687,10 @@ This checks how your pages look when shared on Facebook, Twitter/X, LinkedIn, an
 2. Open DevTools (`F12`) → **Console** tab
 3. Browse through 3-4 pages
 4. Look for any red errors mentioning "Content Security Policy" or "CSP"
-5. Check that fonts load correctly (text should be in Inter font, not a fallback serif/sans-serif)
+5. Check that text renders correctly in the system font (should NOT reference Google Fonts)
 
 - [ ] CSP `form-action` includes `https://buttondown.com` (email capture form submits OK)
-- [ ] Google Fonts load correctly under CSP (text appears in Inter font)
+- [ ] No external font requests in Network tab (system fonts only — no Google Fonts CSP issues possible)
 - [ ] Vercel Analytics script loads correctly under CSP (no CSP errors in console)
 - [ ] No CSP violation errors in browser console
 

@@ -317,7 +317,7 @@ Create these files in this order:
 
 **2. `astro.config.mjs`** — Set `site` from config, static output, trailing slashes, integrations (sitemap, react, tailwind). Set `build: { inlineStylesheets: 'always' }` to inline all CSS into HTML (eliminates render-blocking `<link>` stylesheet requests — critical for Core Web Vitals). Include `vite: { build: { assetsInlineLimit: 0 } }` to force all scripts to be emitted as external files (prevents Vite from re-inlining small scripts, which would break CSP `script-src 'self'`).
 
-**3. `tailwind.config.ts`** — Map CSS custom properties to Tailwind tokens. Use Inter font. Include tailwindcss-animate plugin.
+**3. `tailwind.config.ts`** — Map CSS custom properties to Tailwind tokens. Use system font stack (`system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`). Include tailwindcss-animate plugin.
 
 **4. `tsconfig.json`** — ES2020, ESNext modules, `@/*` path alias to `./src/*`.
 
@@ -534,7 +534,6 @@ eliminating the waterfall. Only `main.ts` is referenced in BaseLayout — the ot
 imported by it, not loaded directly.
 
 **`src/scripts/interactions.ts`** — Page interaction behaviors:
-- Google Fonts activation: switches `media="print"` → `"all"` on the `#google-fonts` link element
 - Scroll reveal IntersectionObserver for all 6 reveal variants (`.reveal`, `.reveal-left`, etc.)
 - Scroll progress bar width update via `requestAnimationFrame`
 - Spotlight card mouse-tracking (updates `--mouse-x`/`--mouse-y` CSS custom properties on mousemove,
@@ -593,16 +592,10 @@ Vite from re-inlining small scripts during the build.
 - `<head>`: charset, viewport, title, meta description, canonical URL
 - Open Graph tags (og:title, og:description, og:image, og:url, og:type)
 - Twitter Card tags
-- Google Fonts (Inter, weights 400-900) loaded with **deferred non-render-blocking pattern**:
-  ```html
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
-  <link id="google-fonts" href="...Inter..." rel="stylesheet" media="print">
-  <noscript><link rel="stylesheet" href="...Inter..."></noscript>
-  ```
-  The `media="print"` prevents render-blocking. `interactions.ts` switches it to `media="all"` on load.
-  **Do NOT use `onload` inline handler** — CSP blocks inline event handlers.
+- **System fonts only** — no Google Fonts or external font loading. Uses `system-ui, -apple-system,
+  BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` which renders instantly with zero CLS.
+  **Do NOT add Google Fonts** — web fonts cause CLS (layout shift when the font swaps in) and add
+  4+ network requests (preconnect, CSS, woff2). System fonts render in <1ms with perfect scores.
 - DNS prefetch for Amazon (`dns-prefetch` only — no `preconnect`, since the page never fetches
   resources from Amazon; all Amazon URLs are navigation `<a>` links)
 - **`heroImage` prop** (optional string) — when provided, renders a `<link rel="preload">` for the

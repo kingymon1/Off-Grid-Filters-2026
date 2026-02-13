@@ -386,7 +386,7 @@ function buildSVG(image, width, height) {
 
   <!-- Category label -->
   <text x="${cx}" y="${cy * 0.78 + iconSize * 0.75}" text-anchor="middle"
-    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${subFontSize * 0.85}"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${subFontSize * 0.85}"
     font-weight="700" letter-spacing="0.15em" fill="${hsl(COLORS.primary, 0.8)}">
     ${escapeXml(categoryLabel)}
   </text>
@@ -399,18 +399,18 @@ function buildSVG(image, width, height) {
   <g filter="url(#textShadow)">
     ${titleLine2 ? `
     <text x="${cx}" y="${cy * 0.78 + iconSize * 1.08}" text-anchor="middle"
-      font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
+      font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
       font-weight="800" fill="${hsl(COLORS.foreground, 0.95)}">
       ${escapeXml(titleLine1)}
     </text>
     <text x="${cx}" y="${cy * 0.78 + iconSize * 1.08 + fontSize * 1.25}" text-anchor="middle"
-      font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
+      font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
       font-weight="800" fill="${hsl(COLORS.foreground, 0.95)}">
       ${escapeXml(titleLine2)}
     </text>
     ` : `
     <text x="${cx}" y="${cy * 0.78 + iconSize * 1.08}" text-anchor="middle"
-      font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
+      font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${fontSize}"
       font-weight="800" fill="${hsl(COLORS.foreground, 0.95)}">
       ${escapeXml(titleLine1)}
     </text>
@@ -419,7 +419,7 @@ function buildSVG(image, width, height) {
 
   <!-- Brand watermark -->
   <text x="${width - 20}" y="${height - 14}" text-anchor="end"
-    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${subFontSize * 0.7}"
+    font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="${subFontSize * 0.7}"
     font-weight="600" letter-spacing="0.05em" fill="${hsl(COLORS.mutedForeground, 0.3)}">
     OFFGRIDFILTERS.COM
   </text>

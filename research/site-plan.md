@@ -169,7 +169,7 @@ Every page links to 4 related articles:
 - Foreground: Near White (HSL 210 10% 95%)
 
 ### Typography
-- Font: Inter (Google Fonts, weights 400-900)
+- Font: System font stack (system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif)
 - Scale: Responsive clamp-based sizing
 
 ### Components (10)

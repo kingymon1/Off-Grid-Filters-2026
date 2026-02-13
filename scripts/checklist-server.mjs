@@ -824,7 +824,7 @@ function getDashboardHTML() {
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0b0e14;--card:#121922;--border:#272f3c;--primary:#2490cc;--primary-dim:#1a6d99;
 --accent:#f09520;--text:#f0f2f4;--muted:#858d99;--success:#22c55e;--error:#ef4444;--warn:#eab308;--radius:10px}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
 a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 
 header{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 1.5rem}
