@@ -82,9 +82,13 @@ function runCmd(cmd, opts = {}) {
 }
 
 // ─── HTML Parsing Helpers ─────────────────────────────────
+function decodeEntities(str) {
+  return str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+}
+
 function extractTag(html, tag) {
   const m = html.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'i'));
-  return m ? m[1].trim() : null;
+  return m ? decodeEntities(m[1].trim()) : null;
 }
 
 function extractMeta(html, name) {
@@ -315,7 +319,8 @@ async function runSection2() {
 
     // HTML fundamentals
     if (!html.includes('lang="en"') && !html.includes("lang='en'")) pagesWithoutLang++;
-    if (html.includes('noindex')) pagesWithNoindex++;
+    const pageUrl = urlFromFile(file);
+    if (html.includes('noindex') && pageUrl !== '/404/') pagesWithNoindex++;
   }
 
   // 2.1 Title Tags
@@ -509,7 +514,7 @@ async function runSection4() {
       let resolved = href;
       if (resolved.startsWith('/')) {
         // Normalize
-        if (!resolved.endsWith('/') && !resolved.includes('.')) {
+        if (!resolved.endsWith('/') && !resolved.includes('.') && !resolved.includes('#')) {
           noTrailingSlashInternal++;
           resolved += '/';
         }

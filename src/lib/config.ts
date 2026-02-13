@@ -31,6 +31,7 @@ export const PUBLISH_WAVES = {
 // ── Interfaces ───────────────────────────────────────────────
 export interface Product {
   name: string;
+  shortName: string;
   slug: string;
   brand: string;
   asin: string;
@@ -181,6 +182,7 @@ export const products: Product[] = [
   // ── Countertop & Pitcher Filters ──────────────────────────
   {
     name: 'Bluevua RO100ROPOT-UV Countertop Reverse Osmosis System',
+    shortName: 'Bluevua RO100ROPOT-UV',
     slug: 'bluevua-ro100ropot-uv',
     brand: 'Bluevua',
     asin: 'B0CNPMRFXS',
@@ -222,6 +224,7 @@ export const products: Product[] = [
   },
   {
     name: 'Bluevua RO100ROPOT-Lite(UV) Countertop Reverse Osmosis System',
+    shortName: 'Bluevua RO100ROPOT-Lite',
     slug: 'bluevua-ro100ropot-lite-uv',
     brand: 'Bluevua',
     asin: 'B0CZ475FBC',
@@ -263,6 +266,7 @@ export const products: Product[] = [
   },
   {
     name: 'Amazon Basics 10-Cup Water Filter Pitcher',
+    shortName: 'Amazon Basics 10-Cup Pitcher',
     slug: 'amazon-basics-10-cup-pitcher',
     brand: 'Amazon Basics',
     asin: 'B07YT18P21',
@@ -302,6 +306,7 @@ export const products: Product[] = [
   },
   {
     name: 'Brita UltraMax 27-Cup Water Filter Dispenser',
+    shortName: 'Brita UltraMax 27-Cup',
     slug: 'brita-ultramax-27-cup-dispenser',
     brand: 'Brita',
     asin: 'B09WBL9HCS',
@@ -343,6 +348,7 @@ export const products: Product[] = [
   // ── Under-Sink Filters ────────────────────────────────────
   {
     name: 'Pentair Everpure H-1200 Replacement Cartridge Set',
+    shortName: 'Pentair Everpure H-1200',
     slug: 'pentair-everpure-h1200',
     brand: 'Pentair Everpure',
     asin: 'B002WDS3AW',
@@ -383,6 +389,7 @@ export const products: Product[] = [
   },
   {
     name: 'Pentair Everpure H-300 Drinking Water System',
+    shortName: 'Pentair Everpure H-300',
     slug: 'pentair-everpure-h300',
     brand: 'Pentair Everpure',
     asin: 'B0045LXJGC',
@@ -423,6 +430,7 @@ export const products: Product[] = [
   },
   {
     name: 'iSpring RCC7AK 6-Stage Reverse Osmosis System',
+    shortName: 'iSpring RCC7AK',
     slug: 'ispring-rcc7ak',
     brand: 'iSpring',
     asin: 'B005LJ8EXU',
@@ -465,6 +473,7 @@ export const products: Product[] = [
   },
   {
     name: 'Waterdrop G3P600 Tankless Reverse Osmosis System',
+    shortName: 'Waterdrop G3P600',
     slug: 'waterdrop-g3p600',
     brand: 'Waterdrop',
     asin: 'B07P1XFYJP',
@@ -509,6 +518,7 @@ export const products: Product[] = [
   // ── Refrigerator Filters ──────────────────────────────────
   {
     name: 'everydrop by Whirlpool Refrigerator Filter 1 (EDR1RXD1)',
+    shortName: 'everydrop Filter 1',
     slug: 'everydrop-filter-1-edr1rxd1',
     brand: 'everydrop',
     asin: 'B00UXG4WR8',
@@ -545,6 +555,7 @@ export const products: Product[] = [
   },
   {
     name: 'GE XWFE Refrigerator Water Filter',
+    shortName: 'GE XWFE',
     slug: 'ge-xwfe',
     brand: 'GE Appliances',
     asin: 'B0882ZJ48W',
@@ -581,6 +592,7 @@ export const products: Product[] = [
   },
   {
     name: 'GE RPWFE Refrigerator Water Filter',
+    shortName: 'GE RPWFE',
     slug: 'ge-rpwfe',
     brand: 'GE Appliances',
     asin: 'B009PCI2JU',
@@ -617,6 +629,7 @@ export const products: Product[] = [
   },
   {
     name: 'Samsung HAF-QIN/EXP Refrigerator Water Filter (DA97-17376B)',
+    shortName: 'Samsung HAF-QIN',
     slug: 'samsung-haf-qin',
     brand: 'Samsung',
     asin: 'B071NFVVNG',
@@ -652,6 +665,7 @@ export const products: Product[] = [
   },
   {
     name: 'everydrop by Whirlpool Refrigerator Filter A (EDRARXD1)',
+    shortName: 'everydrop Filter A',
     slug: 'everydrop-filter-a-edrarxd1',
     brand: 'everydrop',
     asin: 'B0D8MFM6BK',
@@ -688,6 +702,7 @@ export const products: Product[] = [
   },
   {
     name: 'AQUACREST UKF8001 Replacement Refrigerator Filter (3-Pack)',
+    shortName: 'AQUACREST UKF8001 3-Pack',
     slug: 'aquacrest-ukf8001-3pack',
     brand: 'AQUACREST',
     asin: 'B01G4T47S6',
@@ -726,6 +741,7 @@ export const products: Product[] = [
   // ── Pitcher & Dispenser Replacement Filters ───────────────
   {
     name: 'Amazon Basics Enhanced Replacement Water Filters (3-Pack)',
+    shortName: 'Amazon Basics Enhanced 3-Pack',
     slug: 'amazon-basics-replacement-3pack',
     brand: 'Amazon Basics',
     asin: 'B07YT16TMS',
@@ -763,6 +779,7 @@ export const products: Product[] = [
   },
   {
     name: 'Brita Standard Replacement Filters (3-Pack)',
+    shortName: 'Brita Standard 3-Pack',
     slug: 'brita-standard-3pack',
     brand: 'Brita',
     asin: 'B00004SU18',
@@ -800,6 +817,7 @@ export const products: Product[] = [
   },
   {
     name: 'Brita Standard Replacement Filters (4-Pack)',
+    shortName: 'Brita Standard 4-Pack',
     slug: 'brita-standard-4pack',
     brand: 'Brita',
     asin: 'B0000CF98Q',
@@ -837,6 +855,7 @@ export const products: Product[] = [
   },
   {
     name: 'Brita Elite Replacement Filters (2-Pack)',
+    shortName: 'Brita Elite 2-Pack',
     slug: 'brita-elite-2pack',
     brand: 'Brita',
     asin: 'B01MU7973W',
@@ -874,6 +893,7 @@ export const products: Product[] = [
   },
   {
     name: 'ZeroWater 5-Stage Replacement Filter (4-Pack)',
+    shortName: 'ZeroWater 4-Pack',
     slug: 'zerowater-5stage-4pack',
     brand: 'ZeroWater',
     asin: 'B00C7N7L1E',
@@ -911,6 +931,7 @@ export const products: Product[] = [
   },
   {
     name: 'ZeroWater 5-Stage Replacement Filter (6-Pack)',
+    shortName: 'ZeroWater 6-Pack',
     slug: 'zerowater-5stage-6pack',
     brand: 'ZeroWater',
     asin: 'B00OZIOLB2',
@@ -948,6 +969,7 @@ export const products: Product[] = [
   },
   {
     name: 'PUR Water Pitcher Replacement Filter (4-Pack)',
+    shortName: 'PUR Pitcher Filter 4-Pack',
     slug: 'pur-pitcher-filter-4pack',
     brand: 'PUR',
     asin: 'B07WWB1MLN',
@@ -985,6 +1007,7 @@ export const products: Product[] = [
   },
   {
     name: 'Waterdrop WD-PF-01A Plus Replacement Filter (3-Pack)',
+    shortName: 'Waterdrop Plus 3-Pack',
     slug: 'waterdrop-wd-pf01a-plus-3pack',
     brand: 'Waterdrop',
     asin: 'B08C7QNSKZ',
@@ -1024,6 +1047,7 @@ export const products: Product[] = [
   // ── Survival & Portable Filters ───────────────────────────
   {
     name: 'Timain 4-Stage Water Filter Straw (2-Pack)',
+    shortName: 'Timain Filter Straw 2-Pack',
     slug: 'timain-filter-straw-2pack',
     brand: 'Timain',
     asin: 'B0CCD6BTVX',
@@ -1062,6 +1086,7 @@ export const products: Product[] = [
   },
   {
     name: 'Membrane Solutions Portable Water Filter Straw (4-Pack)',
+    shortName: 'Membrane Solutions Straw',
     slug: 'membrane-solutions-filter-straw-4pack',
     brand: 'Membrane Solutions',
     asin: 'B07SYYQZDN',
@@ -1101,6 +1126,7 @@ export const products: Product[] = [
   },
   {
     name: 'NatureNova Personal Water Filter Straw (3-Pack)',
+    shortName: 'NatureNova Straw 3-Pack',
     slug: 'naturenova-filter-straw-3pack',
     brand: 'NatureNova',
     asin: 'B08YJHG8DQ',
@@ -1139,6 +1165,7 @@ export const products: Product[] = [
   },
   {
     name: 'MSR Aquatabs Water Purification Tablets (30-Pack)',
+    shortName: 'MSR Aquatabs 30-Pack',
     slug: 'msr-aquatabs-30pack',
     brand: 'MSR',
     asin: 'B007W5D13O',
@@ -1177,6 +1204,7 @@ export const products: Product[] = [
   // ── Whole House & Sediment Filters ────────────────────────
   {
     name: 'Membrane Solutions 5-Micron String Wound Sediment Filter (6-Pack)',
+    shortName: 'Membrane Solutions Sediment',
     slug: 'membrane-solutions-sediment-6pack',
     brand: 'Membrane Solutions',
     asin: 'B082PXRJBZ',
@@ -1213,6 +1241,7 @@ export const products: Product[] = [
   },
   {
     name: 'Universal 5-Micron Sediment Filter Cartridge',
+    shortName: 'Universal 5-Micron Sediment',
     slug: 'universal-5micron-sediment-filter',
     brand: 'Generic',
     asin: 'B0FYDWSKY2',
@@ -1247,6 +1276,7 @@ export const products: Product[] = [
   },
   {
     name: 'Elkay 51300C WaterSentry Plus Replacement Filter',
+    shortName: 'Elkay WaterSentry Plus',
     slug: 'elkay-51300c-watersentry-plus',
     brand: 'Elkay',
     asin: 'B004PUCV3K',
@@ -1307,7 +1337,7 @@ export const guides: GuideConfig[] = [
   // Buyer guides
   { title: 'How to Choose a Water Filter: Complete 2026 Guide', slug: 'how-to-choose-water-filter', description: 'Everything you need to know to pick the right water filter for your home, budget, and water quality.', type: 'buyer', publishDate: PUBLISH_WAVES.wave1 },
   { title: 'Water Filter Maintenance Guide: Keep Your Filter Performing', slug: 'water-filter-maintenance', description: 'Learn when to change filters, how to clean systems, and signs your filter needs replacing.', type: 'buyer', publishDate: PUBLISH_WAVES.wave3 },
-  { title: 'Water Filter Sizing Guide: Match Your Filter to Your Household', slug: 'water-filter-sizing-guide', description: 'Calculate the right filter capacity based on your household size, water usage, and source water quality.', type: 'buyer', publishDate: PUBLISH_WAVES.wave4 },
+  { title: 'Water Filter Sizing Guide: Match Filter to Household', slug: 'water-filter-sizing-guide', description: 'Calculate the right filter capacity based on your household size, water usage, and source water quality.', type: 'buyer', publishDate: PUBLISH_WAVES.wave4 },
   { title: 'Best Water Filters Under $50: Budget Guide', slug: 'best-water-filters-under-50', description: 'Effective water filtration does not need to cost a fortune. Our picks for the best filters under $50.', type: 'buyer', publishDate: PUBLISH_WAVES.wave3 },
   { title: 'Reverse Osmosis vs Carbon Filters: Which Do You Need?', slug: 'reverse-osmosis-vs-carbon-filters', description: 'A detailed comparison of the two most common filtration technologies and which suits your needs.', type: 'buyer', publishDate: PUBLISH_WAVES.wave4 },
   { title: 'Beginner Guide to Water Filtration', slug: 'water-filtration-beginner-guide', description: 'New to water filtration? Start here. We explain types, technologies, and how to pick your first filter.', type: 'buyer', publishDate: PUBLISH_WAVES.wave2 },
@@ -1334,7 +1364,7 @@ export const guides: GuideConfig[] = [
   { title: 'Lead in Drinking Water: Sources, Risks, and Filtration', slug: 'lead-in-drinking-water', description: 'How lead enters your water, health effects, and which filter types are certified to remove it.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave5 },
   { title: 'Water Filter Types Explained: Complete Technology Guide', slug: 'water-filter-types-explained', description: 'Activated carbon, RO, UV, ceramic, ion exchange — every filtration technology explained and compared.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave2 },
   { title: 'Is Tap Water Safe to Drink? A State-by-State Guide', slug: 'is-tap-water-safe', description: 'The state of US municipal water quality and when you should consider additional filtration.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave6 },
-  { title: 'History of Water Filtration: From Ancient Methods to Modern RO', slug: 'history-of-water-filtration', description: 'How humans have purified drinking water throughout history and the technologies that changed everything.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave7 },
+  { title: 'History of Water Filtration: Ancient to Modern', slug: 'history-of-water-filtration', description: 'How humans have purified drinking water throughout history and the technologies that changed everything.', type: 'knowledge', publishDate: PUBLISH_WAVES.wave7 },
 ];
 
 // ── Price Tier Helper ────────────────────────────────────────
