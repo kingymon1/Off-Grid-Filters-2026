@@ -145,7 +145,13 @@ leading to cascading indexing failures. **Every page must be worth indexing.**
 ### 2.7 Security & Deployment
 
 - [ ] HTTPS enabled on all pages
-- [ ] Security headers configured (CSP, HSTS, X-Frame-Options)
+- [ ] Security headers configured:
+  - [ ] CSP with `script-src 'self'` (NO `'unsafe-inline'`)
+  - [ ] `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` (HSTS)
+  - [ ] `Cross-Origin-Opener-Policy: same-origin` (COOP)
+  - [ ] `Access-Control-Allow-Origin: https://[site-domain]` (restrictive CORS)
+  - [ ] `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`
+- [ ] No inline `<script type="module">` without `src` in build output (all scripts external for CSP)
 - [ ] No mixed content (HTTP resources on HTTPS page)
 - [ ] DNS properly configured and propagated
 
