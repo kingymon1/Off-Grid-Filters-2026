@@ -32,8 +32,8 @@ npm run checklist
 ```
 http://localhost:3200
 ```
-The dashboard always starts clean — old results are cleared automatically on server startup.
-You should see all sections showing "Not run" badges with dashes in the summary cards.
+The dashboard always starts clean — it never loads old results from previous sessions.
+You should see all sections showing **"Not run"** badges with dashes (`-`) in the summary cards.
 
 The header controls bar looks like this:
 ```

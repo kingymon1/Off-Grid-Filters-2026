@@ -825,7 +825,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.92);backdrop-f
 .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .header-inner h1{font-size:1rem;font-weight:700;white-space:nowrap}
 .header-inner h1 span{color:var(--primary)}
-.controls{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.controls{display:flex;align-items:center;gap:.5rem;margin-left:auto;flex-wrap:wrap}
 .btn{padding:.45rem .9rem;border:none;border-radius:var(--radius);font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s}
 .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dim)}
 .btn-accent{background:var(--accent);color:#fff}.btn-accent:hover{opacity:.9}
@@ -951,14 +951,6 @@ function toast(msg, type='info') {
   el.textContent = msg;
   document.getElementById('toasts').appendChild(el);
   setTimeout(() => el.remove(), 4000);
-}
-
-async function loadState() {
-  try {
-    const r = await fetch('/api/results');
-    state = await r.json();
-  } catch { state = { sections: {}, manual: {}, lastRun: null }; }
-  render();
 }
 
 function updateSummary() {
@@ -1140,9 +1132,8 @@ async function resetResults() {
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// Render clean UI immediately, then hydrate from server (which clears stale data on startup).
+// Always start with a clean, empty dashboard — no stale data from previous runs.
 render();
-loadState();
 </script>
 </body>
 </html>`;
@@ -1214,11 +1205,7 @@ async function readBody(req) {
   return JSON.parse(Buffer.concat(chunks).toString());
 }
 
-async function startServer() {
-  // Always start with a clean slate — clear any stale results from previous runs
-  const fresh = { lastRun: null, sections: {}, manual: {} };
-  await writeFile(RESULTS_FILE, JSON.stringify(fresh, null, 2));
-
+function startServer() {
   const server = createServer(async (req, res) => {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     const path = url.pathname;
@@ -1229,9 +1216,9 @@ async function startServer() {
     }
 
     try {
-      // Dashboard
+      // Dashboard — no-store so browser always gets fresh HTML after server restart
       if (path === '/' && req.method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
         return res.end(getDashboardHTML());
       }
 
@@ -1328,5 +1315,5 @@ async function autoMode() {
 if (process.argv.includes('--auto')) {
   await autoMode();
 } else {
-  await startServer();
+  startServer();
 }

@@ -1152,7 +1152,10 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
 - Provides pass/fail UI for manual Sections 6-12
 - Parses all HTML files in `dist/` for titles, metas, canonicals, headings, OG tags, JSON-LD,
   internal links, affiliate link attributes, content length, placeholder text, and more
-- Exports Markdown sign-off reports
+- Dashboard always opens clean (never loads stale results from previous sessions)
+- Header controls: Reset, Run Automated Checks, Filter dropdown (Full Report / Failures +
+  Warnings / Failures Only / Warnings Only), and Export button
+- Exports filtered Markdown sign-off reports
 - **Usage:**
   ```bash
   # Start dashboard at http://localhost:3200
@@ -1182,8 +1185,8 @@ GEMINI_API_KEY=
 
 1. `cd Off-Grid-Filters-2026` — navigate to the project root
 2. `npm install` — install dependencies (skip if already done)
-3. `npm run checklist` — starts the dashboard server (old results are cleared automatically)
-4. Open **http://localhost:3200** in your browser
+3. `npm run checklist` — starts the dashboard server at http://localhost:3200
+4. Open **http://localhost:3200** — dashboard always opens clean (never loads old results)
 5. Click **"Run Automated Checks (S1-S5)"** — runs build, SEO, schema, linking, and content checks
 6. Pick a filter from the **"Filter:"** dropdown, then click **"Export"** to download a report
 
