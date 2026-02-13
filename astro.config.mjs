@@ -23,6 +23,7 @@ export default defineConfig({
     build: {
       cssMinify: true,
       minify: 'esbuild',
+      assetsInlineLimit: 0,
     },
   },
 });
