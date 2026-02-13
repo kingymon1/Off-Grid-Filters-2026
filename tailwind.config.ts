@@ -53,12 +53,11 @@ export default {
 			},
 			fontFamily: {
 				sans: [
-					'Inter',
+					'system-ui',
 					'-apple-system',
 					'BlinkMacSystemFont',
 					'"Segoe UI"',
 					'Roboto',
-					'system-ui',
 					'sans-serif'
 				]
 			},

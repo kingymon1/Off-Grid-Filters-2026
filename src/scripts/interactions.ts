@@ -1,7 +1,3 @@
-// Activate Google Fonts (deferred from media="print" to avoid render-blocking CSP-safe)
-const fontLink = document.getElementById('google-fonts') as HTMLLinkElement | null;
-if (fontLink) fontLink.media = 'all';
-
 // Scroll reveal observer
 const revealObserver = new IntersectionObserver(
   (entries) => {
