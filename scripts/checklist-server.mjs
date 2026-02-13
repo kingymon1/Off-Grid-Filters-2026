@@ -813,6 +813,7 @@ function getDashboardHTML() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="version" content="v3-${Date.now()}">
 <title>OffGrid Filters — Launch Checklist</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -1275,9 +1276,11 @@ function startServer() {
     console.log(`  ║  http://localhost:${PORT}/                        ║`);
     console.log('  ╚═══════════════════════════════════════════════╝');
     console.log('');
+    console.log('  Dashboard v3 — clean start, no stale data');
+    console.log('  Controls: [Reset] [Run] | Filter: [▾] [Export]');
+    console.log('');
     console.log('  Sections 1-5:  Automated (click "Run" in the UI)');
     console.log('  Sections 6-12: Manual (pass/fail each item in the UI)');
-    console.log('  Results saved to: checklist-results.json');
     console.log('');
   });
 }
