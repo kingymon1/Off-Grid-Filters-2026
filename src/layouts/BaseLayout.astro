@@ -45,9 +45,9 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
   <!-- Inter font (non-render-blocking: preload + deferred media switch via external script) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style">
-  <link id="google-fonts" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=optional" as="style">
+  <link id="google-fonts" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=optional" rel="stylesheet" media="print">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=optional"></noscript>
 
   <!-- Preload hero image for LCP optimization (per-page) -->
   {heroImage && (
