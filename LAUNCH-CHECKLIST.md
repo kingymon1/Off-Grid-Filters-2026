@@ -215,7 +215,7 @@ Every file listed in CLAUDE.md FILE CHECKLIST must exist:
 - [ ] `vercel.json` has `Strict-Transport-Security` (HSTS) header with `max-age=63072000; includeSubDomains; preload`
 - [ ] `vercel.json` has `Cross-Origin-Opener-Policy: same-origin` (COOP) header
 - [ ] `vercel.json` has `Access-Control-Allow-Origin` set to production domain (NOT `*`)
-- [ ] `vercel.json` cache headers: `max-age=86400` for `/assets/*` images, `immutable` for `/assets/*.css|js`
+- [ ] `vercel.json` cache headers: `max-age=86400` for `/assets/:path*`, `immutable` for `/_astro/:path*`
 - [ ] `vercel.json` has `.html` to trailing-slash redirect rules
 - [ ] `.gitignore` excludes `node_modules`, `dist`, `.astro`, `.env`
 - [ ] No inline `<script type="module">` without `src` attribute in build output (CSP compliance — all scripts must be external)
