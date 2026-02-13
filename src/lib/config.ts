@@ -1419,7 +1419,7 @@ export const siteConfig = {
   seo: {
     datePublished: '2026-02-11',
     dateModified: '2026-02-08',
-    defaultOgImage: '/favicon.png',
+    defaultOgImage: '/assets/og-default.png',
   },
 
   socialProof: {
