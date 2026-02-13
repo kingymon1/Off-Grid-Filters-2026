@@ -545,6 +545,9 @@ imported by it, not loaded directly.
 - Spotlight card mouse-tracking (updates `--mouse-x`/`--mouse-y` CSS custom properties on mousemove,
   with `getBoundingClientRect()` cached in a `WeakMap` and updated on resize to avoid forced reflow)
 - Animated counter IntersectionObserver (eased number animation, 1500ms duration)
+- **All `scroll` and `resize` event listeners MUST use `{ passive: true }`** — this tells the
+  browser the handler won't call `preventDefault()`, enabling scroll performance optimizations.
+  Without it, Chrome flags "non-passive event listener" as a Lighthouse audit failure.
 
 **`src/scripts/analytics.ts`** — Vercel Web Analytics:
 ```typescript
@@ -583,9 +586,24 @@ Vite from re-inlining small scripts during the build.
 - Spotlight cards: `.spotlight-card` with CSS custom property mouse tracking
 - Floating orbs: `.orb`, `.orb-primary`, `.orb-accent` background decorations
 - Winner badges: `.winner-badge` for comparison/roundup page winners
-- Verdict card: `.verdict-card` with animated gradient top border
+- Verdict card: `.verdict-card` with animated gradient top border — uses `transform: translateX()`
+  with `width: 200%` and `will-change: transform` (NOT `background-position` animation, which
+  is non-composited and triggers paint on every frame)
 - Rating stars: `.star-rating` visual display
 - `prefers-reduced-motion` media query disabling ALL animations
+
+**GPU-composited animations (Core Web Vitals critical):**
+All CSS animations MUST use GPU-composited properties (`transform`, `opacity`) instead of
+non-composited properties (`background-position`, `left`, `top`, `width`, `height`).
+Non-composited animations trigger layout/paint on every frame, causing jank and failing
+Lighthouse "Avoid non-composited animations" audit.
+
+- **DO:** `transform: translateX()`, `transform: scale()`, `opacity` transitions
+- **DON'T:** `background-position` animation, `left/top` animation, `width/height` animation
+- **`will-change: transform`** on elements with continuous CSS animations (verdict-card `::before`,
+  scroll progress bar). Do NOT overuse — only on elements that actually animate continuously.
+- For gradient animations (like verdict-card border), use a `::before` pseudo-element at `width: 200%`
+  animated with `transform: translateX(-50%)` instead of animating `background-position`.
 - Noise texture overlay on body
 - Grid pattern overlay for hero section
 - Responsive typography scales
@@ -600,8 +618,10 @@ Vite from re-inlining small scripts during the build.
 - Twitter Card tags
 - **System fonts only** — no Google Fonts or external font loading. Uses `system-ui, -apple-system,
   BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` which renders instantly with zero CLS.
-  **Do NOT add Google Fonts** — web fonts cause CLS (layout shift when the font swaps in) and add
-  4+ network requests (preconnect, CSS, woff2). System fonts render in <1ms with perfect scores.
+  **Do NOT add Google Fonts or any external font CDN** — web fonts cause CLS (layout shift when
+  the font swaps in) and add 4+ network requests (preconnect, CSS, woff2). Do NOT add
+  `<link rel="preconnect">` to fonts.googleapis.com or fonts.gstatic.com. System fonts render
+  in <1ms with perfect scores.
 - DNS prefetch for Amazon (`dns-prefetch` only — no `preconnect`, since the page never fetches
   resources from Amazon; all Amazon URLs are navigation `<a>` links)
 - **`heroImage` prop** (optional string) — when provided, renders a `<link rel="preload">` for the
