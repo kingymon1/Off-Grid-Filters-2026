@@ -623,7 +623,11 @@ Vite from re-inlining small scripts during the build.
 
 **`src/layouts/ContentLayout.astro`** must include:
 - Wraps BaseLayout
-- Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles, `lastUpdated?: string`
+- Props: title, description, canonicalUrl, schema, breadcrumbs, relatedArticles, `lastUpdated?: string`, `ogImage?: string`
+- **Per-page OG images:** ContentLayout auto-derives `og:image` from the `heroImage` prop when
+  no explicit `ogImage` is passed (prepends `siteConfig.siteUrl` to make it absolute). Pages
+  that pass `heroImage` get unique social preview images automatically. Falls back to the
+  site-wide default OG image when neither `ogImage` nor `heroImage` is provided.
 - Renders: Header → Breadcrumbs → **Visible "Last Updated" date** → AffiliateDisclosure → Main Content (slot) → Related Articles → Footer
 - The `lastUpdated` prop renders a human-readable date (`<time>` element) between breadcrumbs and
   content. This visible date **must match** the `dateModified` in the page's Article schema —
@@ -1181,7 +1185,9 @@ for llms.txt, use `getProductBySlug()` to resolve product names from slugs. Do N
 - 1200x630px PNG generated via Sharp SVG rendering
 - Includes: site branding, tagline, CTA button(s) ("Find Your Perfect [Product]" + "Browse Reviews"), trust badges
 - Referenced by `siteConfig.seo.defaultOgImage` in config
-- Used as default for `og:image` and `twitter:image` meta tags on all pages
+- Used as fallback for `og:image` and `twitter:image` when no per-page hero image is available
+  (ContentLayout auto-derives OG images from `heroImage` — only the homepage and resource hub
+  use this default)
 - Generate using a Sharp script that renders an SVG template to PNG:
   ```javascript
   // scripts/gen-og.mjs — generates public/assets/og-default.png
