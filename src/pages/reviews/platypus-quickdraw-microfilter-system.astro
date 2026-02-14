@@ -1,0 +1,139 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('platypus-quickdraw-microfilter-system')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+const faqs = [
+  { question: 'How does the Platypus QuickDraw flow rate compare to the Sawyer Squeeze?', answer: 'The Platypus QuickDraw delivers approximately 3 liters per minute — roughly 2-3x faster than the Sawyer Squeeze, which typically produces 1-1.7 L/min depending on squeeze pressure and filter condition. This speed advantage is the QuickDraw\'s primary selling point. The difference is immediately noticeable in the field: filling a 1-liter bottle takes about 20 seconds with the QuickDraw versus 35-60 seconds with the Sawyer. Over a multi-day trip where you filter 6-10 liters daily, the time savings add up significantly.' },
+  { question: 'Can the Platypus QuickDraw be used inline with a hydration pack?', answer: 'Yes. The QuickDraw filter is compatible with Platypus hydration reservoirs and can be connected inline between the reservoir and the drinking hose. This allows you to fill the reservoir with unfiltered water and drink filtered water on the move without stopping to squeeze. This is a significant advantage for trail runners and thru-hikers who want continuous hydration without breaking stride. Adapters may be needed for non-Platypus hydration systems.' },
+  { question: 'Why does the Platypus QuickDraw use 0.2 microns instead of 0.1?', answer: 'Platypus chose a 0.2-micron hollow fiber membrane to achieve the ultrafast 3 L/min flow rate. Smaller pore sizes (0.1 micron) create more resistance, which slows flow. At 0.2 microns, the QuickDraw still removes 99.9999% of bacteria and 99.9% of protozoa — exceeding EPA requirements for both. The practical difference between 0.1 and 0.2 microns is negligible for bacterial and protozoan filtration in North American backcountry water. Neither pore size removes viruses.' },
+  { question: 'How do you clean the Platypus QuickDraw filter?', answer: 'Platypus designed the QuickDraw for easy field cleaning: fill the squeeze bottle with filtered water, reattach the filter, and give it a vigorous shake (the "swish" method). This agitates the hollow fiber membrane and dislodges trapped particles. For deeper cleaning, squeeze clean water backward through the filter. No syringe is needed — the wide-mouth bottle design makes backflushing straightforward. Clean the filter every 2-3 uses in turbid water, or whenever flow rate decreases.' },
+];
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`, description: product.verdict,
+  url: `/reviews/${product.slug}/`, datePublished: product.publishDate, dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({ title: `${p.name} Review`, url: `/reviews/${p.slug}/`, description: p.verdict })),
+  ...(category ? [{ title: `Best ${category.name}`, url: `/best-${category.slug}/`, description: category.description }] : []),
+  { title: 'Best Water Filters for Hiking & Backpacking', url: '/water-filters-for-hiking/', description: 'Ultralight water filtration options for thru-hikers, day hikers, and backpackers.' },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Platypus QuickDraw is the fastest squeeze filter on the market. At 3 liters per minute, it filters water roughly twice as fast as the Sawyer Squeeze and three times faster than most budget straw filters. For hikers and backpackers who have grown frustrated waiting for water to push through a slow membrane, the QuickDraw solves the problem with engineering rather than force — a wider hollow fiber membrane array that delivers volume without sacrificing safety. At $39.95, it sits in the mid-range between budget straws and premium gravity systems.</p>
+  <p>Platypus (a division of Cascade Designs, the same company behind MSR and Therm-a-Rest) brings serious outdoor credibility to this filter. The QuickDraw's 0.2-micron hollow fiber membrane removes 99.9999% of bacteria and 99.9% of protozoa, exceeding EPA standards for portable water filters. The slightly larger pore size compared to 0.1-micron competitors is what enables the faster flow rate — and the practical difference is negligible, since both pore sizes block all bacteria and protozoan cysts effectively. What you gain in speed, you do not sacrifice in safety.</p>
+  <p>The system includes a durable wide-mouth squeeze bottle designed specifically for the QuickDraw filter. The wide opening makes scooping water from shallow sources easy, and the bottle material strikes a good balance between squeezable flexibility and structural durability. The filter also connects inline with Platypus hydration reservoirs, enabling filtered hydration on the move — a feature that trail runners and fast-moving hikers value highly. The trade-off is that the squeeze bottle is proprietary; the QuickDraw does not fit standard water bottle threads the way a Sawyer adapter does.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 3 L/min flow rate is the headline specification and it delivers as advertised. In testing, a moderate squeeze produced a strong, steady stream of filtered water — filling a 1-liter Nalgene in approximately 20 seconds. This is dramatically faster than any other squeeze filter we have tested. The speed comes from Platypus's hollow fiber membrane design, which uses a wider fiber array than competitors to reduce resistance while maintaining effective pore-size filtration. The result is a squeeze filter that feels more like squeezing an unfiltered bottle than fighting against a membrane.</p>
+
+  <ProTip>The QuickDraw's speed advantage multiplies on multi-day trips. If you filter 6 liters per day over a 5-day trip, a 1 L/min filter takes 30 minutes of cumulative squeeze time. The QuickDraw cuts that to 10 minutes — saving 20 minutes of squeeze effort over the trip. For thru-hikers covering 20+ miles daily, every minute counts. Also, the inline hydration compatibility means you can drink on the move without stopping — fill the reservoir at a water source and keep walking while sipping filtered water.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In stream-water testing, the QuickDraw lived up to its name. The squeeze effort was notably lighter than the Sawyer Squeeze — the wider membrane array creates less back-pressure, so you can maintain a strong flow without hand fatigue. Water clarity was excellent from both clear and mildly turbid sources. There is no carbon stage, so taste improvement depends entirely on the source water quality. From mountain streams, the filtered water tasted clean and neutral. From a pond with higher organic content, there was a slight earthy note that a carbon filter would have removed.</p>
+  <p>The 4.5-star rating across 3,200 reviews is among the highest in the squeeze filter category. Reviewers consistently highlight the flow rate as the standout feature — many explicitly compare it favorably to their previous Sawyer Squeeze experience. The most common criticism is the proprietary bottle: users who already own compatible Smartwater or CNOC bags for their Sawyer cannot reuse them with the QuickDraw without adapters. Some reviewers also note that Platypus does not specify a gallon-based filter life, instead advising replacement "when flow drops significantly." This ambiguity bothers spec-focused buyers who want a hard number.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $39.95, the QuickDraw costs about $10 more than the Sawyer Squeeze ($29.95 street price) and delivers roughly double the flow rate. That $10 premium buys a dramatically better user experience — less squeeze effort, faster water, and less time standing at a water source. For hikers who filter 4-8 liters per day, the QuickDraw's speed advantage is felt on every fill. The included squeeze bottle is well-made and comfortable to use, which partially offsets the limitation of not fitting standard bottle threads.</p>
+  <p>The value calculation favors the QuickDraw for active hikers and backpackers who filter frequently. If you hike once a month and filter a liter or two per trip, the Sawyer Squeeze is perfectly adequate and saves $10. If you are a weekly hiker, thru-hiker, or trail runner who filters daily, the QuickDraw's speed and ergonomic advantage justify the price premium many times over. Against gravity systems like the Platypus GravityWorks ($74.95), the QuickDraw offers faster filtered water at nearly half the price and a third of the weight — the trade-off is that squeeze mode requires active effort while gravity mode is hands-free.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

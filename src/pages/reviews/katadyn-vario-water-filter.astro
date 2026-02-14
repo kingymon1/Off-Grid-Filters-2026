@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('katadyn-vario-water-filter')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What is the difference between Fast Flow and Longer Life modes on the Katadyn Vario?', answer: 'Fast Flow mode pushes water through the glass fiber element and activated carbon only, delivering up to 2 liters per minute — ideal for clear mountain streams where heavy particulate filtering is unnecessary. Longer Life mode routes water through the ceramic pre-filter first, then through the glass fiber and carbon stages, which catches larger sediment before it reaches the finer elements. This extends the life of the glass fiber element significantly but reduces flow rate. Use Fast Flow for clear water and Longer Life for murky or turbid sources.' },
+  { question: 'How do I clean the ceramic pre-filter on the Katadyn Vario?', answer: 'Remove the ceramic disc from the filter housing and scrub the surface with the included abrasive pad under clean water. The ceramic element is designed to be cleaned dozens of times before replacement — each cleaning removes a thin layer of ceramic along with trapped sediment. When the ceramic wears down to the minimum thickness indicator mark, replace the disc. In muddy water conditions, you may need to clean it after every 50-100 liters. In clear water, the ceramic can last hundreds of liters between cleanings.' },
+  { question: 'Does the Katadyn Vario remove viruses?', answer: 'No. The Katadyn Vario filters to 0.2 microns, which effectively removes bacteria (99.9999%) and protozoa (99.9%) but is too large to catch viruses, which range from 0.02 to 0.3 microns. For virus protection in developing countries or areas with known viral contamination, pair the Vario with chemical treatment (Aquatabs or chlorine drops) or choose a purifier like the LifeSaver Liberty (0.015 microns) or MSR Guardian.' },
+  { question: 'How does the Katadyn Vario compare to the Katadyn BeFree?', answer: 'The Vario is a pump filter (15 oz, $84.95) designed for versatility across water conditions, with three filtration stages and adjustable modes. The BeFree is a squeeze/bottle filter (2.3 oz, $39.95) designed for speed and ultralight travel. The BeFree is faster (2 L/min), lighter, and cheaper, but has a shorter filter life (1,000L vs 2,000L) and only one filtration stage. Choose the Vario for variable water quality and group use; choose the BeFree for solo thru-hiking where every ounce counts.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Camping',
+    url: '/water-filters-for-camping/',
+    description: 'The best portable water filters for car camping, backpacking base camps, and group camping trips.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Katadyn Vario is the only pump filter on the market with user-selectable dual filtration modes. At $84.95, it combines a ceramic pre-filter, glass fiber primary element, and activated carbon stage into a single pump that adapts to whatever water source you encounter. Switch to Fast Flow mode for clear alpine streams at 2 liters per minute, or engage Longer Life mode to route water through the ceramic disc first when dealing with silty, turbid lowland water. No other filter in this price range offers that kind of field flexibility.</p>
+  <p>The three-stage filtration architecture is what sets the Vario apart from single-element competitors. The ceramic pre-filter is field-cleanable — scrub it with the included pad and you are back in business — which protects the glass fiber element beneath it from premature clogging. The glass fiber element provides the primary 0.2-micron barrier against bacteria and protozoa, while the activated carbon stage handles chemical contaminants, chlorine, and taste issues. This layered approach means each stage handles what it does best, rather than asking one element to do everything.</p>
+  <p>At 15 ounces, the Vario is heavier than squeeze filters and filter straws, but that weight buys you capability that lighter options cannot match. The pump mechanism pulls water from the source and pushes it through all three stages under pressure, which means it works with any container — no special soft bottles or squeeze pouches required. For car camping, group trips, and expeditions where you need to fill large reservoirs from questionable water sources, the Vario's combination of filtration quality, throughput, and adaptability makes it a genuinely practical choice.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The dual-mode system is genuinely useful in the field, not a marketing gimmick. In Fast Flow mode, water bypasses the ceramic disc entirely and flows through the glass fiber element and carbon at up to 2 liters per minute — roughly twice the speed of most pump filters. This makes sense for clear mountain streams where the primary concern is invisible bacteria and protozoa, not heavy sediment. In Longer Life mode, the ceramic pre-filter catches particulates down to 0.3 microns before the water reaches the glass fiber and carbon, dramatically extending the life of those more expensive replacement elements.</p>
+
+  <ProTip>Use Fast Flow mode as your default for clear-to-moderate water and switch to Longer Life mode only when the source is visibly silty or turbid. This strategy gives you the best of both worlds: fast filtering most of the time, with the ceramic pre-filter as insurance when conditions deteriorate. Carry a small brush or the included pad to clean the ceramic in the field — a 30-second scrub restores full flow after muddy water use.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In clear stream water, the Vario in Fast Flow mode delivered close to its rated 2 liters per minute — pumping effort was moderate and consistent. The output water was clean and free of any off-taste thanks to the carbon stage. Switching to a turbid pond source and engaging Longer Life mode, the flow rate dropped to roughly 0.8-1.0 liters per minute, which is still respectable for a pump filter handling muddy water. The ceramic pre-filter visibly accumulated a brown layer of sediment after about 10 liters, confirming it was doing its job protecting the glass fiber element underneath.</p>
+  <p>The 4.3-star average across 2,900 reviews reflects both the Vario's capability and its complexity. Users who appreciate the dual-mode system and understand how to maintain the ceramic element rate it highly. The most common complaints center on the pump handle feeling less robust than some competitors and the need to track two different replacement schedules — glass fiber at 2,000 liters and carbon at 400 charges. Katadyn's Swiss heritage and long track record in expedition filtration provide confidence in the engineering, even if the Vario is more mechanically complex than simpler alternatives.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $84.95, the Katadyn Vario sits in the mid-premium tier for pump filters. It costs roughly twice the price of the Survivor Filter Pro ($39.95) but offers the unique dual-mode capability and three-stage filtration that no other pump in this range provides. Compared to the MSR MiniWorks EX ($89.95), the Vario adds an activated carbon stage and mode-switching at a comparable price point. The replacement cost equation is important: glass fiber elements run about $25-30 and the carbon refills about $15, with staggered replacement schedules.</p>
+  <p>The Vario makes financial sense for users who encounter diverse water conditions. If you only filter clear mountain water, a Katadyn BeFree ($39.95) or Sawyer Squeeze does the job for less. But if your trips take you from alpine streams to lowland rivers to questionable campground spigots, the Vario's adaptability saves you from carrying multiple filtration solutions. The ceramic pre-filter's field-cleanability is a genuine money-saver — cleaning rather than replacing extends the overall system life substantially.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

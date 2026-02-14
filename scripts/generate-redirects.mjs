@@ -39,14 +39,18 @@ const configSource = readFileSync(configPath, 'utf-8');
 function extractProductRedirects(source) {
   const redirects = [];
 
-  // Match product objects that have legacyUrls
-  // Pattern: slug: 'some-slug', ... legacyUrls: ['/old/path', ...]
-  const productBlockRegex = /\{\s*\n(?:[^}]*?)slug:\s*'([^']+)'(?:[^}]*?)legacyUrls:\s*\[([\s\S]*?)\]/g;
+  // Find all legacyUrls arrays, then look backward for the nearest slug
+  const legacyRegex = /legacyUrls:\s*\[([\s\S]*?)\]/g;
   let match;
 
-  while ((match = productBlockRegex.exec(source)) !== null) {
-    const slug = match[1];
-    const urlsBlock = match[2];
+  while ((match = legacyRegex.exec(source)) !== null) {
+    const urlsBlock = match[1];
+    const beforeMatch = source.slice(0, match.index);
+
+    // Find the nearest slug: 'some-slug' before this legacyUrls
+    const slugMatches = [...beforeMatch.matchAll(/slug:\s*'([^']+)'/g)];
+    if (slugMatches.length === 0) continue;
+    const slug = slugMatches[slugMatches.length - 1][1];
     const destination = `/reviews/${slug}/`;
 
     // Extract individual URL strings from the array

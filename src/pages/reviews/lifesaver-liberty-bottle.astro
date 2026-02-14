@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('lifesaver-liberty-bottle')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What does the LifeSaver Liberty failsafe shutoff do?', answer: 'The failsafe shutoff mechanism automatically blocks water flow when the ultrafiltration membrane reaches the end of its 2,000-liter capacity. Unlike standard filters that gradually lose effectiveness without warning, the LifeSaver Liberty physically prevents you from drinking unfiltered water once the cartridge is exhausted. This is a critical safety feature for travel and emergency use — you never have to guess whether the filter is still working. When the pump stops producing water, it is time for a new cartridge.' },
+  { question: 'Can the LifeSaver Liberty remove viruses?', answer: 'Yes. The LifeSaver Liberty is a true purifier, not just a filter. Its 0.015-micron ultrafiltration membrane removes viruses (99.999%), bacteria (99.9999%), and protozoa (99.99%). This makes it one of the few portable bottle systems that meets the EPA Guide Standard for virus removal without chemicals or UV light. The GRAYL GeoPress is the main competitor with similar virus-removal capability, but the LifeSaver achieves it through mechanical filtration alone — no purification chemicals that could run out.' },
+  { question: 'How does the LifeSaver Liberty compare to the GRAYL GeoPress?', answer: 'Both are portable purifiers that remove viruses, bacteria, and protozoa. The GRAYL GeoPress ($89.95) uses a press-down mechanism that purifies 24 oz in 8 seconds — faster than the Liberty for single servings. The LifeSaver Liberty ($109.99) uses a pump/squeeze mechanism that is slower per serving but has a 2,000-liter cartridge life vs GRAYL\'s 350 liters per cartridge. Long-term, the Liberty costs significantly less per liter. Choose the GRAYL for speed and simplicity; choose the Liberty for capacity, cost efficiency, and the failsafe shutoff feature.' },
+  { question: 'Is the LifeSaver Liberty good for emergency preparedness kits?', answer: 'The LifeSaver Liberty is an excellent choice for emergency preparedness. Its 2,000-liter capacity provides enough purified water for one person for over 3 years at 1.5 liters per day, or a family of four for about 8 months. The failsafe shutoff ensures safety even in high-stress situations. The integrated activated carbon disc improves taste from stagnant or chlorinated emergency water sources. Unlike chemical treatments that expire or UV purifiers that need batteries, the Liberty works entirely through mechanical filtration with no consumables beyond the cartridge itself.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Travel',
+    url: '/water-filters-for-travel/',
+    description: 'Portable water purification for international travel, from filter bottles to UV purifiers.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The LifeSaver Liberty is one of the few portable bottles on the market that is a genuine water purifier — not just a filter. At $109.99, its 0.015-micron ultrafiltration membrane removes viruses, bacteria, and protozoa through mechanical filtration alone, without chemicals, UV light, or electricity. This matters because most portable filters (including popular options from Sawyer, LifeStraw, and Katadyn) only filter to 0.1-0.2 microns, which blocks bacteria and protozoa but lets viruses pass through. The Liberty closes that gap with a membrane pore size nearly 7 times finer than a standard 0.1-micron filter.</p>
+  <p>The failsafe shutoff mechanism is the Liberty's most distinctive safety feature and something no other portable purifier bottle offers. When the ultrafiltration cartridge reaches its rated 2,000-liter capacity, the pump mechanism physically locks and will not produce water. There is no gradual degradation, no guessing, no "is my filter still good?" uncertainty. The system either works or it stops — and when it stops, you know it is time for a new cartridge. In high-stakes situations like international travel or disaster response, this binary safety guarantee provides genuine peace of mind.</p>
+  <p>The integrated activated carbon disc is the second filtration stage, working downstream of the ultrafiltration membrane to improve taste and reduce chlorine. This is a thoughtful addition because purified water from membrane filtration alone can taste flat or carry off-flavors from stagnant source water. The carbon disc does not affect pathogen removal (that is handled entirely by the membrane) but makes the output water significantly more palatable. At 15 ounces, the Liberty is heavier than simple filter straws but lighter than pump filters, occupying a practical middle ground for travelers and preparedness-minded users.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 0.015-micron ultrafiltration membrane is the core technology. At this pore size, the membrane physically blocks all known waterborne pathogens: viruses at 99.999% (log-5 reduction), bacteria at 99.9999% (log-6), and protozoa at 99.99% (log-4). These ratings meet or exceed the EPA Guide Standard and the NSF Protocol P231 for microbiological purifiers. The membrane achieves this through size exclusion alone — there are no iodine resins, silver nanoparticles, or other chemical treatment methods involved. This makes the Liberty effective regardless of water temperature, pH, or contact time.</p>
+
+  <ProTip>For international travel, the LifeSaver Liberty is one of the safest portable options because it removes viruses mechanically. Unlike chemical purifiers that require specific contact times (30 minutes for Cryptosporidium with iodine) or UV purifiers that need clear water to work properly, the Liberty works instantly on any water you can push through it. Keep the integrated carbon disc fresh by replacing it every 100-200 liters for optimal taste improvement — the membrane itself lasts the full 2,000 liters regardless of carbon disc condition.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>The LifeSaver Liberty produced clean, clear, and palatable water from a variety of sources including lake water, river water with visible sediment, and tap water with heavy chlorine taste. The pump/squeeze mechanism requires moderate effort — noticeably more than the simple squeeze action of a Katadyn BeFree or Sawyer Squeeze — but delivers consistent flow at 0.5-0.7 liters per minute. Filling a 500ml cup took approximately 45-60 seconds of pumping. The carbon stage made a noticeable difference in taste, particularly when filtering from stagnant pond water that tasted earthy without it.</p>
+  <p>The 4.4-star rating across 2,200 reviews reflects strong satisfaction from the target audience: international travelers, disaster preparedness planners, and outdoor enthusiasts who prioritize virus removal. The most common praise targets the failsafe shutoff and the peace of mind that comes with genuine purification. The primary criticisms center on the pump effort being harder than expected (it is pushing water through a very fine membrane, after all) and the replacement cartridge availability — LifeSaver cartridges are less widely stocked than Sawyer or GRAYL replacements. Users in developing countries and humanitarian contexts give particularly strong reviews, confirming the Liberty's pedigree as a field-proven purifier.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $109.99, the LifeSaver Liberty is priced $20 above the GRAYL GeoPress ($89.95) but offers nearly 6 times the cartridge life: 2,000 liters vs 350 liters. Over 2,000 liters of purification, the Liberty costs $0.055 per liter (assuming one cartridge). The GRAYL would require approximately 5.7 cartridges at $24.95 each to purify the same volume, totaling roughly $232 — more than double the Liberty's upfront cost. For users who plan to purify large volumes over time (travelers, off-grid living, emergency prep), the Liberty offers dramatically better per-liter economics.</p>
+  <p>The Liberty makes less financial sense for casual day hikers who do not need virus protection and can get by with a $30-40 filter straw or squeeze system. It is also heavier than simpler alternatives — at 15 ounces, it weighs more than three Katadyn BeFree systems combined. The sweet spot for the Liberty is users who specifically need virus removal in a portable bottle format and plan to use it enough for the 2,000-liter capacity to provide real cost savings over the GRAYL GeoPress. International travelers, NGO field workers, and emergency preparedness enthusiasts are the core audience where this bottle pays for itself.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

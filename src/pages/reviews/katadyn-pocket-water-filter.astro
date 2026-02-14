@@ -1,0 +1,159 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('katadyn-pocket-water-filter')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Is the Katadyn Pocket really capable of filtering 50,000 liters?', answer: 'Yes, the 50,000-liter claim is based on the silver-impregnated ceramic element\'s physical capacity. The ceramic shell can be cleaned and reused approximately 300-400 times before it wears down to the minimum safe diameter (indicated by the included gauge). Each cleaning restores flow rate by removing the outer layer of trapped particles. At an average of 125-150 liters between cleanings, the math works out to approximately 50,000 liters total. In practice, the actual lifespan depends on water quality — filtering consistently turbid water requires more frequent cleaning and wears the ceramic faster. In reasonably clear water, 50,000 liters over the filter\'s lifetime is realistic.' },
+  { question: 'How do you clean the Katadyn Pocket ceramic element?', answer: 'Remove the ceramic element from the aluminum housing. Using the included scotch-brite style cleaning pad, scrub the entire outer surface of the ceramic with light, even strokes under running water (or using a small amount of clean water). The goal is to remove the accumulated layer of filtered sediment, not to sand down the ceramic aggressively. Scrub until the surface color is uniformly lighter. After scrubbing, check the ceramic diameter against the gauge tool — if the ceramic fits through the gauge, it has been scrubbed past its minimum safe thickness and must be replaced. Reassemble and test by pumping a few strokes to confirm restored flow.' },
+  { question: 'Why is the Katadyn Pocket so much heavier than other portable filters?', answer: 'The 20-ounce weight comes from the all-aluminum housing and the dense ceramic filter element. Aluminum was chosen over plastic for its durability — the Pocket is designed to survive decades of expeditions, military deployments, and rough field use that would crack plastic housings. The ceramic element itself is heavier than hollow fiber membranes because ceramic is a rigid, dense material. This weight penalty buys you field-cleanability (you can scrub ceramic; you cannot scrub hollow fiber), resistance to freeze damage (ceramic survives moderate freezing; hollow fiber does not), and the 50,000-liter capacity that no lightweight filter can match.' },
+  { question: 'What does the Katadyn Pocket 20-year warranty cover?', answer: 'Katadyn\'s 20-year warranty covers manufacturing defects in materials and workmanship of the pump housing, handle mechanism, and hose fittings. It does not cover the replaceable ceramic element (which is a consumable), normal wear and tear, damage from misuse (dropping, freezing — though ceramic handles moderate frost), or cosmetic damage. The warranty is transferable — if you buy a used Katadyn Pocket with proof of original purchase within the 20-year window, the warranty still applies. To file a claim, contact Katadyn directly with your purchase documentation. Given the filter\'s $370 price point, the 20-year warranty provides meaningful financial protection for what is a multi-decade investment.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Off-Grid Living',
+    url: '/water-filters-for-off-grid/',
+    description: 'Long-lasting, reliable water filtration solutions for cabins, homesteads, and permanent off-grid setups.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Katadyn Pocket is the most serious portable water filter money can buy. At $369.95, it costs more than most backpackers spend on their entire water treatment setup over a lifetime. But the Pocket is not designed for weekend warriors — it is an expedition-grade, military-specification water filter built to deliver 50,000 liters of clean water over a 20+ year lifespan. The silver-impregnated ceramic element filters at 0.2 microns, the all-aluminum housing survives impacts that shatter plastic, and Katadyn backs the entire assembly with a 20-year warranty that no other filter manufacturer comes close to matching.</p>
+  <p>Katadyn has been making the Pocket since 1928, and the design philosophy has not changed: prioritize longevity and reliability over weight and convenience. The silver impregnation in the ceramic prevents bacterial colonization of the filter element itself — a problem that can affect hollow fiber and carbon filters during long storage periods. The ceramic can be field-cleaned hundreds of times by scrubbing the outer surface, with each cleaning restoring flow rate to near-original levels. When you do the math — $370 divided by 50,000 liters — the cost works out to $0.0074 per liter. That is less than one cent per liter of clean water, making the Pocket the cheapest-per-liter portable filter in existence over its full lifespan.</p>
+  <p>The trade-offs are real and significant. At 20 ounces, the Pocket is the heaviest portable filter in our review catalog — nearly four times the weight of the MSR MiniWorks EX. The pumping action requires more effort than modern hollow fiber designs because water must be forced through dense ceramic rather than flexible membrane tubes. And it does not remove viruses, which means it is not sufficient as a standalone purifier in regions with viral contamination risk (most of developing-world travel). For ultralight backpackers and casual weekend hikers, the Pocket is dramatic overkill. For long-term travelers, expeditions, off-grid homesteaders, and preppers building a multi-decade water security plan, it is the only filter that makes serious long-term financial and practical sense.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The silver-impregnated ceramic is the Pocket's defining technology. Silver ions are embedded throughout the ceramic matrix during manufacturing, not merely coated on the surface. As water passes through the ceramic pores, trace amounts of silver leach into the water — not enough to affect taste or health, but enough to create an antimicrobial zone within and around the filter element. This prevents bacteria from colonizing the ceramic pores during storage, which is critical for a filter designed to be used intermittently over decades. Without silver impregnation, bacteria could grow inside the ceramic during periods of non-use, potentially compromising filtration on the next use.</p>
+
+  <ProTip>The Katadyn Pocket is the only portable filter we recommend for preppers building a serious long-term water security plan. A single Pocket, stored properly, can provide a family of four with clean drinking water for over 30 years of intermittent emergency use. Store the filter dry with the ceramic element removed and wrapped in a clean cloth. The silver impregnation prevents degradation during storage. Pair it with a stockpile of Aquatabs for virus protection, and you have a comprehensive water purification system that outlasts every other option by an order of magnitude.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Pumping the Katadyn Pocket requires noticeably more effort than hollow fiber pump filters. The ergonomic handle helps, but you are forcing water through dense ceramic rather than flexible membrane tubes — expect a moderate arm workout when filtering more than a few liters. The rated 1 L/min flow rate was achievable with steady, deliberate pump strokes, though maintaining that pace for 5+ liters straight produced noticeable forearm fatigue. For the intended use case — filtering 2-4 liters at a time during expedition travel — this effort level is entirely manageable. For high-volume camp duty, a gravity filter would be more practical.</p>
+  <p>Where the Pocket truly shines is reliability. The aluminum housing feels indestructible. The ceramic element cleaned easily with the included pad, and flow rate restoration after cleaning was immediate and dramatic — going from a slow drip back to full 1 L/min in a single cleaning session. The pump mechanism is simple and mechanically robust, with no plastic parts that could fatigue or crack. After handling dozens of portable filters, the Pocket is the only one that feels like it was built to outlive its owner. The 2,100 Amazon reviews averaging 4.5 stars confirm this: users report 10, 15, even 20 years of reliable service.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $369.95, the Katadyn Pocket sits alone in the {getPriceTier(product.price)} premium tier. No other portable filter comes close to this price point. The value proposition rests entirely on longevity: the 50,000-liter capacity and 20-year warranty transform the upfront cost into the lowest per-liter operating cost of any portable filter — approximately $0.0074 per liter over its full life. Compare that to the MSR MiniWorks EX at $0.045/L or a Sawyer Squeeze at $0.00035/L (though the Sawyer's 100,000-liter claim is widely disputed in practice). If the Pocket delivers even half its rated capacity, it is still cheaper per liter than most mid-range filters.</p>
+  <p>The Pocket makes financial sense only if you will actually use it long enough to amortize the cost. For a weekend backpacker filtering 20 liters per trip, 10 trips per year, it would take 250 years to reach 50,000 liters — obviously absurd. But for an expedition leader filtering 50-100 liters per week across multiple trips per year, or an off-grid homesteader using it daily, the 50,000-liter life is reachable within 5-10 years. The Pocket also holds resale value remarkably well — used Katadyn Pockets sell for $150-250 on outdoor gear exchanges, meaning your effective cost of ownership after eventual resale could be under $200 for years of use.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

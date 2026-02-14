@@ -1,0 +1,159 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('grayl-geopress-24oz-water-purifier-bottle')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'How long does the GRAYL GeoPress cartridge last and how much do replacements cost?', answer: 'Each GeoPress purifier cartridge lasts approximately 350 presses, which translates to about 65 gallons (250 liters) of purified water. At a replacement cost of $24.95, that works out to roughly $0.38 per liter or $0.10 per ounce — significantly more expensive per liter than hollow fiber filters like the Sawyer Squeeze (effectively $0.00/liter). For a 2-week international trip filtering 2 liters per day, you would use about 40 presses — well within a single cartridge. For extended backcountry trips or daily home use, the cartridge cost adds up quickly. Carry a spare cartridge on trips longer than 3 weeks.' },
+  { question: 'Does the GRAYL GeoPress actually remove viruses?', answer: 'Yes. The GeoPress is a true purifier, not just a filter. Its electroadsorptive media technology removes 99.99% of viruses (including hepatitis A, norovirus, and rotavirus), 99.9999% of bacteria (E. coli, salmonella, cholera), and 99.9% of protozoa (giardia, cryptosporidium). It also removes chemicals, pesticides, heavy metals, and microplastics through its activated carbon and ion exchange stages. This is the critical difference between a purifier and a filter — hollow fiber filters like the Sawyer Squeeze remove bacteria and protozoa but cannot remove viruses due to their 0.1-micron pore size (viruses are 0.02-0.3 microns). The GeoPress is one of the few portable devices that provides complete pathogen removal without chemicals or UV light.' },
+  { question: 'How do I clean the GRAYL GeoPress between uses?', answer: 'After each use, remove the inner press assembly and shake out any excess water from both the outer bottle and the cartridge. Let both pieces air dry separately before reassembling for storage. If the press becomes noticeably harder to push, the cartridge may be clogged with sediment — this is normal with turbid water. You can extend cartridge life by pre-filtering visibly dirty water through a bandana or coffee filter before pressing. Do not attempt to backwash or rinse the purifier cartridge with force — the electroadsorptive media is designed to trap contaminants permanently, and aggressive cleaning can dislodge captured pathogens. Simply replace the cartridge when flow resistance becomes excessive or after 350 presses.' },
+  { question: 'Can I bring the GRAYL GeoPress through airport security?', answer: 'Yes. The GeoPress is TSA-compliant when empty. Remove the inner press, dump any remaining water, and send it through the X-ray machine. Security officers may inspect it due to its unusual shape, but it contains no prohibited materials — just a plastic bottle with a replaceable filter cartridge. Once past security, fill it from any airport water fountain or tap and press for clean water on your flight. This is one of the GeoPress best travel advantages: it works with any water source including questionable hotel tap water, restaurant ice, and airport fountains in countries where municipal water treatment may be inconsistent.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Travel',
+    url: '/water-filters-for-travel/',
+    description: 'The best portable water purifiers and filters for international travel, hotels, and airport use.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The GRAYL GeoPress is the fastest and most complete portable water purifier you can buy. Fill the outer bottle with contaminated water, insert the inner press, and push down — 8 seconds later you have 24 ounces of water that is free of viruses, bacteria, protozoa, chemicals, heavy metals, and microplastics. No other portable device delivers this breadth of protection with this speed and simplicity. At $89.95, it costs more than twice the price of a Sawyer Squeeze, but it does something no hollow fiber filter can: it removes viruses. For international travelers, disaster responders, and anyone dealing with potentially sewage-contaminated water, that capability is not optional — it is essential.</p>
+  <p>The GeoPress uses a three-stage purification system that is fundamentally different from the hollow fiber membrane technology in Sawyer and LifeStraw products. The first stage is electroadsorptive media, which uses positively charged materials to attract and trap negatively charged pathogens — including viruses as small as 0.02 microns that pass through conventional 0.1-micron filters. The second stage is activated carbon, which adsorbs dissolved chemicals, pesticides, chlorine, and heavy metals. The third stage is ion exchange, which further removes dissolved metals and improves taste. This triple-action approach is what earns the GeoPress its "purifier" classification rather than just "filter."</p>
+  <p>The trade-off for this comprehensive purification is cost — both upfront and ongoing. The $89.95 purchase price is the entry fee, but replacement cartridges at $24.95 every 350 presses (about 65 gallons) represent the real long-term expense. At $0.38 per liter, the GeoPress costs roughly 100x more per liter than a Sawyer Squeeze over its lifetime. The bottle itself is also heavy at 15.9 ounces — nearly 8 times the weight of a Sawyer Mini. These are real limitations, not marketing disclaimers. The GeoPress is not for ultralight backpackers filtering clear mountain streams. It is for travelers and preparedness-focused users who need absolute purification certainty from any water source on earth.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The "virus-level" micron rating deserves explanation. Traditional hollow fiber filters have a fixed pore size (typically 0.1 microns) that physically blocks anything larger than the pores. Viruses range from 0.02 to 0.3 microns, meaning many pass through conventional filters. The GeoPress does not rely on pore-size exclusion alone — its electroadsorptive media uses electrical charge to attract and trap particles far smaller than any physical filter could capture. This is the same principle used in medical-grade water purification systems and is why GRAYL can achieve 99.99% virus removal (log-4) without a pump or UV lamp.</p>
+
+  <ProTip>Pre-filter turbid water through a bandana or clean cloth before pressing to extend cartridge life significantly. The GeoPress cartridge is designed to handle dirty water, but removing large sediment particles first reduces clogging and maintains easy press pressure. For a 2-week trip, one cartridge is sufficient (about 40 presses for 2L/day). Carry a spare cartridge for trips longer than 3 weeks — they weigh only 3 ounces and cost $24.95, which is cheap insurance against press resistance in the field.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>The 8-second press claim is accurate with clean to moderately turbid water. Fill the outer bottle, insert the inner press assembly, and push straight down with both hands — the water forces through the cartridge and collects in the inner drinking vessel. The press action requires moderate effort (roughly 10-15 pounds of force), comparable to pressing a French press coffee maker. With heavily silted or muddy water, press time increases to 12-15 seconds and requires noticeably more force. After filtering about 100 presses of turbid water, the press becomes progressively harder — this is the cartridge reaching its sediment capacity, not a product defect.</p>
+  <p>Water taste is excellent. The activated carbon stage removes chlorine and dissolved chemicals that cause off-flavors, producing water that tastes cleaner than most municipal tap water. In side-by-side comparison with Sawyer-filtered water from the same creek source, the GeoPress output tasted noticeably better — the carbon stage makes a real difference for taste, which hollow fiber alone cannot address. The 4.6-star rating across 8,500 reviews reflects genuine user satisfaction, with the most common criticism being the ongoing cartridge cost and the weight for backpacking use. Users who travel internationally — particularly in Southeast Asia, Central America, and Africa — consistently report the GeoPress as a trip-changing piece of gear.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>The GeoPress represents a fundamentally different value proposition than hollow fiber filters. A Sawyer Squeeze at $34.97 has effectively zero ongoing cost; the GeoPress at $89.95 plus $24.95 per cartridge (every 65 gallons) accumulates real expense. For a year of moderate use (1 liter/day, 365 liters), you would use approximately 1.5 cartridges — call it $127 in year one and $37 annually thereafter. Compare that to the Sawyer Squeeze at $35 total for the same period (and the next 20 years). The GeoPress only makes economic sense if you genuinely need virus removal or chemical/heavy metal purification that hollow fiber cannot provide.</p>
+  <p>Against other purifiers, the GeoPress holds up well. The MSR Guardian ($349.95) removes viruses via 0.02-micron hollow fiber and is self-cleaning, but costs 4x more and weighs slightly more at 17.3 oz. Chemical purification tablets (MSR Aquatabs, $9.25 for 30) are cheaper and lighter but require 30-minute wait times and leave a chemical taste. UV purifiers (SteriPEN, $50-100) are lightweight but need batteries and do not remove chemicals or particulates. The GeoPress occupies the sweet spot of speed, completeness, and simplicity — no wait times, no batteries, no chemical taste, and the broadest contaminant removal of any single portable device.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

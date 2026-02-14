@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('lifestraw-flex-advanced-water-filter')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What are the four ways to use the LifeStraw Flex?', answer: 'The LifeStraw Flex works in four configurations: (1) Straw mode — drink directly from a water source by placing the intake end in water and sipping through the mouthpiece; (2) Squeeze mode — attach the filter to the included collapsible bottle, fill it with source water, and squeeze to push filtered water into a clean container; (3) Gravity mode — hang the filled collapsible bottle above a clean container and let gravity pull water through the filter; (4) Inline mode — connect the filter inline with a hydration bladder hose for hands-free filtered drinking while hiking. No other filter at this price offers all four configurations.' },
+  { question: 'How long does the LifeStraw Flex carbon capsule last?', answer: 'The activated carbon capsule lasts approximately 25 gallons (about 95 liters), which is significantly shorter than the membrane filter at 500 gallons (about 1,893 liters). At 2-3 liters per day of outdoor use, the carbon will need replacement roughly every 30-45 days of active use. Without the carbon capsule, the Flex still removes bacteria and protozoa through the membrane — you just lose chemical reduction and taste improvement. Replacement carbon capsules are available from LifeStraw and cost about $8-10 each.' },
+  { question: 'Can the LifeStraw Flex remove chemicals and heavy metals?', answer: 'The activated carbon capsule reduces chlorine, organic chemicals, and some taste/odor compounds, but it does not remove heavy metals like lead or mercury. For heavy metal removal, you need a filter with ion exchange resin (like a ZeroWater pitcher) or a reverse osmosis system. The Flex is designed primarily for microbiological safety (bacteria and protozoa removal) with carbon as a secondary improvement for taste and basic chemical reduction. It is not a replacement for a home filtration system for chemically contaminated tap water.' },
+  { question: 'Is the LifeStraw Flex better than the LifeStraw Go Series?', answer: 'It depends on your use case. The Flex ($29.95) is more versatile — four use modes vs one — and lighter at 3.5 oz (filter only), but comes with a soft collapsible pouch instead of a rigid bottle. The Go Series ($34.95) includes a durable Tritan bottle with a leak-proof lid and has a longer membrane life (1,000 gallons vs 500 gallons). Choose the Flex if you want maximum versatility and already own bottles or bladders to pair with it. Choose the Go Series if you want a complete, self-contained daily-use filter bottle.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Camping',
+    url: '/water-filters-for-camping/',
+    description: 'The best portable water filters for car camping, backpacking base camps, and group camping trips.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The LifeStraw Flex is the most versatile filter in LifeStraw's lineup, functioning as a straw, squeeze filter, gravity filter, and inline hydration bladder filter — four configurations from a single $29.95 product. No other portable filter at any price point offers this level of adaptability. The 2-stage design pairs a 0.2-micron membrane microfilter with a replaceable activated carbon capsule, delivering both microbiological safety and improved water taste in a package that weighs just 3.5 ounces.</p>
+  <p>The multi-use versatility is not a gimmick — each configuration solves a genuinely different field scenario. Straw mode lets you drink directly from streams and lakes without any accessories. Squeeze mode uses the included collapsible bottle to push filtered water into cookpots or clean bottles — ideal for camp water processing. Gravity mode lets you hang the filled bottle and walk away while filtered water drips into a collection container below, hands-free. And inline mode connects the Flex between your hydration bladder hose and the bite valve, so every sip from your CamelBak or Platypus is filtered automatically. A solo thru-hiker might use all four modes on a single trip.</p>
+  <p>The carbon capsule is the Flex's edge over bare membrane filters like the Sawyer Squeeze or standard LifeStraw Personal. Activated carbon adsorbs chlorine, organic compounds, and the earthy flavors that tannin-rich or stagnant water often carries. The resulting water tastes noticeably cleaner than what a membrane-only filter delivers. The trade-off is the carbon's short lifespan — just 25 gallons before replacement — which adds an ongoing consumable cost. But at roughly $8-10 per capsule, the taste improvement is worth it for many users.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 0.2-micron membrane delivers log-8 bacteria removal (99.999999%) and log-4 protozoa removal (99.99%), meeting EPA standards for microbiological water filters. The carbon capsule handles chlorine, organic chemicals, and taste/odor compounds. Together, the two stages produce water that is both microbiologically safe and pleasant to drink. The membrane alone lasts 500 gallons — considerably less than the Sawyer Squeeze's functionally unlimited lifespan but adequate for multiple seasons of regular backcountry use.</p>
+
+  <ProTip>For camping and base camp scenarios, the gravity mode is a game-changer. Hang the filled collapsible bottle from a tree branch using paracord, position a cookpot or clean Nalgene below the filter outlet, and let gravity do the work while you set up camp. The flow rate in gravity mode is slower than squeezing (roughly 0.3 L/min) but requires zero effort. This effectively turns the $29.95 Flex into a gravity filtration system that would otherwise cost $50-80 from brands like Platypus or MSR.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In squeeze mode with the included collapsible bottle, the Flex delivered approximately 0.6 liters per minute — slower than the Katadyn BeFree (2 L/min) and Sawyer Squeeze (1.7 L/min) but faster than sip-only filter bottles. The squeeze effort was moderate — the small collapsible pouch requires a firm grip but does not fatigue quickly. In straw mode from a stream, drinking required steady suction with noticeable resistance — comparable to the original LifeStraw Personal. The carbon capsule made a clear difference in taste testing: water from a leaf-strewn pond had an earthy flavor without carbon, which was eliminated when the carbon capsule was in place.</p>
+  <p>The 4.3-star rating across 3,500 reviews reflects solid satisfaction with the versatility concept but some frustration with the included squeeze pouch. Users consistently praise the four-mode flexibility and the carbon taste improvement but note that the collapsible pouch is smaller and flimsier than dedicated squeeze bags from CNOC or Evernew. The inline mode with hydration bladders receives the most enthusiastic feedback — it effectively adds 2-stage filtration to any existing hydration system for under $30. The most common complaint beyond the pouch quality is the carbon capsule's 25-gallon lifespan, which several reviewers describe as too short for extended backcountry trips.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $29.95, the LifeStraw Flex is the cheapest way to get a 2-stage (membrane + carbon) portable filter with multi-mode versatility. The LifeStraw Go Series ($34.95) costs $5 more but includes a rigid Tritan bottle and a longer-lasting membrane (1,000 gallons vs 500). The Sawyer Squeeze ($34.95 for filter only) has better flow rate and effectively unlimited filter life but offers only squeeze/gravity modes and no carbon stage. The Katadyn BeFree ($39.95) has the fastest flow but only works with Hydrapak bottles and has no carbon stage. For sheer capability per dollar, the Flex offers the most configurations of any filter at any price.</p>
+  <p>The ongoing carbon capsule replacement cost ($8-10 every 25 gallons) is the Flex's hidden expense. A heavy user filtering 3-4 liters per day outdoors will burn through a carbon capsule in about 6-8 days, which adds up quickly on long trips. Budget-conscious users can simply remove the carbon and run the Flex as a membrane-only filter — it still removes bacteria and protozoa effectively, just without taste improvement. This makes the Flex a strong value for users who want a backup gravity/inline/straw option and do not necessarily rely on the carbon stage for every use.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>
