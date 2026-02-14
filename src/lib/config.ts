@@ -47,6 +47,7 @@ export interface Product {
   verdict: string;
   specs: ProductSpecs;
   publishDate: string;
+  legacyUrls?: string[]; // Old URLs that should 301 redirect to /reviews/[slug]/
 }
 
 export interface ProductSpecs {
@@ -90,6 +91,20 @@ export interface GuideConfig {
   type: 'buyer' | 'activity' | 'knowledge';
   publishDate: string;
 }
+
+// ── URL Redirects (for site migrations) ───────────────────────
+// General-purpose 301 redirects for old URLs that don't map to specific products.
+// Product-level redirects use the `legacyUrls` field on each Product instead.
+export interface Redirect {
+  from: string;
+  to: string;
+}
+
+// When migrating, add entries like:
+//   { from: '/products', to: '/guides/' },
+//   { from: '/roundups', to: '/guides/' },
+export const redirects: Redirect[] = [
+];
 
 export interface NavLink {
   title: string;
