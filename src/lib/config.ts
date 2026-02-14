@@ -100,10 +100,32 @@ export interface Redirect {
   to: string;
 }
 
-// When migrating, add entries like:
-//   { from: '/products', to: '/guides/' },
-//   { from: '/roundups', to: '/guides/' },
+// Old site migration redirects — preserves SEO equity from indexed URLs.
+// Order matters: specific paths before wildcards (Vercel checks top-to-bottom).
 export const redirects: Redirect[] = [
+  // ── Old section indexes ──
+  { from: '/products', to: '/guides/' },
+  { from: '/roundups', to: '/guides/' },
+  { from: '/contact', to: '/' },
+
+  // ── Old product pages (wildcard — /products/ prefix unused in new site) ──
+  { from: '/products/:path+', to: '/best-survival-filters/' },
+
+  // ── Old roundup subpages (all were survival/portable filter roundups) ──
+  { from: '/roundups/:path+', to: '/best-survival-filters/' },
+
+  // ── Old review pages for products not in current catalog ──
+  { from: '/reviews/lifestraw-go-series', to: '/best-survival-filters/' },
+  { from: '/reviews/hydroblu-clear-flow-bottle', to: '/best-survival-filters/' },
+  { from: '/reviews/grayl-tap-water-filter', to: '/best-survival-filters/' },
+  { from: '/reviews/hydroblu-versa-flow-water-filter', to: '/best-survival-filters/' },
+  { from: '/reviews/sawyer-squeeze-water-filtration-system', to: '/best-survival-filters/' },
+  { from: '/reviews/hydroblu-go-flow-water-gravity-bag', to: '/best-survival-filters/' },
+  { from: '/reviews/hydroblu-sidekick-2-stage-straw-filter', to: '/best-survival-filters/' },
+  { from: '/reviews/grayl-geopress-24oz-water-purifier-bottle', to: '/best-survival-filters/' },
+  { from: '/reviews/sawyer-products-mini-water-filtration-system', to: '/best-survival-filters/' },
+  { from: '/reviews/katadyn-befree-1-0l-water-filter-bottle', to: '/best-survival-filters/' },
+  { from: '/reviews/lifestraw-family-1-0-portable-gravity-powered-water-purifier', to: '/best-survival-filters/' },
 ];
 
 export interface NavLink {

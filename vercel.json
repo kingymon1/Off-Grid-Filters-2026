@@ -6,71 +6,131 @@
     {
       "source": "/:path*.html",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     },
     {
       "source": "/assets/images/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=43200"
+        }
       ]
     },
     {
       "source": "/assets/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=43200"
+        }
       ]
     },
     {
       "source": "/_astro/:path*",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/favicon.ico",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/favicon.png",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     },
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" },
-        { "key": "Content-Type", "value": "application/xml" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=43200"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        }
       ]
     },
     {
       "source": "/sitemap-index.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=43200" },
-        { "key": "Content-Type", "value": "application/xml" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=43200"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/xml"
+        }
       ]
     },
     {
       "source": "/robots.txt",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-XSS-Protection", "value": "1; mode=block" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=(), interest-cohort=()" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Access-Control-Allow-Origin", "value": "https://offgridfilters.com" },
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://va.vercel-scripts.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://buttondown.com" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://offgridfilters.com"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://va.vercel-scripts.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://buttondown.com"
+        }
       ]
     }
   ],
@@ -83,6 +143,86 @@
     {
       "source": "/guides/how-to-choose-off-grid-water-filter",
       "destination": "/guides/how-to-choose-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products",
+      "destination": "/guides/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups",
+      "destination": "/guides/",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/products/:path+",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/:path+",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/lifestraw-go-series",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/hydroblu-clear-flow-bottle",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/grayl-tap-water-filter",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/hydroblu-versa-flow-water-filter",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/sawyer-squeeze-water-filtration-system",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/hydroblu-go-flow-water-gravity-bag",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/hydroblu-sidekick-2-stage-straw-filter",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/grayl-geopress-24oz-water-purifier-bottle",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/sawyer-products-mini-water-filtration-system",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/katadyn-befree-1-0l-water-filter-bottle",
+      "destination": "/best-survival-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/lifestraw-family-1-0-portable-gravity-powered-water-purifier",
+      "destination": "/best-survival-filters/",
       "permanent": true
     }
   ]
