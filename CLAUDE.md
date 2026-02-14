@@ -179,6 +179,13 @@ Organize pages into these content types:
 - "Best [Category] [Year]" — ranks all products in that category
 - URL: `/best-[category-slug]/`
 
+**2b. Curated Roundups (0-5 pages, created during URL migration)**
+- Cross-category product curation by use case (e.g., "Best Pump Filters", "Best Backpacking Filters")
+- URL: `/best-[use-case-slug]/`
+- These are NOT tied to a config category — they pull specific products by slug using `getProductBySlug()`
+- Created when an old site had roundup pages that don't map to the new site's category structure
+- Follow the same template as category roundups but with a curated product list
+
 **3. Head-to-Head Comparisons (from brief, 8-15 pages)**
 - "[Product A] vs [Product B]: Which Is Better?"
 - URL: `/[product-a]-vs-[product-b]/`
@@ -1503,17 +1510,30 @@ Collect ALL indexed URLs into a list. For each, note:
 
 ### 4.5.2 Categorize URLs
 
-Sort old URLs into three buckets:
+Sort old URLs into four buckets:
 
 **1. Product pages → need new review pages + redirects**
 - Old product URLs (e.g., `/products/slug`) that map to specific products
 - These need: ASIN lookup, product added to `config.ts`, review page built, `legacyUrls` set
 
-**2. Section/index pages → redirect to nearest equivalent**
+**2. Roundup/category pages → create curated roundup pages + redirects**
+- Old roundup URLs (e.g., `/roundups/best-pump-filters`) that grouped products by use case
+- These need: **new standalone roundup pages** that curate products by slug from across categories
+- Do NOT just redirect to a generic page — create actual content that mirrors the old page's intent
+- Use `getProductBySlug()` to pull specific products (NOT `getProductsByCategory`, since products
+  may span multiple categories)
+- Follow the same template as `best-survival-filters.astro` but with curated product lists
+- Add to: `vercel.json` redirects (specific paths before the catch-all), image-map, navigation,
+  resource hub
+- Examples: `/roundups/best-pump-filters` → create `/best-pump-filters/` with all pump-mechanism
+  products; `/roundups/best-backpacking-water-filters` → create `/best-backpacking-water-filters/`
+  with ultralight trail filters
+
+**3. Section/index pages → redirect to nearest equivalent**
 - Old index pages (e.g., `/products`, `/roundups`) that map to new section pages
 - These need: entries in the `redirects` array in `config.ts`
 
-**3. Content pages → redirect to nearest equivalent**
+**4. Content pages → redirect to nearest equivalent**
 - Old guides, blog posts, etc. that map to new guide/knowledge base pages
 - These need: entries in the `redirects` array, or new content pages if worth creating
 
@@ -1539,11 +1559,16 @@ For products that need to be added back:
 },
 ```
 
-**General redirects** — add to the `redirects` array in `config.ts`:
+**Curated roundup redirects** — specific paths before catch-all (Vercel checks top-to-bottom):
 ```typescript
 export const redirects: Redirect[] = [
-  { from: '/products', to: '/guides/' },
+  // Specific old roundup pages → curated roundup pages (created in bucket 2)
+  { from: '/roundups/best-pump-filters', to: '/best-pump-filters/' },
+  { from: '/roundups/best-backpacking-water-filters', to: '/best-backpacking-water-filters/' },
+  { from: '/roundups/best-off-grid-water-filters', to: '/best-off-grid-water-filters/' },
+  // Catch-all for any remaining old roundup URLs
   { from: '/roundups', to: '/guides/' },
+  { from: '/products', to: '/guides/' },
 ];
 ```
 

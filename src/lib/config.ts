@@ -105,6 +105,10 @@ export interface Redirect {
 export const redirects: Redirect[] = [
   // ── Old section indexes ──
   { from: '/products', to: '/guides/' },
+  { from: '/roundups/best-off-grid-water-filters', to: '/best-off-grid-water-filters/' },
+  { from: '/roundups/best-backpacking-water-filters', to: '/best-backpacking-water-filters/' },
+  { from: '/roundups/best-pump-filters', to: '/best-pump-filters/' },
+  { from: '/roundups/bestpumpfilters', to: '/best-pump-filters/' },
   { from: '/roundups', to: '/guides/' },
   { from: '/contact', to: '/' },
   // Product-level redirects are handled via legacyUrls on each product in the products array.
@@ -2647,6 +2651,9 @@ export const siteConfig = {
         { title: 'Best Refrigerator Filters', url: '/best-refrigerator-filters/' },
         { title: 'Best Replacement Filters', url: '/best-replacement-filters/' },
         { title: 'Best Survival Filters', url: '/best-survival-filters/' },
+        { title: 'Best Pump Filters', url: '/best-pump-filters/' },
+        { title: 'Best Backpacking Filters', url: '/best-backpacking-water-filters/' },
+        { title: 'Best Off-Grid Filters', url: '/best-off-grid-water-filters/' },
         { title: 'Best Whole House Filters', url: '/best-whole-house-filters/' },
       ] as NavLink[],
       'Compare': [

@@ -1,0 +1,272 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const year = new Date().getFullYear();
+const publishDate = '2026-02-14';
+
+const pumpProductSlugs = [
+  'msr-miniworks-ex-microfilter',
+  'katadyn-hiker-pro-transparent-filter',
+  'katadyn-vario-water-filter',
+  'survivor-filter-pro',
+  'survivor-filter-pro-x-electric-pump',
+  'survivor-filter-pro-x-electric-water-filter',
+  'katadyn-pocket-water-filter',
+  'msr-trailshot-pocket-sized-water-filter',
+];
+const allProducts = pumpProductSlugs
+  .map(slug => getProductBySlug(slug))
+  .filter((p): p is NonNullable<typeof p> => p != null && isPublished(p.publishDate));
+
+// Top picks for the comparison table — limit to 6 diverse picks to keep the table readable.
+// The full list of all products is shown in the individual mini-reviews below.
+const topPickSlugs = [
+  'msr-miniworks-ex-microfilter',
+  'katadyn-hiker-pro-transparent-filter',
+  'katadyn-vario-water-filter',
+  'survivor-filter-pro',
+  'survivor-filter-pro-x-electric-pump',
+  'katadyn-pocket-water-filter',
+];
+const topPicks = topPickSlugs
+  .map(slug => allProducts.find(p => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
+
+const tableProducts = topPicks.map((p, i) => ({
+  name: p.shortName || p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  filterLife: p.specs.filterLife || '',
+  weight: p.specs.weight || '',
+  isEditorsPick: i === 0,
+}));
+
+const faqs = [
+  { question: 'Are pump water filters better than squeeze filters?', answer: 'Pump filters and squeeze filters serve different use cases. Pump filters excel at drawing water from shallow sources (puddles, seeps, rocky stream edges) where you cannot submerge a squeeze bag. They also handle large volumes more ergonomically for group use. Squeeze filters are lighter, simpler, and faster for solo backpackers with access to deeper streams or lakes. If you primarily filter from shallow or hard-to-reach sources, a pump filter is the better choice. For deep, accessible water, squeeze filters are lighter and faster.' },
+  { question: 'How often should I clean or maintain a pump filter?', answer: 'Clean your pump filter after every trip and during extended outings whenever flow rate noticeably drops. Ceramic elements (MSR MiniWorks EX, Katadyn Pocket) can be scrubbed with the included pad to remove the clogged outer layer — this restores flow rate immediately. Glass fiber and hollow fiber elements cannot be scrubbed but can be backflushed on some models. Carbon stages lose effectiveness over time and should be replaced per the manufacturer schedule (typically 200-400 liters). Always disassemble and air-dry your pump filter before storage to prevent mold growth.' },
+  { question: 'Can a pump filter remove viruses from water?', answer: 'Most standard pump filters with 0.2-micron ceramic or hollow fiber elements do NOT remove viruses. Viruses are 0.02-0.3 microns — small enough to pass through a 0.2-micron filter. The exception is the Survivor Filter Pro line, which uses a 0.01-micron ultrafiltration membrane and claims independent virus testing. For guaranteed virus removal, pair your pump filter with chemical purification tablets (MSR Aquatabs), use a UV purifier, or choose a purifier bottle like the GRAYL GeoPress.' },
+  { question: 'What is the best pump filter for shallow water sources?', answer: 'The MSR MiniWorks EX ($89.95) and Katadyn Hiker Pro ($74.95) are the best choices for shallow water. Their flexible intake hoses can reach into puddles, seeps, and rock crevices where you cannot submerge a squeeze bag or gravity reservoir. The Katadyn Pocket also works well in shallow water but costs significantly more at $369.95. The MSR TrailShot ($44.95) is a pocket-sized alternative, though its short intake hose is less versatile in very shallow sources.' },
+  { question: 'How long do pump filter cartridges last?', answer: 'Cartridge life varies dramatically by filter type and water quality. Ceramic elements (Katadyn Pocket: 50,000 liters; MSR MiniWorks EX: 2,000 liters) last the longest because they can be scrubbed and reused. Glass fiber elements (Katadyn Hiker Pro: 1,150 liters; Katadyn Vario: 2,000 liters) have moderate life but cannot be field-cleaned. Hollow fiber (MSR TrailShot: 2,000 liters) falls in the middle. Actual lifespan depends heavily on source water turbidity — filtering from a murky pond will clog a cartridge 3-5 times faster than a clear mountain stream.' },
+  { question: 'Are electric pump filters worth it over manual pumps?', answer: 'Electric pump filters like the Survivor Filter Pro X ($69.95-$74.95) eliminate hand fatigue and filter faster (750 ml/min vs 500-1,000 ml/min for manual pumps). They are worth it for car camping, base camp use, and emergency preparedness where USB-C charging is available. However, battery dependency is a serious drawback for extended backcountry trips. If you are more than 2-3 days from a power source, a manual pump is more reliable. The best approach for extended trips is to carry a manual pump as primary and an electric as a convenience backup.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  allProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const articleSchema = generateArticleSchema({
+  title: `Best Pump Water Filters ${year}: Expert Picks`,
+  description: `We evaluated ${allProducts.length} manual and electric pump water filters for backcountry, group, and emergency use. Here are the best pump filters for ${year}, ranked by flow rate, filtration quality, durability, and value.`,
+  url: '/best-pump-filters/',
+  datePublished: publishDate,
+  dateModified: publishDate,
+  about: [{ name: 'Water Pump Filters', url: 'https://www.wikidata.org/entity/Q842467' }],
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'All portable filtration options ranked.' },
+  { title: 'Water Filters for Hiking & Backpacking', url: '/water-filters-for-hiking/', description: 'Ultralight options for thru-hikers and backpackers.' },
+  { title: 'Water Filters for Camping', url: '/water-filters-for-camping/', description: 'Car camping and base camp filtration picks.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Complete guide to picking the right filter.' },
+];
+---
+
+<ContentLayout
+  title={`Best Pump Water Filters ${year} | OffGrid Filters`}
+  description={`We evaluated ${allProducts.length} manual and electric pump water filters for backcountry, group, and emergency use. Here are the best pump filters for ${year}, ranked by flow rate, filtration quality, durability, and value.`}
+  canonical="/best-pump-filters/"
+  category="Best Of"
+  currentPage="Best Pump Filters"
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={publishDate}
+  heroImage="/assets/best-pump-filters-hero.webp"
+>
+  <h1>Best Pump Water Filters {year}: Expert Picks</h1>
+  <p class="lead">Pump water filters remain the workhorse of backcountry water treatment. While squeeze filters and gravity systems dominate ultralight circles, pump filters solve problems nothing else can — filtering from shallow puddles, seeps, and rocky stream edges where you cannot submerge a bag. We evaluated {allProducts.length} manual and electric pump filters, from budget options under $40 to expedition-grade ceramics built to last decades, to find the best pump filters for hiking, camping, group use, and emergency preparedness.</p>
+
+  <ProductImage alt={`Best Pump Water Filters ${year}`} icon="pump" aspect="hero" slug="best-pump-filters" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Prime Your Pump Before You Need It">
+    <p>New pump filters often require 30-60 seconds of initial priming to wet the filter element and purge air from the system. Always test your pump at home before heading into the field. On the trail, if flow rate drops noticeably, most ceramic elements (MSR MiniWorks EX, Katadyn Pocket) can be scrubbed with the included cleaning pad to restore performance in under two minutes. For glass fiber and hollow fiber elements, backflushing is your only option — check your model's manual for the correct procedure.</p>
+  </ProTip>
+
+  {allProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
+      <ProductImage alt={product.name} icon="pump" aspect="wide" slug={product.slug} />
+      <p>{product.verdict}</p>
+      <p><strong>Key specs:</strong> {product.specs.filtrationTechnology}{product.specs.micronRating ? `, ${product.specs.micronRating} microns` : ''}{product.specs.capacity ? `, ${product.specs.capacity}` : ''}{product.specs.weight ? `, ${product.specs.weight}` : ''}. Priced at ${product.price}.</p>
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Pump filters occupy a specific niche in portable water treatment, so we evaluated them on criteria that matter most for pump-style filtration. <strong>Flow rate under sustained pumping</strong> was our primary performance metric — the difference between 500 ml/min and 2 L/min is dramatic when filtering water for a group. <strong>Filter media and micron rating</strong> determined pathogen removal capability, with ceramic and ultrafiltration membranes rated differently. <strong>Durability and field maintainability</strong> separated expedition-grade filters from weekend options — can you fix it trailside if something clogs? <strong>Ease of pumping</strong> matters on long trips where hand fatigue is a real issue, especially in cold weather when grip strength drops. Finally, <strong>weight-to-performance ratio</strong> determined whether the added weight over a squeeze filter was justified by the pump's advantages.</p>
+  <p>We also assessed each filter's suitability for different water source types. Pump filters are uniquely capable of drawing from shallow puddles, seeps, and rock crevices — a critical advantage in arid environments or drought conditions where deeper water sources dry up. Filters that handled turbid, low-volume sources without frequent clogging scored higher in our rankings.</p>
+
+  <h2>Buying Guide: What to Look For in Pump Filters</h2>
+  <p><strong>Filter media determines everything.</strong> Ceramic elements (MSR MiniWorks EX, Katadyn Pocket) are field-cleanable and long-lasting but heavier. Glass fiber (Katadyn Hiker Pro, Vario) offers good flow rates but cannot be scrubbed clean. Ultrafiltration membranes (Survivor Filter Pro) reach finer micron ratings (0.01 vs 0.2) but are more delicate. Carbon stages improve taste by removing chlorine and organic chemicals — a meaningful upgrade if you filter from stagnant or chemically-treated sources.</p>
+  <p><strong>Manual vs electric is a lifestyle choice.</strong> Manual pump filters (MSR MiniWorks EX, Katadyn Pocket) work anywhere, anytime, with zero external dependencies. Electric pumps (Survivor Filter Pro X) eliminate hand fatigue and filter faster, but they die when the battery dies. For multi-day backcountry trips, manual is safer. For car camping and emergency prep with power access, electric is more convenient.</p>
+  <p><strong>Match capacity to your trip length.</strong> A 1,150-liter filter (Katadyn Hiker Pro) is fine for weekend trips but will not last a thru-hike. The Katadyn Pocket's 50,000-liter ceramic element is designed for years of expedition use. Replacement cartridge cost matters too — a $369 filter with a 50,000-liter element costs far less per liter than a $75 filter you replace every 1,150 liters.</p>
+
+  <ProTip title="Pump Filters in Cold Weather and Shallow Water">
+    <p>Cold weather is a pump filter's hidden enemy. Water viscosity increases as temperature drops, making pumping noticeably harder below 40 degrees Fahrenheit. Ceramic elements are especially susceptible — internal moisture can freeze and crack the element, creating invisible holes that let bacteria pass through. In freezing conditions, sleep with your pump filter inside your sleeping bag and pump water during the warmest part of the day. For shallow water sources (under 3 inches deep), remove the pre-filter float if your model has one and place the intake hose directly on the bottom. A small collapsible cup can scoop water into a wider container for easier pumping.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best overall pump filter, the <strong>MSR MiniWorks EX</strong> at $89.95 delivers the ideal balance of ceramic + carbon filtration, field maintainability, and proven reliability. For budget-conscious buyers, the <strong>Survivor Filter Pro</strong> at $39.95 offers 0.01-micron ultrafiltration with virus testing at half the price. The <strong>Katadyn Vario</strong> ($84.95) stands out for its adjustable dual-mode filtration — fast flow for clear water, full ceramic + carbon for murky sources. If you want electric convenience, the <strong>Survivor Filter Pro X</strong> at $69.95 eliminates hand fatigue entirely. And for serious expeditioners and long-term preppers, the <strong>Katadyn Pocket</strong> at $369.95 offers an unmatched 50,000-liter capacity with a 20-year warranty — the highest upfront cost but the lowest cost per liter over a lifetime of use.</p>
+    {allProducts[0] && (
+      <a href={getAffiliateUrl(allProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

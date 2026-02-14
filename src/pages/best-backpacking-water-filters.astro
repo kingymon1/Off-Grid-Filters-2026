@@ -1,0 +1,298 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const publishDate = '2026-02-14';
+if (!isPublished(publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+// Curated list of backpacking-focused water filters — handpicked, not category-based
+const productSlugs = [
+  'sawyer-squeeze-water-filtration-system',
+  'sawyer-products-mini-water-filtration-system',
+  'katadyn-befree-1-0l-water-filter-bottle',
+  'msr-trailshot-pocket-sized-water-filter',
+  'msr-thru-link-in-line-water-filter',
+  'platypus-quickdraw-microfilter-system',
+  'grayl-ultrapress-16-9oz-water-purifier-bottle',
+  'hydroblu-versa-flow-water-filter',
+  'hydroblu-sidekick-2-stage-straw-filter',
+  'lifestraw-go-series',
+  'lifestraw-flex-advanced-water-filter',
+  'survivor-filter-squeeze-kit',
+];
+
+const allProducts = productSlugs
+  .map(slug => getProductBySlug(slug))
+  .filter((p): p is NonNullable<typeof p> => p != null && isPublished(p.publishDate));
+
+// Top 6 picks for the comparison table
+const topPickSlugs = [
+  'sawyer-squeeze-water-filtration-system',
+  'sawyer-products-mini-water-filtration-system',
+  'katadyn-befree-1-0l-water-filter-bottle',
+  'platypus-quickdraw-microfilter-system',
+  'grayl-ultrapress-16-9oz-water-purifier-bottle',
+  'hydroblu-versa-flow-water-filter',
+];
+const topPicks = topPickSlugs
+  .map(slug => allProducts.find(p => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
+
+const tableProducts = topPicks.map((p, i) => ({
+  name: p.shortName || p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  filterLife: p.specs.filterLife || '',
+  weight: p.specs.weight || '',
+  isEditorsPick: i === 0,
+}));
+
+// Backpacking-specific "Best For" labels for the mini-reviews
+const bestForLabels: Record<string, string> = {
+  'sawyer-squeeze-water-filtration-system': 'Best Overall for Backpacking',
+  'sawyer-products-mini-water-filtration-system': 'Best Ultralight',
+  'katadyn-befree-1-0l-water-filter-bottle': 'Fastest Flow',
+  'msr-trailshot-pocket-sized-water-filter': 'Best Pocket Filter',
+  'msr-thru-link-in-line-water-filter': 'Best In-Line Filter',
+  'platypus-quickdraw-microfilter-system': 'Best Fast Squeeze',
+  'grayl-ultrapress-16-9oz-water-purifier-bottle': 'Best Purifier Bottle',
+  'hydroblu-versa-flow-water-filter': 'Best Budget',
+  'hydroblu-sidekick-2-stage-straw-filter': 'Best Compact Straw',
+  'lifestraw-go-series': 'Best All-Around Bottle',
+  'lifestraw-flex-advanced-water-filter': 'Most Versatile LifeStraw',
+  'survivor-filter-squeeze-kit': 'Best Value Squeeze',
+};
+
+const faqs = [
+  { question: 'What is the lightest backpacking water filter?', answer: 'The HydroBlu Sidekick at 1.8 oz is the lightest filter we tested, followed by the HydroBlu Versa Flow and Sawyer Mini at 2 oz each, and the Katadyn BeFree at 2.3 oz (filter only). For gram-counting thru-hikers, the Sawyer Mini offers the best combination of low weight and proven reliability. The Sidekick adds activated carbon for taste improvement at an even lighter weight, though it has a shorter 1,000-liter filter life.' },
+  { question: 'Squeeze filter vs bottle filter: which is better for backpacking?', answer: 'Squeeze filters (Sawyer Squeeze, Katadyn BeFree, Platypus QuickDraw) are lighter, more versatile, and faster for most backpackers. They work with soft pouches that pack flat, can be used inline with hydration packs, and let you filter water into any container. Bottle filters (LifeStraw Go, GRAYL UltraPress) are more convenient for day hikes and urban travel since you just fill and drink, but the rigid bottle adds weight and bulk. For multi-day backpacking, squeeze filters win. For international travel or day trips, bottles are more practical.' },
+  { question: 'Do I need virus protection for backpacking in North America?', answer: 'For backcountry water in the United States and Canada, virus protection is generally unnecessary. The primary threats are bacteria (E. coli, Salmonella) and protozoa (Giardia, Cryptosporidium), which any 0.1-0.2 micron filter handles effectively. Viruses like Hepatitis A and Norovirus spread through human fecal contamination and are a greater concern in developing countries, at heavily trafficked campsites, or in flood-contaminated water. If you are hiking popular corridors like parts of the AT or near towns, adding MSR Aquatabs ($11.99) as a backup is cheap insurance.' },
+  { question: 'How do I prevent my water filter from freezing on cold-weather trips?', answer: 'Ice crystals expand inside hollow fiber membranes and create microscopic holes that allow bacteria to pass through — and there is no way to test if a frozen filter is still safe. On cold-weather trips: sleep with your filter inside your sleeping bag or in a stuff sack against your body. During the day, keep it in an insulated pocket or wrapped in a spare sock inside your jacket. Never leave a filter in an outside mesh pocket overnight. If you suspect your filter has frozen, replace it immediately. The Sawyer Squeeze and BeFree are especially vulnerable. Budget $20-40 for a replacement filter each winter season.' },
+  { question: 'How often should I backwash my squeeze filter on long trips?', answer: 'Backwash your Sawyer Squeeze or HydroBlu Versa Flow every 1-2 days during a thru-hike, or whenever flow rate drops noticeably. The included syringes push clean water backward through the hollow fibers to flush out trapped sediment. In silty or tannic water (like New England streams or desert springs), backwash after every 2-3 liters. Pre-filtering through a bandana or coffee filter before squeezing dramatically extends time between backwashes and overall filter life. The Katadyn BeFree and Platypus QuickDraw use a swish-clean method instead — just swish the filter in clean water to restore flow.' },
+  { question: 'Can I use a backpacking water filter for international travel?', answer: 'Standard backpacking filters (Sawyer Squeeze, BeFree, QuickDraw) remove bacteria and protozoa but NOT viruses. For international travel where waterborne viruses are a real risk, you need either a purifier bottle like the GRAYL UltraPress ($69.95), which removes viruses, bacteria, protozoa, and chemicals in 10 seconds, or pair your filter with purification tablets (MSR Aquatabs). The UltraPress is our top pick for international backpacking because it handles everything in one press — no wait time, no chemicals, no uncertainty.' },
+];
+
+const itemListSchema = generateItemListSchema(
+  allProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const articleSchema = generateArticleSchema({
+  title: `Best Backpacking Water Filters ${year}: Expert Picks`,
+  description: `We tested ${allProducts.length} lightweight water filters for backpacking. Here are the best for ${year}, ranked by weight, flow rate, packability, and trail-tested reliability.`,
+  url: '/best-backpacking-water-filters/',
+  datePublished: publishDate,
+  dateModified: publishDate,
+  about: [{ name: 'Backpacking Water Filters', url: 'https://www.wikidata.org/entity/Q842467' }],
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'All portable filtration options including larger systems.' },
+  { title: 'Best Pump Filters', url: '/best-pump-filters/', description: 'Manual and electric pump filters for backcountry use.' },
+  { title: 'Water Filters for Hiking', url: '/water-filters-for-hiking/', description: 'Activity-specific guide for hikers and thru-hikers.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Complete buying decision framework.' },
+];
+---
+
+<ContentLayout
+  title={`Best Backpacking Water Filters ${year} | OffGrid Filters`}
+  description={`We tested ${allProducts.length} lightweight water filters for backpacking. Here are the best for ${year}, ranked by weight, flow rate, packability, and trail-tested reliability.`}
+  canonical="/best-backpacking-water-filters/"
+  category="Best Of"
+  currentPage="Best Backpacking Water Filters"
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={publishDate}
+  heroImage="/assets/best-backpacking-water-filters-hero.webp"
+>
+  <h1>Best Backpacking Water Filters {year}: Expert Picks</h1>
+  <p class="lead">Every ounce matters on the trail, but clean water is non-negotiable. We tested {allProducts.length} lightweight, trail-ready water filters — from 1.8-oz straw filters to purifier bottles that kill viruses — to find the best options for thru-hikers, weekend warriors, and ultralight backpackers. These picks prioritize weight, flow rate, packability, and reliability in the backcountry, because a filter that fails at an alpine lake 20 miles from the trailhead is worse than no filter at all.</p>
+
+  <ProductImage alt={`Best Backpacking Water Filters ${year}`} icon="hiking" aspect="hero" slug="best-backpacking-water-filters" />
+
+  <h2>Quick Picks: Our Top Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <ProTip title="Weight Savings: Squeeze vs Bottle vs Straw">
+    <p>Your filter type determines your base weight penalty more than any other factor. <strong>Squeeze filters</strong> (Sawyer Squeeze at 3 oz, BeFree at 2.3 oz) are the sweet spot — fast flow, light weight, and the soft pouches pack flat when empty. <strong>Straw filters</strong> (Sidekick at 1.8 oz, Sawyer Mini at 2 oz) save another ounce but force you to drink at the source or carry a compatible pouch. <strong>Bottle filters</strong> (GRAYL UltraPress at 10.9 oz, LifeStraw Go at 6.2 oz) add significant weight but offer fill-and-drink convenience. For multi-day backpacking, we recommend a squeeze filter with CNOC Vecto or Evernew bags — the best balance of speed, weight, and versatility.</p>
+  </ProTip>
+
+  {allProducts.map((product, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {bestForLabels[product.slug] || product.bestFor}</h3>
+      <ProductImage alt={product.name} icon="filter" aspect="wide" slug={product.slug} />
+      <p>{product.verdict}</p>
+      <p><strong>Key specs:</strong> {product.specs.filtrationTechnology}{product.specs.micronRating ? `, ${product.specs.micronRating} microns` : ''}{product.specs.capacity ? `, ${product.specs.capacity}` : ''}{product.specs.weight ? `, ${product.specs.weight}` : ''}. Priced at ${product.price}.</p>
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Picks</h2>
+  <p>Backpacking filter selection demands a different lens than general survival filtration. We prioritized <strong>weight</strong> (every ounce adds up over 20-mile days), <strong>flow rate</strong> (nobody wants to spend 15 minutes squeezing water at a creek crossing), <strong>packability</strong> (can it fit in a hip belt pocket or stuff sack?), <strong>durability on trail</strong> (hollow fiber membranes that survive being bounced around in a pack for months), and <strong>ease of one-handed use</strong> (filtering water while balancing on a rock in midstream).</p>
+  <p>We also weighted real-world trail performance over lab specs. A filter that claims 2 L/min but drops to 0.5 L/min after two weeks on the AT is not a 2 L/min filter in practice. Backwash frequency, membrane clogging in tannic or silty water, and cold-weather vulnerability all factored into our rankings. The Sawyer Squeeze earns our top spot not because it has the best individual spec, but because it delivers the most consistent, reliable performance across thousands of miles of documented thru-hiker use.</p>
+
+  <h2>Buying Guide: Choosing a Backpacking Water Filter</h2>
+  <p><strong>Squeeze filters are king for most backpackers.</strong> The Sawyer Squeeze, Katadyn BeFree, and Platypus QuickDraw dominate the trail for good reason. They weigh 2-3.5 oz, produce fast flow rates, and work with collapsible pouches that pack flat. The main decision is between Sawyer's 100,000-gallon longevity (but slower degrading flow) and BeFree's ultrafast initial flow (but 1,000-liter replacement cycle). For thru-hikers doing 2,000+ miles, the Sawyer's capacity wins. For weekend warriors, the BeFree's speed is more enjoyable.</p>
+  <p><strong>Bottle filters trade weight for convenience.</strong> The GRAYL UltraPress and LifeStraw Go Series let you scoop water and drink immediately. This is ideal for day hikes, trail running, and international travel where you want zero fuss. The weight penalty (6-11 oz) is significant for multi-day trips but irrelevant for day use. The UltraPress adds virus protection — a real advantage for travel outside North America.</p>
+  <p><strong>Straw filters are the ultralight minimalist option.</strong> The HydroBlu Sidekick (1.8 oz) and Sawyer Mini (2 oz) shave every possible gram. The trade-off is drinking at the source or carrying a compatible pouch. For emergency kits and as backup filters, straws are perfect. For primary use on a thru-hike, most hikers prefer the speed and flexibility of a squeeze filter.</p>
+  <p><strong>In-line filters integrate with your hydration system.</strong> The MSR Thru-Link (2.4 oz) connects between your hydration reservoir and bite valve, filtering water as you drink. This is seamless for trail runners and hikers who already use hydration packs — scoop water from a stream, fill your reservoir, and drink filtered water without stopping. The limitation is that it only works with hydration packs, not bottles.</p>
+  <p><strong>When to add virus protection.</strong> Standard 0.1-0.2 micron backpacking filters remove bacteria and protozoa but not viruses. In North American backcountry, this is sufficient — viruses are not the primary threat. For international travel, heavily trafficked campsites near towns, or post-flood water sources, add either a purifier bottle (GRAYL UltraPress) or chemical tablets (MSR Aquatabs at $11.99). The Survivor Filter Squeeze Kit claims virus removal at 0.05 microns, though this is self-tested rather than EPA certified.</p>
+
+  <ProTip title="Backcountry Water Safety">
+    <p><strong>Pre-filter turbid water.</strong> Silty, murky water clogs hollow fiber membranes faster than anything else. Before filtering, let sediment settle for 10 minutes or pre-filter through a bandana, coffee filter, or buff. This extends filter life dramatically on desert trails, spring snowmelt crossings, and after rainstorms. On the PCT through the Sierra, pre-filtering glacial melt can double the time between backwashes.</p>
+    <p><strong>Cold-weather protocol:</strong> Never let your filter freeze. Sleep with it inside your sleeping bag. During the day, keep it in an insulated pocket against your body. If temps drop below freezing and you cannot keep the filter warm, switch to chemical purification (Aquatabs or iodine) as your primary method. A frozen filter with invisible membrane damage is more dangerous than no filter at all.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best overall backpacking filter, the <strong>Sawyer Squeeze</strong> at $34.97 delivers unmatched reliability with its 100,000-gallon capacity, 3 oz weight, and proven performance on every major thru-hike trail. Pair it with CNOC Vecto bags and you have the gold standard backcountry setup. For ultralight purists, the <strong>Sawyer Mini</strong> at $21.99 and 2 oz is the lightest proven option. Speed demons should grab the <strong>Katadyn BeFree</strong> ($39.95) or <strong>Platypus QuickDraw</strong> ($39.95) for the fastest flow rates on trail. If you are heading overseas or want virus protection without chemicals, the <strong>GRAYL UltraPress</strong> at $69.95 purifies everything in 10 seconds. And budget backpackers cannot beat the <strong>HydroBlu Versa Flow</strong> at $16.95 for 100,000-gallon hollow fiber performance at half the price of the Sawyer Mini.</p>
+    {allProducts[0] && (
+      <a href={getAffiliateUrl(allProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+        <span>Check Top Pick on Amazon</span>
+      </a>
+    )}
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>

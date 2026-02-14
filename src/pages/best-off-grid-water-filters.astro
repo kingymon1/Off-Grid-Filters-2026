@@ -1,0 +1,360 @@
+---
+import ContentLayout from '../layouts/ContentLayout.astro';
+import ProductImage from '../components/ProductImage.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import ProTip from '../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
+
+const publishDate = '2026-02-14';
+if (!isPublished(publishDate)) return Astro.redirect('/404');
+
+const year = new Date().getFullYear();
+
+// ── Portable Off-Grid Filters ──
+const sawyerSqueeze = getProductBySlug('sawyer-squeeze-water-filtration-system')!;
+const msrGuardian = getProductBySlug('msr-guardian-purifier')!;
+const msrAutoFlow = getProductBySlug('msr-autoflow-xl-gravity-filter')!;
+const graylGeoPress = getProductBySlug('grayl-geopress-24oz-water-purifier-bottle')!;
+const lifeStrawFamily = getProductBySlug('lifestraw-family-1-0-portable-gravity-powered-water-purifier')!;
+const lifeSaverLiberty = getProductBySlug('lifesaver-liberty-bottle')!;
+const platypusGravity = getProductBySlug('platypus-gravityworks-4-0l-water-filter-system')!;
+const hydroBluGoFlow = getProductBySlug('hydroblu-go-flow-water-gravity-bag')!;
+const msrAquatabs = getProductBySlug('msr-aquatabs-30pack')!;
+
+const portableProducts = [
+  { product: sawyerSqueeze, bestForLabel: 'Best Overall Portable' },
+  { product: msrGuardian, bestForLabel: 'Best Military-Grade Purifier' },
+  { product: msrAutoFlow, bestForLabel: 'Best Gravity Filter for Groups' },
+  { product: graylGeoPress, bestForLabel: 'Best Quick Purification' },
+  { product: lifeStrawFamily, bestForLabel: 'Best Family Gravity Purifier' },
+  { product: lifeSaverLiberty, bestForLabel: 'Best Purifier Bottle' },
+  { product: platypusGravity, bestForLabel: 'Best Complete Gravity System' },
+  { product: hydroBluGoFlow, bestForLabel: 'Best Budget Gravity' },
+  { product: msrAquatabs, bestForLabel: 'Best Chemical Backup' },
+];
+
+// ── Home Off-Grid Systems ──
+const bluevuaUV = getProductBySlug('bluevua-ro100ropot-uv')!;
+const bluevuaLite = getProductBySlug('bluevua-ro100ropot-lite-uv')!;
+const ispringRCC7AK = getProductBySlug('ispring-rcc7ak')!;
+const waterdropG3P600 = getProductBySlug('waterdrop-g3p600')!;
+
+const homeProducts = [
+  { product: bluevuaUV, bestForLabel: 'Best Countertop RO for Off-Grid' },
+  { product: bluevuaLite, bestForLabel: 'Best Value Countertop RO' },
+  { product: ispringRCC7AK, bestForLabel: 'Best Under-Sink RO for Cabins' },
+  { product: waterdropG3P600, bestForLabel: 'Best Premium Under-Sink' },
+];
+
+const allProducts = [
+  ...portableProducts.map(p => p.product),
+  ...homeProducts.map(p => p.product),
+];
+
+// ── Top 6 for comparison table ──
+const topPickSlugs = [
+  'sawyer-squeeze-water-filtration-system',
+  'msr-autoflow-xl-gravity-filter',
+  'lifestraw-family-1-0-portable-gravity-powered-water-purifier',
+  'bluevua-ro100ropot-uv',
+  'ispring-rcc7ak',
+  'msr-guardian-purifier',
+];
+const topPicks = topPickSlugs
+  .map(slug => allProducts.find(p => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
+
+const tableProducts = topPicks.map((p, i) => ({
+  name: p.shortName || p.name,
+  asin: p.asin,
+  rating: p.rating,
+  price: p.price,
+  filtrationTechnology: p.specs.filtrationTechnology || '',
+  micronRating: p.specs.micronRating || '',
+  capacity: p.specs.capacity || '',
+  flowRate: p.specs.flowRate || '',
+  filterLife: p.specs.filterLife || '',
+  weight: p.specs.weight || '',
+  isEditorsPick: i === 0,
+}));
+
+// ── FAQs ──
+const faqs = [
+  { question: 'What is the best water filter for an off-grid cabin?', answer: 'For a permanent off-grid cabin with well water or a pressurized water line, the iSpring RCC7AK under-sink RO system ($198.78) provides the most thorough filtration at the best value. If you lack plumbing or electricity, the Bluevua RO100ROPOT-UV countertop RO ($317) runs off any standard outlet and needs no water line connection. For cabins relying on surface water (creek, lake, or rainwater collection), start with a gravity purifier like the LifeStraw Family 1.0 ($64.95) which removes viruses without power, then consider a countertop RO for drinking water refinement.' },
+  { question: 'Do I need a purifier or just a filter for off-grid water?', answer: 'It depends on your water source. If you are on a private well, a filter (0.1-0.2 micron) handles bacteria and protozoa, and an RO system handles dissolved contaminants. If you are drawing from surface water (streams, rivers, lakes, or rainwater collection), you need a purifier that also removes viruses. The LifeStraw Family 1.0 and MSR Guardian both achieve purifier-level protection at 0.02 micron. For well water with known chemical contamination, only reverse osmosis removes dissolved chemicals like PFAS, lead, and arsenic.' },
+  { question: 'Can countertop RO systems work without municipal water?', answer: 'Yes. Countertop RO systems like the Bluevua RO100ROPOT-UV and Lite models work with any potable or pre-filtered water source. You manually fill the tank with water from your well, rain barrel, or pre-filtered surface water. They need electricity (standard 110V outlet) but no pressurized water line. This makes them ideal for off-grid cabins and homesteads that have solar power or a generator but no municipal hookup. Pre-filter through a sediment filter or gravity filter first if your source water is turbid.' },
+  { question: 'What is the best portable water filter for van life?', answer: 'The Sawyer Squeeze ($34.97) is the best portable filter for van life because it is compact, weighs 3 ounces, and has a 100,000-gallon lifetime. For daily drinking water, pair it with a countertop RO system like the Bluevua Lite UV ($219) if your van has shore power or sufficient solar. The GRAYL GeoPress ($89.95) is the best all-in-one solution for van lifers who fill up from varied and uncertain water sources, since it removes viruses, chemicals, and heavy metals in 8 seconds.' },
+  { question: 'How do I filter rainwater for drinking off-grid?', answer: 'Rainwater collection requires a multi-stage approach. First, use a roof washer or first-flush diverter to discard the initial contaminated runoff. Then pass collected water through a sediment pre-filter (5 micron) to remove debris. Next, use a gravity purifier like the LifeStraw Family 1.0 to remove bacteria, protozoa, and viruses. Finally, for the cleanest drinking water, run it through a countertop RO system to remove dissolved chemicals, heavy metals, and any remaining contaminants. Test your rainwater annually for lead and chemical contamination.' },
+  { question: 'What off-grid water filter works without electricity?', answer: 'Gravity-fed systems are the best choice when electricity is unavailable. The LifeStraw Family 1.0 ($64.95) is a true purifier that removes viruses, bacteria, and protozoa using only gravity, with an 18,000-liter capacity. The MSR AutoFlow XL ($64.95) and Platypus GravityWorks 4L ($74.95) are excellent gravity filters for groups. For individual use, the Sawyer Squeeze ($34.97) works by hand pressure alone. Chemical purification tablets like MSR Aquatabs ($11.99) provide virus protection with zero power requirements.' },
+];
+
+// ── Schema ──
+const itemListSchema = generateItemListSchema(
+  allProducts.map((p, i) => ({
+    name: p.name,
+    url: `/reviews/${p.slug}/`,
+    position: i + 1,
+  }))
+);
+const articleSchema = generateArticleSchema({
+  title: `Best Off-Grid Water Filters ${year}: Expert Picks`,
+  description: `We curated ${allProducts.length} water filters for off-grid living — from ultralight portable filters for remote cabins to countertop RO systems that work without municipal water. Here are the best for ${year}.`,
+  url: '/best-off-grid-water-filters/',
+  datePublished: publishDate,
+  dateModified: publishDate,
+  about: [{ name: 'Off-Grid Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
+});
+const faqSchema = generateFAQSchema(faqs);
+const schema = combineSchemas(articleSchema, itemListSchema, faqSchema);
+
+const relatedArticles = [
+  { title: 'Water Filters for Off-Grid Living', url: '/water-filters-for-off-grid/', description: 'Complete off-grid water filtration strategies for homesteads.' },
+  { title: 'Best Survival & Portable Filters', url: '/best-survival-filters/', description: 'All portable filtration options ranked.' },
+  { title: 'Best Countertop Filters', url: '/best-countertop-filters/', description: 'No-install filtration for any kitchen.' },
+  { title: 'How to Choose a Water Filter', url: '/guides/how-to-choose-water-filter/', description: 'Complete buying decision framework.' },
+];
+---
+
+<ContentLayout
+  title={`Best Off-Grid Water Filters ${year} | OffGrid Filters`}
+  description={`We curated ${allProducts.length} water filters for off-grid living — from ultralight portable filters for remote cabins to countertop RO systems that work without municipal water. Here are the best for ${year}.`}
+  canonical="/best-off-grid-water-filters/"
+  category="Best Of"
+  currentPage="Best Off-Grid Water Filters"
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={publishDate}
+  heroImage="/assets/best-off-grid-water-filters-hero.webp"
+>
+  <h1>Best Off-Grid Water Filters {year}: Expert Picks</h1>
+  <p class="lead">Off-grid water filtration is not a one-product problem. Whether you are building a remote cabin on well water, outfitting a van for full-time travel, filtering creek water at a homestead, or preparing for emergencies at a rural property, the right setup depends on your water source, power availability, and daily volume needs. We curated {allProducts.length} water filters that cover the full spectrum of off-grid living — from sub-$25 portable filters you can throw in a pack to countertop reverse osmosis systems that purify well water without a plumber.</p>
+
+  <ProductImage alt={`Best Off-Grid Water Filters ${year}`} icon="camping" aspect="hero" slug="best-off-grid-water-filters" />
+
+  <h2>Quick Picks: Our Top Off-Grid Recommendations</h2>
+  <ComparisonTable products={tableProducts} />
+
+  <h2>Best Portable Off-Grid Filters</h2>
+  <p>Portable filters are the backbone of off-grid water access. They require no electricity, no plumbing, and no installation. Whether you are filtering creek water at a remote campsite, purifying rain collection at a cabin, or keeping a gravity bag running at a homestead, these products handle the job with zero infrastructure.</p>
+
+  <ProTip title="Layered Water Strategy for Off-Grid Living">
+    <p>The smartest off-grid water strategy uses multiple complementary products. A gravity filter (MSR AutoFlow XL or Platypus GravityWorks) handles daily volume needs with zero effort. A squeeze filter (Sawyer Squeeze) provides fast on-demand filtration for individual use. Chemical purification tablets (MSR Aquatabs) serve as a virus-killing backup that weighs nothing and never breaks. This layered approach means no single point of failure in your water supply chain — critical when the nearest hardware store is hours away.</p>
+  </ProTip>
+
+  {portableProducts.map(({ product, bestForLabel }, i) => (
+    <section class="product-mini-review">
+      <h3>{i + 1}. {product.name} — {bestForLabel}</h3>
+      <ProductImage alt={product.name} icon="filter" aspect="wide" slug={product.slug} />
+      <p>{product.verdict}</p>
+      <p><strong>Key specs:</strong> {product.specs.filtrationTechnology}{product.specs.micronRating ? `, ${product.specs.micronRating} microns` : ''}{product.specs.capacity ? `, ${product.specs.capacity}` : ''}{product.specs.weight ? `, ${product.specs.weight}` : ''}. Priced at ${product.price}.</p>
+      <p><strong>Off-grid advantage:</strong> {
+        product.slug === 'sawyer-squeeze-water-filtration-system' ? 'The 100,000-gallon lifetime means you will never need a replacement filter at your cabin. Works as a squeeze, gravity, or inline filter with zero power requirements. The gold standard for remote properties where resupply is difficult.' :
+        product.slug === 'msr-guardian-purifier' ? 'The self-cleaning mechanism means zero field maintenance — critical when you are miles from any store. Removes viruses from surface water sources without chemicals. Worth the investment for homesteads relying on untreated water.' :
+        product.slug === 'msr-autoflow-xl-gravity-filter' ? 'Hang from a cabin rafter or tree branch and filter 10 liters hands-free. The 3 L/min flow rate means a family of four can have clean water in minutes. Perfect for daily use at a remote cabin or base camp.' :
+        product.slug === 'grayl-geopress-24oz-water-purifier-bottle' ? 'Fill from any water source — creek, lake, puddle — and have purified water in 8 seconds with no waiting, no chemicals, no batteries. The ultimate grab-and-go purifier for varied off-grid water sources.' :
+        product.slug === 'lifestraw-family-1-0-portable-gravity-powered-water-purifier' ? 'Designed for disaster relief and developing-world use, the Family 1.0 purifies 18,000 liters on gravity alone. No power, no pumping, no chemicals. The most practical long-term purification solution for off-grid families without electricity.' :
+        product.slug === 'lifesaver-liberty-bottle' ? 'The 0.015-micron ultrafiltration removes viruses without chemicals, and the 2,000-liter cartridge life is 5-6x longer than GRAYL cartridges. The failsafe shutoff is a genuine safety feature — it stops working before it lets contaminated water through.' :
+        product.slug === 'platypus-gravityworks-4-0l-water-filter-system' ? 'The dual dirty/clean bag system eliminates cross-contamination risk — essential when filtering untreated surface water at a remote property. Complete kit includes everything needed: dirty bag, clean reservoir, filter, and hoses.' :
+        product.slug === 'hydroblu-go-flow-water-gravity-bag' ? 'At $24.95, this is the most affordable gravity filtration for off-grid use. The 3-liter capacity handles solo and duo needs, and the dual gravity/squeeze operation gives flexibility when you cannot hang the bag.' :
+        'Ultralight virus-killing backup that requires zero power, zero maintenance, and weighs virtually nothing. Every off-grid property should have Aquatabs stashed for emergencies when your primary filter is unavailable or compromised.'
+      }</p>
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>Best Home Systems for Off-Grid Properties</h2>
+  <p>If your off-grid cabin, homestead, or rural property has electricity (solar, generator, or grid), a countertop or under-sink RO system provides the highest level of drinking water purification available. Countertop RO systems like the Bluevua models need no plumbing connection — just fill the tank with pre-filtered well water or rainwater and plug into a standard outlet. Under-sink systems like the iSpring RCC7AK connect to any pressurized water line, making them ideal for cabins with a well pump.</p>
+
+  {homeProducts.map(({ product, bestForLabel }, i) => (
+    <section class="product-mini-review">
+      <h3>{portableProducts.length + i + 1}. {product.name} — {bestForLabel}</h3>
+      <ProductImage alt={product.name} icon="filter" aspect="wide" slug={product.slug} />
+      <p>{product.verdict}</p>
+      <p><strong>Key specs:</strong> {product.specs.filtrationStages} stages, {product.specs.filtrationTechnology}{product.specs.gpd ? `, ${product.specs.gpd} GPD` : ''}{product.specs.pureToWaste ? `, ${product.specs.pureToWaste} pure-to-drain` : ''}{product.specs.weight ? `, ${product.specs.weight}` : ''}. Priced at ${product.price}.</p>
+      <p><strong>Off-grid advantage:</strong> {
+        product.slug === 'bluevua-ro100ropot-uv' ? 'Zero installation means you can set it up the day you arrive at your cabin. The UV sterilization stage kills 99.99% of bacteria and viruses — critical for well water that has not been municipally treated. The glass carafe avoids plastic leaching in remote settings where you might store water longer.' :
+        product.slug === 'bluevua-ro100ropot-lite-uv' ? 'Delivers 90% of the premium model\'s purification at 70% of the price. The smart LED display shows real-time filter life — useful in remote locations where you need to plan filter replacements ahead of resupply trips.' :
+        product.slug === 'ispring-rcc7ak' ? 'At under $200, this is the most affordable way to get full reverse osmosis with alkaline remineralization. Connects directly to your well pump line. The 75 GPD output handles a typical household, and the alkaline stage adds back healthy minerals that RO strips out — important if this is your only drinking water source.' :
+        'The 600 GPD tankless design is 8x faster than traditional RO and eliminates the bulky storage tank. The smart LED faucet shows real-time TDS readings, letting you verify water quality on the spot — peace of mind when you are filtering untreated well water or rainwater.'
+      }</p>
+      <div class="pros-cons-mini">
+        <div class="pros-mini">
+          <strong>Pros:</strong>
+          <ul>
+            {product.pros.slice(0, 3).map(p => (
+              <li>{p}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-mini">
+          <strong>Cons:</strong>
+          <ul>
+            {product.cons.slice(0, 2).map(c => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="review-links">
+        <a href={`/reviews/${product.slug}/`}>Read Full Review &rarr;</a> | <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price &rarr;</a>
+      </p>
+    </section>
+  ))}
+
+  <h2>How We Chose Our Off-Grid Picks</h2>
+  <p>Off-grid water filtration demands a different evaluation framework than home filters connected to municipal supplies. We prioritized five criteria specific to remote and off-grid living:</p>
+  <ul>
+    <li><strong>Power requirements:</strong> Can the system operate without electricity, or does it need solar/generator power? Gravity-fed and manual-pump products scored highest for true off-grid flexibility.</li>
+    <li><strong>Water source flexibility:</strong> Does the product handle turbid surface water (creeks, rivers, rainwater), or does it require pre-treated water? Purifiers that remove viruses, bacteria, and protozoa from raw water sources scored higher than filters that only remove bacteria.</li>
+    <li><strong>Maintenance in remote areas:</strong> How easy is it to maintain the filter when the nearest hardware store is an hour away? Self-cleaning systems (MSR Guardian), backwashable filters (Sawyer Squeeze), and long-life cartridges (LifeStraw Family 1.0 at 18,000L) all reduce the maintenance burden.</li>
+    <li><strong>Volume capacity:</strong> Can the system handle daily water needs for a family without constant attention? Gravity systems that process 4-10 liters hands-free scored highest for daily-driver use.</li>
+    <li><strong>Cost of ownership:</strong> Off-grid living is often budget-conscious. We calculated the 3-year cost of ownership including replacement filters, replacement bags, and energy costs to identify the best long-term value.</li>
+  </ul>
+
+  <h2>Buying Guide: Off-Grid Water Filtration</h2>
+  <p><strong>Match your system to your water source.</strong> Well water typically contains bacteria, sediment, and dissolved minerals but rarely viruses — a standard 0.1-0.2 micron filter plus an RO system handles it effectively. Surface water (streams, rivers, lakes) carries bacteria, protozoa, and potentially viruses — you need a purifier rated to 0.02 microns or chemical treatment. Rainwater collection is usually the cleanest natural source but can contain airborne contaminants, bird droppings, and roof chemicals — a sediment pre-filter plus gravity purifier covers it.</p>
+  <p><strong>Portable vs. fixed systems.</strong> Portable filters (squeeze, gravity, bottle purifiers) require no installation, no electricity, and no plumbing. They are essential for every off-grid property as both primary and backup filtration. Fixed systems (countertop RO, under-sink RO) provide the highest purification levels but need electricity and, in the case of under-sink systems, a pressurized water line. The ideal off-grid setup uses both: a gravity filter for bulk daily water and a countertop RO for premium drinking water.</p>
+  <p><strong>Solar power compatibility.</strong> Countertop RO systems draw 50-100 watts during operation. A standard off-grid solar setup (400W+ panels with battery bank) can easily handle a Bluevua RO system running a few cycles per day. Under-sink RO systems with electric pumps (like the Waterdrop G3P600) draw more power but only during use. If you have zero electricity, stick with gravity-fed purifiers and squeeze filters — they work indefinitely with no power input.</p>
+  <p><strong>Think in layers, not single products.</strong> The most resilient off-grid water strategy combines multiple methods: a sediment pre-filter to protect your main system, a gravity filter or RO system for daily drinking water, a portable squeeze filter for on-the-go use around your property, and chemical tablets as an emergency backup. Redundancy matters when the nearest clean water source may be a long drive away.</p>
+
+  <ProTip title="Off-Grid Water Testing">
+    <p>Test your well water or primary water source at least once per year, and after any major weather event (heavy rains, flooding, drought). A basic water test kit ($20-$50) checks for bacteria, pH, hardness, iron, and nitrates. For comprehensive testing including lead, PFAS, and heavy metals, send a sample to a certified lab ($100-$200). This data tells you exactly which contaminants your filtration system needs to handle — and whether your current setup is adequate. Many off-grid homesteaders discover their well water has issues they never suspected until they test it.</p>
+  </ProTip>
+
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <h2>Our Recommendation</h2>
+  <div class="verdict-card">
+    <p>For the best overall portable off-grid filter, the <strong>Sawyer Squeeze</strong> at $34.97 is unmatched — the 100,000-gallon lifetime means you will never replace it, and it works as a squeeze, gravity, or inline filter with zero power. For families relying on surface water without electricity, the <strong>LifeStraw Family 1.0</strong> at $64.95 purifies 18,000 liters of virus-laden water on gravity alone. For off-grid cabins and homesteads with electricity, the <strong>Bluevua RO100ROPOT-UV</strong> at $317 provides hospital-grade countertop purification with no plumbing required, while the <strong>iSpring RCC7AK</strong> at $198.78 delivers the best under-sink RO value for cabins with a well pump. And every off-grid property should keep <strong>MSR Aquatabs</strong> ($11.99) as a virus-killing emergency backup that weighs nothing and never fails.</p>
+    <a href={getAffiliateUrl(sawyerSqueeze.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
+      <span>Check Top Pick on Amazon</span>
+    </a>
+  </div>
+</ContentLayout>
+
+<style>
+  .product-mini-review {
+    padding-bottom: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  .product-mini-review:last-of-type {
+    border-bottom: none;
+  }
+
+  .pros-cons-mini {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+  }
+
+  @media (max-width: 639px) {
+    .pros-cons-mini {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+
+  .pros-mini ul,
+  .cons-mini ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
+  }
+
+  .pros-mini li {
+    color: hsl(150 60% 50%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .cons-mini li {
+    color: hsl(0 60% 60%);
+    font-size: 0.9375rem;
+    margin-bottom: 0.375rem;
+    padding-left: 0;
+  }
+
+  .pros-mini strong,
+  .cons-mini strong {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .review-links {
+    font-weight: 600;
+  }
+
+  .verdict-card {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.06), hsl(var(--accent) / 0.04));
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    border-top: 3px solid hsl(var(--primary));
+  }
+
+  .verdict-card p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.85);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-warm)));
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 4px 14px -2px hsl(var(--primary) / 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px hsl(var(--primary) / 0.45);
+  }
+</style>
