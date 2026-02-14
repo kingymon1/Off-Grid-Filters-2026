@@ -1359,6 +1359,21 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
 - Opens a PR for human review (does NOT auto-merge to main)
 - Requires `ANTHROPIC_API_KEY` in GitHub repository secrets
 
+**`scripts/generate-redirects.mjs`:**
+- Reads `config.ts` for product `legacyUrls` and the `redirects` array
+- Parses TypeScript source directly (no ts-node dependency) via regex extraction
+- Merges config-generated redirects with manually-added `vercel.json` redirects
+- Preserves manual entries (e.g., `.html`→trailing-slash redirect) — only adds/updates config ones
+- **Dry-run mode** previews changes without writing: `npm run redirects:dry`
+- **Usage:**
+  ```bash
+  npm run redirects          # update vercel.json
+  npm run redirects:dry      # preview without writing
+  ```
+- Add to package.json: `"redirects": "node scripts/generate-redirects.mjs"`
+- **When to run:** After adding `legacyUrls` to products or entries to the `redirects` array
+  in `config.ts`. Always run before deploying a migration.
+
 ### 3.10 `.env.example`
 
 Create a `.env.example` file (committed to repo, unlike `.env`):
@@ -1460,6 +1475,108 @@ Work through Section 2 of GOOGLE-READINESS.md. All 7 subsections must pass:
 
 **After Phase 4, Claude's automated work is complete.** The site is fully functional with SVG
 placeholder images. Push to GitHub, deploy to Vercel. Then proceed to Phase 5 for real images.
+
+---
+
+## PHASE 4.5: URL MIGRATION (Optional — only for sites replacing an existing site)
+
+**Skip this phase for brand-new sites.** This only applies when rebuilding a site that already
+has Google-indexed URLs under a different URL structure or with different products.
+
+### Why This Matters
+
+Google has already indexed old URLs and assigned them ranking equity. If those URLs return 404
+after the rebuild, that equity is lost. 301 redirects transfer the ranking to the new URLs.
+
+### 4.5.1 Audit Old Indexed URLs
+
+Find all URLs Google has indexed for the domain:
+
+1. **Google Search:** `site:yourdomain.com` — pages through all results
+2. **Google Search Console:** Coverage report → Valid pages (if available)
+3. **Wayback Machine:** `web.archive.org/web/*/yourdomain.com/*` for historical URLs
+
+Collect ALL indexed URLs into a list. For each, note:
+- The old URL path (e.g., `/products/katadyn-hiker-pro`)
+- The product name / content type
+- Whether the product exists in the new catalog or needs to be added
+
+### 4.5.2 Categorize URLs
+
+Sort old URLs into three buckets:
+
+**1. Product pages → need new review pages + redirects**
+- Old product URLs (e.g., `/products/slug`) that map to specific products
+- These need: ASIN lookup, product added to `config.ts`, review page built, `legacyUrls` set
+
+**2. Section/index pages → redirect to nearest equivalent**
+- Old index pages (e.g., `/products`, `/roundups`) that map to new section pages
+- These need: entries in the `redirects` array in `config.ts`
+
+**3. Content pages → redirect to nearest equivalent**
+- Old guides, blog posts, etc. that map to new guide/knowledge base pages
+- These need: entries in the `redirects` array, or new content pages if worth creating
+
+### 4.5.3 Find ASINs for Old Products
+
+For products that need to be added back:
+
+1. **Old repo** — Check product config/data files for ASINs (fastest)
+2. **Wayback Machine** — Cached pages contain Amazon affiliate links with ASINs
+3. **Google Cache** — `cache:yourdomain.com/products/product-slug`
+4. **Amazon search** — Search the product name, grab ASIN from URL (`/dp/BXXXXXXXXX`)
+
+### 4.5.4 Add Products and Redirects to Config
+
+**Product-level redirects** — add `legacyUrls` to each product in `config.ts`:
+```typescript
+{
+  name: 'Katadyn Hiker Pro',
+  slug: 'katadyn-hiker-pro',
+  asin: 'B000BXXXX',
+  // ... other fields
+  legacyUrls: ['/products/katadyn-hiker-pro'],
+},
+```
+
+**General redirects** — add to the `redirects` array in `config.ts`:
+```typescript
+export const redirects: Redirect[] = [
+  { from: '/products', to: '/guides/' },
+  { from: '/roundups', to: '/guides/' },
+];
+```
+
+### 4.5.5 Generate vercel.json Redirects
+
+Run the redirect generator to update `vercel.json`:
+
+```bash
+npm run redirects:dry     # preview first
+npm run redirects         # write to vercel.json
+```
+
+The script:
+- Reads `legacyUrls` from all products → generates `source → /reviews/[slug]/` redirects
+- Reads `redirects` array → generates general redirects
+- Preserves existing manual redirects in `vercel.json` (e.g., `.html`→trailing-slash)
+- All redirects are permanent (301) for maximum SEO equity transfer
+
+### 4.5.6 Verify
+
+After deploying:
+1. Test each old URL returns 301 (not 404) — `curl -I https://yourdomain.com/old-path`
+2. Request re-indexing of redirected URLs in Google Search Console
+3. Monitor Search Console for crawl errors over the next 2 weeks
+
+**Configuration in `product-brief.yaml`:**
+
+The brief also has a `redirects` section for documentation purposes:
+```yaml
+redirects: []
+  # - from: "/products"
+  #   to: "/guides/"
+```
 
 ---
 
@@ -1764,7 +1881,7 @@ When complete, the project should contain:
 - [ ] `research/design-decisions.md`
 - [ ] `research/site-plan.md`
 
-### Scripts (7 files)
+### Scripts (8 files)
 - [ ] `scripts/convert-to-webp.mjs`
 - [ ] `scripts/generate-local-images.mjs`
 - [ ] `scripts/image-gen-server.mjs`
@@ -1772,3 +1889,4 @@ When complete, the project should contain:
 - [ ] `scripts/generate-content.mjs` (content generation orchestrator)
 - [ ] `scripts/lib/template-reader.mjs` (reads existing pages as AI templates)
 - [ ] `scripts/lib/config-patcher.mjs` (patches config.ts and image-map.ts)
+- [ ] `scripts/generate-redirects.mjs` (URL migration — auto-generates vercel.json redirects from config)

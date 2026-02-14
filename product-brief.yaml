@@ -323,6 +323,28 @@ comparisons:
 
 # --- OPTIONAL: Override defaults ---
 
+# --- OPTIONAL: URL Redirects (for site migrations) ---
+# When rebuilding an existing site with new URL structure, list old indexed URLs here.
+# These generate 301 redirects in vercel.json to preserve Google ranking equity.
+# Leave empty for brand-new sites.
+#
+# Product-level redirects (old product URLs → new /reviews/ URLs):
+# Add `legacyUrls:` to individual products above. Example:
+#   - name: "Katadyn Hiker Pro"
+#     asin: "B000BXXXX"
+#     legacyUrls:
+#       - "/products/katadyn-hiker-pro"
+#       - "/old-path/katadyn-hiker"
+#
+# General redirects (old section URLs → new equivalents):
+redirects: []
+  # - from: "/products"
+  #   to: "/guides/"
+  # - from: "/roundups"
+  #   to: "/guides/"
+
+# --- OPTIONAL: Override defaults ---
+
 color_preference: "clean ocean blue with earth tones"
 content_scope: "comprehensive"
 design_direction: "fresh best-in-class"

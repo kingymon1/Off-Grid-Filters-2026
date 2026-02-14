@@ -16,6 +16,8 @@
     "checklist:auto": "node scripts/checklist-server.mjs --auto",
     "generate-content": "node scripts/generate-content.mjs",
     "generate-content:dry": "node scripts/generate-content.mjs --dry-run",
+    "redirects": "node scripts/generate-redirects.mjs",
+    "redirects:dry": "node scripts/generate-redirects.mjs --dry-run",
     "postinstall": "node scripts/sanity-check.mjs"
   },
   "dependencies": {
