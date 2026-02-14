@@ -14,20 +14,31 @@ const allProducts = getProductsByCategory(categorySlug);
 const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
 const year = new Date().getFullYear();
 
-const tableProducts = publishedProducts.map((p, i) => ({
-  name: p.name,
+// Top picks for the comparison table — limit to 6 diverse picks to keep the table readable.
+// The full list of all products is shown in the individual mini-reviews below.
+const topPickSlugs = [
+  'sawyer-squeeze-water-filtration-system',       // Best Overall
+  'sawyer-products-mini-water-filtration-system',  // Best Ultralight
+  'grayl-geopress-24oz-water-purifier-bottle',     // Best Purifier
+  'katadyn-befree-1-0l-water-filter-bottle',       // Fastest Flow
+  'platypus-gravityworks-4-0l-water-filter-system', // Best Gravity
+  'lifestraw-family-1-0-portable-gravity-powered-water-purifier', // Best for Families
+];
+const topPicks = topPickSlugs
+  .map(slug => publishedProducts.find(p => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
+
+const tableProducts = topPicks.map((p, i) => ({
+  name: p.shortName || p.name,
   asin: p.asin,
   rating: p.rating,
   price: p.price,
-  filtrationStages: p.specs.filtrationStages || '',
   filtrationTechnology: p.specs.filtrationTechnology || '',
   micronRating: p.specs.micronRating || '',
   capacity: p.specs.capacity || '',
   flowRate: p.specs.flowRate || '',
-  certifications: p.specs.certifications || '',
   filterLife: p.specs.filterLife || '',
-  contaminantsRemoved: p.specs.contaminantsRemoved || '',
-  packSize: p.specs.packSize || '',
+  weight: p.specs.weight || '',
   isEditorsPick: i === 0,
 }));
 
