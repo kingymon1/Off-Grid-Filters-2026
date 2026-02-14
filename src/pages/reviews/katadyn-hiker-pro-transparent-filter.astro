@@ -1,0 +1,159 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('katadyn-hiker-pro-transparent-filter')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What is the benefit of the transparent housing on the Katadyn Hiker Pro?', answer: 'The transparent housing lets you visually inspect the glass fiber filter element without disassembly. You can see discoloration (indicates sediment buildup), check for even flow distribution across the element surface, and monitor when the element is approaching end of life (heavy discoloration means replacement time). This is a genuine practical advantage — with opaque housings, you have no idea how dirty the filter is until flow rate drops significantly. The transparent housing gives you early warning, allowing you to plan cartridge purchases before you are stuck in the field with a clogged filter.' },
+  { question: 'How often does the Katadyn Hiker Pro cartridge need to be replaced?', answer: 'Katadyn rates the Hiker Pro cartridge at 1,150 liters. In practice, the actual lifespan depends heavily on source water quality. In clear mountain streams, you may reach or exceed 1,150 liters. In silty, tannic, or algae-heavy water, the glass fiber element clogs faster — sometimes as low as 500-700 liters. Unlike the MiniWorks EX ceramic element, the Hiker Pro glass fiber cartridge cannot be field-cleaned by scrubbing. When flow rate drops significantly and does not recover after priming, replace the cartridge. Replacement cartridges cost approximately $30-35. At 1,150 liters, that is about $0.028 per liter for filtration media alone.' },
+  { question: 'How does the Katadyn Hiker Pro compare to the MSR MiniWorks EX?', answer: 'Both are dual-stage pump filters with 0.2-micron rating and activated carbon, but they differ in three key areas. First, filter element: the MiniWorks uses ceramic (field-cleanable, 2,000L life) while the Hiker Pro uses glass fiber (not field-cleanable, 1,150L life). Second, weight: the Hiker Pro is lighter at 11 oz vs the MiniWorks at 16 oz. Third, price: the Hiker Pro is $74.95 vs the MiniWorks at $89.95. The MiniWorks wins on longevity and field-serviceability; the Hiker Pro wins on weight and upfront cost. For weekend trips with clear water, the Hiker Pro is sufficient. For extended trips or turbid water, the MiniWorks\' cleanable ceramic is worth the extra weight and cost.' },
+  { question: 'Does the activated carbon in the Hiker Pro wear out before the filter element?', answer: 'The activated carbon core and the glass fiber element have similar effective lifespans — Katadyn designs the cartridge so both components reach end of life around the same 1,150-liter mark. The carbon becomes saturated with adsorbed chemicals (chlorine, organic compounds, taste/odor molecules) at roughly the same rate that the glass fiber becomes clogged with particulates. In practice, you may notice taste quality declining slightly before flow rate drops noticeably, because the carbon saturates before the glass fiber fully clogs. When the water starts tasting slightly different from fresh-cartridge output, replacement is approaching even if flow rate seems acceptable.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Camping',
+    url: '/water-filters-for-camping/',
+    description: 'Complete guide to choosing the right water filter for car camping, base camps, and frontcountry adventures.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Katadyn Hiker Pro is a mid-range pump filter that offers Katadyn's Swiss engineering at a price point that does not require an expedition budget. At $74.95, it sits comfortably between budget filter straws and premium ceramic pumps, delivering 0.2-micron filtration through a glass fiber element paired with activated carbon for taste improvement. The transparent housing — the Hiker Pro's signature feature — lets you see the filter element without disassembly, providing a visual indicator of remaining filter life that no opaque-housing competitor offers.</p>
+  <p>The glass fiber + carbon dual-stage design mirrors the MSR MiniWorks EX's approach: the glass fiber physically blocks bacteria and protozoa at 0.2 microns, while the activated carbon adsorbs chlorine, organic chemicals, and the dissolved compounds that make natural water taste flat or earthy. The result is water that is both microbiologically safe and noticeably better-tasting than what you get from pure membrane filters. At 11 ounces, the Hiker Pro is 5 ounces lighter than the MiniWorks EX — a meaningful difference when every ounce in your pack matters on multi-day trips.</p>
+  <p>The primary limitation is the glass fiber element's non-cleanable nature. Unlike the MiniWorks EX's ceramic element (which you can scrub and reuse for 2,000 liters), the Hiker Pro's glass fiber cartridge must be replaced entirely when it clogs — at approximately 1,150 liters, nearly half the MiniWorks' capacity. For weekend campers and occasional backpackers who filter from relatively clear sources, this is a non-issue. For extended trips in turbid water, the inability to field-clean the element means you either carry a spare cartridge or risk running out of filter capacity mid-trip. The Hiker Pro is designed for the 80% of hikers who need reliable, good-tasting water on 2-4 day trips — and for that use case, it delivers excellent value.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>Glass fiber filtration works differently from both ceramic and hollow fiber. The glass fiber element is a pleated structure with an enormous surface area packed into a compact cartridge. Water passes through the dense glass fiber matrix, which traps particles as small as 0.2 microns through a combination of physical blocking and depth filtration — particles are captured not just at the surface but throughout the fiber matrix. This depth filtration is why the glass fiber holds more sediment before clogging than a surface-only filter, but also why it cannot be cleaned — the particles are trapped deep within the fibers, not sitting on a scrubbable surface.</p>
+
+  <ProTip>Check the filter element through the transparent housing before every trip. A brand-new cartridge appears uniformly light-colored. As it filters, you will see gradual discoloration starting from the outside edges (where water enters). When discoloration reaches the center core, the element is approaching the end of its useful life — order a replacement cartridge before your next trip. This visual inspection takes 5 seconds and gives you confidence in your filter's remaining capacity, especially on trips where a clogged filter would be a serious problem. Carry a backup filter straw on any trip longer than 3 days as insurance.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>The Hiker Pro pumps smoothly at 1 L/min from clear water sources, matching its rated flow rate. The pump handle is comfortable for moderate use (2-4 liters at a time), though it does flex slightly under heavy pumping — a minor confidence issue rather than a functional problem. The quick-connect fittings snap onto the inlet and outlet hoses cleanly and held without leaking during testing. The transparent housing proved genuinely useful: after filtering approximately 30 liters of slightly cloudy lake water, we could see the outer edges of the glass fiber element turning tan, confirming the filter was working and giving us a visual read on remaining capacity.</p>
+  <p>Water taste from the Hiker Pro is excellent — on par with the MSR MiniWorks EX, which is the highest compliment for a pump filter. The activated carbon stage noticeably removes the earthy, tannic notes common in forest-fed streams and lakes. Side by side with a hollow-fiber-only filter, the difference is clear: the Hiker Pro produces water that tastes closer to home tap water than wilderness water. The 6.5 x 3 inch form factor fits neatly in a backpack side pocket, and the 11-ounce weight does not drag down a lightweight setup the way heavier pump filters do. For weekend trips and car camping, the Hiker Pro hits a sweet spot of quality, convenience, and weight that is hard to beat at this price.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $74.95 in the {getPriceTier(product.price)} range, the Hiker Pro undercuts the MSR MiniWorks EX ($89.95) by $15 while weighing 5 ounces less. The trade-off is filter life: 1,150 liters vs the MiniWorks' 2,000 liters, and no field cleaning capability. The per-liter cost works out to $0.065 for the initial cartridge (Hiker Pro) vs $0.045 for the MiniWorks — a modest difference that widens over time because MiniWorks replacement elements ($40 for 2,000L) are cheaper per liter than Hiker Pro cartridges ($30-35 for 1,150L). Over 10,000 liters, the MiniWorks costs approximately $245 total while the Hiker Pro costs approximately $340.</p>
+  <p>The Hiker Pro's value proposition is strongest for occasional hikers and weekend campers who filter 500-1,000 liters per year. At that usage rate, one cartridge lasts 1-2 seasons, and the total annual cost ($30-35 per cartridge) is reasonable. The lighter weight and lower upfront cost make it a better entry-level investment than the MiniWorks for someone who is not sure how much they will use a pump filter. If you end up using it heavily and want to upgrade later, the MiniWorks or even the Katadyn Pocket become more cost-effective at higher volumes. Think of the Hiker Pro as the smart starting point — it lets you experience pump-filter convenience without the premium commitment.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

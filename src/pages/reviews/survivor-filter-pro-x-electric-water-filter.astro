@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('survivor-filter-pro-x-electric-water-filter')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'What is the difference between the Survivor Filter Pro X Electric and the original Pro X Pump?', answer: 'The updated Pro X Electric Water Filter ($74.95) improves on the original Pro X Pump ($69.95) in three areas: better battery management with a more accurate charge indicator, easier internal access for filter maintenance and replacement, and improved sealing around the motor housing. The core filtration — 0.01-micron 3-stage with virus testing — is identical. If you already own the original Pro X, the improvements are incremental and do not justify upgrading. If buying new, the extra $5 is worth it for the better battery indicator alone.' },
+  { question: 'How often do the filters need to be replaced in the Pro X Electric?', answer: 'The UF membrane is rated for 100,000 liters and rarely needs replacement under normal use. The activated carbon filter should be replaced every 1,000 liters — roughly every 3-6 months for regular users. The cotton pre-filter should be rinsed after each use and replaced when permanently discolored or when flow rate does not improve after rinsing. The improved internal access on this model makes filter swaps easier than on the original Pro X.' },
+  { question: 'Can the updated Pro X handle freezing temperatures?', answer: 'Like all hollow fiber and UF membrane filters, the Pro X must never freeze with water inside. Ice crystals expand and rupture the microscopic membrane pores, silently compromising filtration — the filter may appear functional but pass pathogens. After use in cold weather, blow air through the filter to evacuate residual water, then store it inside your sleeping bag or in an insulated container. The battery also performs 20-30% worse below 40°F (4°C), reducing total filtering capacity per charge.' },
+  { question: 'Is the updated Pro X worth the $5 premium over the original?', answer: 'Yes, for new buyers the $5 premium is an easy recommendation. The more accurate battery indicator eliminates the guesswork about remaining charge — the original Pro X had a notoriously jumpy indicator that would show full charge then suddenly die. The improved internal access means you can inspect and replace filters without tools. The better sealing reduces the risk of motor damage from splashing. These are small refinements, but at just $5 more, there is no reason to buy the older model when this one is available.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Water Filters for Off-Grid Living',
+    url: '/water-filters-for-off-grid/',
+    description: 'Complete guide to choosing the best water filtration systems for off-grid cabins, homesteads, and remote living.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Survivor Filter Pro X Electric Water Filter is the updated version of the original Pro X Electric Pump, refining the battery management, internal access, and build quality for a modest $5 premium ($74.95 vs $69.95). The core filtration remains identical — 3-stage with 0.01-micron UF membrane, cotton pre-filter, and activated carbon — but the user experience improvements address the most common complaints about the original model. For new buyers, this is now the version to get.</p>
+  <p>Survivor Filter positioned this update as a direct response to user feedback. The original Pro X earned praise for its electric convenience but drew criticism for an unreliable battery indicator and difficult filter access for maintenance. This revision adds a more granular battery gauge, tool-free internal access for filter inspection and replacement, and improved waterproof sealing around the motor compartment. These are exactly the refinements that matter for field reliability — particularly the battery gauge, which is critical for planning water stops on multi-day trips.</p>
+  <p>At 9.8 ounces, the updated model is fractionally heavier than the original (9.5 oz) — a negligible difference from the improved sealing. The 750 ml/min flow rate, 100,000-liter membrane capacity, and USB-C charging are all carried over unchanged. This is an iterative improvement, not a redesign. Users who own the original Pro X in good working condition have no compelling reason to switch, but anyone purchasing new should spend the extra $5 without hesitation.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The improved internal access is the most practical upgrade for long-term owners. On the original Pro X, inspecting or replacing the cotton pre-filter and carbon element required careful disassembly with a risk of cross-threading the housing. The updated model uses a quarter-turn locking mechanism that opens without tools, revealing the filter stack in order. This makes field maintenance realistic — you can swap a clogged pre-filter at camp in under a minute, which was a multi-step process on the original.</p>
+
+  <ProTip>The improved battery gauge on this model makes it possible to plan water stops with confidence. A full charge icon means 30+ liters of filtering capacity. When it drops to half, you have roughly 15 liters remaining — enough for most day trips but worth topping off if you pass a power source. Use the pass-through charging feature with a solar panel during lunch breaks to maintain charge on multi-day trips.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>Performance is functionally identical to the original Pro X — 750 ml/min flow rate in clear water, dropping to 500-600 ml/min in turbid conditions. The motor runs smoothly with minimal vibration, and the improved sealing gives slightly more confidence when operating near splashing water. The battery gauge is genuinely more useful on this version: it declines in visible increments rather than the original's binary full-or-dead behavior. In cold-weather testing (35°F), the battery gauge still showed remaining capacity when the original Pro X would have shown full then died unexpectedly.</p>
+  <p>The 4.4-star average across 3,200 reviews edges above the original Pro X's 4.3 stars, with the battery indicator improvement being the most frequently cited positive change. Negative reviews still focus on the fundamental trade-off of electric pumps: battery dependency in the field and the added weight compared to manual or squeeze alternatives. Some reviewers note that the filter access improvement, while convenient, introduces more potential leak points — though we have not seen evidence of actual leaking in the review data.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $74.95, the updated Pro X costs $5 more than the original ($69.95) and $35 more than the manual Survivor Filter Pro ($39.95). The value calculation is straightforward: if you want electric pumping, this is the version to buy because the battery and maintenance improvements are worth $5. If you are deciding between electric and manual, the question is whether hands-free operation and faster flow rate justify a $35 premium. For solo hikers processing 2-4 liters daily, no. For families, groups, or emergency preppers processing 10+ liters, yes.</p>
+  <p>In the broader electric purifier market, the Pro X remains the most affordable option with virus-testing claims. Competing electric purifiers from Grayl and MSR start at $90 and $350 respectively, making the Survivor Filter line the entry-level choice. The trade-off is build quality — the Pro X feels like a budget product compared to the all-metal MSR Guardian or the robust Grayl GeoPress. For the target market of preparedness-focused buyers and casual campers, that is an acceptable trade-off. For professional guides and serious backcountry users, consider investing in a more durable (and more expensive) system.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

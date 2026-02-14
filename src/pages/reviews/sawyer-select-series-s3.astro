@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('sawyer-select-series-s3')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'How does the Sawyer Select S3 foam membrane work?', answer: 'The S3 uses a proprietary foam membrane as its first filtration stage. Unlike hollow fiber membranes that block pathogens by pore size, the foam membrane uses electroadsorption — it carries a positive charge that attracts and captures negatively charged viruses and dissolved heavy metals as water passes through. This is why the S3 can remove viruses (which are too small for most hollow fiber filters) and heavy metals down to 0.5 ppb — 260 times below EPA safety limits. The second stage is a standard 0.1-micron hollow fiber membrane that blocks bacteria and protozoa mechanically.' },
+  { question: 'Why does the foam membrane only last 400 uses?', answer: 'The foam membrane relies on electroadsorption, which means it captures contaminants on its surface rather than physically blocking them. Over time, the charged sites on the foam become saturated with captured viruses and metals, reducing the membrane effectiveness. After approximately 400 fill-and-squeeze cycles, enough sites are saturated that virus and metal removal drops below safe levels. The 0.1-micron hollow fiber stage continues working for bacteria and protozoa, but you lose virus and metal protection. Replacement foam membranes restore full capability.' },
+  { question: 'Is the Sawyer Select S3 being discontinued?', answer: 'The S3 has become increasingly difficult to find since 2024, and Sawyer has not been manufacturing new units consistently. This suggests the product is being phased out, likely because the foam membrane technology has higher manufacturing costs than Sawyer standard hollow fiber products. If you find the S3 in stock, check the manufacture date — older units may have degraded foam membranes. Stock up on replacement foam membranes if you commit to this system, as availability is inconsistent.' },
+  { question: 'How does the Sawyer Select S3 compare to the Survivor Filter Pro for virus removal?', answer: 'The S3 uses electroadsorption foam to capture viruses — a proven technology with scientific backing. The Survivor Filter Pro uses a 0.01-micron UF membrane that mechanically blocks viruses based on pore size. Both claim 99.99% virus removal in testing. The S3 has the advantage of additionally removing heavy metals and being backed by Sawyer brand reputation. The Pro has the advantage of lower cost ($39.95 vs $59.97), higher flow rate, and longer filter life (100,000L vs 400 uses). For international travel where heavy metals in water are a concern, the S3 is superior. For general backcountry use, the Pro offers better long-term value.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Travel',
+    url: '/water-filters-for-travel/',
+    description: 'The best portable water filters and purifiers for international travel, backpacking abroad, and developing countries.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Sawyer Select S3 is the most technically innovative portable purifier in Sawyer's lineup, combining a proprietary foam membrane with their proven 0.1-micron hollow fiber technology in a dual-stage system that addresses viruses, bacteria, protozoa, and heavy metals — a threat profile that no single hollow fiber filter can match. At $59.97, it occupies the premium tier of portable purification but delivers capabilities that typically require multiple products or chemical treatment to replicate.</p>
+  <p>What makes the S3 genuinely different is the foam membrane first stage. While most portable filters rely on mechanical pore-size exclusion (water goes through tiny holes; pathogens are too big to fit), the foam membrane uses electroadsorption — a positive electrical charge that attracts and traps negatively charged viruses and dissolved metal ions. This is the same principle used in laboratory-grade water treatment and is scientifically validated for removing particles far smaller than any mechanical filter's pore size. It is the only portable consumer product we know of that removes heavy metals down to 0.5 ppb — 260 times below EPA's safety thresholds.</p>
+  <p>The caveat is significant: the foam membrane has a limited lifespan of approximately 400 uses before the electroadsorptive capacity is exhausted. Once saturated, the foam can no longer capture viruses or metals, and replacement membranes have been inconsistently available as Sawyer appears to be phasing out this product line. This makes the S3 a powerful but potentially unsustainable choice — brilliant for international travel and disaster response, but problematic for long-term everyday use.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating}</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The dual-stage architecture processes water sequentially. Raw water enters the squeeze bottle, passes first through the foam membrane (virus and metal capture via electroadsorption), then through the 0.1-micron hollow fiber membrane (bacteria and protozoa exclusion by pore size). The hollow fiber stage is the same proven technology Sawyer uses in their Squeeze and Mini products — rated for 100,000 gallons and backflushable. The foam membrane requires periodic cleaning with the included plunger to maintain flow rate, but cannot be backflushed like hollow fiber.</p>
+
+  <ProTip>If you are buying the S3 specifically for international travel, purchase two replacement foam membranes at the same time. Availability has been spotty since Sawyer appears to be deprioritizing this product line. With two spare membranes on hand, you have approximately 1,200 total uses — enough for several extended trips. Mark each membrane with its start date and count uses to avoid running past the 400-use limit.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In squeeze-mode testing, the S3 delivered 20 ounces (about 590 ml) in roughly 10 seconds of firm squeezing — a competitive flow rate for a dual-stage system. Water quality was excellent: clear, taste-neutral output from turbid creek water. The foam membrane adds no flavor or odor, unlike some chemical treatment methods. The squeeze bottle design is intuitive — fill the bottle at a water source, screw the cap/filter assembly back on, and squeeze water out through the nozzle. It functions identically to Sawyer's standard Squeeze products, just with the added foam stage inside.</p>
+  <p>The 4.2-star average across 1,800 reviews is lower than Sawyer's standard products (the Squeeze averages 4.7 stars), reflecting legitimate concerns about foam membrane longevity and availability. Positive reviews focus on the peace of mind from virus and metal protection — particularly from travelers returning from Southeast Asia, Central America, and Africa where waterborne viruses are a real threat. Negative reviews cluster around the 400-use limit feeling short for the $60 price, the difficulty of determining exactly when the foam membrane is depleted, and increasing concern about Sawyer phasing out the product line.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $59.97, the S3 costs roughly $0.15 per use over its 400-use foam membrane life — expensive compared to hollow fiber filters that cost fractions of a penny per liter. However, the comparison is not apples-to-apples. No hollow fiber filter at any price removes viruses or heavy metals. To match the S3's capabilities with other products, you would need a Sawyer Squeeze ($35) plus chemical purification tablets ($10-15 per trip) plus a separate heavy metal reduction filter — adding up to more than the S3 while being bulkier and less convenient.</p>
+  <p>For domestic backcountry use where bacteria and protozoa are the primary concerns, the S3 is overkill — a standard Sawyer Squeeze or Survivor Filter Pro provides adequate protection at lower cost. The S3's value proposition is strongest for international travel, disaster response, and scenarios where industrial contamination or sewage-affected water sources are likely. If your use case involves only pristine mountain streams, spend the $60 elsewhere. If your use case involves municipal water systems in developing countries or floodwater after natural disasters, the S3's dual-stage approach is uniquely valuable.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('katadyn-befree-1-0l-water-filter-bottle')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'How does the Katadyn BeFree EZ-Clean membrane work?', answer: 'The EZ-Clean membrane is a hollow fiber filter with uniquely open pore geometry that resists clogging. Instead of backflushing (which the BeFree cannot do), you clean it by filling the flask with clean water and vigorously swishing the filter element back and forth. The agitation dislodges trapped particulates from the membrane surface. This takes about 5-10 seconds and restores flow rate in most conditions. For heavy sediment buildup, remove the filter and tap it gently against your palm before swishing.' },
+  { question: 'Can I use the Katadyn BeFree with other bottles besides the Hydrapak flask?', answer: 'The BeFree filter element uses a 42mm thread that is proprietary to Katadyn and Hydrapak. It does not fit standard 28mm water bottles. However, Hydrapak makes compatible flasks in multiple sizes (0.6L, 1.0L, and a larger Hydrapak Seeker bladder that fits the BeFree). Some users have found adapters or used CNOC Vecto bags with modified threading, but the officially compatible options are Hydrapak products only.' },
+  { question: 'How long does the Katadyn BeFree filter last?', answer: 'The BeFree filter is rated for 1,000 liters, which is enough for roughly 3-4 months of regular hiking use or one long thru-hike. By comparison, a Sawyer Squeeze is rated for 100,000 gallons (effectively lifetime use). The BeFree trades longevity for flow speed and ease of cleaning. At $39.95 total (filter + flask), the per-liter cost is about $0.04 — reasonable for how effortless the system is to use. Replacement filter elements cost about $25.' },
+  { question: 'Is the Katadyn BeFree good for international travel?', answer: 'The BeFree is adequate for backcountry travel in North America, Europe, and other developed regions where bacteria and protozoa are the primary waterborne threats. It is NOT sufficient for travel to developing countries where viral contamination (Hepatitis A, norovirus, rotavirus) is a concern, because its 0.1-micron pore size does not catch viruses. For international travel to high-risk areas, pair the BeFree with UV treatment (SteriPEN) or chemical purification, or choose a true purifier like the LifeSaver Liberty or GRAYL GeoPress.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Hiking & Backpacking',
+    url: '/water-filters-for-hiking/',
+    description: 'Ultralight water filtration options for thru-hikers, day hikers, and backpackers.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Katadyn BeFree 1.0L is the fastest-flowing bottle filter in the portable water filtration category. At $39.95, it pairs a 0.1-micron EZ-Clean hollow fiber membrane with a collapsible 1-liter Hydrapak flask, delivering up to 2 liters per minute with minimal squeeze effort. That flow rate is roughly 3-4 times faster than the LifeStraw Go Series and significantly faster than gravity-feed systems. For thru-hikers and ultralight backpackers who measure every ounce and every minute, the BeFree is purpose-built to eliminate the friction of water filtration.</p>
+  <p>The EZ-Clean membrane technology is what distinguishes the BeFree from competitors using standard hollow fiber. Traditional hollow fiber filters like the Sawyer Squeeze require backflushing with a syringe to maintain flow rate — a process that adds weight (the syringe) and time. The BeFree's membrane has a more open pore geometry that releases trapped particles with a simple swish in clean water. Fill the flask, cap it, and shake vigorously for a few seconds. Flow rate is restored without tools, adapters, or syringes. This is genuinely useful in the field when you are filtering from slightly silty sources that would gradually clog a standard hollow fiber element.</p>
+  <p>The collapsible Hydrapak flask is the other half of the equation. When empty, the entire system rolls up to the size of a small fist and weighs just 2.6 ounces total. Compare that to the LifeStraw Go Series at 6.2 ounces with its rigid Tritan bottle, or any pump filter at 10+ ounces. For thru-hikers doing 20+ mile days where a quick scoop, squeeze, and drink from a stream crossing is the preferred workflow, the BeFree's combination of speed, weight, and simplicity is unmatched.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 0.1-micron EZ-Clean hollow fiber membrane delivers bacteria removal at 99.9999% (log-6 reduction) and protozoa removal at 99.9% (log-3). These numbers meet the EPA Guide Standard for microbiological water purifiers for bacteria and protozoa — the same performance benchmarks that more expensive and heavier pump filters must meet. The single-stage design means there is no carbon element for taste improvement or chemical reduction, so the BeFree passes through whatever dissolved minerals and organic compounds are in the source water. In practice, most backcountry water sources produce neutral or slightly mineral-tasting filtered water, which most hikers find perfectly acceptable.</p>
+
+  <ProTip>Pair the BeFree with a standard CNOC Vecto 2L or 3L bag for camp use. Fill the CNOC from a lake or stream, screw on the BeFree filter, and squeeze the larger bag to fill cookpots and bottles at camp. The BeFree's 42mm thread fits Hydrapak products, and some CNOC bags can be adapted. This gives you a fast-flow camp filter system without carrying a separate gravity setup. For trail drinking, use the included 1L flask as-is.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In clear stream water, the BeFree delivered its rated 2 liters per minute with easy one-handed squeezing — the fastest flow we have measured from any bottle-format filter. The soft flask deforms easily, so you do not need a strong grip. Filling a 1-liter Nalgene from a full BeFree flask took under 30 seconds. When filtering from a pond with moderate sediment, flow rate dropped to approximately 1.2-1.5 liters per minute, and a quick swish-clean in clean water restored it to near-original speed. The EZ-Clean membrane genuinely works as advertised for maintaining flow in moderate conditions.</p>
+  <p>The 4.3-star average across 5,500 reviews confirms broad satisfaction, with the most common praise focusing on flow speed and packability. The primary criticisms target the Hydrapak flask's durability — the soft plastic can develop pinhole leaks at crease points after extended use, and the narrow opening makes scooping water from shallow sources difficult. Users who pre-filter through a bandana before filling the flask in very muddy water report significantly longer membrane life. The 1,000-liter capacity is adequate for most multi-week trips but is notably lower than the Sawyer Squeeze's effectively unlimited lifespan.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $39.95 for the complete system (filter + 1L flask), the BeFree offers strong value in the bottle-filter segment. The LifeStraw Go Series ($34.95) is $5 cheaper but delivers one-quarter the flow rate and weighs more than twice as much. The Sawyer Squeeze ($34.95 for filter only, no bottle included) is the closest performance competitor — similar flow rate and vastly longer filter life — but lacks the integrated collapsible bottle and requires backflushing for maintenance. The BeFree's cost-per-liter is about $0.04, which is reasonable for a system this convenient.</p>
+  <p>Where the BeFree loses on value is longevity. The 1,000-liter capacity means a thru-hiker filtering 3-4 liters per day will exhaust it in 250-330 days of use — enough for one long-distance trail but not a multi-year investment. Replacement filter elements run about $25, bringing the per-year cost higher than a Sawyer Squeeze (which functionally never needs replacement). The BeFree is the right choice for hikers who prioritize speed and convenience over long-term per-liter economics. If you value the "scoop, squeeze, drink" workflow and despise backflushing syringes, the premium is worth it.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

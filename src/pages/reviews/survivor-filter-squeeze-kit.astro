@@ -1,0 +1,161 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('survivor-filter-squeeze-kit')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'Can the Survivor Filter Squeeze Kit really remove viruses?', answer: 'The Survivor Filter Squeeze Kit claims virus removal based on third-party laboratory testing showing 99.99% virus reduction. However, this testing is not EPA-registered or NSF-certified, which means the methodology and conditions may differ from official standards. The 0.05-micron UF membrane is theoretically fine enough to block many viruses (most are 0.02-0.3 microns), but without formal certification, you should treat virus removal as a supplementary benefit rather than a guaranteed capability. For confirmed virus protection in high-risk areas, pair the filter with chemical purification tablets.' },
+  { question: 'How long do the included collapsible canteens last?', answer: 'The included 1-liter collapsible canteens are made of thin BPA-free plastic designed for portability rather than durability. With careful use (avoiding sharp objects and not over-squeezing), they typically last 3-6 months of regular field use. The 28mm threads work with any standard-thread water bottle, so you can upgrade to a more durable Smartwater bottle or CNOC Vecto bag when the included canteens wear out. Many users switch to aftermarket bags immediately and keep the canteens as lightweight backups.' },
+  { question: 'What is the difference between the Squeeze Kit and the Survivor Filter Pro?', answer: 'The Squeeze Kit ($29.95) is a straw-style squeeze filter with 0.05-micron UF membrane, carbon mouthpiece, and included canteens. The Pro ($39.95) is a pump-style filter with 0.01-micron UF membrane, inline carbon, and no containers included. The Pro has finer filtration (0.01 vs 0.05 microns) and a higher flow rate (500 vs 400 ml/min), but weighs more (6.8 vs 4 oz) and costs $10 more. Choose the Squeeze Kit for lightweight simplicity and complete out-of-box readiness. Choose the Pro for maximum filtration fineness and pump-style convenience.' },
+  { question: 'How do I clean and maintain the Survivor Filter Squeeze Kit?', answer: 'After each use, blow air through the straw from the mouthpiece end to evacuate water from the UF membrane. For deeper cleaning, fill a clean bottle with filtered water and squeeze it backward through the straw (output to intake). This backflushes sediment from the membrane surface and restores flow rate. The carbon mouthpiece cannot be backflushed and will gradually lose effectiveness after 1,000 liters — replace it when taste improvement noticeably declines. Never let the filter freeze with water inside, and store it dry between trips.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Water Filters for Emergency Preparedness',
+    url: '/water-filters-for-emergencies/',
+    description: 'The best portable water filters and purification systems for emergency kits, disaster preparedness, and survival situations.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The Survivor Filter Squeeze Kit is the most complete out-of-the-box squeeze filtration package under $30. At $29.95, you get a 3-stage filter straw with 0.05-micron UF membrane and carbon mouthpiece, plus two 1-liter collapsible canteens — everything needed to start filtering immediately with no additional purchases. The 0.05-micron pore size sits between the 0.1-micron standard of Sawyer and LifeStraw and the 0.01-micron fineness of the Survivor Filter Pro, offering a meaningful edge in pathogen blocking over mainstream competitors.</p>
+  <p>Squeeze-style filters have become the most popular format in portable water treatment because they balance simplicity, speed, and weight. You fill a soft container with source water, attach the filter, and squeeze water through into your mouth or a clean container. No pumping, no electricity, no chemical wait time. The Survivor Filter Squeeze Kit packages this format with a carbon mouthpiece that most squeeze competitors lack — meaning you get taste improvement and partial heavy metal reduction in addition to pathogen removal.</p>
+  <p>The included collapsible canteens are thin but functional. They use standard 28mm threads compatible with most disposable water bottles, so you can upgrade to a more durable Smartwater bottle or CNOC Vecto bag if the included canteens wear out. Having two canteens means you can designate one as "dirty" (source water) and one as "clean" (filtered output), which is good practice for avoiding cross-contamination. At 4 ounces for the filter alone, the complete kit is light enough for ultralight backpackers who want virus-testing claims without the weight of a pump.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Filtration Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Filter Life</strong></td><td>{product.specs.filterLife}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The 3-stage design layers protection effectively: the cotton pre-filter catches sediment and large particles, the 0.05-micron UF membrane blocks bacteria (99.999%), protozoa (99.99%), and claimed viruses (99.99%), and the activated carbon mouthpiece improves taste while reducing mercury (99.5%) and lead (93%). The dual-capacity rating reflects this layered design — the UF membrane lasts 100,000 liters while the carbon mouthpiece is effective for about 1,000 liters. After the carbon is depleted, the straw still filters pathogens but loses the taste improvement.</p>
+
+  <ProTip>Designate one canteen as your "dirty bag" and mark it with tape or a marker. Always fill this one from the source and squeeze through the filter into the other canteen or directly into your mouth. This prevents accidentally drinking unfiltered water from the wrong container. Carry a third-party squeeze bag (CNOC Vecto or Evernew) as a backup — the included canteens are the weakest link in the kit and eventually develop leaks at the seams.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In squeeze-mode testing with the included canteens, the Survivor Filter Squeeze Kit delivered approximately 400 ml/min with firm squeezing — slower than the Sawyer Squeeze (which achieves 500+ ml/min in clean water) but adequate for personal hydration. The carbon mouthpiece produces noticeably better-tasting water than carbon-free competitors. Stream water with earthy tannin flavor came through tasting clean and neutral, which is a meaningful real-world improvement when you are drinking 3-4 liters per day on the trail. Flow rate decreased after filtering about 5 liters of moderately silty water, and was restored by backflushing.</p>
+  <p>The 4.4-star average across 6,500 reviews reflects strong satisfaction, particularly among emergency preparedness buyers and casual hikers. The most common complaint is the flimsy canteens — multiple reviewers report them developing leaks after a few weeks of regular use. The filter straw itself receives consistently positive feedback for flow rate, taste quality, and ease of use. Compared to the Membrane Solutions straw (0.1 microns, no carbon) and the NatureNova kit (0.1 microns with accessories), the Survivor Filter Squeeze Kit offers finer filtration and taste improvement at a competitive price point.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $29.95 for a complete kit with filter and two canteens, the Survivor Filter Squeeze Kit offers exceptional value. The Sawyer Squeeze system ($35) comes with one squeeze pouch and filters at 0.1 microns without carbon. The LifeStraw Personal ($18) is cheaper but is a sip-only straw with no squeeze capability and no carbon. The NatureNova 3-pack ($28.97) includes a water bag and backwash syringe but uses 0.1-micron filtration without carbon. The Survivor Filter kit uniquely combines 0.05-micron filtration, carbon taste improvement, and included containers — no competitor matches all three at this price.</p>
+  <p>The 1,000-liter carbon mouthpiece is the ongoing cost to consider. After approximately 6-12 months of regular use, the carbon element needs replacement (Survivor Filter sells replacements for about $8-10). The UF membrane itself lasts 100,000 liters and effectively never needs replacement under normal use. Compared to buying a Sawyer Squeeze ($35) plus a separate carbon inline filter ($15-20), the integrated design of the Survivor Filter Squeeze Kit is both lighter and cheaper for users who want combined pathogen and taste filtration.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">
+    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

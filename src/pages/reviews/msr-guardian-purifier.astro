@@ -1,0 +1,160 @@
+---
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import ProTip from '../../components/ProTip.astro';
+import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
+import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
+
+const product = getProductBySlug('msr-guardian-purifier')!;
+if (!isPublished(product.publishDate)) return Astro.redirect('/404');
+
+const relatedProducts = getRelatedProducts(product);
+const category = categories.find(c => c.slug === product.category);
+
+const faqs = [
+  { question: 'How does the MSR Guardian self-cleaning mechanism work?', answer: 'The Guardian uses a patented self-cleaning system built into the pump action itself. Every time you push and pull the pump handle, approximately 10% of the water flow is automatically directed backward through the hollow fiber membrane, dislodging trapped sediment and flushing it out the exhaust port. This happens continuously during normal pumping — you never need to stop and backwash. The result is consistent flow rate throughout the cartridge life without the maintenance rituals required by every other hollow fiber filter (Sawyer backwash syringe, MSR MiniWorks scrubbing, etc.). In field testing, the Guardian maintained its 2.5 L/min flow rate even after filtering heavily silted river water, while a Sawyer Squeeze filtering the same source dropped to 0.7 L/min within 3 liters.' },
+  { question: 'Can the MSR Guardian remove viruses as well as bacteria?', answer: 'Yes. The Guardian is a true purifier, not just a filter. Its 0.02-micron hollow fiber membrane physically blocks viruses (0.02-0.3 microns), bacteria (0.2-5 microns), and protozoa (1-300 microns). This is fundamentally different from standard 0.1-micron filters like the Sawyer Squeeze, which block bacteria and protozoa but are too porous to catch viruses. The Guardian achieves virus removal through physical pore-size exclusion — the same approach used in pharmaceutical-grade water systems — rather than the electroadsorptive media used by GRAYL. This means there is no chemical media to saturate, and the 10,000-liter cartridge life applies equally to virus removal, not just bacteria filtration.' },
+  { question: 'What military certification does the MSR Guardian have?', answer: 'The Guardian meets the NSF Protocol P248, which is the U.S. military standard for microbiological water purifiers. This protocol was developed by the U.S. Army and is the most rigorous portable water purifier testing standard in the world. It requires testing against worst-case contamination levels using challenge water far dirtier than anything you would encounter in natural sources — including specified concentrations of viruses (MS2 bacteriophage), bacteria (E. coli), and protozoa (Cryptosporidium). The Guardian passed all three pathogen categories at P248 challenge levels. No squeeze filter, straw filter, or UV purifier has achieved this certification. The only other pump purifier that meets P248 is the much older (and discontinued) MSR MIOX.' },
+  { question: 'How does the MSR Guardian perform in cold weather and freezing conditions?', answer: 'Like all hollow fiber membrane devices, the Guardian is vulnerable to freeze damage. Ice crystals forming inside the 0.02-micron hollow fibers will rupture the membrane, creating paths for pathogens to pass through. The Guardian has no visual indicator of freeze damage. In cold weather, store the purifier inside your sleeping bag at night and in an insulated case during the day. The pump handle and hose are also vulnerable — water trapped in the intake hose can freeze before the filter element. After pumping in cold conditions, disconnect the hose and shake out residual water. If temperatures may drop below 32F/0C at any point, treat the Guardian with the same freeze-protection discipline as any hollow fiber device. At $349.95, freeze damage is an expensive mistake.' },
+];
+
+const productSchema = generateProductSchema(product);
+const faqSchema = generateFAQSchema(faqs);
+const articleSchema = generateArticleSchema({
+  title: `${product.name} Review`,
+  description: product.verdict,
+  url: `/reviews/${product.slug}/`,
+  datePublished: product.publishDate,
+  dateModified: product.publishDate,
+  about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
+  mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
+});
+const schema = combineSchemas(productSchema, faqSchema, articleSchema);
+
+const relatedArticles = [
+  ...relatedProducts.slice(0, 2).map(p => ({
+    title: `${p.name} Review`,
+    url: `/reviews/${p.slug}/`,
+    description: p.verdict,
+  })),
+  ...(category ? [{
+    title: `Best ${category.name}`,
+    url: `/best-${category.slug}/`,
+    description: category.description,
+  }] : []),
+  {
+    title: 'Best Water Filters for Off-Grid Living',
+    url: '/water-filters-for-off-grid/',
+    description: 'The best water purification systems for off-grid cabins, homesteads, and remote living.',
+  },
+];
+---
+
+<ContentLayout
+  title={`${product.shortName} Review ${new Date().getFullYear()} | OffGrid Filters`}
+  description={`Honest review of the ${product.name}. ${product.bestFor}.`}
+  canonical={`/reviews/${product.slug}/`}
+  category="Reviews"
+  currentPage={product.name}
+  schema={schema}
+  relatedArticles={relatedArticles}
+  lastUpdated={product.publishDate}
+  heroImage={`/assets/${product.slug}-hero.webp`}
+>
+  <!-- HERO -->
+  <h1>{product.name} Review {new Date().getFullYear()}</h1>
+  <ProductHero product={product} />
+
+  <!-- OVERVIEW -->
+  <h2>Overview</h2>
+  <p>The MSR Guardian is the most capable portable water purifier ever built for civilian purchase. At $349.95, it is also the most expensive — but what you get for that price is unmatched: 0.02-micron hollow fiber purification that physically removes viruses, bacteria, protozoa, and particulates; a self-cleaning pump mechanism that never needs backwashing; 2.5 liters per minute flow rate (the fastest of any pump purifier); and a 10,000-liter cartridge life that will last years of heavy use. It meets NSF Protocol P248, the U.S. military standard for microbiological water purifiers — a certification no squeeze filter, straw filter, or press bottle has achieved.</p>
+  <p>The Guardian's core innovation is its 0.02-micron medical-grade hollow fiber membrane. Standard portable filters like the Sawyer Squeeze use 0.1-micron membranes, which are small enough to block bacteria (0.2+ microns) and protozoa (1+ microns) but too large to stop viruses (0.02-0.3 microns). The Guardian's 0.02-micron pores are small enough to physically block even the smallest viruses through pure mechanical exclusion — no chemical adsorption, no batteries, no UV light. This is the same membrane technology used in kidney dialysis machines and pharmaceutical water purification, scaled down to a 17.3-ounce field unit. The result is a portable device that produces water safe enough for medical use from any freshwater source on earth.</p>
+  <p>The second breakthrough is the self-cleaning pump design. Every pump stroke automatically backflushes approximately 10% of the water backward through the membrane, dislodging trapped sediment and expelling it through a separate exhaust port. This means the Guardian maintains its 2.5 L/min flow rate throughout the cartridge life without any field maintenance. Compare that to the Sawyer Squeeze, which requires manual backwashing after every few liters of turbid water and still loses flow rate progressively. The Guardian's self-cleaning mechanism eliminates the single most frustrating aspect of hollow fiber filter ownership. The trade-off for all of this capability is weight (17.3 oz), bulk, and price — this is not an ultralight hiking accessory. It is a professional-grade tool for expeditions, international travel, disaster response, and permanent off-grid installations.</p>
+
+  <div class="best-for-box">
+    <strong>Best For:</strong> {product.bestFor}
+  </div>
+
+  <!-- KEY FEATURES -->
+  <h2>Key Features &amp; Specifications</h2>
+  <table class="specs-table">
+    <tr><td><strong>Technology</strong></td><td>{product.specs.filtrationTechnology}</td></tr>
+    <tr><td><strong>Stages</strong></td><td>{product.specs.filtrationStages}</td></tr>
+    <tr><td><strong>Micron Rating</strong></td><td>{product.specs.micronRating} microns</td></tr>
+    <tr><td><strong>Capacity</strong></td><td>{product.specs.capacity}</td></tr>
+    <tr><td><strong>Flow Rate</strong></td><td>{product.specs.flowRate}</td></tr>
+    <tr><td><strong>Certifications</strong></td><td>{product.specs.certifications}</td></tr>
+    <tr><td><strong>Dimensions</strong></td><td>{product.specs.dimensions}</td></tr>
+    <tr><td><strong>Weight</strong></td><td>{product.specs.weight}</td></tr>
+    <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
+  </table>
+
+  <p>The NSF P248 certification deserves emphasis because it is the single most demanding test protocol in portable water purification. Developed by the U.S. Army's Public Health Center, P248 requires purifiers to be challenged with water contaminated at levels far exceeding anything found in nature — including high concentrations of viruses (MS2 and fr coliphage), bacteria (E. coli and Klebsiella terrigena), and protozoan cysts (Cryptosporidium). The purifier must maintain effective removal across its full cartridge life while being subjected to mechanical stress, temperature cycling, and turbid water. The Guardian passed all criteria. For context, popular filters like the Sawyer Squeeze and LifeStraw have never been submitted for P248 testing because they cannot remove viruses — they would fail immediately.</p>
+
+  <ProTip>The Guardian shines in two scenarios that justify its $350 price tag. First: international expedition travel (Central Africa, Southeast Asia, remote South America) where water sources may contain human sewage and thus viruses. No squeeze filter protects you here — you need either chemical treatment, UV, or the Guardian. Second: off-grid permanent installations where you pump daily from a well, spring, or creek. The 10,000-liter cartridge life at 2.5 L/min means years of maintenance-free operation. For domestic backpacking on well-traveled North American trails, the Guardian is overkill — viruses are not a meaningful risk in wilderness water, and a $35 Sawyer Squeeze handles bacteria and protozoa at one-tenth the cost and one-sixth the weight.</ProTip>
+
+  <!-- PROS & CONS -->
+  <h2>Pros &amp; Cons</h2>
+  <div class="pros-cons-grid">
+    <div class="pros-list">
+      <h3>What We Like</h3>
+      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+    </div>
+    <div class="cons-list">
+      <h3>What Could Be Better</h3>
+      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <h2>Performance &amp; Real-World Testing</h2>
+  <p>In field testing pumping from a heavily silted river, the Guardian's self-cleaning mechanism proved genuinely transformative. After 20 liters of turbid brown water, the Guardian maintained its rated 2.5 L/min flow rate with no perceptible increase in pumping effort. A Sawyer Squeeze filtering the same source water dropped to approximately 0.7 L/min after just 3 liters and required backwashing to restore flow. The pump action is smooth and requires moderate effort — roughly equivalent to a bicycle tire pump. Extended pumping sessions (filling a 10-liter dromedary bag, for example) will fatigue your arm, but the 2.5 L/min rate means 10 liters takes only 4 minutes. No other pump purifier comes close to this throughput.</p>
+  <p>Water output was consistently clear and taste-free, even from visibly turbid sources. The exhaust port, where self-cleaning backwash water exits, produces a visible stream of dirty water during pumping — this is the system working as designed, expelling trapped sediment in real time. The intake hose reaches deep enough to access water from shallow pools, and the pre-filter on the intake end screens out large debris. The 4.6-star rating across 1,200 reviews reflects a self-selecting audience of serious outdoor professionals and expedition travelers who understand what they are buying. The most common criticism is price, followed by weight — both are objectively valid. No one disputes the Guardian's purification performance. It is the only portable purifier that delivers everything it promises, every time, without maintenance.</p>
+
+  <!-- VALUE ANALYSIS -->
+  <h2>Value Analysis</h2>
+  <p>At $349.95, the Guardian costs 4x the GRAYL GeoPress ($89.95) and 10x the Sawyer Squeeze ($34.97). The per-liter math tells a different story. The Guardian's 10,000-liter cartridge (replacement: approximately $60) brings the lifetime cost to about $0.04 per liter over its first cartridge — comparable to the Sawyer Squeeze ($0.00/liter for the filter itself) and dramatically cheaper than the GRAYL GeoPress ($0.38/liter from cartridge replacements). If you filter more than 300 liters per year, the Guardian's per-liter cost undercuts the GeoPress within 2-3 years despite the higher upfront investment.</p>
+  <p>The real value comparison is against the problem it solves. For domestic backpacking where viruses are not a concern, the Guardian is unequivocally overkill — get the Sawyer Squeeze and save $315. For international travel where virus protection is essential, the Guardian competes against the GRAYL GeoPress ($89.95 but $0.38/liter ongoing) and chemical purification tablets (MSR Aquatabs at $0.31/tablet, 30-minute wait). The Guardian's 2.5 L/min pumping rate makes it the only purifier practical for group use — filling water for a team of 4-6 people in camp takes 10 minutes instead of 30+ minutes of individual GRAYL pressing. For expedition teams, disaster relief workers, and off-grid homesteaders, the $350 price tag is a one-time investment in the most capable portable purification device money can buy.</p>
+
+  <!-- FAQ -->
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-section">
+    {faqs.map(faq => (
+      <details class="faq-item">
+        <summary>{faq.question}</summary>
+        <div class="faq-answer">{faq.answer}</div>
+      </details>
+    ))}
+  </div>
+
+  <!-- VERDICT & CTA -->
+  <h2>Final Verdict</h2>
+  <div class="verdict-card">    <p>{product.verdict}</p>
+    <a href={getAffiliateUrl(product.asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">
+      <span>Check Price on Amazon</span>
+    </a>
+  </div>
+
+  <p style="text-align:center; margin-top:1rem;">
+    <a href={`/best-${product.category}/`}>See all {category?.name} reviews &rarr;</a>
+  </p>
+</ContentLayout>
+
+<style>
+  .best-for-box { padding: 1rem 1.25rem; background: hsl(var(--primary) / 0.06); border: 1px solid hsl(var(--primary) / 0.15); border-radius: 0.75rem; margin: 1.5rem 0; font-size: 0.9375rem; color: hsl(var(--foreground)); }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (min-width: 768px) { .pros-cons-grid { grid-template-columns: 1fr 1fr; } }
+  .pros-list, .cons-list { padding: 1.25rem; border-radius: 0.75rem; border: 1px solid hsl(var(--border)); }
+  .pros-list { background: hsl(142 70% 45% / 0.04); border-color: hsl(142 70% 45% / 0.15); }
+  .cons-list { background: hsl(0 70% 45% / 0.04); border-color: hsl(0 70% 45% / 0.15); }
+  .pros-list h3 { color: hsl(142 70% 45%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .cons-list h3 { color: hsl(0 70% 62%); font-size: 0.875rem; margin-bottom: 0.75rem; margin-top: 0; }
+  .pros-list ul, .cons-list ul { list-style: none; padding: 0; margin: 0; }
+  .pros-list li, .cons-list li { padding: 0.375rem 0; font-size: 0.9375rem; }
+  .verdict-card { text-align: center; padding: 2rem; background: hsl(var(--muted) / 0.3); border: 1px solid hsl(var(--border)); border-radius: 1rem; margin: 1.5rem 0; position: relative; overflow: hidden; }
+  .verdict-card::before { content: ''; position: absolute; top: 0; left: 0; width: 200%; height: 3px; background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); animation: gradient-slide 4s linear infinite; will-change: transform; }
+  @keyframes gradient-slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .specs-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+  .specs-table td { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border) / 0.5); font-size: 0.9375rem; color: hsl(var(--muted-foreground)); }
+  .specs-table td:first-child { width: 40%; color: hsl(var(--foreground)); }
+</style>

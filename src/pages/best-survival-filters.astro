@@ -14,20 +14,31 @@ const allProducts = getProductsByCategory(categorySlug);
 const publishedProducts = allProducts.filter(p => isPublished(p.publishDate));
 const year = new Date().getFullYear();
 
-const tableProducts = publishedProducts.map((p, i) => ({
-  name: p.name,
+// Top picks for the comparison table — limit to 6 diverse picks to keep the table readable.
+// The full list of all products is shown in the individual mini-reviews below.
+const topPickSlugs = [
+  'sawyer-squeeze-water-filtration-system',       // Best Overall
+  'sawyer-products-mini-water-filtration-system',  // Best Ultralight
+  'grayl-geopress-24oz-water-purifier-bottle',     // Best Purifier
+  'katadyn-befree-1-0l-water-filter-bottle',       // Fastest Flow
+  'platypus-gravityworks-4-0l-water-filter-system', // Best Gravity
+  'lifestraw-family-1-0-portable-gravity-powered-water-purifier', // Best for Families
+];
+const topPicks = topPickSlugs
+  .map(slug => publishedProducts.find(p => p.slug === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
+
+const tableProducts = topPicks.map((p, i) => ({
+  name: p.shortName || p.name,
   asin: p.asin,
   rating: p.rating,
   price: p.price,
-  filtrationStages: p.specs.filtrationStages || '',
   filtrationTechnology: p.specs.filtrationTechnology || '',
   micronRating: p.specs.micronRating || '',
   capacity: p.specs.capacity || '',
   flowRate: p.specs.flowRate || '',
-  certifications: p.specs.certifications || '',
   filterLife: p.specs.filterLife || '',
-  contaminantsRemoved: p.specs.contaminantsRemoved || '',
-  packSize: p.specs.packSize || '',
+  weight: p.specs.weight || '',
   isEditorsPick: i === 0,
 }));
 
@@ -78,49 +89,23 @@ const relatedArticles = [
   heroImage={`/assets/best-${categorySlug}-hero.webp`}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
-  <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws under $8 to EPA-registered purification tablets, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>
+  <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws under $8 to military-grade pump purifiers, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>
 
   <ProductImage alt={`Best ${category.name} ${year}`} icon="camping" aspect="hero" slug="best-survival-filters" />
 
   <h2>Quick Picks: Our Top Recommendations</h2>
   <ComparisonTable products={tableProducts} />
 
-  <ProTip title="Filter + Tablets = Complete Protection">
-    <p>No single product in this category provides 100% water safety. Filter straws remove bacteria and protozoa but miss viruses. Purification tablets kill viruses but leave sediment. For complete protection, carry both a filter straw AND tablets. Our recommended combo: Timain filter straw ($7.12) + MSR Aquatabs ($11.99) = $19.11 for comprehensive field water purification weighing under 3 ounces.</p>
+  <ProTip title="Filter + Purification = Complete Protection">
+    <p>No single portable product removes every waterborne threat. Filter straws and squeeze filters (0.1-0.2 micron) remove bacteria and protozoa but miss viruses. Purification tablets and purifier bottles (GRAYL, LifeSaver) kill viruses but may leave sediment. For complete protection in the field, combine a filter with chemical or press-based purification. Our top combo: Sawyer Squeeze ($34.97) + MSR Aquatabs ($11.99) = $47 for comprehensive water purification.</p>
   </ProTip>
 
   {publishedProducts.map((product, i) => (
     <section class="product-mini-review">
       <h3>{i + 1}. {product.name} — {product.bestFor}</h3>
-      <ProductImage alt={product.name} icon={i === 3 ? 'tablet' : 'straw'} aspect="wide" slug={product.slug} />
-      {i === 0 && (
-        <>
-          <p>At $14.23 for two straws — just $7.12 each — the Timain is the most affordable survival filter we tested. But cheap does not mean ineffective. The 4-stage filtration process starts with polypropylene pre-filtration, passes through coconut shell activated carbon for taste improvement, adds PP fiber for fine particulate removal, and finishes with a 0.1-micron ultrafiltration membrane that removes 99.9999% of bacteria and 99.99% of protozoa.</p>
-          <p>The dual-use design is practical: drink directly through the straw from a water source, or attach it to a standard water bottle and use it as a squeeze filter. The 2-pack format means one for your day pack and one for your emergency kit at home. At 2.1 ounces per straw, the weight penalty is negligible even for ultralight backpackers.</p>
-          <p>The honest caveats: Timain is not a well-known brand, so the long-term reliability data is thinner than established names. The claimed 1,500-liter capacity is likely optimistic for anything other than clear water. And critically, this does not remove viruses — for international travel or flood-contaminated water, pair it with purification tablets. But for the price, the Timain straw is an unreasonably good deal for basic backcountry and emergency filtration.</p>
-        </>
-      )}
-      {i === 1 && (
-        <>
-          <p>The Membrane Solutions 4-pack is our top recommendation for families and groups building multiple emergency kits. At $9.75 per straw, you get four proven hollow fiber membrane filters — enough for every family member or for stashing in your car, home kit, office, and day pack. The brand has 8,500+ reviews with a 4.5-star rating, providing more reliability data than any other filter straw in our lineup.</p>
-          <p>The hollow fiber membrane technology is the same proven filtration method used by LifeStraw and Sawyer. At 0.1 microns, it catches bacteria with a log-8 reduction rate (99.999999%) and protozoa at 99.99%. Each straw fits standard 28mm water bottles, adding versatility beyond direct-straw drinking. At 2.0 ounces per straw, these are among the lightest survival filters available.</p>
-          <p>The limitations are the same as all filter straws: no virus removal, no chemical filtration, and no heavy metal reduction. The single-stage filtration (membrane only) means no activated carbon for taste improvement — you will taste what the source water tastes like minus the biological threats. Flow rate does decrease as the membrane collects contaminants, and there is no backwash capability to restore it.</p>
-        </>
-      )}
-      {i === 2 && (
-        <>
-          <p>The NatureNova 3-pack stands out by including accessories that other filter straws charge extra for or omit entirely. Each straw comes with a foldable water bag and a backwash syringe. The water bag enables gravity-feed filtering when you do not want to suck through a straw, and the backwash syringe extends filter life by flushing trapped contaminants out of the membrane.</p>
-          <p>The 4-stage filtration matches the Timain's specification: PP cotton, coconut carbon, PP fiber, and 0.1-micron UF membrane. The coconut carbon stage provides activated carbon filtration for improved taste, which the single-stage Membrane Solutions straws lack. At 2.5 ounces per straw (plus accessories), it is slightly heavier than competitors but still negligible in a pack.</p>
-          <p>The foldable water bag is the weakest link — it is thin and can puncture in rough field conditions. Carry duct tape as a patch repair. The backwash syringe adds complexity but meaningfully extends filter life, especially in sediment-heavy water. At $9.66 per straw, the NatureNova costs about the same as the Membrane Solutions per unit but includes more functionality out of the box.</p>
-        </>
-      )}
-      {i === 3 && (
-        <>
-          <p>Aquatabs occupy a fundamentally different role in your water safety toolkit. While filter straws physically remove bacteria and protozoa, Aquatabs chemically kill viruses — the one biological threat that 0.1-micron filters miss. Based on NaDCC (sodium dichloroisocyanurate), these EPA-registered tablets are recommended by the World Health Organization for emergency water treatment.</p>
-          <p>Each tablet treats 2 quarts (about 1 liter) of water in 30 minutes. The NaDCC formula produces less taste impact than iodine-based treatments, though a faint chlorine taste is still present. At $11.99 for a 30-pack, that is $0.40 per liter of treated water — inexpensive insurance for situations where viruses are a concern, such as flood water, international travel, or large group water sources.</p>
-          <p>The critical limitation is that tablets do not remove sediment, chemicals, or heavy metals. Turbid water should be pre-filtered through a cloth or filter straw before tablet treatment. Tablets also have a limited shelf life once the package is opened, and the 30-minute wait time can feel long when you are thirsty. But as a complement to filter straws, Aquatabs complete your water purification capability in a package that weighs half an ounce.</p>
-        </>
-      )}
+      <ProductImage alt={product.name} icon="filter" aspect="wide" slug={product.slug} />
+      <p>{product.verdict}</p>
+      <p><strong>Key specs:</strong> {product.specs.filtrationTechnology}{product.specs.micronRating ? `, ${product.specs.micronRating} microns` : ''}{product.specs.capacity ? `, ${product.specs.capacity}` : ''}{product.specs.weight ? `, ${product.specs.weight}` : ''}. Priced at ${product.price}.</p>
       <div class="pros-cons-mini">
         <div class="pros-mini">
           <strong>Pros:</strong>
@@ -147,15 +132,15 @@ const relatedArticles = [
 
   <h2>How We Chose Our Picks</h2>
   <p>Survival water filtration demands a different evaluation framework than home filters. We prioritized <strong>biological threat removal effectiveness</strong> (log reduction rates for bacteria, protozoa, and viruses), <strong>weight and packability</strong> (every ounce matters in the field), <strong>reliability under adverse conditions</strong> (will it work after being bounced around in a pack for months?), <strong>ease of use under stress</strong> (can you use it effectively when cold, tired, or panicked?), and <strong>cost-to-coverage ratio</strong> (how much protection per dollar?).</p>
-  <p>We also evaluated each product's role in a complete water treatment strategy. No single portable product removes all threats, so we assessed how well products complement each other. The filter straw + tablet combination emerged as the most effective and weight-efficient approach for comprehensive water safety.</p>
+  <p>We also evaluated each product's role in a complete water treatment strategy. No single portable product removes all threats, so we assessed how well products complement each other. The filter + purification combination emerged as the most effective approach for comprehensive water safety across different scenarios.</p>
 
   <h2>Buying Guide: What to Look For in Survival Filters</h2>
-  <p><strong>Understand what you are filtering against.</strong> Backcountry water in North America primarily contains bacteria (E. coli, Salmonella) and protozoa (Giardia, Cryptosporidium). A 0.1-micron filter handles both effectively. International travel adds virus risk (Hepatitis A, Norovirus), requiring chemical treatment or UV purification. Flood water and industrial areas may contain chemicals that no portable filter can address.</p>
-  <p><strong>Micron rating is the critical spec.</strong> For bacteria and protozoa removal, 0.1 microns is the standard. Lower is not necessarily better for field use — 0.01-micron filters (like the Sawyer Squeeze) can remove viruses but clog much faster. The 0.1-micron sweet spot provides biological safety with reasonable flow rates and filter longevity.</p>
-  <p><strong>Weight, redundancy, and simplicity win in the field.</strong> Carry two cheap filters instead of one expensive one. A $7 filter straw that breaks can be replaced from your backup, while a $40 gravity system failure leaves you with nothing. Simple squeeze or direct-drink designs have fewer failure points than pump systems with moving parts.</p>
+  <p><strong>Understand what you are filtering against.</strong> Backcountry water in North America primarily contains bacteria (E. coli, Salmonella) and protozoa (Giardia, Cryptosporidium). A 0.1-micron filter handles both effectively. International travel adds virus risk (Hepatitis A, Norovirus), requiring chemical treatment, UV purification, or a purifier bottle like the GRAYL GeoPress. Flood water and industrial areas may contain chemicals that no portable filter can address.</p>
+  <p><strong>Micron rating is the critical spec.</strong> For bacteria and protozoa removal, 0.1-0.2 microns is the standard. Purifier bottles (GRAYL, LifeSaver) and military-grade systems (MSR Guardian) reach 0.02 microns or use electroadsorptive media to remove viruses. The 0.1-micron sweet spot provides biological safety with reasonable flow rates and filter longevity for most domestic backcountry use.</p>
+  <p><strong>Match your filter type to your use case.</strong> Squeeze filters (Sawyer Squeeze, Katadyn BeFree) offer the best weight-to-performance ratio for solo backpacking. Gravity systems (MSR AutoFlow XL, Platypus GravityWorks) are ideal for groups and base camps. Pump filters (MSR MiniWorks EX, Katadyn Pocket) work in shallow or hard-to-reach water sources. Bottle purifiers (GRAYL GeoPress, LifeSaver Liberty) provide the fastest complete purification for international travel.</p>
 
   <ProTip>
-    <p>Pre-filter turbid water through a bandana, coffee filter, or even a clean sock before using your filter straw. Removing visible sediment first dramatically extends your filter's effective life and prevents premature clogging. This simple step can double or triple the liters you get from a single straw.</p>
+    <p>Never let a hollow fiber filter freeze. Ice crystals expand inside the microscopic fibers and create holes that allow bacteria to pass through. In cold weather, sleep with your filter inside your sleeping bag or keep it in an insulated pocket close to your body. If you suspect a filter has frozen, replace it — there is no way to test if the fibers are still intact.</p>
   </ProTip>
 
   <h2>Frequently Asked Questions</h2>
@@ -170,7 +155,7 @@ const relatedArticles = [
 
   <h2>Our Recommendation</h2>
   <div class="verdict-card">
-    <p>For the best budget survival filter, the <strong>Timain 4-Stage Filter Straw 2-Pack</strong> at $14.23 is an unbeatable value — two complete filter straws for less than a fast-food meal. For family and group preparedness, the <strong>Membrane Solutions 4-Pack</strong> outfits everyone at $9.75 per straw with the strongest review-backed reliability. For the most complete field-ready kit, the <strong>NatureNova 3-Pack</strong> includes water bags and backwash syringes. And always carry <strong>MSR Aquatabs</strong> alongside your filter straw for virus protection that no filter alone can provide.</p>
+    <p>For the best overall backcountry filter, the <strong>Sawyer Squeeze</strong> at $34.97 with its 100,000-gallon capacity and proven reliability is our top pick. For ultralight hikers, the <strong>Sawyer Mini</strong> at $21.99 and 2 ounces is unbeatable. For complete virus protection without chemicals, the <strong>GRAYL GeoPress</strong> ($89.95) purifies water in 8 seconds. Budget preppers should grab the <strong>Timain 4-Stage Filter Straw 2-Pack</strong> at $14.23 plus <strong>MSR Aquatabs</strong> at $11.99 for comprehensive protection under $27. And for long-term off-grid or family use, the <strong>LifeStraw Family 1.0</strong> gravity purifier at $64.95 provides 18,000 liters of virus-free water with zero electricity.</p>
     {publishedProducts[0] && (
       <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
         <span>Check Top Pick on Amazon</span>

@@ -146,6 +146,156 @@
       "permanent": true
     },
     {
+      "source": "/roundups/:path+",
+      "destination": "/guides/",
+      "permanent": true
+    },
+    {
+      "source": "/products/sawyer-squeeze-water-filtration-system",
+      "destination": "/reviews/sawyer-squeeze-water-filtration-system/",
+      "permanent": true
+    },
+    {
+      "source": "/products/sawyer-products-mini-water-filtration-system",
+      "destination": "/reviews/sawyer-products-mini-water-filtration-system/",
+      "permanent": true
+    },
+    {
+      "source": "/products/grayl-geopress-24oz-water-purifier-bottle",
+      "destination": "/reviews/grayl-geopress-24oz-water-purifier-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/grayl-ultrapress-16-9oz-water-purifier-bottle",
+      "destination": "/reviews/grayl-ultrapress-16-9oz-water-purifier-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/grayl-tap-water-filter",
+      "destination": "/reviews/grayl-tap-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/msr-guardian-purifier",
+      "destination": "/reviews/msr-guardian-purifier/",
+      "permanent": true
+    },
+    {
+      "source": "/products/msr-miniworks-ex-microfilter",
+      "destination": "/reviews/msr-miniworks-ex-microfilter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/msr-trailshot-pocket-sized-water-filter",
+      "destination": "/reviews/msr-trailshot-pocket-sized-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/msr-autoflow-xl-gravity-filter",
+      "destination": "/reviews/msr-autoflow-xl-gravity-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/msr-thru-link-in-line-water-filter",
+      "destination": "/reviews/msr-thru-link-in-line-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/katadyn-pocket-water-filter",
+      "destination": "/reviews/katadyn-pocket-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/katadyn-hiker-pro-transparent-filter",
+      "destination": "/reviews/katadyn-hiker-pro-transparent-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/katadyn-vario-water-filter",
+      "destination": "/reviews/katadyn-vario-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/katadyn-befree-1-0l-water-filter-bottle",
+      "destination": "/reviews/katadyn-befree-1-0l-water-filter-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/lifesaver-liberty-bottle",
+      "destination": "/reviews/lifesaver-liberty-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/lifestraw-go-series",
+      "destination": "/reviews/lifestraw-go-series/",
+      "permanent": true
+    },
+    {
+      "source": "/products/lifestraw-flex-advanced-water-filter",
+      "destination": "/reviews/lifestraw-flex-advanced-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/lifestraw-family-1-0-portable-gravity-powered-water-purifier",
+      "destination": "/reviews/lifestraw-family-1-0-portable-gravity-powered-water-purifier/",
+      "permanent": true
+    },
+    {
+      "source": "/products/survivor-filter-pro",
+      "destination": "/reviews/survivor-filter-pro/",
+      "permanent": true
+    },
+    {
+      "source": "/products/survivor-filter-pro-x-electric-pump",
+      "destination": "/reviews/survivor-filter-pro-x-electric-pump/",
+      "permanent": true
+    },
+    {
+      "source": "/products/survivor-filter-pro-x-electric-water-filter",
+      "destination": "/reviews/survivor-filter-pro-x-electric-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/survivor-filter-squeeze-kit",
+      "destination": "/reviews/survivor-filter-squeeze-kit/",
+      "permanent": true
+    },
+    {
+      "source": "/products/sawyer-select-series-s3",
+      "destination": "/reviews/sawyer-select-series-s3/",
+      "permanent": true
+    },
+    {
+      "source": "/products/hydroblu-versa-flow-water-filter",
+      "destination": "/reviews/hydroblu-versa-flow-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/hydroblu-clear-flow-bottle",
+      "destination": "/reviews/hydroblu-clear-flow-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/hydroblu-sidekick-2-stage-straw-filter",
+      "destination": "/reviews/hydroblu-sidekick-2-stage-straw-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/hydroblu-go-flow-water-gravity-bag",
+      "destination": "/reviews/hydroblu-go-flow-water-gravity-bag/",
+      "permanent": true
+    },
+    {
+      "source": "/products/platypus-quickdraw-microfilter-system",
+      "destination": "/reviews/platypus-quickdraw-microfilter-system/",
+      "permanent": true
+    },
+    {
+      "source": "/products/platypus-gravityworks-4-0l-water-filter-system",
+      "destination": "/reviews/platypus-gravityworks-4-0l-water-filter-system/",
+      "permanent": true
+    },
+    {
       "source": "/products",
       "destination": "/guides/",
       "permanent": true
@@ -158,71 +308,6 @@
     {
       "source": "/contact",
       "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/products/:path+",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/roundups/:path+",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/lifestraw-go-series",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/hydroblu-clear-flow-bottle",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/grayl-tap-water-filter",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/hydroblu-versa-flow-water-filter",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/sawyer-squeeze-water-filtration-system",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/hydroblu-go-flow-water-gravity-bag",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/hydroblu-sidekick-2-stage-straw-filter",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/grayl-geopress-24oz-water-purifier-bottle",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/sawyer-products-mini-water-filtration-system",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/katadyn-befree-1-0l-water-filter-bottle",
-      "destination": "/best-survival-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/reviews/lifestraw-family-1-0-portable-gravity-powered-water-purifier",
-      "destination": "/best-survival-filters/",
       "permanent": true
     }
   ]
