@@ -210,10 +210,10 @@ describe('generateProductSchema', () => {
     expect(result.name).toBe('Test Filter');
     expect(result.brand.name).toBe('TestBrand');
     expect(result.offers['@type']).toBe('Offer');
-    expect(result.offers.price).toBe('49.99');
+    expect(result.offers.price).toBe(49.99);
     expect(result.offers.priceCurrency).toBe('USD');
-    expect(result.aggregateRating.ratingValue).toBe('4.5');
-    expect(result.aggregateRating.reviewCount).toBe('100');
+    expect(result.aggregateRating.ratingValue).toBe(4.5);
+    expect(result.aggregateRating.reviewCount).toBe(100);
   });
 });
 

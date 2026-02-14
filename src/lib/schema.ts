@@ -185,7 +185,7 @@ export function generateProductSchema(product?: Product) {
     offers: {
       "@type": "Offer",
       url: `https://www.amazon.com/dp/${product.asin}?tag=${siteConfig.affiliateTag}`,
-      price: product.price,
+      price: parseFloat(product.price),
       priceCurrency: 'USD',
       priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability: "https://schema.org/InStock",
@@ -197,10 +197,10 @@ export function generateProductSchema(product?: Product) {
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: product.rating,
-      reviewCount: product.reviewCount,
-      bestRating: "5",
-      worstRating: "1",
+      ratingValue: parseFloat(product.rating),
+      reviewCount: parseInt(product.reviewCount, 10),
+      bestRating: 5,
+      worstRating: 1,
     },
   };
 }
