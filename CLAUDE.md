@@ -403,7 +403,11 @@ This is the SINGLE SOURCE OF TRUTH. All components read from this.
 - `generateArticleSchema(props)` — For content pages
 - `generateFAQSchema(faqs)` — For FAQ sections
 - `generateBreadcrumbSchema(items)` — For breadcrumb navigation
-- `generateProductSchema(product)` — For product review pages
+- `generateProductSchema(product)` — For product review pages. **CRITICAL: All numeric fields
+  (`ratingValue`, `reviewCount`, `bestRating`, `worstRating`, `price`) must be output as JSON
+  numbers, not strings.** Use `parseFloat()` / `parseInt()` when the Product interface stores
+  values as strings. Google's Rich Results validator rejects string-typed numeric fields,
+  preventing review stars from appearing in search results.
 - `generateHowToSchema(steps)` — For how-to guides
 - `generateOrganizationSchema()` — For brand/site info
 - `generateWebSiteSchema()` — For site-level schema (NO SearchAction — the site has no search)
@@ -1605,6 +1609,11 @@ Every page links to 4 related articles:
 22.12. **llms.txt must include per-page descriptions.** Product reviews include verdicts, categories
    include descriptions, guides include descriptions. Comparison titles must be generated from
    product names (the Comparison interface has no `title` field).
+22.13. **Product schema numeric fields MUST be JSON numbers, not strings.** `ratingValue`,
+   `reviewCount`, `bestRating`, `worstRating`, and `price` must all be output as numbers in the
+   JSON-LD. The Product interface stores these as strings — use `parseFloat()` / `parseInt()` in
+   `generateProductSchema()`. String-typed numeric fields cause Google's Rich Results validator to
+   reject the schema, preventing review stars from appearing in search results.
 
 ### CSP (Content Security Policy)
 25. **NEVER write inline `<script>` tags.** Use external `.ts` files in `src/scripts/` referenced
