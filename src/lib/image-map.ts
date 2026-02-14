@@ -101,7 +101,10 @@ export const heroImages: Record<string, string> = {
   // ── Editorial hero images ──
   'about': '/assets/about-hero.webp',
   'amazon-basics-vs-brita-standard': '/assets/amazon-basics-vs-brita-standard-hero.webp',
+  'best-backpacking-water-filters': '/assets/best-backpacking-water-filters-hero.webp',
   'best-countertop-filters': '/assets/best-countertop-filters-hero.webp',
+  'best-off-grid-water-filters': '/assets/best-off-grid-water-filters-hero.webp',
+  'best-pump-filters': '/assets/best-pump-filters-hero.webp',
   'best-refrigerator-filters': '/assets/best-refrigerator-filters-hero.webp',
   'best-replacement-filters': '/assets/best-replacement-filters-hero.webp',
   'best-survival-filters': '/assets/best-survival-filters-hero.webp',

@@ -146,6 +146,26 @@
       "permanent": true
     },
     {
+      "source": "/roundups/best-off-grid-water-filters",
+      "destination": "/best-off-grid-water-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/best-backpacking-water-filters",
+      "destination": "/best-backpacking-water-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/best-pump-filters",
+      "destination": "/best-pump-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/bestpumpfilters",
+      "destination": "/best-pump-filters/",
+      "permanent": true
+    },
+    {
       "source": "/roundups/:path+",
       "destination": "/guides/",
       "permanent": true
