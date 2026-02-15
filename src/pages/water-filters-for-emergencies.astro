@@ -33,7 +33,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -55,7 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -73,7 +73,7 @@ const relatedArticles = [
   <ul>
     <li><strong>No power or plumbing required:</strong> Forget electric-powered RO systems and plumbed-in filters. Your emergency kit must work when the grid is down and pipes are dry. Filter straws and chemical tablets need nothing but a water source.</li>
     <li><strong>Long shelf life:</strong> Emergency supplies must be ready years after you buy them. Filter straws in sealed packaging last 5-10 years. Aquatabs last 5 years sealed. Both are reliable set-and-forget supplies.</li>
-    <li><strong>Multi-person capacity:</strong> You need filtration for every family member. Individual filter straws mean no one has to share or wait. Multi-packs like the Membrane Solutions 4-pack are designed for exactly this.</li>
+    <li><strong>Multi-person capacity:</strong> You need filtration for every family member. Individual filter straws mean no one has to share or wait. Affordable straws like the Membrane Solutions make it easy to stock one per person.</li>
     <li><strong>Complete biological coverage:</strong> Emergency water sources may contain bacteria, protozoa, and viruses. Filters alone miss viruses. Chemical tablets alone do not remove sediment or cysts. You need both for comprehensive protection.</li>
     <li><strong>Portability:</strong> You may need to evacuate. Your water purification kit should fit in a go-bag alongside other emergency supplies. Compact, lightweight filter straws are perfect for this.</li>
   </ul>
@@ -85,9 +85,9 @@ const relatedArticles = [
   <h2>Top Picks for Emergency Preparedness</h2>
 
   <h3>1. {membrane.name} — Best for Family Emergency Kits</h3>
-  <p>The Membrane Solutions 4-pack is purpose-built for emergency preparedness. Four individual filter straws mean a family of four each has their own dedicated water filtration device — no sharing, no waiting, no single point of failure. If one straw gets lost or damaged, three family members still have safe water access.</p>
+  <p>The Membrane Solutions straw is purpose-built for emergency preparedness. At its price point, stocking one straw per family member is a no-brainer — everyone gets their own dedicated water filtration device with no sharing, no waiting, and no single point of failure. If one straw gets lost or damaged, the rest of your family still has safe water access.</p>
   <p>The 0.1-micron hollow fiber membrane removes 99.999999% of bacteria and 99.99% of protozoa, which covers the primary biological threats in emergency freshwater sources. Each straw is rated for 1,500+ liters, giving a family of four roughly 375 liters per person — more than 90 days of drinking water at the recommended minimum intake.</p>
-  <p>At {getPriceTier(membrane.price)} for four straws, equipping your family for water safety costs less than a single restaurant meal. These belong in every household emergency kit.</p>
+  <p>At {getPriceTier(membrane.price)} per straw, equipping your entire family for water safety costs less than a single restaurant meal. These belong in every household emergency kit.</p>
   <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {aquatabs.name} — Essential Virus Protection</h3>
@@ -103,14 +103,14 @@ const relatedArticles = [
 
   <h3>4. {naturenova.name} — Best for Base Camp Emergencies</h3>
   <p>When sheltering in place during an extended emergency, the NatureNova kit's included foldable water bag enables gravity filtration — a hands-free method that can produce larger quantities of filtered water for cooking, cleaning, and drinking. Fill the bag from any source, hang it from a hook or door frame, and let gravity pull water through the filter.</p>
-  <p>The backwash syringe is particularly valuable in extended emergencies where sediment-heavy water is the norm. Being able to maintain and restore your filter's flow rate can extend its life far beyond the rated 1,500 liters. At {getPriceTier(naturenova.price)} for three complete kits, it provides redundancy and functionality that simpler straws lack.</p>
+  <p>The backwash syringe is particularly valuable in extended emergencies where sediment-heavy water is the norm. Being able to maintain and restore your filter's flow rate can extend its life far beyond the rated 1,500 liters. At {getPriceTier(naturenova.price)} for the complete kit, it provides functionality that simpler straws lack — and at this price point, stocking extras for redundancy is an easy call.</p>
   <p><strong>Price Range:</strong> {getPriceTier(naturenova.price)} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h2>Building Your Emergency Water Kit</h2>
   <p>Here is a step-by-step checklist for a complete family emergency water purification setup:</p>
   <ol>
     <li><strong>Store baseline water:</strong> At minimum, 1 gallon per person per day for 14 days. Use commercially sealed water or fill food-grade containers and rotate every 6 months.</li>
-    <li><strong>One filter straw per family member:</strong> The Membrane Solutions 4-pack covers a typical family. Store in sealed packaging in your emergency supply bin.</li>
+    <li><strong>One filter straw per family member:</strong> Order one Membrane Solutions straw per person in your household. Store in sealed packaging in your emergency supply bin.</li>
     <li><strong>Chemical purification tablets:</strong> At least 30 Aquatabs per person. Buy 2-3 packs per family member and store in a cool, dry place.</li>
     <li><strong>Collection containers:</strong> Store at least two collapsible water containers (5-gallon size) for transporting water from sources back to your shelter.</li>
     <li><strong>Pre-filtration material:</strong> Include a few coffee filters or clean bandanas for straining sediment from turbid water before filtering.</li>

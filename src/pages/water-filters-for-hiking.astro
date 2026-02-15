@@ -31,7 +31,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -53,7 +53,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -89,7 +89,7 @@ const relatedArticles = [
   <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <strong>Weight:</strong> 2.1 oz/straw | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {membrane.name} — Best for Reliability</h3>
-  <p>With 8,500+ reviews and a 4.5-star rating, the Membrane Solutions straw has the most proven track record among budget filter straws. The hollow fiber membrane technology is the same fundamental design used in premium filters costing $30-40 for a single unit. At {getPriceTier(membrane.price)} for four straws, you can stash backups in your pack, car, and emergency kit.</p>
+  <p>With 8,500+ reviews and a 4.5-star rating, the Membrane Solutions straw has the most proven track record among budget filter straws. The hollow fiber membrane technology is the same fundamental design used in premium filters costing significantly more. At {getPriceTier(membrane.price)} per straw, it is affordable enough to stash backups in your pack, car, and emergency kit.</p>
   <p>For hikers, the 28mm bottle compatibility is a standout feature. Thread the straw onto a standard water bottle, flip it upside down, and squeeze filtered water into your mouth or another container. This is faster and more practical than suction drinking from a stream, especially when refilling on the trail.</p>
   <p>Each straw is rated for 1,500+ liters, which translates to roughly 500 days of typical hiking use at 3 liters per day. Realistically, sediment buildup will reduce flow rate before you hit that capacity, but even at half the rated life, the per-liter cost is nearly zero.</p>
   <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <strong>Weight:</strong> 2.0 oz/straw | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>

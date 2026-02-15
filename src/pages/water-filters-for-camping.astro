@@ -23,7 +23,7 @@ const faqs = [
   { question: 'Do camping water filters remove viruses?', answer: 'Most portable filter straws use 0.1-micron hollow fiber membranes, which remove bacteria and protozoa but not viruses. Viruses are too small (0.02-0.3 microns) for these membranes. For complete protection, pair a filter straw with chemical purification tablets like MSR Aquatabs, which kill viruses, bacteria, and Giardia in 30 minutes.' },
   { question: 'How long do camping water filters last?', answer: 'Most filter straws are rated for 1,000 to 1,500 liters. For a typical camping trip where you filter 3-4 liters per day, a single straw can last hundreds of days. However, flow rate decreases as the filter collects contaminants. Backwashing (if your model supports it) helps restore flow. Replace the straw when water no longer passes through even after backwashing.' },
   { question: 'Is it safe to drink from mountain streams without filtering?', answer: 'No. Even crystal-clear mountain streams can harbor Giardia, Cryptosporidium, E. coli, and other pathogens from animal waste upstream. These parasites are invisible and can cause severe gastrointestinal illness lasting weeks. Always filter or purify water from any natural source, no matter how clean it looks.' },
-  { question: 'What is the best water filter for a group camping trip?', answer: 'For groups of 4 or more, the Membrane Solutions 4-pack is ideal because everyone gets their own straw. Alternatively, the NatureNova kit includes a foldable water bag that enables gravity filtering, which works well for filling group water containers at a base camp. For large groups, combine filter straws for individual use with Aquatabs for treating bulk water in a large container.' },
+  { question: 'What is the best water filter for a group camping trip?', answer: 'For groups of 4 or more, grab one Membrane Solutions straw per person — they are affordable enough to stock individually. Alternatively, the NatureNova kit includes a foldable water bag that enables gravity filtering, which works well for filling group water containers at a base camp. For large groups, combine filter straws for individual use with Aquatabs for treating bulk water in a large container.' },
   { question: 'Should I bring water purification tablets as a backup?', answer: 'Absolutely. Tablets are an essential backup because they handle what filters cannot: viruses. They also weigh virtually nothing and serve as a fail-safe if your filter gets damaged or clogged beyond repair. We recommend carrying both a filter straw for convenience and a pack of MSR Aquatabs for situations requiring virus protection or bulk water treatment.' },
 ];
 
@@ -32,7 +32,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -54,7 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -89,13 +89,13 @@ const relatedArticles = [
   <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {membrane.name} — Best for Groups and Families</h3>
-  <p>When you are camping with family or a group of friends, the Membrane Solutions 4-pack ensures everyone has their own dedicated filter straw. At {getPriceTier(membrane.price)} for four straws, it works out to under $10 per person — a small price for guaranteed water safety. The 0.1-micron hollow fiber membrane technology is the same proven filtration used in premium backpacking filters costing three times as much.</p>
+  <p>When you are camping with family or a group of friends, the Membrane Solutions straw is affordable enough that everyone can have their own dedicated filter. At {getPriceTier(membrane.price)} per straw, equipping a group of four costs very little — a small price for guaranteed water safety. The 0.1-micron hollow fiber membrane technology is the same proven filtration used in premium backpacking filters costing three times as much.</p>
   <p>Each straw fits standard 28mm water bottles, which means you can thread it onto a disposable plastic bottle and use it as an on-the-go filtration system. This is especially convenient for kids who might struggle with direct suction from a creek. The 4.5-star rating across 8,500+ reviews gives us confidence in the quality consistency.</p>
   <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {naturenova.name} — Best Complete Camping Kit</h3>
-  <p>The NatureNova stands out as the only filter straw package that comes ready to use in the field without any additional purchases. Each of the three straws includes a foldable water bag and a backwash syringe. The water bag enables gravity filtering — fill it at the river, hang it from a tree branch, and let filtered water drip into your camp container while you set up the tent.</p>
-  <p>The backwash syringe is a genuinely useful accessory that extends filter life. When flow rate drops after heavy use, a quick reverse flush clears accumulated sediment and restores performance. At {getPriceTier(naturenova.price)} for the complete 3-pack kit, it is more expensive per straw than the Timain, but the included accessories make it a better out-of-the-box value for camping-specific use.</p>
+  <p>The NatureNova stands out as the only filter straw kit that comes ready to use in the field without any additional purchases. The kit includes a foldable water bag and a backwash syringe alongside the straw itself. The water bag enables gravity filtering — fill it at the river, hang it from a tree branch, and let filtered water drip into your camp container while you set up the tent.</p>
+  <p>The backwash syringe is a genuinely useful accessory that extends filter life. When flow rate drops after heavy use, a quick reverse flush clears accumulated sediment and restores performance. At {getPriceTier(naturenova.price)} for the complete kit, it is slightly more per straw than the Timain, but the included accessories make it a better out-of-the-box value for camping-specific use.</p>
   <p><strong>Price Range:</strong> {getPriceTier(naturenova.price)} | <a href={`/reviews/${naturenova.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(naturenova.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {aquatabs.name} — Essential Chemical Backup</h3>
