@@ -26,13 +26,13 @@ const geXwfe = products.find(p => p.slug === 'ge-xwfe')!;
 const everydrop1 = products.find(p => p.slug === 'everydrop-filter-1-edr1rxd1')!;
 
 const faqs = [
-  { question: 'What is the cheapest water filter to own long-term?', answer: `The Amazon Basics pitcher with Amazon Basics Enhanced replacement filters is the cheapest overall system. The pitcher costs ${getPriceTier(amazonPitcher.price)}, and replacement filters cost ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack (about $3.50 each). At 6 filters per year for a family of 4, that is roughly $21 per year in replacements after the initial $24 pitcher. Total 5-year cost: approximately $128. That is about $0.07 per gallon of filtered water.` },
-  { question: 'Is a reverse osmosis system worth the investment?', answer: `For households with serious water quality issues (high TDS, lead, PFAS), absolutely. The iSpring RCC7AK costs ${getPriceTier(ispring.price)} upfront, but replacement filters cost only $50-$70 per year. Over 5 years, the total cost is approximately $450-$550 — comparable to a pitcher system that provides far less filtration. The cost per gallon drops below $0.05 over time, making RO the most cost-effective serious filtration option.` },
-  { question: 'How does filtered water compare to bottled water cost?', answer: 'Bottled water typically costs $0.50-$2.00 per gallon depending on the brand. A family of 4 consuming 3 gallons per day spends $550-$2,200 per year on bottled water. The most expensive filtration system in our analysis (Waterdrop G3P600) costs about $0.09 per gallon — 5-22x cheaper than bottled. The cheapest option (Amazon Basics pitcher) costs $0.07 per gallon — 7-28x cheaper.' },
-  { question: 'Do RO systems cost more in water waste?', answer: 'Yes, water waste adds to the cost. Traditional RO systems waste 3-4 gallons per filtered gallon, adding roughly $0.01-$0.03 per gallon at average US water rates ($0.004/gallon). Modern efficient systems like the Waterdrop G3P600 (2:1 ratio) waste less. For most households, the wastewater cost adds $10-$30 per year — noticeable but not significant compared to filter costs.' },
-  { question: 'Which pitcher filter has the lowest cost per gallon?', answer: `The Amazon Basics Enhanced replacement filter at ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack, with each filter rated at 40 gallons, costs about $0.09 per gallon. The Brita Elite at ${getPriceTier(britaElite.price)} for a 2-pack, with each filter rated at 120 gallons, costs about $0.12 per gallon. Despite the higher upfront cost, the Brita Elite is competitive because of its longer filter life. ZeroWater is the most expensive at $0.60-$1.00 per gallon due to its very short filter life.` },
-  { question: 'Should I factor in electricity costs for RO systems?', answer: 'Tankless RO systems like the Waterdrop G3P600 and countertop RO systems like the Bluevua models require electricity for their pumps. The energy consumption is minimal — roughly $5-$15 per year. Tank-based systems like the iSpring RCC7AK use only water pressure (no electricity), making them the most economical to operate. Electricity costs are a minor factor in total cost of ownership.' },
-  { question: 'How much does it cost to maintain a refrigerator water filter?', answer: `Refrigerator filter costs depend on OEM vs aftermarket. OEM GE XWFE filters cost ${getPriceTier(geXwfe.price)} every 6 months ($99/year). OEM everydrop Filter 1 costs ${getPriceTier(everydrop1.price)} every 6 months ($108/year). Aftermarket alternatives like the AQUACREST 6-pack at $16.88 bring the annual cost down to just $5.63 — an enormous savings. The trade-off is fewer NSF certifications.` },
+  { question: 'What is the cheapest water filter to own long-term?', answer: `The Amazon Basics pitcher with Amazon Basics Enhanced replacement filters is the cheapest overall system. The pitcher costs ${getPriceTier(amazonPitcher.price)}, and replacement filters cost ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack. With each filter rated at 40 gallons, a family of 4 goes through roughly 27 filters per year. Even so, the annual replacement cost remains among the lowest of any system we tested, and the per-gallon cost is the most economical in the pitcher category.` },
+  { question: 'Is a reverse osmosis system worth the investment?', answer: `For households with serious water quality issues (high TDS, lead, PFAS), absolutely. The iSpring RCC7AK costs ${getPriceTier(ispring.price)} upfront, but replacement filter costs are modest compared to pitcher systems that require frequent cartridge changes. Over five years, the total cost of an under-sink RO system is comparable to a pitcher system — while providing dramatically superior filtration. The per-gallon cost drops significantly over time, making RO the most cost-effective serious filtration option.` },
+  { question: 'How does filtered water compare to bottled water cost?', answer: 'Bottled water costs many times more per gallon than any home filtration system. A family of 4 consuming 3 gallons per day can easily spend over a thousand dollars per year on bottled water. Even the most expensive filtration system in our analysis costs a fraction of that per gallon — roughly 5 to 20 times cheaper than bottled water depending on the brand. The cheapest pitcher system is even more economical.' },
+  { question: 'Do RO systems cost more in water waste?', answer: 'Yes, water waste adds to the cost. Traditional RO systems waste 3-4 gallons per filtered gallon, adding a small surcharge per gallon at average US water rates. Modern efficient systems like the Waterdrop G3P600 (2:1 ratio) waste less. For most households, the wastewater cost adds a modest amount per year — noticeable but not significant compared to filter replacement costs.' },
+  { question: 'Which pitcher filter has the lowest cost per gallon?', answer: `The Amazon Basics Enhanced replacement filter at ${getPriceTier(amazonBasicsReplacement.price)} for a 3-pack, with each filter rated at 40 gallons, is among the cheapest per-gallon options. The Brita Elite at ${getPriceTier(britaElite.price)} for a 2-pack, with each filter rated at 120 gallons, is competitive despite the higher price per cartridge because of its much longer filter life. ZeroWater is by far the most expensive per gallon due to its very short filter life — costing several times more per gallon than any other pitcher filter.` },
+  { question: 'Should I factor in electricity costs for RO systems?', answer: 'Tankless RO systems like the Waterdrop G3P600 and countertop RO systems like the Bluevua models require electricity for their pumps. The energy consumption is minimal — a negligible addition to your utility bill each year. Tank-based systems like the iSpring RCC7AK use only water pressure (no electricity), making them the most economical to operate. Electricity costs are a minor factor in total cost of ownership.' },
+  { question: 'How much does it cost to maintain a refrigerator water filter?', answer: `Refrigerator filter costs depend heavily on OEM vs aftermarket. OEM GE XWFE filters at ${getPriceTier(geXwfe.price)} every 6 months add up quickly. OEM everydrop Filter 1 at ${getPriceTier(everydrop1.price)} every 6 months is similarly expensive. Aftermarket alternatives like the AQUACREST 6-pack cost a fraction of OEM prices — enough to cover an entire year of filter changes for roughly the price of a single OEM cartridge. The trade-off is fewer NSF certifications.` },
 ];
 
 const articleSchema = generateArticleSchema({
@@ -40,7 +40,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/guides/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -62,7 +62,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -75,12 +75,12 @@ const relatedArticles = [
   <ol>
     <li><strong>Purchase price:</strong> The upfront cost of the filter system itself.</li>
     <li><strong>Replacement filters:</strong> The ongoing cartridge cost. This is almost always the largest expense over time.</li>
-    <li><strong>Water waste:</strong> RO systems produce wastewater. At average US water rates (~$0.004 per gallon), this adds $10-$30 per year.</li>
-    <li><strong>Electricity:</strong> Tankless RO and countertop systems need power. Adds $5-$15 per year.</li>
+    <li><strong>Water waste:</strong> RO systems produce wastewater. At typical municipal water rates, this adds a modest but non-trivial amount per year.</li>
+    <li><strong>Electricity:</strong> Tankless RO and countertop systems need power. The electricity cost is minimal — a negligible line item in your annual budget.</li>
   </ol>
   <p>Our analysis assumes a family of 4 consuming approximately 3 gallons of filtered water per day (1,095 gallons per year). Adjust proportionally for your household.</p>
 
-  <ProTip>The single biggest money-saving move in water filtration is switching from bottled water to any filter. A family of 4 buying bottled water spends $800-$2,200 per year. Even the most expensive filter system on this page costs less than $200 per year to operate.</ProTip>
+  <ProTip>The single biggest money-saving move in water filtration is switching from bottled water to any filter. A family of 4 buying bottled water spends many hundreds to thousands of dollars per year. Even the most expensive filter system on this page costs far less to operate annually.</ProTip>
 
   <h2>Pitcher Filter Systems: Cost Breakdown</h2>
 

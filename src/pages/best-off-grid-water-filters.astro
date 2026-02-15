@@ -3,7 +3,7 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
-import { getProductBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { getProductBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const publishDate = '2026-02-14';
@@ -81,7 +81,7 @@ const tableProducts = topPicks.map((p, i) => ({
 
 // ── FAQs ──
 const faqs = [
-  { question: 'What is the best water filter for an off-grid cabin?', answer: 'For a permanent off-grid cabin with well water or a pressurized water line, the iSpring RCC7AK under-sink RO system ($198.78) provides the most thorough filtration at the best value. If you lack plumbing or electricity, the Bluevua RO100ROPOT-UV countertop RO ($317) runs off any standard outlet and needs no water line connection. For cabins relying on surface water (creek, lake, or rainwater collection), start with a gravity purifier like the LifeStraw Family 1.0 ($64.95) which removes viruses without power, then consider a countertop RO for drinking water refinement.' },
+  { question: 'What is the best water filter for an off-grid cabin?', answer: 'For a permanent off-grid cabin with well water or a pressurized water line, the iSpring RCC7AK under-sink RO system provides the most thorough filtration at the best value — it is the most affordable full RO system we tested. If you lack plumbing or want no-install convenience, the Bluevua RO100ROPOT-UV countertop RO runs off any standard outlet and needs no water line connection. For cabins relying on surface water (creek, lake, or rainwater collection), start with a gravity purifier like the LifeStraw Family 1.0 which removes viruses without power, then consider a countertop RO for drinking water refinement.' },
   { question: 'Do I need a purifier or just a filter for off-grid water?', answer: 'It depends on your water source. If you are on a private well, a filter (0.1-0.2 micron) handles bacteria and protozoa, and an RO system handles dissolved contaminants. If you are drawing from surface water (streams, rivers, lakes, or rainwater collection), you need a purifier that also removes viruses. The LifeStraw Family 1.0 and MSR Guardian both achieve purifier-level protection at 0.02 micron. For well water with known chemical contamination, only reverse osmosis removes dissolved chemicals like PFAS, lead, and arsenic.' },
   { question: 'Can countertop RO systems work without municipal water?', answer: 'Yes. Countertop RO systems like the Bluevua RO100ROPOT-UV and Lite models work with any potable or pre-filtered water source. You manually fill the tank with water from your well, rain barrel, or pre-filtered surface water. They need electricity (standard 110V outlet) but no pressurized water line. This makes them ideal for off-grid cabins and homesteads that have solar power or a generator but no municipal hookup. Pre-filter through a sediment filter or gravity filter first if your source water is turbid.' },
   { question: 'What is the best portable water filter for van life?', answer: 'The Sawyer Squeeze ($34.97) is the best portable filter for van life because it is compact, weighs 3 ounces, and has a 100,000-gallon lifetime. For daily drinking water, pair it with a countertop RO system like the Bluevua Lite UV ($219) if your van has shore power or sufficient solar. The GRAYL GeoPress ($89.95) is the best all-in-one solution for van lifers who fill up from varied and uncertain water sources, since it removes viruses, chemicals, and heavy metals in 8 seconds.' },
@@ -102,7 +102,7 @@ const articleSchema = generateArticleSchema({
   description: `We curated ${allProducts.length} water filters for off-grid living — from ultralight portable filters for remote cabins to countertop RO systems that work without municipal water. Here are the best for ${year}.`,
   url: '/best-off-grid-water-filters/',
   datePublished: publishDate,
-  dateModified: publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Off-Grid Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -124,7 +124,7 @@ const relatedArticles = [
   currentPage="Best Off-Grid Water Filters"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={publishDate}
+  lastUpdated="2026-02-15"
   heroImage="/assets/best-off-grid-water-filters-hero.webp"
 >
   <h1>Best Off-Grid Water Filters {year}: Expert Picks</h1>

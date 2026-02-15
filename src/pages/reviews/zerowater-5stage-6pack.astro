@@ -12,7 +12,7 @@ const relatedProducts = getRelatedProducts(product);
 const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
-  { question: 'Is the ZeroWater 6-pack a better deal than the 4-pack?', answer: 'Yes. The 6-pack costs $80.99 ($13.50 per filter) compared to the 4-pack at $59.99 ($15.00 per filter). That saves you $1.50 per filter, which adds up to $9.00 in savings across six filters. If you are a committed ZeroWater user, the 6-pack is the most economical way to buy. The only reason to choose the 4-pack is if you want to try ZeroWater before committing to a larger quantity.' },
+  { question: 'Is the ZeroWater 6-pack a better deal than the 4-pack?', answer: 'Yes. The 6-pack reduces the per-filter cost by roughly 10% compared to the 4-pack. Over the full six filters, those savings are meaningful for a product you replace frequently. If you are a committed ZeroWater user, the 6-pack is the most economical way to buy. The only reason to choose the 4-pack is if you want to try ZeroWater before committing to a larger quantity.' },
   { question: 'How many months will the ZeroWater 6-pack last?', answer: 'It depends entirely on your source water TDS and daily consumption. For a household of two using about 1 gallon per day with moderate TDS (150-250 ppm), each filter lasts roughly 3-4 weeks, meaning the 6-pack covers approximately 4.5-6 months. In high-TDS areas (350+), filters may last only 2 weeks each, reducing the 6-pack lifespan to about 3 months.' },
   { question: 'Do ZeroWater filters develop a fishy or acidic smell?', answer: 'This is a known issue that occurs when a ZeroWater filter is used past its effective life. As the ion exchange resin becomes exhausted, it can release trimethylamine, causing a fishy taste or smell. This is not dangerous but is a clear signal the filter needs immediate replacement. Monitor your TDS readings — replace the filter as soon as it reads above 006 to avoid this issue entirely.' },
   { question: 'Can ZeroWater filters remove fluoride from drinking water?', answer: 'Yes. ZeroWater\'s 5-stage ion exchange process effectively reduces fluoride along with virtually all other dissolved solids. Independent testing shows fluoride reduction rates above 90%. If fluoride removal is a priority, ZeroWater is one of the most effective pitcher-based options available, rivaling countertop RO systems in fluoride reduction capability.' },
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The ZeroWater 6-pack is the bulk-buy option for committed ZeroWater users who have accepted both the exceptional filtration quality and the high replacement frequency that comes with the territory. At $80.99 for six filters, this works out to approximately $13.50 per filter — the lowest per-unit cost available for ZeroWater's 5-stage technology. If you are going through 6-12 filters per year (which is typical for most households), buying in 6-packs is the only financially sensible approach.</p>
+  <p>The ZeroWater 6-pack is the bulk-buy option for committed ZeroWater users who have accepted both the exceptional filtration quality and the high replacement frequency that comes with the territory. Priced in the {getPriceTier(product.price)} range, it offers the lowest per-unit cost available for ZeroWater's 5-stage technology — roughly 10% less per filter than the 4-pack. If you are going through 6-12 filters per year (which is typical for most households), buying in 6-packs is the only financially sensible approach.</p>
   <p>The filtration technology is identical to the 4-pack: the same 5-stage ion exchange system that achieves 99.6% TDS reduction and holds IAPMO certification for lead, chromium, PFOA, and PFOS removal. Each filter delivers the same 0-TDS pure water that has made ZeroWater the go-to choice for users who need maximum contaminant removal from a pitcher-based system. The included TDS meter (same as the 4-pack) lets you verify every filter is performing as expected.</p>
 
   <div class="best-for-box">
@@ -110,8 +110,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>The 6-pack at $80.99 brings the per-filter cost to $13.50, saving $1.50 per filter compared to the 4-pack ($15.00 per filter). Over a year of use (approximately 8-12 filters for a typical household), the 6-pack pricing saves $12-18 annually. That is not a transformative saving, but it is meaningful when you are already committed to ZeroWater's higher ongoing costs. The cost-per-gallon remains approximately $0.65-0.90 depending on your source water TDS — still the most expensive pitcher filtration option available.</p>
-  <p>The $81 upfront investment is the 6-pack's main barrier. For context, that amount nearly covers a year of Brita Elite filters (two 2-packs at ~$60 total) which would filter approximately 480 gallons versus ZeroWater's ~120 gallons. The choice comes down to whether you need ZeroWater's 99.6% TDS reduction or whether Brita Elite's lead and contaminant reduction is sufficient for your water quality concerns. For most households on clean municipal water, Brita Elite is the smarter financial choice. For homes with confirmed high TDS, lead, or PFAS issues, ZeroWater justifies the premium.</p>
+  <p>The 6-pack brings the per-filter cost down roughly 10% compared to the 4-pack. Over a year of use (approximately 8-12 filters for a typical household), the bulk pricing yields modest but worthwhile annual savings. That is not transformative, but it is meaningful when you are already committed to ZeroWater's high ongoing replacement costs. The cost-per-gallon remains several times higher than any carbon-based alternative — still the most expensive pitcher filtration option available by a wide margin.</p>
+  <p>The upfront investment is the 6-pack's main barrier. For context, the same money nearly covers a full year of Brita Elite filters, which would filter approximately 480 gallons versus ZeroWater's roughly 120 gallons. The choice comes down to whether you need ZeroWater's 99.6% TDS reduction or whether Brita Elite's lead and contaminant reduction is sufficient for your water quality concerns. For most households on clean municipal water, Brita Elite is the smarter financial choice. For homes with confirmed high TDS, lead, or PFAS issues, ZeroWater justifies the premium.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>PUR has long been Brita's closest competitor in the pitcher filter market, and the 4-pack replacement filter is where PUR makes its strongest case. At $23.22 for four filters ($5.81 each), PUR undercuts Brita Standard pricing while delivering better contaminant reduction — including NSF 53-certified lead removal that Brita Standard lacks. The proprietary LockFit design is PUR's standout engineering feature, creating a mechanical seal that prevents unfiltered water from bypassing the cartridge.</p>
+  <p>PUR has long been Brita's closest competitor in the pitcher filter market, and the 4-pack replacement filter is where PUR makes its strongest case. Priced in the {getPriceTier(product.price)} range, the per-filter cost undercuts Brita Standard while delivering better contaminant reduction — including NSF 53-certified lead removal that Brita Standard lacks. The proprietary LockFit design is PUR's standout engineering feature, creating a mechanical seal that prevents unfiltered water from bypassing the cartridge.</p>
   <p>The 2-in-1 filtration combines activated carbon with ion exchange resin in a single integrated cartridge. This dual approach tackles both taste/odor contaminants (chlorine, sediment) and dissolved metals (lead, mercury) simultaneously. PUR certifies its filters to reduce 20+ substances, putting it firmly between Brita Standard (basic chlorine reduction) and Brita Elite (30+ contaminants) in terms of filtration breadth. For the price, it delivers impressive coverage.</p>
   <p>The limitation is ecosystem lock-in. PUR filters only work with PUR pitchers, which have a smaller retail footprint than Brita. You will not find PUR pitchers at every grocery store the way you find Brita. However, the filters themselves are widely available on Amazon and at major retailers like Target and Walmart, so replacement availability is not a concern.</p>
 
@@ -111,7 +111,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $5.81 per filter with a 40-gallon capacity, PUR costs approximately $0.15 per gallon — nearly identical to Brita Standard ($0.11-0.15/gallon). But PUR's NSF 53 lead certification makes it functionally closer to the Brita Elite ($0.12/gallon at 120 gallons per filter) in terms of what it actually removes. This makes PUR arguably the best value in the pitcher filter market for lead-concerned households, delivering lead reduction at a Standard-tier price point.</p>
+  <p>With a 40-gallon capacity per filter, PUR's per-gallon cost lands in nearly the same range as Brita Standard. But PUR's NSF 53 lead certification makes it functionally closer to the Brita Elite in terms of what it actually removes — at a significantly lower per-filter price. This makes PUR arguably the best value in the pitcher filter market for lead-concerned households, delivering lead reduction at a Standard-tier price point.</p>
   <p>The 4-pack provides 8 months of filtration at typical usage rates, which is a convenient purchase cadence — order twice a year and you are covered. The main drawback is ecosystem lock-in: you need a PUR pitcher, and switching away means abandoning that hardware investment. For new pitcher buyers, PUR is worth serious consideration over Brita Standard. For existing Brita owners, the switching cost (new pitcher) may tilt the math toward upgrading to Brita Elite instead.</p>
 
   <!-- FAQ -->

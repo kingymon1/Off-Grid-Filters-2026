@@ -19,7 +19,7 @@ const productSchema = generateProductSchema(product);
 const faqSchema = generateFAQSchema(faqs);
 const articleSchema = generateArticleSchema({
   title: `${product.name} Review`, description: product.verdict,
-  url: `/reviews/${product.slug}/`, datePublished: product.publishDate, dateModified: product.publishDate,
+  url: `/reviews/${product.slug}/`, datePublished: product.publishDate, dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -39,7 +39,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -48,9 +48,9 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Platypus GravityWorks 4L is the gold standard for backcountry gravity filtration. At $74.95, it is a complete system: 4-liter dirty water reservoir, 4-liter clean water reservoir, hollow fiber microfilter, hoses, shutoff clamp, and storage sack — everything needed for hands-free water purification right out of the box. Hang the dirty bag from a tree, connect the filter, and let gravity do the work while you set up camp, cook dinner, or rest your legs. No pumping, no squeezing, no effort. With 5,800 reviews and a 4.5-star rating, it has earned its reputation through thousands of miles of backcountry use.</p>
+  <p>The Platypus GravityWorks 4L is the gold standard for backcountry gravity filtration. For a {getPriceTier(product.price)} investment, it is a complete system: 4-liter dirty water reservoir, 4-liter clean water reservoir, hollow fiber microfilter, hoses, shutoff clamp, and storage sack — everything needed for hands-free water purification right out of the box. Hang the dirty bag from a tree, connect the filter, and let gravity do the work while you set up camp, cook dinner, or rest your legs. No pumping, no squeezing, no effort. With 5,800 reviews and a 4.5-star rating, it has earned its reputation through thousands of miles of backcountry use.</p>
   <p>The dual-reservoir design is what separates the GravityWorks from simpler gravity filters like the HydroBlu Go Flow. The dedicated dirty and clean bags are color-coded (blue for dirty, clear for clean) to eliminate cross-contamination — you never accidentally drink from the wrong bag. The clean reservoir has a convenient pour handle for filling bottles and cook pots. This system-level thinking is where Platypus justifies the premium price: every component is designed to work together seamlessly, reducing the friction of water management at camp to near zero.</p>
-  <p>The 0.2-micron hollow fiber membrane filters at 1.75 liters per minute, processing a full 4-liter dirty bag in about 2 minutes and 15 seconds. It removes 99.9999% of bacteria and 99.9% of protozoa — exceeding EPA requirements for portable water filters. The filter cartridge is rated for 1,500 liters, which equates to roughly 375 full filtration cycles. For a typical backpacking season of 30-40 days on trail, one filter cartridge lasts 3-4 years of regular use. Replacement cartridges run approximately $30, making the ongoing cost of ownership very reasonable.</p>
+  <p>The 0.2-micron hollow fiber membrane filters at 1.75 liters per minute, processing a full 4-liter dirty bag in about 2 minutes and 15 seconds. It removes 99.9999% of bacteria and 99.9% of protozoa — exceeding EPA requirements for portable water filters. The filter cartridge is rated for 1,500 liters, which equates to roughly 375 full filtration cycles. For a typical backpacking season of 30-40 days on trail, one filter cartridge lasts 3-4 years of regular use. Replacement cartridges are affordable, making the ongoing cost of ownership very reasonable.</p>
 
   <div class="best-for-box">
     <strong>Best For:</strong> {product.bestFor}
@@ -94,8 +94,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $74.95, the GravityWorks is a significant investment compared to budget options like the HydroBlu Go Flow ($24.95) or a simple squeeze filter like the Sawyer Squeeze ($29.95). However, it is a complete system that replaces multiple components: the dirty bag replaces a collapsible water scoop, the clean bag replaces a camp water container, and the gravity filter replaces the squeeze filter itself. When viewed as a water management system rather than just a filter, the price is reasonable. The MSR AutoFlow XL ($99.95) costs more and does not include a clean reservoir.</p>
-  <p>The GravityWorks earns its keep on multi-day trips where water management is a daily task. Filtering 8-12 liters per day for a duo requires only 2-3 gravity cycles and zero physical effort — a luxury that squeeze-filter users envy by day three of a long trip. The 1,500-liter filter life translates to 375 full fills, providing years of use before a $30 replacement is needed. For weekend warriors, the cost-per-trip drops below $1 within the first season. For anyone who camps regularly with a partner or small group and values hands-free convenience, the GravityWorks is the best investment in backcountry water filtration.</p>
+  <p>The GravityWorks is a meaningful step up in price compared to budget gravity bags and simple squeeze filters. However, it is a complete system that replaces multiple components: the dirty bag replaces a collapsible water scoop, the clean bag replaces a camp water container, and the gravity filter replaces the squeeze filter itself. When viewed as a water management system rather than just a filter, the {getPriceTier(product.price)} price point is well justified. Budget alternatives cost less upfront but require you to supply your own reservoirs and collection containers, narrowing the real price gap considerably.</p>
+  <p>The GravityWorks earns its keep on multi-day trips where water management is a daily task. Filtering 8-12 liters per day for a duo requires only 2-3 gravity cycles and zero physical effort — a luxury that squeeze-filter users envy by day three of a long trip. The 1,500-liter filter life translates to 375 full fills, providing years of use before an inexpensive replacement cartridge is needed. For weekend warriors, the cost-per-trip drops below a dollar within the first season. For anyone who camps regularly with a partner or small group and values hands-free convenience, the GravityWorks is the best investment in backcountry water filtration.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

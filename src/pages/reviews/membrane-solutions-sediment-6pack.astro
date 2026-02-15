@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>Sediment filtration is the unglamorous workhorse of water treatment — it will not make your water taste better or remove chemicals, but it protects everything downstream in your filtration system from premature failure. The Membrane Solutions 6-pack delivers this essential function at a price that is hard to argue with: $26.35 for six filters works out to just $4.39 per cartridge. For well water homes and rural properties where sand, silt, and rust are constant issues, this is a year's supply of pre-filtration for less than the cost of a single premium under-sink cartridge.</p>
+  <p>Sediment filtration is the unglamorous workhorse of water treatment — it will not make your water taste better or remove chemicals, but it protects everything downstream in your filtration system from premature failure. The Membrane Solutions 6-pack delivers this essential function at a {getPriceTier(product.price)} price point that is hard to argue with — six filters for a few dollars per cartridge. For well water homes and rural properties where sand, silt, and rust are constant issues, this is a year's supply of pre-filtration for less than the cost of a single premium under-sink cartridge.</p>
   <p>The string wound polypropylene construction works by forcing water through layers of tightly wound fiber. As water spirals inward through the wound layers, progressively finer gaps trap particles of decreasing size. The nominal 5-micron rating means the filter effectively captures most particles down to 5 microns in diameter — small enough to trap sand, silt, rust, dirt, and visible sediment but large enough to maintain reasonable water flow through the cartridge. This design is simple, proven, and has been the standard in residential sediment filtration for decades.</p>
   <p>The 10 x 2.5 inch standard sizing ensures these filters fit the vast majority of residential whole-house filter housings. If you have a clear or opaque housing mounted on your main water line (common in homes with well water), these are almost certainly the right size. The universal compatibility across GE, DuPont, Culligan, Pentek, and generic housings makes Membrane Solutions a reliable no-guesswork replacement option.</p>
 
@@ -106,12 +106,12 @@ const relatedArticles = [
   <!-- PERFORMANCE -->
   <h2>Performance &amp; Real-World Testing</h2>
   <p>Installed in a standard 10-inch housing on a well water supply with moderate sediment (visible rust and silt), the Membrane Solutions filter immediately cleared visible turbidity from the water. Water pressure downstream showed minimal drop with a fresh filter — flow restriction was negligible during the first several weeks of use. The 5-micron rating caught rust particles and sand effectively, turning from white to a deep rust-orange after approximately 6 weeks of whole-house use on the well water test system.</p>
-  <p>On cleaner municipal water, the filters lasted significantly longer — 4-5 months before showing significant discoloration. The 7,200+ Amazon reviews with a 4.5-star rating validate consistent quality across a large user base. The most common complaint is that string wound filters do not last as long as pleated alternatives in very high-sediment conditions, which is a fair criticism of the design type rather than this specific product. For the price, the solution is simply to change them more frequently — with six filters for $26, the economics support more frequent replacement.</p>
+  <p>On cleaner municipal water, the filters lasted significantly longer — 4-5 months before showing significant discoloration. The 7,200+ Amazon reviews with a 4.5-star rating validate consistent quality across a large user base. The most common complaint is that string wound filters do not last as long as pleated alternatives in very high-sediment conditions, which is a fair criticism of the design type rather than this specific product. For the price, the solution is simply to change them more frequently — at this per-cartridge cost, the economics strongly support more frequent replacement over investing in pricier individual filters.</p>
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>The value proposition is straightforward: $4.39 per filter for a product that has a single, well-defined job. For comparison, name-brand sediment filters from GE or Pentek typically cost $8-15 per filter for equivalent specifications. The Membrane Solutions 6-pack delivers a full year of replacements (at bi-monthly changes) for what a single name-brand filter costs. Over three years of well water filtration, the savings add up to $100+ compared to purchasing individual name-brand cartridges.</p>
-  <p>The only scenario where these filters are not the best value is if you have extremely heavy sediment that requires the higher dirt-holding capacity of pleated filters. In that case, a pleated 5-micron filter ($8-12 each) that lasts 2-3 times longer may offer equivalent or better long-term value. For the vast majority of residential applications — municipal water pre-filtration, moderate well water sediment, and general whole-house protection — the Membrane Solutions 6-pack is the best value in its category.</p>
+  <p>The value proposition is straightforward: a few dollars per filter for a product that has a single, well-defined job. For comparison, name-brand sediment filters from GE or Pentek typically cost two to three times more per filter for equivalent specifications. The Membrane Solutions 6-pack delivers a full year of replacements (at bi-monthly changes) for what a single name-brand filter costs. Over three years of well water filtration, the savings are substantial compared to purchasing individual name-brand cartridges.</p>
+  <p>The only scenario where these filters are not the best value is if you have extremely heavy sediment that requires the higher dirt-holding capacity of pleated filters. In that case, a pleated 5-micron filter that costs slightly more per unit but lasts 2-3 times longer may offer equivalent or better long-term value. For the vast majority of residential applications — municipal water pre-filtration, moderate well water sediment, and general whole-house protection — the Membrane Solutions 6-pack is the best value in its category.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

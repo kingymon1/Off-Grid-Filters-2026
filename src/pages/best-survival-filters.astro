@@ -3,7 +3,7 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
-import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'survival-filters';
@@ -48,7 +48,7 @@ const faqs = [
   { question: 'What is the best water purification method for emergencies?', answer: 'The best emergency water strategy uses two complementary methods: a filter straw to remove bacteria, protozoa, and sediment, plus chemical purification tablets to kill viruses. This dual approach covers all biological threats. Store at least one filter straw and a pack of Aquatabs in every emergency kit. For long-term emergencies, a gravity-fed filter system provides higher volume with less effort.' },
   { question: 'Can I use a survival filter straw with any water source?', answer: 'Filter straws are designed for natural freshwater sources: streams, rivers, lakes, ponds, and rainwater collection. They should NOT be used with saltwater, chemically contaminated water (industrial runoff, agricultural chemicals), or water with dissolved heavy metals. Filters remove biological and physical contaminants but cannot remove dissolved chemicals, pesticides, or salt. Always use the cleanest available water source.' },
   { question: 'How do purification tablets compare to filter straws?', answer: 'They serve different purposes and work best together. Filter straws physically remove bacteria, protozoa, and sediment for instant drinking. Purification tablets (like Aquatabs) chemically kill viruses, bacteria, and some cysts, but require 30 minutes of wait time and do not remove sediment or improve taste. The ideal field protocol: filter first to remove physical contaminants, then treat with tablets for virus protection.' },
-  { question: 'What survival water filter should I put in my bug-out bag?', answer: 'For a bug-out bag, we recommend the Timain 4-Stage Filter Straw 2-pack ($14.23) plus MSR Aquatabs ($11.99). The two filter straws weigh virtually nothing, provide 3,000 liters of combined bacterial filtration, and the Aquatabs add virus protection. Total cost is about $26 for comprehensive water purification capability weighing under 5 ounces.' },
+  { question: 'What survival water filter should I put in my bug-out bag?', answer: 'For a bug-out bag, we recommend the Timain 4-Stage Filter Straw 2-pack plus MSR Aquatabs. Both are budget-friendly — together they cost less than a single purifier bottle. The two filter straws weigh virtually nothing, provide 3,000 liters of combined bacterial filtration, and the Aquatabs add virus protection. You get comprehensive water purification capability weighing under 5 ounces for a fraction of the price of premium alternatives.' },
 ];
 
 const itemListSchema = generateItemListSchema(
@@ -63,7 +63,7 @@ const articleSchema = generateArticleSchema({
   description: `We tested ${allProducts.length} survival and portable water filters. Here are the best for ${year}, ranked by filtration effectiveness, weight, durability, and value.`,
   url: `/best-${categorySlug}/`,
   datePublished: category.publishDate,
-  dateModified: category.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -85,11 +85,11 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={category.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/best-${categorySlug}-hero.webp`}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
-  <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws under $8 to military-grade pump purifiers, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>
+  <p class="lead">When you are miles from the nearest tap, your water filter is not a convenience — it is a lifeline. We tested {allProducts.length} survival and portable water purification products, from ultralight filter straws costing less than a fast-food meal to military-grade pump purifiers, to find the best options for hiking, camping, emergency preparedness, and off-grid living.</p>
 
   <ProductImage alt={`Best ${category.name} ${year}`} icon="camping" aspect="hero" slug="best-survival-filters" />
 
@@ -97,7 +97,7 @@ const relatedArticles = [
   <ComparisonTable products={tableProducts} />
 
   <ProTip title="Filter + Purification = Complete Protection">
-    <p>No single portable product removes every waterborne threat. Filter straws and squeeze filters (0.1-0.2 micron) remove bacteria and protozoa but miss viruses. Purification tablets and purifier bottles (GRAYL, LifeSaver) kill viruses but may leave sediment. For complete protection in the field, combine a filter with chemical or press-based purification. Our top combo: Sawyer Squeeze ($34.97) + MSR Aquatabs ($11.99) = $47 for comprehensive water purification.</p>
+    <p>No single portable product removes every waterborne threat. Filter straws and squeeze filters (0.1-0.2 micron) remove bacteria and protozoa but miss viruses. Purification tablets and purifier bottles (GRAYL, LifeSaver) kill viruses but may leave sediment. For complete protection in the field, combine a filter with chemical or press-based purification. Our top combo: pair a Sawyer Squeeze with MSR Aquatabs for comprehensive water purification at a total cost that is still well under the price of a single purifier bottle.</p>
   </ProTip>
 
   {publishedProducts.map((product, i) => (
@@ -155,7 +155,7 @@ const relatedArticles = [
 
   <h2>Our Recommendation</h2>
   <div class="verdict-card">
-    <p>For the best overall backcountry filter, the <strong>Sawyer Squeeze</strong> at $34.97 with its 100,000-gallon capacity and proven reliability is our top pick. For ultralight hikers, the <strong>Sawyer Mini</strong> at $21.99 and 2 ounces is unbeatable. For complete virus protection without chemicals, the <strong>GRAYL GeoPress</strong> ($89.95) purifies water in 8 seconds. Budget preppers should grab the <strong>Timain 4-Stage Filter Straw 2-Pack</strong> at $14.23 plus <strong>MSR Aquatabs</strong> at $11.99 for comprehensive protection under $27. And for long-term off-grid or family use, the <strong>LifeStraw Family 1.0</strong> gravity purifier at $64.95 provides 18,000 liters of virus-free water with zero electricity.</p>
+    <p>For the best overall backcountry filter, the <strong>Sawyer Squeeze</strong> delivers unmatched value in the mid-range tier with its 100,000-gallon capacity and proven reliability — our top pick. For ultralight hikers, the <strong>Sawyer Mini</strong> is the lightest proven option at 2 ounces and one of the most affordable filters we tested. For complete virus protection without chemicals, the <strong>GRAYL GeoPress</strong> purifies water in 8 seconds and is worth the premium. Budget preppers should pair the <strong>Timain 4-Stage Filter Straw 2-Pack</strong> with <strong>MSR Aquatabs</strong> — together they cost less than most single filters and deliver comprehensive protection. And for long-term off-grid or family use, the <strong>LifeStraw Family 1.0</strong> gravity purifier provides 18,000 liters of virus-free water with zero electricity at a remarkably reasonable price point.</p>
     {publishedProducts[0] && (
       <a href={getAffiliateUrl(publishedProducts[0].asin)} target="_blank" rel="nofollow sponsored noopener" class="btn-primary" style="color:#fff!important;text-shadow:0 1px 2px rgba(0,0,0,.2)">
         <span>Check Top Pick on Amazon</span>

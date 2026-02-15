@@ -15,7 +15,7 @@ const faqs = [
   { question: 'Does the Waterdrop G3P600 need a water tank under the sink?', answer: 'No, and that is the primary advantage. The G3P600 is a tankless system that purifies water on demand at 600 GPD (gallons per day). The water flows directly from your supply line through the filters and out the faucet in real time. This eliminates the large pressurized tank that traditional RO systems require, freeing up significant under-sink cabinet space for storage.' },
   { question: 'Does the Waterdrop G3P600 require electricity?', answer: 'Yes. The tankless design uses an internal booster pump to push water through the RO membrane at high pressure, and this pump requires a standard electrical outlet under the sink. If you do not have an outlet under your sink, you will need to have one installed by an electrician before setting up the system. This is the main installation requirement that tank-based systems like the iSpring RCC7AK do not have.' },
   { question: 'What does the smart LED faucet on the Waterdrop G3P600 show?', answer: 'The included smart faucet has a built-in LED display that shows real-time TDS (total dissolved solids) readings of the filtered water. The display changes color based on water quality: blue indicates excellent quality (low TDS), while other colors signal that filter replacement may be needed. It gives you objective, measurable confirmation that your system is working properly without needing a separate TDS meter.' },
-  { question: 'How does the Waterdrop G3P600 compare to the iSpring RCC7AK?', answer: 'Both produce excellent RO water with similar TDS reduction (93-98%). The G3P600 costs $429 vs $199 for the iSpring, but offers 8x faster production (600 GPD vs 75 GPD), no tank, a smart TDS faucet, and better water efficiency (2:1 vs 1:3 pure-to-drain). Choose the iSpring if budget is the priority. Choose the Waterdrop if you value speed, space savings, and water efficiency.' },
+  { question: 'How does the Waterdrop G3P600 compare to the iSpring RCC7AK?', answer: 'Both produce excellent RO water with similar TDS reduction (93-98%). The G3P600 costs roughly twice as much as the iSpring, but offers 8x faster production (600 GPD vs 75 GPD), no tank, a smart TDS faucet, and better water efficiency (2:1 vs 1:3 pure-to-drain). Choose the iSpring if budget is the priority. Choose the Waterdrop if you value speed, space savings, and water efficiency.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Waterdrop G3P600 represents the modern evolution of residential reverse osmosis. By eliminating the pressurized storage tank that has defined RO systems for decades, Waterdrop has created a system that delivers purified water on demand at 600 gallons per day — 8 times faster than traditional 75 GPD tank systems — while taking up roughly half the under-sink space. At $429, it sits at the premium end of residential RO, but the combination of speed, space efficiency, and smart monitoring features makes a compelling case for the upgrade.</p>
+  <p>The Waterdrop G3P600 represents the modern evolution of residential reverse osmosis. By eliminating the pressurized storage tank that has defined RO systems for decades, Waterdrop has created a system that delivers purified water on demand at 600 gallons per day — 8 times faster than traditional 75 GPD tank systems — while taking up roughly half the under-sink space. It sits at the {getPriceTier(product.price)} end of residential RO, but the combination of speed, space efficiency, and smart monitoring features makes a compelling case for the upgrade.</p>
   <p>The 8-stage filtration process runs water through polypropylene pre-filtration, carbon treatment stages, the high-capacity RO membrane, and post-carbon polishing. The 2:1 pure-to-drain ratio is significantly more water-efficient than the 1:3 ratio typical of tank-based systems, which means less water wasted and lower environmental impact. Over the course of a year, a household producing 3 gallons of RO water daily saves roughly 1,600 gallons of water compared to a traditional 1:3 system.</p>
   <p>The smart LED faucet is a feature that sounds gimmicky but proves genuinely useful in practice. The real-time TDS reading gives you objective confirmation that your filters are working, and the color-coded display makes it immediately obvious when performance is degrading. It eliminates the common RO anxiety of "is my system still filtering properly?" and replaces it with a number you can verify at a glance every time you fill a glass.</p>
 
@@ -92,7 +92,7 @@ const relatedArticles = [
 
   <p>The NSF 42/53/58/372 quad certification is the most comprehensive in our under-sink category. NSF 58 covers the RO membrane performance, while 42 and 53 address chlorine and health-related contaminants. NSF 372 certifies lead-free materials in the system construction itself. The consolidated filter design uses only 3 replacement cartridges (CF, MRO, and CB) on staggered schedules, which simplifies maintenance compared to the 5 separate cartridges in traditional RO systems.</p>
 
-  <ProTip>The G3P600 requires an electrical outlet under the sink for the booster pump. Before purchasing, verify that you have an outlet available or budget $100-200 for an electrician to add one. GFCI-protected outlets are required by code in most jurisdictions for under-sink installations. Also check that your water pressure is at least 14.5 PSI — the system needs minimum pressure to function, though the built-in pump handles most residential water supplies without issue.</ProTip>
+  <ProTip>The G3P600 requires an electrical outlet under the sink for the booster pump. Before purchasing, verify that you have an outlet available — adding one typically requires a licensed electrician and should be factored into your total installation budget. GFCI-protected outlets are required by code in most jurisdictions for under-sink installations. Also check that your water pressure is at least 14.5 PSI — the system needs minimum pressure to function, though the built-in pump handles most residential water supplies without issue.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -114,8 +114,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $429, the Waterdrop G3P600 costs more than double the iSpring RCC7AK ($199). The question is whether the premium features justify the gap. The tankless design saves approximately 12 x 12 inches of under-sink floor space — a significant difference in tight cabinets. The 600 GPD flow rate means you never wait for water. The 2:1 water efficiency saves roughly 1,600 gallons of drain water per year. And the smart faucet provides ongoing peace of mind. Replacement filters run about $80-100 annually, roughly $20-30 more than the iSpring, but fewer individual cartridges to manage.</p>
-  <p>The 3-year total cost of ownership (system plus filters) comes to approximately $650-730, working out to roughly $0.12-0.15 per gallon of purified water. That is higher than the iSpring's $0.08-0.10 but still dramatically cheaper than bottled water. The Waterdrop G3P600 makes the most sense for households where cabinet space is limited, water efficiency matters, or you simply want the most modern, feature-rich RO experience available. If your priorities are pure value and you have the cabinet space, the iSpring remains the smarter financial choice.</p>
+  <p>The Waterdrop G3P600 costs more than double the iSpring RCC7AK, making the value question unavoidable. The question is whether the premium features justify that gap. The tankless design saves approximately 12 x 12 inches of under-sink floor space — a significant difference in tight cabinets. The 600 GPD flow rate means you never wait for water. The 2:1 water efficiency saves roughly 1,600 gallons of drain water per year. And the smart faucet provides ongoing peace of mind. Annual replacement filter costs run moderately higher than the iSpring's, though the consolidated cartridge design means fewer individual filters to manage.</p>
+  <p>Over a three-year ownership period, the per-gallon cost of purified water settles higher than budget tank-based systems but remains dramatically cheaper than bottled water. The Waterdrop G3P600 makes the most sense for households where cabinet space is limited, water efficiency matters, or you simply want the most modern, feature-rich RO experience available. If your priorities are pure value and you have the cabinet space, a tank-based system like the iSpring remains the smarter financial choice.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

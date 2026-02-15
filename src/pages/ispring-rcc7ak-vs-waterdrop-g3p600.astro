@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `Head-to-head comparison of the iSpring RCC7AK and Waterdrop G3P600 under-sink reverse osmosis systems. We compare price, speed, space, water efficiency, and filtration.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="iSpring vs Waterdrop"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>iSpring RCC7AK ($198.78)</strong> is the best value in under-sink RO — it delivers 93-98% TDS reduction with alkaline remineralization for under $200. The <strong>Waterdrop G3P600 ($429)</strong> is the premium pick for those who need tankless space savings, 8x faster flow, and superior water efficiency. Both produce excellent water; the question is how much you value speed and space.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>iSpring RCC7AK ({getPriceTier(productA.price)})</strong> is the best value in under-sink RO — it delivers 93-98% TDS reduction with alkaline remineralization at a budget-friendly price point. The <strong>Waterdrop G3P600 ({getPriceTier(productB.price)})</strong> is the premium pick for those who need tankless space savings, 8x faster flow, and superior water efficiency. Both produce excellent water; the question is how much you value speed and space.</p>
   </div>
 
   <div class="comparison-products">
@@ -101,8 +101,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Waterdrop G3P600 (600 GPD vs 75 GPD)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>At $198.78, the iSpring RCC7AK is one of the best deals in home water filtration. You get a complete 6-stage RO system with alkaline remineralization backed by 18,000+ reviews. The Waterdrop at $429 is more than double the price. While the Waterdrop offers real advantages in speed and efficiency, the iSpring's price-to-performance ratio is genuinely remarkable. Annual filter costs also favor the iSpring at roughly $60-80 versus $100-130 for the Waterdrop's proprietary cartridges.</p>
-  <div class="winner-badge">Winner: iSpring RCC7AK ($198.78 vs $429)</div>
+  <p>The iSpring RCC7AK sits in the {getPriceTier(productA.price)} range, making it one of the best deals in home water filtration. You get a complete 6-stage RO system with alkaline remineralization backed by 18,000+ reviews. The Waterdrop commands a {getPriceTier(productB.price)} price tag — more than double what the iSpring costs. While the Waterdrop offers real advantages in speed and efficiency, the iSpring's price-to-performance ratio is genuinely remarkable. Annual filter costs also favor the iSpring, with replacement cartridges running roughly half the cost of the Waterdrop's proprietary filters.</p>
+  <div class="winner-badge">Winner: iSpring RCC7AK (less than half the cost)</div>
 
   <h3>Space &amp; Installation</h3>
   <p>The Waterdrop's tankless design is a major advantage for kitchens with limited under-sink space. The iSpring requires room for both the filter assembly and a 3-4 gallon pressurized storage tank, consuming most of the cabinet. The Waterdrop's compact unit takes up roughly half the space. However, the Waterdrop requires an electrical outlet under the sink for its booster pump — which not every kitchen has. The iSpring operates on water pressure alone with no electricity required.</p>
@@ -117,7 +117,7 @@ const relatedArticles = [
     <div class="rec-card rec-a">
       <h3>Get the {productA.name} if...</h3>
       <ul>
-        <li>You want the best RO water quality for under $200 — unbeatable value</li>
+        <li>You want the best RO water quality at a {getPriceTier(productA.price)} price point — unbeatable value</li>
         <li>You prefer alkaline remineralized water with improved taste and pH</li>
         <li>You have adequate under-sink cabinet space for the tank system</li>
         <li>You do not have an electrical outlet under your sink</li>

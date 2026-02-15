@@ -13,8 +13,8 @@ const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
   { question: 'What comes in the Pentair Everpure H-300 box?', answer: 'The H-300 is a complete system that includes the filter head (mounting bracket), one replacement cartridge, a dedicated drinking water faucet, all connection hardware, and installation instructions. Unlike the H-1200 replacement cartridge set, you do not need to purchase any additional components to get started — everything you need for a full installation is in the box.' },
-  { question: 'Can I install the Pentair Everpure H-300 myself?', answer: 'If you are comfortable with basic plumbing tasks, yes. The installation requires connecting to your cold water line under the sink, mounting the filter head, and drilling a hole in your sink or countertop for the dedicated faucet. Budget 1-2 hours for a DIY installation. If you are not comfortable drilling into your countertop, a plumber can typically complete the install in 30-60 minutes for $100-200.' },
-  { question: 'How does the H-300 compare to the H-1200?', answer: 'The H-300 is a complete system ($505) with a single 300-gallon cartridge, while the H-1200 is a replacement cartridge set ($390) with twin cartridges totaling 1,000 gallons of capacity. The H-300 is the right choice if you are starting from scratch and need everything in one box. The H-1200 cartridges offer better long-term value with 3.3x the capacity per replacement cycle, but require the separate H-1200 filter head.' },
+  { question: 'Can I install the Pentair Everpure H-300 myself?', answer: 'If you are comfortable with basic plumbing tasks, yes. The installation requires connecting to your cold water line under the sink, mounting the filter head, and drilling a hole in your sink or countertop for the dedicated faucet. Budget 1-2 hours for a DIY installation. If you are not comfortable drilling into your countertop, a plumber can typically complete the install in 30-60 minutes for a modest service fee.' },
+  { question: 'How does the H-300 compare to the H-1200?', answer: 'The H-300 is a complete system with a single 300-gallon cartridge, while the H-1200 is a replacement cartridge set with twin cartridges totaling 1,000 gallons of capacity. The H-300 costs more upfront but includes everything — filter head, faucet, and hardware. The H-300 is the right choice if you are starting from scratch and need everything in one box. The H-1200 cartridges offer better long-term value with 3.3x the capacity per replacement cycle, but require the separate H-1200 filter head.' },
   { question: 'Does the Everpure H-300 reduce PFAS and forever chemicals?', answer: 'The H-300 is NSF 42/53 certified for chlorine and lead reduction, but it does not carry the NSF 401 certification that covers PFAS and pharmaceuticals like the H-1200 does. If PFAS removal is a primary concern, consider the H-1200 system instead, or pair the H-300 with a secondary filtration stage. For most municipal water sources, the H-300 provides excellent overall filtration quality.' },
 ];
 
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Pentair Everpure H-300 is the complete, ready-to-install package for homeowners who want commercial-grade water filtration without assembling components from multiple sources. At $505, it is the most expensive single system in our catalog, but the box includes everything — filter head, cartridge, dedicated faucet, and all mounting hardware. You unbox it, install it, and start drinking restaurant-quality water. That all-in-one convenience is the core value proposition, and for many buyers, the premium is worth not having to figure out compatibility between separate parts.</p>
+  <p>The Pentair Everpure H-300 is the complete, ready-to-install package for homeowners who want commercial-grade water filtration without assembling components from multiple sources. As the most expensive single system in our catalog — a true {getPriceTier(product.price)} investment — the box includes everything: filter head, cartridge, dedicated faucet, and all mounting hardware. You unbox it, install it, and start drinking restaurant-quality water. That all-in-one convenience is the core value proposition, and for many buyers, the premium is worth not having to figure out compatibility between separate parts.</p>
   <p>The H-300 uses the same Micro-Pure activated carbon and precoat submicron technology that powers Pentair's commercial product line. The 0.5-micron filtration level catches cysts, lead, chlorine, mold, and algae while preserving the dissolved minerals that make water taste good. It is a single-cartridge design, which means a smaller under-sink footprint than the twin-cartridge H-1200, but the trade-off is capacity: 300 gallons versus the H-1200's 1,000 gallons.</p>
   <p>The dedicated faucet is a notable inclusion. Rather than replacing your existing faucet or using an adapter, the H-300 installs a separate drinking water tap on your sink or countertop. This means filtered water is always on demand at full pressure, separate from your regular hot and cold water. It is a clean, professional installation that most under-sink systems at lower price points cannot match.</p>
 
@@ -110,12 +110,12 @@ const relatedArticles = [
   <!-- PERFORMANCE -->
   <h2>Performance &amp; Real-World Testing</h2>
   <p>Water quality from the H-300 is immediately noticeable and, for many users, life-changing compared to pitcher filtration. The chlorine tang of municipal water is completely eliminated, and the water has a clean, mineral-rich character that makes it genuinely pleasant to drink straight. Coffee and tea prepared with H-300 filtered water taste noticeably better — the subtle flavors come through without the interference of chlorine or sediment. The 0.5 GPM flow rate is adequate for filling glasses and water bottles but will feel slow if you are trying to fill a large pot.</p>
-  <p>Reliability is the Everpure hallmark, and the H-300 delivers. Across 850 Amazon reviews with a 4.6-star average, the most common theme is that the system simply works — year after year, with no leaks, no failures, and consistent water quality. The quarter-turn cartridge swap is universally praised as the easiest replacement mechanism on the market. The main complaint from long-term users is the replacement cartridge cost, which runs $100-130 per cartridge. At 300 gallons, that is roughly $0.33-0.43 per gallon of filtered water.</p>
+  <p>Reliability is the Everpure hallmark, and the H-300 delivers. Across 850 Amazon reviews with a 4.6-star average, the most common theme is that the system simply works — year after year, with no leaks, no failures, and consistent water quality. The quarter-turn cartridge swap is universally praised as the easiest replacement mechanism on the market. The main complaint from long-term users is the replacement cartridge cost — each cartridge runs at a premium price point befitting commercial-grade filtration. With 300 gallons of capacity per cartridge, the per-gallon cost is higher than budget alternatives but competitive with bottled water delivery services.</p>
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>The $505 upfront cost is the highest barrier to entry in our entire filter catalog. However, this is a complete, permanent system — the filter head and faucet are one-time purchases that will last for years. Ongoing costs are the replacement cartridge only, which runs $100-130 for 300 gallons. Compared to the H-1200 replacement set ($390 for 1,000 gallons), the H-300's per-gallon cost is roughly 3x higher on an ongoing basis. If you plan to use Everpure long-term, starting with the H-300 for the complete system and then upgrading to the H-1200 filter head and cartridge set would give you the best of both worlds.</p>
-  <p>Against other under-sink options, the H-300 is expensive but targets a different buyer. The iSpring RCC7AK at $199 offers 6-stage RO with superior contaminant removal, while the Waterdrop G3P600 at $429 provides tankless RO with 600 GPD throughput. The H-300's advantage is its simplicity, mineral preservation, and the Pentair commercial pedigree. If you want set-and-forget reliability from a brand trusted by the food service industry worldwide, the H-300 delivers exactly that.</p>
+  <p>The upfront cost is the highest barrier to entry in our entire filter catalog. However, this is a complete, permanent system — the filter head and faucet are one-time purchases that will last for years. Ongoing costs are the replacement cartridge only, and with 300 gallons of capacity, you replace roughly once or twice per year depending on household usage. Compared to the H-1200 replacement set (which delivers 1,000 gallons per cycle), the H-300's per-gallon cost is roughly 3x higher on an ongoing basis. If you plan to use Everpure long-term, starting with the H-300 for the complete system and then upgrading to the H-1200 filter head and cartridge set would give you the best of both worlds.</p>
+  <p>Against other under-sink options, the H-300 is expensive but targets a different buyer. Mid-range RO systems like the iSpring RCC7AK offer 6-stage filtration with superior contaminant removal at less than half the price, while premium tankless RO units like the Waterdrop G3P600 provide 600 GPD throughput for a comparable investment. The H-300's advantage is its simplicity, mineral preservation, and the Pentair commercial pedigree. If you want set-and-forget reliability from a brand trusted by the food service industry worldwide, the H-300 delivers exactly that.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

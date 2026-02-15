@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The MSR Thru-Link is the most invisible water filter you can own. At 2.4 ounces and 5.5 inches long, it connects inline between your hydration reservoir hose and bite valve, filtering every sip of water as you drink. There is no pumping, no squeezing, no waiting — you fill your hydration pack from any backcountry water source and drink normally. The 0.2-micron hollow fiber membrane removes bacteria and protozoa with the same efficacy as MSR's larger filters, but you never interact with it directly. At $29.95, it is the cheapest filter in MSR's lineup and arguably the most elegant solution for hikers who already carry hydration packs.</p>
+  <p>The MSR Thru-Link is the most invisible water filter you can own. At 2.4 ounces and 5.5 inches long, it connects inline between your hydration reservoir hose and bite valve, filtering every sip of water as you drink. There is no pumping, no squeezing, no waiting — you fill your hydration pack from any backcountry water source and drink normally. The 0.2-micron hollow fiber membrane removes bacteria and protozoa with the same efficacy as MSR's larger filters, but you never interact with it directly. As the most affordable filter in MSR's lineup, it is arguably the most elegant solution for hikers who already carry hydration packs.</p>
   <p>The Thru-Link addresses a genuine friction point in backcountry hydration. With standalone filters, you stop at a water source, filter water into a clean container, pour it into your reservoir, and stow the filter — a process that takes 5-10 minutes per stop. With the Thru-Link, you scoop raw water into your reservoir and keep walking. Every sip is filtered automatically. This saves cumulative time across a full day of hiking and eliminates the mental overhead of planning water stops around filtration time. For thru-hikers knocking out 20-30 mile days, those saved minutes add up to an extra hour of hiking or rest per week.</p>
   <p>The limitations are worth understanding clearly. First, the Thru-Link only filters water that passes through the bite valve — you cannot pour filtered water out for cooking or sharing. Second, your reservoir contains unfiltered water, so you must never drink from it without the Thru-Link attached. Third, the 1,000-liter filter life is shorter than standalone MSR filters (2,000L for the MiniWorks and TrailShot) because the inline form factor limits membrane surface area. And fourth, like all hollow fiber filters, it does not remove viruses or dissolved chemicals. For most North American backcountry hiking, these limitations are acceptable trade-offs for the convenience.</p>
 
@@ -111,8 +111,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $29.95 in the {getPriceTier(product.price)} bracket, the Thru-Link is the most affordable MSR filter and one of the cheapest branded backcountry filters available. The 1,000-liter capacity translates to $0.03 per liter — slightly more expensive per liter than the MiniWorks EX ($0.045/L) or TrailShot ($0.022/L) due to the shorter filter life, but the convenience factor is unmatched. You are not paying for maximum liter capacity; you are paying for the ability to drink filtered water without stopping, pumping, or squeezing. For hikers who already own a hydration pack, the Thru-Link is the lowest-friction path to filtered water.</p>
-  <p>The Thru-Link works best as a dedicated hydration filter paired with another filter for cooking water. The ideal combination for a backpacking trip is a Thru-Link for personal drinking throughout the day, plus a gravity filter (like the AutoFlow XL) or pump filter (like the MiniWorks EX) for camp cooking and shared water. This two-filter approach sounds redundant, but the time savings and convenience are significant — you never have to stop to pump drinking water on the trail. For day hikers who only need drinking water, the Thru-Link as a standalone filter is perfectly sufficient and the best $30 investment in backcountry hydration convenience.</p>
+  <p>In the {getPriceTier(product.price)} bracket, the Thru-Link is the most affordable MSR filter and one of the cheapest branded backcountry filters available. The 1,000-liter capacity delivers a reasonable per-liter cost — slightly higher than longer-lasting MSR filters like the MiniWorks EX or TrailShot due to the shorter filter life, but the convenience factor is unmatched. You are not paying for maximum liter capacity; you are paying for the ability to drink filtered water without stopping, pumping, or squeezing. For hikers who already own a hydration pack, the Thru-Link is the lowest-friction path to filtered water.</p>
+  <p>The Thru-Link works best as a dedicated hydration filter paired with another filter for cooking water. The ideal combination for a backpacking trip is a Thru-Link for personal drinking throughout the day, plus a gravity filter (like the AutoFlow XL) or pump filter (like the MiniWorks EX) for camp cooking and shared water. This two-filter approach sounds redundant, but the time savings and convenience are significant — you never have to stop to pump drinking water on the trail. For day hikers who only need drinking water, the Thru-Link as a standalone filter is perfectly sufficient and one of the best value investments in backcountry hydration convenience.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

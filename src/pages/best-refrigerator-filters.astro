@@ -3,7 +3,7 @@ import ContentLayout from '../layouts/ContentLayout.astro';
 import ProductImage from '../components/ProductImage.astro';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import ProTip from '../components/ProTip.astro';
-import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished } from '../lib/config';
+import { getProductsByCategory, getCategoryBySlug, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
 import { generateItemListSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../lib/schema';
 
 const categorySlug = 'refrigerator-filters';
@@ -53,7 +53,7 @@ const articleSchema = generateArticleSchema({
   description: `We tested ${allProducts.length} ${category.name.toLowerCase()}. Here are the best for ${year}, ranked by performance, value, and reliability.`,
   url: `/best-${categorySlug}/`,
   datePublished: category.publishDate,
-  dateModified: category.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: category.name, url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -75,11 +75,11 @@ const relatedArticles = [
   currentPage={`Best ${category.name}`}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={category.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/best-${categorySlug}-hero.webp`}
 >
   <h1>Best {category.name} {year}: Expert Picks</h1>
-  <p class="lead">Refrigerator filters are the most-replaced water filter in American homes, yet most people grab whatever is cheapest without checking what it actually removes. We evaluated {allProducts.length} OEM and aftermarket fridge filters to find the best match for every major refrigerator brand — from premium OEM cartridges with triple NSF certification to budget aftermarket packs under $3 per filter.</p>
+  <p class="lead">Refrigerator filters are the most-replaced water filter in American homes, yet most people grab whatever is cheapest without checking what it actually removes. We evaluated {allProducts.length} OEM and aftermarket fridge filters to find the best match for every major refrigerator brand — from premium OEM cartridges with triple NSF certification to budget aftermarket multi-packs that cost a fraction of OEM prices per cartridge.</p>
 
   <ProductImage alt={`Best ${category.name} ${year}`} icon="fridge" aspect="hero" slug="best-refrigerator-filters" />
 
@@ -97,7 +97,7 @@ const relatedArticles = [
       {i === 0 && (
         <>
           <p>The everydrop Filter 1 earns our top spot thanks to its triple NSF 42/53/401 certification, which covers chlorine, lead (99% reduction), pharmaceuticals, and pesticides. As an OEM product made by the same company that manufactures Whirlpool, Maytag, KitchenAid, and JennAir refrigerators, compatibility is guaranteed with no risk of poor fit or bypass leaking.</p>
-          <p>At $53.99, you are paying a premium over aftermarket options. The 200-gallon capacity is adequate for most households but falls short of the GE XWFE's 300 gallons. Installation uses a push-in design that can feel awkward on the first attempt but becomes routine after one or two changes.</p>
+          <p>As the priciest Whirlpool-family option in our lineup, you are paying a premium over aftermarket options. The 200-gallon capacity is adequate for most households but falls short of the GE XWFE's 300 gallons. Installation uses a push-in design that can feel awkward on the first attempt but becomes routine after one or two changes.</p>
           <p>The everydrop Filter 1 is the right choice if you own a Whirlpool-family fridge and want maximum peace of mind about what is in your water. The triple NSF certification means every claim has been independently verified by a third party, not just the manufacturer.</p>
         </>
       )}
@@ -105,19 +105,19 @@ const relatedArticles = [
         <>
           <p>The GE XWFE is the most capable refrigerator filter we tested, removing over 50 contaminants including PFOA, PFOS, microplastics, lead, and cysts. Its 300-gallon capacity is the highest among OEM filters, stretching replacement intervals further and reducing the annoyance (and cost) of frequent changes.</p>
           <p>The RFID chip is both a strength and a weakness. It ensures your GE fridge recognizes the filter as genuine, eliminating the "replace filter" nag that aftermarket options trigger. But it also locks you into buying only genuine GE filters — there are no compatible aftermarket alternatives for RFID-equipped models.</p>
-          <p>At $49.49, the GE XWFE offers the best contaminant-per-dollar ratio of any fridge filter. The 50+ contaminant reduction and 300-gallon capacity make it the clear winner for GE fridge owners who want the highest filtration standard. Just confirm your GE model uses the XWFE and not the XWF (no RFID) before purchasing.</p>
+          <p>Priced competitively among OEM filters, the GE XWFE offers the best contaminant-per-dollar ratio of any fridge filter we tested. The 50+ contaminant reduction and 300-gallon capacity make it the clear winner for GE fridge owners who want the highest filtration standard. Just confirm your GE model uses the XWFE and not the XWF (no RFID) before purchasing.</p>
         </>
       )}
       {i === 2 && (
         <>
           <p>The RPWFE is designed specifically for GE French door refrigerators. It shares the RFID authentication system with the XWFE and reduces lead, PFOA, PFOS, and microplastics. For GE French door owners, this is your only real option — aftermarket filters without the RFID chip will not be accepted by the fridge.</p>
-          <p>The biggest drawback is the 170-gallon capacity, which is the lowest among our premium picks. In a household of four with heavy water and ice usage, you may find yourself replacing this filter every 4 months rather than the stated 6. At nearly $50 per filter, that adds up to roughly $150 per year in filter costs.</p>
+          <p>The biggest drawback is the 170-gallon capacity, which is the lowest among our premium picks. In a household of four with heavy water and ice usage, you may find yourself replacing this filter every 4 months rather than the stated 6. At OEM pricing with that accelerated replacement schedule, annual filter costs climb significantly higher than other brands in this roundup.</p>
           <p>Despite the capacity limitation, the RPWFE does its job well. Water quality improvement is noticeable, and the NSF 42/53 certifications verify lead and chlorine reduction. If your GE French door fridge requires the RPWFE, buy it and budget for the replacement schedule.</p>
         </>
       )}
       {i === 3 && (
         <>
-          <p>Samsung's HAF-QIN is the most affordable OEM fridge filter in our lineup at $37.52. The quarter-turn installation is genuinely the easiest of any filter we tested — it takes under 30 seconds with no tools. Compatibility spans Samsung's French door, side-by-side, and 4-Door Flex lineups, covering most Samsung fridges sold in the last decade.</p>
+          <p>Samsung's HAF-QIN is the most affordable OEM fridge filter in our lineup. The quarter-turn installation is genuinely the easiest of any filter we tested — it takes under 30 seconds with no tools. Compatibility spans Samsung's French door, side-by-side, and 4-Door Flex lineups, covering most Samsung fridges sold in the last decade.</p>
           <p>The trade-off is filtration depth. With only NSF 42 certification, the HAF-QIN handles chlorine taste and odor but is not certified for lead, PFAS, or pharmaceutical reduction. Samsung is also less transparent about exact gallon capacity compared to GE and Whirlpool. If your water quality concerns go beyond taste, consider supplementing with a separate under-sink filter.</p>
           <p>For Samsung fridge owners who want a genuine OEM replacement that improves taste and reduces chlorine at a reasonable price, the HAF-QIN is the straightforward choice. Just understand its limitations compared to the higher-certified GE and everydrop options.</p>
         </>
@@ -125,15 +125,15 @@ const relatedArticles = [
       {i === 4 && (
         <>
           <p>The everydrop Filter A is the updated design for newer Whirlpool-family refrigerators. It carries the same triple NSF 42/53/401 certification as the Filter 1, meaning lead, pharmaceutical, and pesticide reduction are all independently verified. The new rotating knob installation mechanism is a meaningful improvement over the push-in design of the Filter 1.</p>
-          <p>At $48, it undercuts the Filter 1 by about $6 while matching its certification level and 200-gallon capacity. The main caveat is that this is a newer product with fewer long-term reviews, so the durability track record is shorter. Check whether your specific Whirlpool-family model uses Filter A or Filter 1 before purchasing — they are not interchangeable.</p>
+          <p>Priced slightly below the Filter 1, the Filter A matches its certification level and 200-gallon capacity while costing a few dollars less per cartridge. The main caveat is that this is a newer product with fewer long-term reviews, so the durability track record is shorter. Check whether your specific Whirlpool-family model uses Filter A or Filter 1 before purchasing — they are not interchangeable.</p>
           <p>If your fridge is compatible, the Filter A is a slightly better value than the Filter 1 thanks to the lower price and improved installation design. The certification parity means you are not sacrificing filtration quality.</p>
         </>
       )}
       {i === 5 && (
         <>
-          <p>The AQUACREST 6-pack is the extreme-value play for refrigerator filtration. At $16.88 for six filters — roughly $2.81 each — it costs less than a single OEM filter. The coconut shell carbon block provides effective chlorine taste and odor reduction with NSF 42 certification, and the filters are compatible with a wide range of Maytag, Whirlpool, and KitchenAid models.</p>
+          <p>The AQUACREST 6-pack is the extreme-value play for refrigerator filtration. For less than the price of a single OEM filter, you get six aftermarket cartridges — making the per-filter cost a fraction of any OEM option. The coconut shell carbon block provides effective chlorine taste and odor reduction with NSF 42 certification, and the filters are compatible with a wide range of Maytag, Whirlpool, and KitchenAid models.</p>
           <p>The trade-off is clear: NSF 42 only, meaning no certified lead, PFAS, or pharmaceutical reduction. If your water has known contamination issues, these are not the right choice. Some users also report shorter effective filter life compared to OEM cartridges, and the filters may trigger "replace filter" indicator lights on some refrigerators.</p>
-          <p>For households with clean municipal water that just want improved taste at the lowest possible cost, the AQUACREST 6-pack is a legitimate option. A full year of filter changes for under $17 is remarkable value. Just pair it with periodic water quality testing to ensure your source water does not require deeper filtration.</p>
+          <p>For households with clean municipal water that just want improved taste at the lowest possible cost, the AQUACREST 6-pack is a legitimate option. A full year of filter changes for less than the cost of a single premium OEM cartridge is remarkable value. Just pair it with periodic water quality testing to ensure your source water does not require deeper filtration.</p>
         </>
       )}
       <div class="pros-cons-mini">
