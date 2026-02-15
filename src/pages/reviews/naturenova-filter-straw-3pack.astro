@@ -26,7 +26,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -59,7 +59,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -73,7 +73,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The NatureNova straw distinguishes itself in the crowded filter straw market not by the straw itself — which uses the same 4-stage 0.1-micron UF membrane design found in several competitors — but by what comes in the box. Each straw ships with a foldable water bag and a backwash syringe, transforming a simple sipping straw into a complete field water purification kit. At $12.99, NatureNova delivers the most accessory-rich survival filtration package in its price range.</p>
+  <p>The NatureNova straw distinguishes itself in the crowded filter straw market not by the straw itself — which uses the same 4-stage 0.1-micron UF membrane design found in several competitors — but by what comes in the box. Each straw ships with a foldable water bag and a backwash syringe, transforming a simple sipping straw into a complete field water purification kit. At under $15, NatureNova delivers the most accessory-rich survival filtration package in its price range.</p>
   <p>The 4-stage filtration follows the same architecture as the Timain straw: PP cotton pre-filter, coconut shell activated carbon, PP fiber, and a 0.1-micron UF membrane. This combination removes 99.9999% of bacteria and 99.99% of protozoa while the carbon stage improves taste and reduces chlorine. The backwash syringe is a genuinely useful inclusion — it pushes clean water backward through the membrane to dislodge trapped particles, effectively extending the usable life of each straw well beyond what you would get without maintenance.</p>
   <p>The foldable water bag enables gravity-feed filtering: fill the bag, attach the straw, and hang it from a branch to let gravity push water through the filter into a clean container below. This is significantly more convenient than lying on your stomach to sip from a stream. It also enables you to collect water from one location and filter it at your campsite, which is how most experienced backcountry users prefer to manage their water.</p>
 

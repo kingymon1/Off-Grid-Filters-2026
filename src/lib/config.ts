@@ -1170,7 +1170,7 @@ export const products: Product[] = [
       'Most complete kit — includes foldable water bag AND backwash syringe',
       '4-stage filtration for comprehensive contaminant removal',
       'Backwash syringe extends filter life significantly',
-      'Affordable at under $13 with full accessory kit',
+      'Affordable price point with full accessory kit included',
       'Foldable water bag enables gravity-feed filtering',
     ],
     cons: [
