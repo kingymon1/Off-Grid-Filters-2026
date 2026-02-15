@@ -12,7 +12,7 @@ export const productSlugs = new Set([
   'brita-standard-3pack', 'brita-standard-4pack', 'brita-ultramax-27-cup-dispenser',
   'elkay-51300c-watersentry-plus', 'everydrop-filter-1-edr1rxd1', 'everydrop-filter-a-edrarxd1',
   'ge-rpwfe', 'ge-xwfe', 'grayl-geopress-24oz-water-purifier-bottle',
-  'grayl-tap-water-filter', 'grayl-ultrapress-16-9oz-water-purifier-bottle',
+  'grayl-ultrapress-16-9oz-water-purifier-bottle',
   'hydroblu-clear-flow-bottle', 'hydroblu-go-flow-water-gravity-bag',
   'hydroblu-sidekick-2-stage-straw-filter', 'hydroblu-versa-flow-water-filter',
   'ispring-rcc7ak', 'katadyn-befree-1-0l-water-filter-bottle',
@@ -29,7 +29,7 @@ export const productSlugs = new Set([
   'pur-pitcher-filter-4pack', 'samsung-haf-qin',
   'sawyer-products-mini-water-filtration-system', 'sawyer-select-series-s3',
   'sawyer-squeeze-water-filtration-system', 'survivor-filter-pro',
-  'survivor-filter-pro-x-electric-pump', 'survivor-filter-pro-x-electric-water-filter',
+  'survivor-filter-pro-x-electric-water-filter',
   'survivor-filter-squeeze-kit', 'timain-filter-straw-2pack',
   'universal-5micron-sediment-filter', 'waterdrop-g3p600',
   'waterdrop-wd-pf01a-plus-3pack', 'zerowater-5stage-4pack', 'zerowater-5stage-6pack',
@@ -69,7 +69,6 @@ export const heroImages: Record<string, string> = {
 
   // ── Legacy survival filter product heroes (29 products) ──
   'grayl-geopress-24oz-water-purifier-bottle': '/assets/grayl-geopress-24oz-water-purifier-bottle-hero.webp',
-  'grayl-tap-water-filter': '/assets/grayl-tap-water-filter-hero.webp',
   'grayl-ultrapress-16-9oz-water-purifier-bottle': '/assets/grayl-ultrapress-16-9oz-water-purifier-bottle-hero.webp',
   'hydroblu-clear-flow-bottle': '/assets/hydroblu-clear-flow-bottle-hero.webp',
   'hydroblu-go-flow-water-gravity-bag': '/assets/hydroblu-go-flow-water-gravity-bag-hero.webp',
@@ -94,7 +93,6 @@ export const heroImages: Record<string, string> = {
   'sawyer-select-series-s3': '/assets/sawyer-select-series-s3-hero.webp',
   'sawyer-squeeze-water-filtration-system': '/assets/sawyer-squeeze-water-filtration-system-hero.webp',
   'survivor-filter-pro': '/assets/survivor-filter-pro-hero.webp',
-  'survivor-filter-pro-x-electric-pump': '/assets/survivor-filter-pro-x-electric-pump-hero.webp',
   'survivor-filter-pro-x-electric-water-filter': '/assets/survivor-filter-pro-x-electric-water-filter-hero.webp',
   'survivor-filter-squeeze-kit': '/assets/survivor-filter-squeeze-kit-hero.webp',
 

@@ -2,6 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import ProTip from '../../components/ProTip.astro';
+import Callout from '../../components/Callout.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
 
@@ -63,11 +64,16 @@ const relatedArticles = [
 >
   <!-- HERO -->
   <h1>{product.name} Review {new Date().getFullYear()}</h1>
+
+  <Callout type="info">
+    <strong>Product update:</strong> This review was originally written for the Membrane Solutions 4-pack. The multi-pack has been discontinued on Amazon and we have updated this review for the single straw version, which uses the same 0.1-micron hollow fiber membrane technology. Multi-packs may return — check the Amazon listing for current options.
+  </Callout>
+
   <ProductHero product={product} />
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Membrane Solutions 4-pack is built for preparedness-minded families and groups. At $38.98 for four straws ($9.75 each), it provides enough individual water filtration to equip a family of four or to build redundancy across multiple emergency kits and go-bags. The hollow fiber UF membrane technology is the same proven approach used in premium filters like the Sawyer Squeeze, delivering 99.999999% bacteria removal (log-8 reduction) — one of the highest removal rates in the portable filter category.</p>
+  <p>The Membrane Solutions filter straw is built on proven hollow fiber UF membrane technology — the same approach used in premium filters like the Sawyer Squeeze, delivering 99.999999% bacteria removal (log-8 reduction), one of the highest removal rates in the portable filter category. At $11.99, it is an affordable addition to any emergency kit or go-bag.</p>
   <p>Hollow fiber membrane technology works by forcing water through thousands of microscopic U-shaped tubes. Each tube has pores of precisely 0.1 microns, small enough to physically block all bacteria and protozoa while allowing clean water to pass through. Unlike carbon-based filters that rely on chemical adsorption (which degrades over time), hollow fiber filtration is purely mechanical — either a pathogen fits through the pore or it does not. This makes the technology highly reliable and predictable.</p>
   <p>The 28mm bottle compatibility is a practical advantage. Standard disposable water bottles (like Smartwater or Dasani) use 28mm threads, meaning you can turn any found water bottle into a squeeze-filter system in the field. This is especially valuable in emergency scenarios where you may not have dedicated outdoor gear but can find discarded bottles. Each straw weighs just 2 ounces, making the entire 4-pack lighter than a single can of soda.</p>
 
