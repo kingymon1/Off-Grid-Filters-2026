@@ -13,7 +13,7 @@ const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
   { question: 'What is the difference between the GRAYL UltraPress and the GeoPress?', answer: 'The UltraPress and GeoPress use identical purification technology — the same three-stage electroadsorptive media, activated carbon, and ion exchange system that removes viruses, bacteria, protozoa, chemicals, and heavy metals. The differences are size and weight. The UltraPress holds 16.9 oz per press and weighs 10.9 oz empty; the GeoPress holds 24 oz per press and weighs 15.9 oz empty. That is 5 fewer ounces of water per press but 5 fewer ounces of carry weight. The UltraPress cartridge lasts approximately 300 presses versus the GeoPress at 350 presses. Choose the UltraPress if weight matters more than volume; choose the GeoPress if you want more water per press and slightly longer cartridge life.' },
-  { question: 'Are GRAYL UltraPress and GeoPress cartridges interchangeable?', answer: 'No. The UltraPress and GeoPress use different cartridge sizes that are not cross-compatible. The UltraPress cartridge (Purifier Cartridge for UltraPress, ~$24.95) is smaller in diameter to fit the 16.9oz bottle body. The GeoPress cartridge (Purifier Cartridge for GeoPress, ~$24.95) is wider. Both cost the same, so there is no price advantage to either size. Make sure you order the correct cartridge for your specific model — GRAYL clearly labels them, but Amazon third-party listings sometimes confuse the two.' },
+  { question: 'Are GRAYL UltraPress and GeoPress cartridges interchangeable?', answer: 'No. The UltraPress and GeoPress use different cartridge sizes that are not cross-compatible. The UltraPress cartridge (Purifier Cartridge for UltraPress) is smaller in diameter to fit the 16.9oz bottle body. The GeoPress cartridge (Purifier Cartridge for GeoPress) is wider. Both cost the same, so there is no price advantage to either size. Make sure you order the correct cartridge for your specific model — GRAYL clearly labels them, but Amazon third-party listings sometimes confuse the two.' },
   { question: 'How much weight does the UltraPress actually save for backpacking?', answer: 'The UltraPress saves 5 ounces over the GeoPress (10.9 oz vs 15.9 oz) when empty. However, when full of water, the GeoPress holds 24 oz and the UltraPress holds 16.9 oz — so the weight difference when full is only about 2 ounces (the GeoPress full weighs ~40 oz vs UltraPress full at ~28 oz, but you are carrying 7 more ounces of water). The real question is whether you would rather carry a heavier bottle with more water per press or a lighter bottle that requires more frequent refilling. For day hikes and fast-and-light backpacking, the UltraPress wins. For travel and situations where clean water sources are far apart, the GeoPress larger reservoir is more practical.' },
   { question: 'Is the UltraPress harder to press than the GeoPress?', answer: 'The UltraPress requires slightly more relative force per ounce because the press assembly has a smaller diameter, concentrating the same type of resistance into a narrower area. In practice, the press takes about 10 seconds versus the GeoPress at 8 seconds. Most users find the effort comparable to a French press coffee maker. The press gets harder as the cartridge accumulates sediment — this is normal and indicates the cartridge is working. If you notice a significant increase in press difficulty, it may be time to replace the cartridge. Pre-filtering turbid water through a bandana reduces cartridge clogging and keeps press effort manageable throughout the cartridge lifespan.' },
 ];
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->

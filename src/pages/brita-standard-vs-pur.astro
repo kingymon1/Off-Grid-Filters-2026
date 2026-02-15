@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `Brita Standard vs PUR pitcher filter comparison. We compare contaminant removal, certifications, price, filter design, and long-term value.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="Brita Standard vs PUR"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>Brita Standard vs PUR: Which Pitcher Filter Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> delivers better filtration with NSF 42/53 certification, lead reduction, and the LockFit design — all at a competitive price. The <strong>Brita Standard 3-Pack ($17.98)</strong> has the brand name, faster flow, and a wider pitcher ecosystem, but its NSF 42-only certification leaves a gap in contaminant removal. PUR wins on filtration; Brita wins on availability.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ({getPriceTier(productB.price)})</strong> delivers better filtration with NSF 42/53 certification, lead reduction, and the LockFit design — all at a competitive price. The <strong>Brita Standard 3-Pack ({getPriceTier(productA.price)})</strong> has the brand name, faster flow, and a wider pitcher ecosystem, but its NSF 42-only certification leaves a gap in contaminant removal. PUR wins on filtration; Brita wins on availability.</p>
   </div>
 
   <div class="comparison-products">
@@ -104,8 +104,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: PUR (NSF 42/53, lead reduction)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>The Brita Standard 3-pack costs $17.98 ($6/filter for 120 total gallons), while the PUR 4-pack costs $23.22 ($5.81/filter for 160 total gallons). PUR actually costs less per filter AND provides more total filtration volume. The PUR 4-pack delivers 160 gallons for $23.22 ($0.145/gallon) versus Brita's 120 gallons for $17.98 ($0.15/gallon). PUR's per-gallon price is marginally better, and the 4-pack means two extra months of filtration before reordering. Over a two-year ownership period, the cost difference compounds to roughly $8-12 in filter replacements alone — not a dramatic gap, but PUR consistently edges ahead on every value metric.</p>
-  <div class="winner-badge">Winner: PUR ($5.81/filter vs $6/filter)</div>
+  <p>Both filters land in the {getPriceTier(productA.price)} range, but the PUR 4-pack actually costs less per individual filter while providing more total filtration volume. PUR's four filters deliver 160 total gallons compared to Brita's 120 gallons from three filters — a 33% capacity advantage with a lower per-filter cost. PUR's per-gallon economics are marginally better, and the 4-pack means two extra months of filtration before reordering. Over a two-year ownership period, the cost difference compounds into a small but real savings on filter replacements — not a dramatic gap, but PUR consistently edges ahead on every value metric.</p>
+  <div class="winner-badge">Winner: PUR (lower per-filter and per-gallon cost)</div>
 
   <h3>Filter Design &amp; Reliability</h3>
   <p>PUR's LockFit technology provides a click-and-lock installation that confirms proper seating. This is a genuine innovation — it prevents unfiltered water from bypassing the filter, which can happen with loose-fitting cartridges. Brita Standard uses a simpler drop-in design that works fine but lacks the tactile confirmation of a proper lock. For users who want assurance that every drop is filtered, PUR's design is more reliable.</p>

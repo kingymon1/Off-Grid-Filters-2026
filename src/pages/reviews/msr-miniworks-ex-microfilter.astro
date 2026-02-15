@@ -15,7 +15,7 @@ const faqs = [
   { question: 'What is the difference between ceramic and hollow fiber filters?', answer: 'Ceramic filters like the MiniWorks EX use a rigid ceramic element with microscopic pores (0.2 microns) that physically block bacteria and protozoa. Hollow fiber filters use bundles of thin membrane tubes to achieve the same pore size. The key practical difference: ceramic elements can be field-cleaned by scrubbing the outer surface with the included pad, restoring flow rate dozens of times before replacement. Hollow fiber membranes cannot be scrubbed — they are backwashed, which is less effective at restoring heavily clogged filters. Ceramic is heavier but more maintainable; hollow fiber is lighter but more delicate (freeze damage destroys hollow fiber instantly, while ceramic survives moderate frost).' },
   { question: 'How do you clean the MiniWorks EX ceramic element in the field?', answer: 'Remove the ceramic element from the housing, then scrub the outer surface with the included abrasive cleaning pad using light, even strokes. You are removing the layer of trapped sediment and debris that clogs the pores. Scrub until the surface appears uniformly lighter in color. Rinse the element with clean water and reassemble. The ceramic element includes a gauge ring — when the element has been scrubbed down to the gauge diameter (typically after 150-200 cleanings), it is time to replace it. Each cleaning removes approximately 0.01mm of ceramic, so the 2,000-liter rated life assumes periodic cleaning throughout.' },
   { question: 'Does the MSR MiniWorks EX thread directly onto Nalgene bottles?', answer: 'Yes. The MiniWorks EX outlet threads are designed to mate directly with standard Nalgene wide-mouth bottles (63mm thread). You screw the filter outlet onto the bottle and pump — filtered water goes straight in without needing adapters, hoses, or bags. It also works with other wide-mouth bottles that use the 63mm Nalgene-standard thread. For narrow-mouth bottles like Smartwater or standard Camelbak bottles, you will need to pump into a wide-mouth container first or use the included hose attachment to direct flow into the narrow opening.' },
-  { question: 'How do you restore flow rate when the MiniWorks EX gets slow?', answer: 'Reduced flow rate means the ceramic element is clogged with trapped particles — this is the filter doing its job. Field-clean the ceramic by scrubbing with the included pad (see cleaning FAQ above). Flow rate should return to near-original levels immediately. If flow rate remains slow after scrubbing, the activated carbon core may be saturated — this happens closer to the 2,000-liter mark. At that point, replace the entire ceramic + carbon element (MSR part #56425, approximately $40). Between cleanings, pumping slowly and evenly produces better flow than rapid, jerky strokes.' },
+  { question: 'How do you restore flow rate when the MiniWorks EX gets slow?', answer: 'Reduced flow rate means the ceramic element is clogged with trapped particles — this is the filter doing its job. Field-clean the ceramic by scrubbing with the included pad (see cleaning FAQ above). Flow rate should return to near-original levels immediately. If flow rate remains slow after scrubbing, the activated carbon core may be saturated — this happens closer to the 2,000-liter mark. At that point, replace the entire ceramic + carbon element (MSR part #56425). Between cleanings, pumping slowly and evenly produces better flow than rapid, jerky strokes.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->

@@ -15,7 +15,7 @@ const faqs = [
   { question: 'Do I need the Everpure H-1200 filter head to use these cartridges?', answer: 'Yes. The H-1200 replacement cartridge set requires the Everpure H-1200 filter head (sold separately). The filter head is a one-time purchase that mounts under your sink and connects to your cold water line. Once installed, you only need to buy these replacement cartridge sets going forward — typically once per year.' },
   { question: 'How does the Everpure H-1200 compare to a reverse osmosis system?', answer: 'The H-1200 does not remove TDS or desalinate water like an RO system. Instead, it uses 0.5-micron commercial-grade carbon filtration to remove lead, cysts, PFOA, PFOS, chlorine, and particulates while preserving beneficial minerals. RO removes everything including minerals and produces wastewater. The H-1200 provides excellent contaminant reduction with no water waste and faster flow rates.' },
   { question: 'Is the Pentair Everpure H-1200 the same system used in restaurants?', answer: 'Yes. Pentair Everpure is the dominant commercial water filtration brand, used in Starbucks, McDonald\'s, Subway, and thousands of other restaurants and coffee shops worldwide. The H-1200 residential line uses the same Micro-Pure filtration technology as their commercial systems, adapted for home installation under a kitchen sink.' },
-  { question: 'Why are the H-1200 replacement cartridges so expensive?', answer: 'At $390, the cartridge set reflects commercial-grade manufacturing and materials. However, the 1,000-gallon capacity means you typically replace cartridges only once per year. That works out to about $1.07 per day for restaurant-quality water — less than a single bottle of water. The cost-per-gallon is actually competitive with many cheaper filter systems that require more frequent replacement.' },
+  { question: 'Why are the H-1200 replacement cartridges so expensive?', answer: 'The cartridge set reflects commercial-grade manufacturing and materials, which puts it at a premium price point. However, the 1,000-gallon capacity means you typically replace cartridges only once per year. That works out to roughly a dollar a day for restaurant-quality water — less than a single bottle of water. The cost-per-gallon is actually competitive with many cheaper filter systems that require more frequent replacement.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Pentair Everpure H-1200 replacement cartridge set represents the top tier of under-sink water filtration — the same commercial-grade technology that Starbucks, McDonald's, and thousands of restaurants rely on to deliver consistently clean, great-tasting water. At $390 for a twin-cartridge set, it is by far the most expensive filter in our catalog, but it targets a completely different audience than budget pitchers or even mid-range RO systems. This is for people who demand the best filtration money can buy and are willing to pay a premium for proven, restaurant-grade performance.</p>
+  <p>The Pentair Everpure H-1200 replacement cartridge set represents the top tier of under-sink water filtration — the same commercial-grade technology that Starbucks, McDonald's, and thousands of restaurants rely on to deliver consistently clean, great-tasting water. As a {getPriceTier(product.price)} investment, it is by far the most expensive filter in our catalog, but it targets a completely different audience than budget pitchers or even mid-range RO systems. This is for people who demand the best filtration money can buy and are willing to pay a premium for proven, restaurant-grade performance.</p>
   <p>The twin-cartridge design uses Pentair's proprietary Micro-Pure activated carbon with precoat submicron filtration at 0.5 microns — fine enough to catch cysts like Giardia and Cryptosporidium, lead particles, PFOA, PFOS, and chlorine, while leaving beneficial minerals intact. Unlike reverse osmosis, the H-1200 does not strip water of calcium and magnesium, which means you get contaminant-free water that still tastes naturally mineral-rich rather than flat.</p>
   <p>The 1,000-gallon capacity is what separates the H-1200 from most residential filters. Where a typical pitcher filter lasts 40 gallons and a standard under-sink filter lasts 200-300 gallons, the H-1200's twin cartridges keep delivering consistent performance for nearly a full year of typical household use. That long service life partially offsets the high upfront cartridge cost.</p>
 
@@ -92,7 +92,7 @@ const relatedArticles = [
 
   <p>The NSF 42/53/401 triple certification is the gold standard for residential filtration, covering chlorine taste and odor (42), health-related contaminants like lead and cysts (53), and emerging contaminants like PFOA, PFOS, and pharmaceuticals (401). The twin cartridge arrangement provides redundancy — even if one cartridge begins to saturate, the second continues filtering effectively. Each cartridge measures 12.75 x 3.25 inches, so the pair requires dedicated under-sink space but remains more compact than a full RO system with its tank.</p>
 
-  <ProTip>If you are installing an Everpure system for the first time, budget an additional $150-250 for the filter head and a dedicated drinking faucet. The initial system cost is steep, but after that, your only ongoing expense is this cartridge set once per year. Many plumbers are familiar with Everpure from commercial installations and can complete a residential install in under an hour.</ProTip>
+  <ProTip>If you are installing an Everpure system for the first time, budget for the filter head and a dedicated drinking faucet — the head and faucet together typically cost as much as or more than the cartridge set itself. The initial system cost is steep, but after that, your only ongoing expense is this cartridge set once per year. Many plumbers are familiar with Everpure from commercial installations and can complete a residential install in under an hour.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -114,7 +114,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $390 per year for replacement cartridges, the Everpure H-1200 is the most expensive filtration option in our catalog on an annual basis. However, the 1,000-gallon capacity brings the cost to approximately $0.39 per gallon — higher than an under-sink RO system like the iSpring RCC7AK ($0.08-0.10/gallon) but dramatically lower than bottled water ($1-2/gallon). The initial system setup (filter head, faucet, installation) adds $200-400, bringing first-year total cost to roughly $600-800.</p>
+  <p>On an annual basis, the Everpure H-1200 is the most expensive filtration option in our catalog. However, the 1,000-gallon capacity spreads that cost across enough water to make the per-gallon expense reasonable — higher than an under-sink RO system like the iSpring RCC7AK but dramatically lower than bottled water. The initial system setup (filter head, faucet, installation) roughly doubles the first-year investment, though the head and faucet are one-time purchases that last for years.</p>
   <p>The value proposition is not about being the cheapest — it is about being the best. If you have already tried pitcher filters and under-sink carbon systems and found them lacking, the H-1200 represents the ceiling of non-RO filtration. For homes with already-clean municipal water, it may be overkill. But for homes dealing with lead concerns, PFOA/PFOS contamination, or simply demanding the absolute best-tasting filtered water, the Everpure H-1200 has no equal in its class.</p>
 
   <!-- FAQ -->

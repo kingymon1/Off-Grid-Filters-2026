@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Bluevua RO100ROPOT-Lite(UV) occupies a strategic middle ground in the countertop RO market: it delivers nearly the same purification quality as the premium RO100ROPOT-UV while saving you nearly $100. At $219, it undercuts the full model significantly while adding a smart LED display and an extra filtration stage — 7 stages versus 6. The question is whether the trade-offs in water efficiency and speed are worth the savings.</p>
+  <p>The Bluevua RO100ROPOT-Lite(UV) occupies a strategic middle ground in the countertop RO market: it delivers nearly the same purification quality as the premium RO100ROPOT-UV at a significantly lower price point. It undercuts the full model by roughly a third while adding a smart LED display and an extra filtration stage — 7 stages versus 6. The question is whether the trade-offs in water efficiency and speed are worth the savings.</p>
   <p>This unit shares the same core technology as its premium sibling: a 0.0001-micron RO membrane, UV-C sterilization, alkaline remineralization, and a glass carafe. The LED display is a genuine upgrade — it shows filter life remaining and incoming water quality, features the premium model lacks. For apartment dwellers, renters, and anyone who cannot or will not modify plumbing, the Lite UV delivers RO-quality water with zero installation complexity.</p>
   <p>The primary compromise is water efficiency. The Lite UV operates at a 3:1 pure-to-drain ratio compared to the premium model's 2:1. While this still beats most under-sink RO systems, it means roughly 25% of your input water goes to drain. In practice, this adds a few dollars per month to water costs — not a dealbreaker for most households, but worth noting for water-conscious users.</p>
 

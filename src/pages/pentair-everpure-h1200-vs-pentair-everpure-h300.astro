@@ -41,7 +41,7 @@ const articleSchema = generateArticleSchema({
   description: `Comparison of Pentair Everpure H-1200 replacement cartridges vs H-300 complete system. We compare capacity, certifications, price, and what each option includes.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -63,13 +63,13 @@ const relatedArticles = [
   currentPage="Everpure H-1200 vs H-300"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> If you already own a Pentair Everpure system, the <strong>H-1200 cartridge set ($390)</strong> is the better long-term investment with 3x the capacity and broader NSF certifications. If you are starting from scratch and want a ready-to-install system, the <strong>H-300 ($505)</strong> gets you everything in one box — but at a higher per-gallon cost.</p>
+    <p><strong>Quick Verdict:</strong> If you already own a Pentair Everpure system, the <strong>H-1200 cartridge set ({getPriceTier(productA.price)})</strong> is the better long-term investment with 3x the capacity and broader NSF certifications. If you are starting from scratch and want a ready-to-install system, the <strong>H-300 ({getPriceTier(productB.price)})</strong> gets you everything in one box — but at a higher per-gallon cost.</p>
   </div>
 
   <div class="comparison-products">
@@ -100,15 +100,15 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Everpure H-1200 (1,000 vs 300 gallons)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>The H-1200 cartridges cost $390 for 1,000 gallons, working out to roughly $0.39 per gallon. The H-300 complete system costs $505 for 300 gallons (with the first cartridge), or about $1.68 per gallon for the initial cartridge. However, the H-300's price includes the filter head, faucet, and all installation hardware — things you would need to purchase separately for the H-1200. For an existing Everpure owner, the H-1200 is far more economical. For a first-time buyer, the H-300 is the simpler, all-in-one option.</p>
-  <div class="winner-badge">Winner: Everpure H-1200 ($0.39/gal vs $1.68/gal)</div>
+  <p>The H-1200 cartridges deliver 1,000 gallons at a {getPriceTier(productA.price)} price point, while the H-300 complete system commands a premium at {getPriceTier(productB.price)} for just 300 gallons with the first cartridge. On a per-gallon basis, the H-1200 costs roughly one-quarter what the H-300 does — a dramatic difference. However, the H-300's higher price includes the filter head, faucet, and all installation hardware — things you would need to purchase separately for the H-1200. For an existing Everpure owner, the H-1200 is far more economical. For a first-time buyer, the H-300 is the simpler, all-in-one option.</p>
+  <div class="winner-badge">Winner: Everpure H-1200 (fraction of the per-gallon cost)</div>
 
   <h3>Ease of Installation</h3>
   <p>The H-300 is the clear winner for new installations. It includes everything needed: filter head, cartridge, dedicated faucet, tubing, and mounting hardware. A handy homeowner can complete the installation in 1-2 hours. The H-1200 cartridge set is just the cartridges — quarter-turn replacements that take 30 seconds if you already have the filter head installed. But if you don't own an Everpure system yet, you need to source the H-1200 filter head separately, which adds complexity and cost.</p>
   <div class="winner-badge">Winner: Everpure H-300 (complete system, ready to install)</div>
 
   <h3>Long-Term Cost of Ownership</h3>
-  <p>For ongoing operation, the H-1200 wins decisively. At $390 per year (one cartridge set) for 1,000 gallons, it costs less per gallon than the H-300's replacement cartridges. The H-300's single-cartridge replacements run roughly $150-180 each at 300 gallons, meaning you might spend $300-360 per year for the same amount of filtered water. The H-1200's twin-cartridge design also provides more consistent flow rates and redundancy.</p>
+  <p>For ongoing operation, the H-1200 wins decisively. One cartridge set per year delivers 1,000 gallons at a significantly lower per-gallon cost than the H-300's replacement cartridges. To match the H-1200's capacity, you would need multiple H-300 cartridge replacements — roughly doubling your annual filtration expense. The H-1200's twin-cartridge design also provides more consistent flow rates and redundancy.</p>
   <div class="winner-badge">Winner: Everpure H-1200 (lower cost per gallon)</div>
 
   <h2>Who Should Get Which?</h2>

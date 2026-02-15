@@ -41,7 +41,7 @@ const articleSchema = generateArticleSchema({
   description: `Detailed comparison of the Bluevua RO100ROPOT-UV and Lite UV countertop reverse osmosis systems. We compare price, water efficiency, filtration stages, and features.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -63,13 +63,13 @@ const relatedArticles = [
   currentPage="Bluevua UV vs Lite UV"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>Lite UV ($219)</strong> is the smarter buy for most people, delivering 90% of the premium model's performance at 70% of the price. Choose the full <strong>RO100ROPOT-UV ($317)</strong> only if you care deeply about water efficiency — its 2:1 pure-to-drain ratio wastes significantly less water than the Lite's 3:1 ratio.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>Lite UV ({getPriceTier(productB.price)})</strong> is the smarter buy for most people, delivering 90% of the premium model's performance at a meaningful discount. Choose the full <strong>RO100ROPOT-UV ({getPriceTier(productA.price)})</strong> only if you care deeply about water efficiency — its 2:1 pure-to-drain ratio wastes significantly less water than the Lite's 3:1 ratio.</p>
   </div>
 
   <div class="comparison-products">
@@ -87,7 +87,7 @@ const relatedArticles = [
   <h2>At a Glance</h2>
   <ComparisonTable products={tableProducts} />
 
-  <p class="lead">Both Bluevua countertop RO systems offer hospital-grade purification without any installation — just plug in and pour. They share the same glass carafe, UV sterilization, and remineralization features. The question is whether the premium model's better water efficiency justifies the $98 price gap.</p>
+  <p class="lead">Both Bluevua countertop RO systems offer hospital-grade purification without any installation — just plug in and pour. They share the same glass carafe, UV sterilization, and remineralization features. The question is whether the premium model's better water efficiency justifies the significant price gap between these two siblings.</p>
 
   <h2>Category-by-Category Breakdown</h2>
 
@@ -96,8 +96,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Bluevua Lite UV (7 stages vs 6)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>At $219 versus $317, the Lite UV saves you $98 upfront — a 31% discount for a system that matches or exceeds the premium model's filtration stages. Both models share similar replacement filter costs and schedules. For a first-time countertop RO buyer, the Lite UV delivers exceptional value. The premium model's higher price is only justified if you value water efficiency highly enough to recoup the $98 difference through lower water bills.</p>
-  <div class="winner-badge">Winner: Bluevua Lite UV ($98 savings)</div>
+  <p>The Lite UV comes in at a {getPriceTier(productB.price)} price point versus the premium model's {getPriceTier(productA.price)} tier — a roughly 30% discount for a system that matches or exceeds the premium model's filtration stages. Both models share similar replacement filter costs and schedules. For a first-time countertop RO buyer, the Lite UV delivers exceptional value. The premium model's higher price is only justified if you value water efficiency highly enough to recoup the upfront difference through lower water bills over time.</p>
+  <div class="winner-badge">Winner: Bluevua Lite UV (significant savings)</div>
 
   <h3>Water Efficiency</h3>
   <p>This is where the premium model clearly earns its price. The RO100ROPOT-UV achieves a 2:1 pure-to-drain ratio, meaning for every 2 gallons of purified water, only 1 gallon goes to drain. The Lite UV's 3:1 ratio means it wastes 50% more water. For a household filtering 3 gallons per day, the premium model saves roughly 1.5 gallons daily — about 550 gallons per year. In drought-prone areas or homes with high water costs, that adds up.</p>
@@ -125,7 +125,7 @@ const relatedArticles = [
     <div class="rec-card rec-b">
       <h3>Get the {productB.name} if...</h3>
       <ul>
-        <li>You want the best value in countertop RO — nearly $100 in savings</li>
+        <li>You want the best value in countertop RO — roughly 30% less than the premium model</li>
         <li>You want a smart LED display for real-time filter and water quality monitoring</li>
         <li>Filtration quality matters more to you than water waste ratios</li>
       </ul>

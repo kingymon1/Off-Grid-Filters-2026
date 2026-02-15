@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `Samsung HAF-QIN vs everydrop Filter A refrigerator filter comparison. We compare certifications, contaminant removal, price, and overall value.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="Samsung vs everydrop"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>Samsung HAF-QIN vs everydrop Filter A: Which Refrigerator Filter Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>everydrop Filter A ($48)</strong> is the objectively better filter with triple NSF 42/53/401 certification covering lead, pharmaceuticals, and pesticides. The <strong>Samsung HAF-QIN ($37.52)</strong> is more affordable but only certified for chlorine taste and odor (NSF 42). As always with fridge filters, <strong>your refrigerator brand dictates your choice</strong>.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>everydrop Filter A ({getPriceTier(productB.price)})</strong> is the objectively better filter with triple NSF 42/53/401 certification covering lead, pharmaceuticals, and pesticides. The <strong>Samsung HAF-QIN ({getPriceTier(productA.price)})</strong> is more affordable but only certified for chlorine taste and odor (NSF 42). As always with fridge filters, <strong>your refrigerator brand dictates your choice</strong>.</p>
   </div>
 
   <div class="comparison-products">
@@ -104,8 +104,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: everydrop Filter A (NSF 42/53/401 vs NSF 42)</div>
 
   <h3>Price</h3>
-  <p>The Samsung HAF-QIN is the most affordable OEM fridge filter in our catalog at $37.52, while the everydrop Filter A costs $48 — a $10.48 difference. For Samsung fridge owners on a budget, the lower price is welcome. However, the price difference reflects the gap in filtration capability. The everydrop's higher cost funds the more advanced activated carbon block media and the additional NSF testing and certification. When you factor in that NSF 53 and 401 testing alone costs manufacturers tens of thousands of dollars in laboratory fees, the $10 premium on the everydrop is a modest markup for substantially broader protection.</p>
-  <div class="winner-badge">Winner: Samsung HAF-QIN ($37.52 vs $48)</div>
+  <p>The Samsung HAF-QIN is the most affordable OEM fridge filter in our catalog, while the everydrop Filter A commands a modest premium. For Samsung fridge owners on a budget, the lower price is welcome. However, the price difference reflects the gap in filtration capability. The everydrop's higher cost funds the more advanced activated carbon block media and the additional NSF testing and certification. When you factor in that NSF 53 and 401 testing alone costs manufacturers tens of thousands of dollars in laboratory fees, the small premium on the everydrop is a modest markup for substantially broader protection.</p>
+  <div class="winner-badge">Winner: Samsung HAF-QIN (lower price point)</div>
 
   <h3>Capacity &amp; Filter Life</h3>
   <p>The everydrop Filter A specifies a 200-gallon capacity with a 6-month recommended replacement cycle. Samsung does not prominently specify the HAF-QIN's gallon capacity — a transparency issue that makes it harder to calculate long-term costs. Both recommend 6-month replacement intervals, but without a specified capacity, Samsung owners must trust the time-based recommendation rather than a usage-based metric. This lack of gallon-based specification means heavy-use households — particularly those with active ice makers — have no reliable way to gauge whether the Samsung filter is depleted before the 6-month mark arrives.</p>
