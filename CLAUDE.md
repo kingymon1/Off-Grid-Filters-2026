@@ -11,6 +11,87 @@
 
 ---
 
+## TEMPLATE RESET (For reuse with a different niche)
+
+> **When to use:** You cloned/downloaded this repo and want to build an authority site for a
+> different product category. Run this reset before filling in `product-brief.yaml` and starting
+> Phase 1.
+>
+> **Tell Claude:** *"Read CLAUDE.md and run the Template Reset, then build the site."*
+
+### What to delete (niche-specific content)
+
+| Target | Action |
+|--------|--------|
+| `src/pages/reviews/*.astro` | Delete all product review pages |
+| Comparison pages in `src/pages/` (`*-vs-*.astro`) | Delete all head-to-head comparison pages |
+| `src/pages/guides/*.astro` (except `index.astro`) | Delete all buyer guide pages |
+| Activity guide pages (`src/pages/water-filters-for-*.astro`) | Delete all activity/use-case pages |
+| Knowledge base pages (`src/pages/*.astro` — topic articles like `history-of-*.astro`, `is-*.astro`, `lead-*.astro`, `nsf-*.astro`, `pfas-*.astro`) | Delete all knowledge base articles |
+| `src/pages/about.astro` | Delete (will be regenerated) |
+| `research/*.md` | Delete all research files (Phase 1 regenerates these) |
+| `public/assets/*.webp` | Delete all images (Phase 5 regenerates these) |
+| `public/assets/og-default.png` | Delete (Phase 3 regenerates this) |
+| `content-queue.yaml` | Reset to empty/disabled template |
+
+### What to clear but keep structure
+
+**`product-brief.yaml`** — Replace all product entries, categories, and comparisons with the
+new niche data. Keep the YAML structure and field names intact.
+
+**`src/lib/config.ts`** — Clear these arrays/values but keep all interfaces, types, and helper
+functions (`getProductBySlug`, `getProductsByCategory`, `getCategoryBySlug`, `getAffiliateUrl`,
+`getPriceTier`, `specLabels`):
+- `SITE_NAME`, `SITE_URL`, `SITE_TAGLINE` → blank/placeholder
+- `products` array → empty `[]`
+- `categories` array → empty `[]`
+- `comparisons` array → empty `[]`
+- `guides` array → empty `[]`
+- `redirects` array → empty `[]`
+- `navigation` → clear dropdown items
+- `specLabels` → clear entries (new niche will have different spec keys)
+- `ProductSpecs` interface → clear fields (new niche will have different specs)
+- Color scheme values → leave as-is or clear (Phase 2 chooses new colors)
+
+**`src/lib/image-map.ts`** — Clear these but keep the exports and structure:
+- `productSlugs` Set → empty `new Set([])`
+- `heroImages` Record → empty `{}`
+
+**`src/pages/index.astro`** — Delete (will be fully regenerated in Phase 3). The homepage
+contains hardcoded hero text, FAQ content, and featured picks specific to the old niche.
+
+### What to keep untouched (niche-agnostic infrastructure)
+
+All of these work for ANY product category without modification:
+
+- **Components** (all 12): `HeaderAstro`, `FooterAstro`, `BreadcrumbsAstro`, `RelatedArticlesAstro`,
+  `StatCard`, `ProTip`, `Callout`, `ProductImage`, `ComparisonTable`, `EmailCapture`,
+  `AffiliateDisclosure`, `ProductHero`
+- **Layouts**: `BaseLayout.astro`, `ContentLayout.astro`
+- **CSS**: `src/index.css` (all animations, utilities, design tokens)
+- **Scripts**: `src/scripts/main.ts`, `interactions.ts`, `analytics.ts`, `header.ts`
+- **Schema**: `src/lib/schema.ts`, `src/lib/schema.test.ts`
+- **Utility scripts**: `scripts/convert-to-webp.mjs`, `scripts/generate-local-images.mjs`,
+  `scripts/image-gen-server.mjs`, `scripts/checklist-server.mjs`, `scripts/generate-content.mjs`,
+  `scripts/generate-redirects.mjs`, `scripts/generate-product-links.mjs`,
+  `scripts/lib/template-reader.mjs`, `scripts/lib/config-patcher.mjs`
+- **Build config**: `astro.config.mjs`, `tailwind.config.ts`, `tsconfig.json`, `postcss.config.js`,
+  `eslint.config.js`, `vercel.json` (security headers, cache rules, redirect structure)
+- **CI/CD**: `.github/workflows/ci.yml`, `.github/workflows/content-pipeline.yml`
+- **Docs**: `CLAUDE.md`, `TEMPLATE-GUIDE.md`, `LAUNCH-CHECKLIST.md`, `GOOGLE-READINESS.md`,
+  `IMAGE-GUIDE.md`, `TECHNICAL-IMPROVEMENTS.md`
+- **Other**: `package.json`, `.gitignore`, `.env.example`, `public/robots.txt`,
+  `src/pages/llms.txt.ts`, `src/pages/404.astro`, `src/pages/guides/index.astro`
+
+### After reset
+
+1. Fill in `product-brief.yaml` with your new niche products, categories, and comparisons
+2. Tell Claude: *"Read CLAUDE.md and build the site."*
+3. Claude runs Phases 1-4 normally — research, decisions, build, quality checks
+4. All content pages, config, research, and images are generated fresh for the new niche
+
+---
+
 ## WORK PHILOSOPHY
 
 **Autonomy:** Carry out all work autonomously from start to finish. Do not stop to ask questions
