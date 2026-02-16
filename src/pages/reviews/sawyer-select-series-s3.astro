@@ -12,10 +12,10 @@ const relatedProducts = getRelatedProducts(product);
 const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
-  { question: 'How does the Sawyer Select S3 foam membrane work?', answer: 'The S3 uses a proprietary foam membrane as its first filtration stage. Unlike hollow fiber membranes that block pathogens by pore size, the foam membrane uses electroadsorption — it carries a positive charge that attracts and captures negatively charged viruses and dissolved heavy metals as water passes through. This is why the S3 can remove viruses (which are too small for most hollow fiber filters) and heavy metals down to 0.5 ppb — 260 times below EPA safety limits. The second stage is a standard 0.1-micron hollow fiber membrane that blocks bacteria and protozoa mechanically.' },
-  { question: 'Why does the foam membrane only last 400 uses?', answer: 'The foam membrane relies on electroadsorption, which means it captures contaminants on its surface rather than physically blocking them. Over time, the charged sites on the foam become saturated with captured viruses and metals, reducing the membrane effectiveness. After approximately 400 fill-and-squeeze cycles, enough sites are saturated that virus and metal removal drops below safe levels. The 0.1-micron hollow fiber stage continues working for bacteria and protozoa, but you lose virus and metal protection. Replacement foam membranes restore full capability.' },
-  { question: 'Is the Sawyer Select S3 being discontinued?', answer: 'The S3 has become increasingly difficult to find since 2024, and Sawyer has not been manufacturing new units consistently. This suggests the product is being phased out, likely because the foam membrane technology has higher manufacturing costs than Sawyer standard hollow fiber products. If you find the S3 in stock, check the manufacture date — older units may have degraded foam membranes. Stock up on replacement foam membranes if you commit to this system, as availability is inconsistent.' },
-  { question: 'How does the Sawyer Select S3 compare to the Survivor Filter Pro for virus removal?', answer: 'The S3 uses electroadsorption foam to capture viruses — a proven technology with scientific backing. The Survivor Filter Pro uses a 0.01-micron UF membrane that mechanically blocks viruses based on pore size. Both claim 99.99% virus removal in testing. The S3 has the advantage of additionally removing heavy metals and being backed by Sawyer brand reputation. The Pro costs significantly less, offers a higher flow rate, and has a much longer filter life (100,000L vs 400 uses). For international travel where heavy metals in water are a concern, the S3 is superior. For general backcountry use, the Pro offers better long-term value.' },
+  { question: 'How does the Micro Squeeze compare to the Sawyer Squeeze and Sawyer Mini?', answer: 'The Micro Squeeze sits between the Mini and Squeeze in both size and performance. At 1.65 oz, it is lighter than the full-size Squeeze (3 oz) but slightly heavier than the Mini (1.4 oz). Flow rate tells the real story: the Micro Squeeze delivers approximately 1.4 L/min vs the Mini\'s 0.5 L/min and the Squeeze\'s 1.7 L/min. The Micro Squeeze uses the same 0.1-micron hollow fiber membrane as both siblings and shares the 100,000-gallon filter life. For most backpackers, the Micro Squeeze is the sweet spot — you get 80% of the Squeeze\'s flow rate in roughly half the size and weight, while avoiding the Mini\'s frustratingly slow output that turns water collection into a 10-minute chore.' },
+  { question: 'Why does the Cnoc Premium bladder bundle matter?', answer: 'Sawyer\'s included squeeze pouches have been the brand\'s weakest link for years — thin seams that split after repeated squeezing, especially in cold conditions. The SP301 bundle replaces them with a Cnoc Premium 750ml TPU bladder that is dramatically more durable. The Cnoc bladder uses a wide-mouth opening (easier to fill from shallow streams), rolls up compact when empty, and features reinforced seams rated for thousands of squeeze cycles. The 28mm thread connection is identical, so it screws directly onto the Micro Squeeze filter. This bundle effectively solves the single most common complaint in Sawyer filter reviews and is worth the modest premium over buying the filter alone.' },
+  { question: 'How do you maintain flow rate on the Micro Squeeze over time?', answer: 'Backflush after every trip using the included syringe — this pushes clean water backwards through the hollow fibers to dislodge trapped sediment. For filters used in silty or tannic water, backflush every 1-2 liters during use. If backflushing no longer restores full flow, do a vinegar soak: fill the filter with undiluted white vinegar and let it sit for 8-12 hours, then backflush thoroughly with clean water. This dissolves mineral buildup inside the fibers. Avoid letting the filter dry completely with sediment inside — the dried particles bond to the fibers and become much harder to remove. Most flow degradation complaints come from skipping regular backflushing or using the filter in extremely turbid water without pre-filtering through a bandana or coffee filter first.' },
+  { question: 'Can the Micro Squeeze handle freezing temperatures?', answer: 'No — and this is the most critical maintenance rule for any hollow fiber filter. If water inside the Micro Squeeze freezes, expanding ice can crack the microscopic hollow fibers, creating invisible pathways large enough for bacteria and protozoa to pass through. There is no way to verify whether freeze damage has occurred — the filter will still flow normally but may no longer be safe. In cold weather, sleep with the filter inside your sleeping bag or keep it in an interior pocket against your body. If you suspect the filter has frozen, replace it. At $49.95, a new filter is cheap insurance compared to a backcountry case of giardia. Some thru-hikers carry the Micro Squeeze for 3-season use and switch to chemical treatment (Aquamira drops) for winter trips.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: '2026-02-15',
+  dateModified: product.publishDate,
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -43,9 +43,9 @@ const relatedArticles = [
     description: category.description,
   }] : []),
   {
-    title: 'Best Water Filters for Travel',
-    url: '/water-filters-for-travel/',
-    description: 'The best portable water filters and purifiers for international travel, backpacking abroad, and developing countries.',
+    title: 'Best Water Filters for Backpacking',
+    url: '/water-filters-for-backpacking/',
+    description: 'The best ultralight water filters for backpacking, thru-hiking, and trail running in backcountry environments.',
   },
 ];
 ---
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated="2026-02-15"
+  lastUpdated={product.publishDate}
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,9 +67,9 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Sawyer Select S3 is the most technically innovative portable purifier in Sawyer's lineup, combining a proprietary foam membrane with their proven 0.1-micron hollow fiber technology in a dual-stage system that addresses viruses, bacteria, protozoa, and heavy metals — a threat profile that no single hollow fiber filter can match. Priced in the {getPriceTier(product.price)} range, it occupies the premium tier of portable purification but delivers capabilities that typically require multiple products or chemical treatment to replicate.</p>
-  <p>What makes the S3 genuinely different is the foam membrane first stage. While most portable filters rely on mechanical pore-size exclusion (water goes through tiny holes; pathogens are too big to fit), the foam membrane uses electroadsorption — a positive electrical charge that attracts and traps negatively charged viruses and dissolved metal ions. This is the same principle used in laboratory-grade water treatment and is scientifically validated for removing particles far smaller than any mechanical filter's pore size. It is the only portable consumer product we know of that removes heavy metals down to 0.5 ppb — 260 times below EPA's safety thresholds.</p>
-  <p>The caveat is significant: the foam membrane has a limited lifespan of approximately 400 uses before the electroadsorptive capacity is exhausted. Once saturated, the foam can no longer capture viruses or metals, and replacement membranes have been inconsistently available as Sawyer appears to be phasing out this product line. This makes the S3 a powerful but potentially unsustainable choice — brilliant for international travel and disaster response, but problematic for long-term everyday use.</p>
+  <p>The Sawyer Micro Squeeze is the best weight-to-performance ratio in portable backpacking water filtration. At 1.65 oz dry and barely larger than your thumb, this 0.1-micron absolute hollow fiber membrane filter delivers 7-log bacteria removal (99.99999%) and 6-log protozoa removal (99.9999%) with a 100,000-gallon lifetime that will outlast every other piece of gear in your pack. Priced in the {getPriceTier(product.price)} range, it hits the value sweet spot between Sawyer's slower Mini and their bulkier full-size Squeeze.</p>
+  <p>This SP301 bundle pairs the Micro Squeeze filter with a Cnoc Premium 750ml TPU bladder — a meaningful upgrade over the notoriously fragile squeeze pouches Sawyer has included with their filters for years. The Cnoc bladder features a wide-mouth opening for easy filling from shallow streams, reinforced seams rated for thousands of squeeze cycles, and the same 28mm thread connection that fits SmartWater bottles and hydration pack hose adapters. Four use modes — squeeze, inline, straw, and direct bottle-thread — make the Micro Squeeze one of the most versatile filters on the market.</p>
+  <p>The limitations are straightforward: this is a mechanical filter, not a purifier. The 0.1-micron hollow fiber membrane blocks bacteria, protozoa, and microplastics with absolute certainty, but viruses, chemicals, and dissolved heavy metals pass right through. For North American backcountry use where giardia and cryptosporidium are the primary threats, that is exactly the right level of protection. For international travel or disaster scenarios where viral contamination is a concern, you need a purifier like the Survivor Filter Pro or a chemical treatment backup.</p>
 
   <div class="best-for-box">
     <strong>Best For:</strong> {product.bestFor}
@@ -89,32 +89,36 @@ const relatedArticles = [
     <tr><td><strong>Contaminants Removed</strong></td><td>{product.specs.contaminantsRemoved}</td></tr>
   </table>
 
-  <p>The dual-stage architecture processes water sequentially. Raw water enters the squeeze bottle, passes first through the foam membrane (virus and metal capture via electroadsorption), then through the 0.1-micron hollow fiber membrane (bacteria and protozoa exclusion by pore size). The hollow fiber stage is the same proven technology Sawyer uses in their Squeeze and Mini products — rated for 100,000 gallons and backflushable. The foam membrane requires periodic cleaning with the included plunger to maintain flow rate, but cannot be backflushed like hollow fiber.</p>
+  <p>The Micro Squeeze uses Sawyer's proven absolute hollow fiber membrane technology — the same 0.1-micron U-shaped fiber bundle found across their entire filter line. "Absolute" means every single pore is at or below the rated size, unlike nominal-rated filters where pore size is an average. Each Micro Squeeze filter is individually tested three times at the factory before shipping, a quality assurance step Sawyer highlights as a differentiator over competitors. The 28mm threaded connection is the industry's most compatible standard — it fits SmartWater bottles (the thru-hiker's favorite), Cnoc bladders, CNOC Vecto 2L bags, and most hydration pack hoses with a simple adapter.</p>
 
-  <ProTip>If you are buying the S3 specifically for international travel, purchase two replacement foam membranes at the same time. Availability has been spotty since Sawyer appears to be deprioritizing this product line. With two spare membranes on hand, you have approximately 1,200 total uses — enough for several extended trips. Mark each membrane with its start date and count uses to avoid running past the 400-use limit.</ProTip>
+  <ProTip>The Micro Squeeze's 28mm thread is identical to the full-size Sawyer Squeeze, so all Sawyer accessories are cross-compatible. Carry one Cnoc Premium bladder for squeezing and thread the filter directly onto a SmartWater bottle for drinking. This two-container system lets you filter a full liter into your drinking bottle in under a minute while keeping the dirty bladder separate — faster and more hygienic than using a single container.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
   <div class="pros-cons-grid">
     <div class="pros-list">
       <h3>What We Like</h3>
-      <ul>{product.pros.map(p => <li>{`✓ ${p}`}</li>)}</ul>
+      <ul>{product.pros.map(p => <li>{`\u2713 ${p}`}</li>)}</ul>
     </div>
     <div class="cons-list">
       <h3>What Could Be Better</h3>
-      <ul>{product.cons.map(c => <li>{`✗ ${c}`}</li>)}</ul>
+      <ul>{product.cons.map(c => <li>{`\u2717 ${c}`}</li>)}</ul>
     </div>
   </div>
 
   <!-- PERFORMANCE -->
   <h2>Performance &amp; Real-World Testing</h2>
-  <p>In squeeze-mode testing, the S3 delivered 20 ounces (about 590 ml) in roughly 10 seconds of firm squeezing — a competitive flow rate for a dual-stage system. Water quality was excellent: clear, taste-neutral output from turbid creek water. The foam membrane adds no flavor or odor, unlike some chemical treatment methods. The squeeze bottle design is intuitive — fill the bottle at a water source, screw the cap/filter assembly back on, and squeeze water out through the nozzle. It functions identically to Sawyer's standard Squeeze products, just with the added foam stage inside.</p>
-  <p>The 4.2-star average across 1,800 reviews is lower than Sawyer's standard products (the Squeeze averages 4.7 stars), reflecting legitimate concerns about foam membrane longevity and availability. Positive reviews focus on the peace of mind from virus and metal protection — particularly from travelers returning from Southeast Asia, Central America, and Africa where waterborne viruses are a real threat. Negative reviews cluster around the 400-use limit feeling short for the $60 price, the difficulty of determining exactly when the foam membrane is depleted, and increasing concern about Sawyer phasing out the product line.</p>
+  <p>The Micro Squeeze delivers approximately 1.4 L/min in squeeze mode when new — noticeably faster than the Sawyer Mini's 0.5 L/min but slightly behind the full-size Squeeze's 1.7 L/min. In practical terms, filling a 1-liter SmartWater bottle takes about 40-50 seconds of steady squeezing from a Cnoc bladder. That is fast enough to keep a group of two hydrated without feeling like water collection dominates your trail breaks, which is something the Mini cannot claim.</p>
+  <p>Flow rate is where the Micro Squeeze's long-term story gets more nuanced. Like all hollow fiber filters, the pores gradually clog with sediment, biofilm, and mineral deposits. After filtering 50-100 liters of clear mountain stream water, flow rate drops to roughly 60-70% of new performance. Backflushing with the included syringe restores most of that loss immediately. In silty or tannic water (desert canyon streams, post-rain runoff), flow degradation accelerates significantly — expect to backflush every liter or two. A periodic vinegar soak (8-12 hours in undiluted white vinegar) dissolves mineral buildup that backflushing alone cannot clear.</p>
+  <p>Compared to the Katadyn BeFree, the Micro Squeeze is slower out of the box but maintains better long-term flow consistency. The BeFree starts fast (2+ L/min) but degrades rapidly in sediment-heavy water with no effective backflush mechanism. Compared to the LifeStraw Peak Series squeeze, the Micro Squeeze offers a significantly longer filter life (100,000 gallons vs 500 gallons) at similar flow rates. The Micro Squeeze's 100,000-gallon capacity means most backpackers will never need to replace the filter itself — it is effectively a lifetime purchase if maintained properly.</p>
+
+  <ProTip>For the fastest field performance, pre-filter turbid water through a bandana or coffee filter before squeezing it through the Micro Squeeze. This removes large sediment particles that would otherwise clog the hollow fibers quickly. Thru-hikers on desert sections of the PCT and CDT swear by this trick — it can double the time between backflushes and keep flow rates near-new for days of continuous use.</ProTip>
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $59.97, the S3 costs roughly $0.15 per use over its 400-use foam membrane life — expensive compared to hollow fiber filters that cost fractions of a penny per liter. However, the comparison is not apples-to-apples. No hollow fiber filter at any price removes viruses or heavy metals. To match the S3's capabilities with other products, you would need a Sawyer Squeeze ($35) plus chemical purification tablets ($10-15 per trip) plus a separate heavy metal reduction filter — adding up to more than the S3 while being bulkier and less convenient.</p>
-  <p>For domestic backcountry use where bacteria and protozoa are the primary concerns, the S3 is overkill — a standard Sawyer Squeeze or Survivor Filter Pro provides adequate protection at lower cost. The S3's value proposition is strongest for international travel, disaster response, and scenarios where industrial contamination or sewage-affected water sources are likely. If your use case involves only pristine mountain streams, spend the $60 elsewhere. If your use case involves municipal water systems in developing countries or floodwater after natural disasters, the S3's dual-stage approach is uniquely valuable.</p>
+  <p>At $49.95, the Micro Squeeze SP301 bundle is the best value proposition in backpacking water filtration. The filter alone (SP2129) costs around $30, which means the Cnoc Premium 750ml bladder adds roughly $20 to the package — fair market price for the bladder alone, and it eliminates the single biggest reliability complaint about Sawyer filters. Compare this to the full-size Sawyer Squeeze at $35 (no premium bladder included, heavier at 3 oz) or the Katadyn BeFree at $40-50 (faster initially but 264-gallon filter life vs 100,000 gallons).</p>
+  <p>The cost-per-liter math is staggering. At 100,000 gallons (378,000 liters), the Micro Squeeze costs $0.00013 per liter filtered — essentially free after the initial purchase. Even factoring in replacement Cnoc bladders every 1-2 years of heavy use ($18-22 each), the total 5-year cost of ownership stays under $100. The Katadyn BeFree, by contrast, requires a new $40-50 filter cartridge every 264 gallons — a thru-hiker filtering 2 liters per day would burn through the BeFree's capacity in 6 months and spend $80-100 per year on replacements.</p>
+  <p>Where the Micro Squeeze does not make sense: if you need virus removal (look at the Survivor Filter Pro or MSR Guardian instead), if you primarily filter for large groups (the full-size Squeeze or a gravity system like the Platypus GravityWorks will save your hands), or if you only filter water a few times per year on casual day hikes (a $17 HydroBlu Versa Flow does the same job at a third of the price). The Micro Squeeze's value is maximized by ultralight backpackers, thru-hikers, and frequent backcountry users who will put serious mileage on the filter over multiple seasons.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>
