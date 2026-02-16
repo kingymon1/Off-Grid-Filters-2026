@@ -112,18 +112,19 @@
 
 1. Click the Amazon link for each product (focus on rows marked `-`)
 2. Save the main product image (right-click → Save Image)
-3. Rename to match the **Image Filename** column (use `.png` or `.jpg` extension for the source)
+3. Rename to match the **Image Filename** column (use `.jpeg` or `.png` extension for the source)
 4. Place source files in `public/assets/images/`
-5. Run the conversion script:
+5. Run the conversion script (auto-scans `public/assets/images/`):
    ```bash
-   # Single file
-   node scripts/convert-to-webp.mjs public/assets/images/bluevua-ro100ropot-uv-hero.png
-
-   # All at once
-   node scripts/convert-to-webp.mjs public/assets/images/*.png
+   node scripts/convert-to-webp.mjs
    ```
-6. The script removes white backgrounds and outputs transparent WebP + responsive variants to `public/assets/`
-7. Run `npm run product-links` again to update the status markers
+6. Update status markers:
+   ```bash
+   npm run product-links
+   ```
+7. Rebuild and verify: `npm run build`
+
+See **IMAGE-GUIDE.md → Quick Start** for the full step-by-step.
 
 ## Notes
 
