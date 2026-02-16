@@ -1354,7 +1354,7 @@ export const products: Product[] = [
     shortName: 'GRAYL UltraPress 16.9oz',
     slug: 'grayl-ultrapress-16-9oz-water-purifier-bottle',
     brand: 'GRAYL',
-    asin: 'B09B2VZL94',
+    asin: 'B0C2FWRDTB',
     price: '69.95',
     category: 'survival-filters',
     categoryName: 'Survival & Portable Filters',
