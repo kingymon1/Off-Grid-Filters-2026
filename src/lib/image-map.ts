@@ -96,6 +96,13 @@ export const heroImages: Record<string, string> = {
   'survivor-filter-pro-x-electric-water-filter': '/assets/survivor-filter-pro-x-electric-water-filter-hero.webp',
   'survivor-filter-squeeze-kit': '/assets/survivor-filter-squeeze-kit-hero.webp',
 
+  // ── Homepage featured pick images ──
+  'amazon-basics-10-cup-pitcher-featured': '/assets/amazon-basics-10-cup-pitcher-featured.webp',
+  'bluevua-ro100ropot-uv-featured': '/assets/bluevua-ro100ropot-uv-featured.webp',
+  'ispring-rcc7ak-featured': '/assets/ispring-rcc7ak-featured.webp',
+  'timain-filter-straw-2pack-featured': '/assets/timain-filter-straw-2pack-featured.webp',
+  'timain-filter-straw-featured': '/assets/timain-filter-straw-featured.webp',
+
   // ── Editorial hero images ──
   'about': '/assets/about-hero.webp',
   'amazon-basics-vs-brita-standard': '/assets/amazon-basics-vs-brita-standard-hero.webp',
