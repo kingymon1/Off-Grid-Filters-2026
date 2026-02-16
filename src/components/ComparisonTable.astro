@@ -136,6 +136,7 @@ const displayFeatures = features || defaultFeatures;
     flex-direction: column;
     align-items: center;
     gap: 0.375rem;
+    min-width: 0;
   }
 
   .pick-badge {
@@ -153,6 +154,8 @@ const displayFeatures = features || defaultFeatures;
 
   .product-name {
     font-weight: 700;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .comparison-table td {
@@ -162,6 +165,8 @@ const displayFeatures = features || defaultFeatures;
     color: hsl(var(--muted-foreground));
     vertical-align: top;
     font-size: 0.875rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .feature-label {
