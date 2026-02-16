@@ -2568,12 +2568,12 @@ export const siteConfig = {
     categories: {
       'Reviews': [
         { title: 'Bluevua RO100ROPOT-UV', url: '/reviews/bluevua-ro100ropot-uv/' },
+        { title: 'iSpring RCC7AK', url: '/reviews/ispring-rcc7ak/' },
+        { title: 'GE XWFE', url: '/reviews/ge-xwfe/' },
         { title: 'Sawyer Squeeze', url: '/reviews/sawyer-squeeze-water-filtration-system/' },
         { title: 'GRAYL GeoPress', url: '/reviews/grayl-geopress-24oz-water-purifier-bottle/' },
-        { title: 'iSpring RCC7AK', url: '/reviews/ispring-rcc7ak/' },
         { title: 'Katadyn BeFree', url: '/reviews/katadyn-befree-1-0l-water-filter-bottle/' },
-        { title: 'MSR Guardian', url: '/reviews/msr-guardian-purifier/' },
-        { title: 'Brita UltraMax', url: '/reviews/brita-ultramax-27-cup-dispenser/' },
+        { title: 'Brita Elite', url: '/reviews/brita-elite-2pack/' },
       ] as NavLink[],
       'Best Of': [
         { title: 'Best Countertop Filters', url: '/best-countertop-filters/' },
@@ -2601,8 +2601,8 @@ export const siteConfig = {
         { title: 'Budget Filters Under $50', url: '/guides/best-water-filters-under-50/' },
         { title: 'Water Filters for Camping', url: '/water-filters-for-camping/' },
         { title: 'Water Filters for Hiking', url: '/water-filters-for-hiking/' },
-        { title: 'RO vs Carbon Filters', url: '/guides/reverse-osmosis-vs-carbon-filters/' },
-        { title: 'Filter Cost Analysis', url: '/guides/water-filter-cost-analysis/' },
+        { title: 'Water Filters for Emergencies', url: '/water-filters-for-emergencies/' },
+        { title: 'Water Filters for Off-Grid', url: '/water-filters-for-off-grid/' },
       ] as NavLink[],
       'Learn': [
         { title: 'What Is Reverse Osmosis?', url: '/what-is-reverse-osmosis/' },
