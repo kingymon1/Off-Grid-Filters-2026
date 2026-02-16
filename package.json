@@ -18,6 +18,7 @@
     "generate-content:dry": "node scripts/generate-content.mjs --dry-run",
     "redirects": "node scripts/generate-redirects.mjs",
     "redirects:dry": "node scripts/generate-redirects.mjs --dry-run",
+    "product-links": "node scripts/generate-product-links.mjs",
     "postinstall": "node scripts/sanity-check.mjs"
   },
   "dependencies": {
