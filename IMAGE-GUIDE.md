@@ -5,10 +5,41 @@
 
 ---
 
-## Current Status: Fully Populated
+## Quick Start: New Product Images
 
-All 121 images across the site have been generated using AI (Google Gemini 2.5 Flash)
-and real Amazon product photos. No SVG placeholders remain in production.
+After saving new product images (JPG/PNG/JPEG) to `public/assets/images/`:
+
+```bash
+# 1. Convert to WebP + generate responsive variants (auto-scans images/ folder)
+node scripts/convert-to-webp.mjs
+
+# 2. Check which products now have images vs still missing
+npm run product-links
+
+# 3. Rebuild the site to pick up new images
+npm run build
+
+# 4. Commit
+git add public/assets/ research/product-links.md
+git commit -m "Add product images for [describe which products]"
+```
+
+**What each step does:**
+1. Removes white backgrounds, converts to WebP, creates 3 responsive variants (`-small`, `-medium`, full) in `public/assets/`
+2. Regenerates `research/product-links.md` with `Y`/`-` status markers per product
+3. Verifies the build passes — product pages should show real photos instead of SVG placeholders
+4. Stages the new WebP files and updated product-links sheet
+
+**Naming requirement:** Source files must match the slug pattern: `[product-slug]-hero.jpeg`
+(e.g., `sawyer-squeeze-water-filtration-system-hero.jpeg`). See `research/product-links.md`
+for the exact filename each product expects.
+
+---
+
+## Current Status
+
+29 of 58 products have real Amazon photos. 29 survival/portable filter products still use
+AI-generated placeholders. All editorial images (roundups, comparisons, guides) are populated.
 
 ---
 

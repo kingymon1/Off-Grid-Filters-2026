@@ -22,6 +22,7 @@ import { readdirSync, existsSync, mkdirSync } from 'fs';
 import { join, basename, extname } from 'path';
 
 const ASSETS_DIR = 'public/assets';
+const IMAGES_DIR = 'public/assets/images';
 const SIZES = [
   { suffix: '', width: null, quality: 85 },
   { suffix: '-medium', width: 800, quality: 80 },
@@ -160,24 +161,31 @@ async function main() {
       await convertImage(inputPath, removeBg);
     }
   } else {
-    console.log(`\n  Processing all images in ${ASSETS_DIR}/...`);
-    if (!existsSync(ASSETS_DIR)) {
-      console.log('  No assets directory found. Nothing to convert.');
-      return;
+    // Scan both public/assets/images/ (source uploads) and public/assets/ (loose files)
+    const scanDirs = [IMAGES_DIR, ASSETS_DIR];
+    let totalFound = 0;
+
+    for (const dir of scanDirs) {
+      if (!existsSync(dir)) continue;
+
+      const files = readdirSync(dir).filter(f =>
+        /\.(jpg|jpeg|png)$/i.test(f)
+      );
+
+      if (files.length === 0) continue;
+
+      totalFound += files.length;
+      console.log(`\n  Found ${files.length} images in ${dir}/`);
+
+      for (const file of files) {
+        console.log(`\n  Converting: ${dir}/${file}`);
+        await convertImage(join(dir, file), removeBg);
+      }
     }
 
-    const files = readdirSync(ASSETS_DIR).filter(f =>
-      /\.(jpg|jpeg|png)$/i.test(f)
-    );
-
-    if (files.length === 0) {
-      console.log('  No JPG/PNG images found to convert.');
+    if (totalFound === 0) {
+      console.log(`\n  No JPG/PNG images found in ${IMAGES_DIR}/ or ${ASSETS_DIR}/`);
       return;
-    }
-
-    for (const file of files) {
-      console.log(`\n  Converting: ${file}`);
-      await convertImage(join(ASSETS_DIR, file), removeBg);
     }
   }
 
