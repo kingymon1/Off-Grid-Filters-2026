@@ -108,21 +108,24 @@
 
 ## Workflow
 
+### Option A: Upload via GitHub (Recommended — fully automated)
+
 1. Click the Amazon link for each product (focus on rows marked `-`)
 2. Save the main product image (right-click → Save Image)
-3. Rename to match the **Image Filename** column (use `.jpeg` or `.png` extension for the source)
-4. Place source files in `public/assets/images/`
-5. Run the conversion script (auto-scans `public/assets/images/`):
-   ```bash
-   node scripts/convert-to-webp.mjs
-   ```
-6. Update status markers:
-   ```bash
-   npm run product-links
-   ```
-7. Rebuild and verify: `npm run build`
+3. Rename to match the **Image Filename** column (use `.jpeg` or `.png` extension)
+4. Go to `public/assets/images/` in GitHub → **Add file → Upload files**
+5. Commit to `main` — a GitHub Action auto-converts to WebP, generates responsive
+   variants, updates this file, and commits back (~1-2 minutes)
 
-See **IMAGE-GUIDE.md → Quick Start** for the full step-by-step.
+### Option B: Local workflow (manual)
+
+1. Download and rename images (steps 1-3 above)
+2. Place source files in `public/assets/images/`
+3. Run: `node scripts/convert-to-webp.mjs`
+4. Run: `npm run product-links`
+5. Run: `npm run build`
+
+See **IMAGE-GUIDE.md → Quick Start** for full details.
 
 ## Notes
 

@@ -1,0 +1,49 @@
+name: Convert Uploaded Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/assets/images/**'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Convert images to WebP + responsive variants
+        run: node scripts/convert-to-webp.mjs
+
+      - name: Update product links status
+        run: npm run product-links
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add public/assets/ research/product-links.md
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push converted images
+        if: steps.changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Auto-convert uploaded images to WebP with responsive variants"
+          git push
