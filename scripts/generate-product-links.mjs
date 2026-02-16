@@ -12,7 +12,7 @@
 //   node scripts/generate-product-links.mjs --dry-run # preview only
 // ============================================================
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -20,6 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const CONFIG_PATH = resolve(ROOT, 'src/lib/config.ts');
 const OUTPUT_PATH = resolve(ROOT, 'research/product-links.md');
+const ASSETS_DIR = resolve(ROOT, 'public/assets');
 
 const dryRun = process.argv.includes('--dry-run');
 
@@ -115,6 +116,17 @@ for (const product of products) {
   }
 }
 
+// ── Check image status ──────────────────────────────────────
+
+function hasImage(slug) {
+  return existsSync(resolve(ASSETS_DIR, `${slug}-hero.webp`));
+}
+
+let totalWithImages = 0;
+for (const p of products) {
+  if (hasImage(p.slug)) totalWithImages++;
+}
+
 // Build markdown
 const lines = [
   '# Product Links — Amazon Listings',
@@ -128,6 +140,13 @@ const lines = [
   '> node scripts/convert-to-webp.mjs path/to/image.png',
   '> ```',
   '',
+  `**Image status: ${totalWithImages} of ${products.length} products have images** (${products.length - totalWithImages} missing)`,
+  '',
+  '| Status | Meaning |',
+  '|--------|---------|',
+  '| Y | Image exists in `public/assets/` |',
+  '| - | Image missing — needs download |',
+  '',
   '---',
 ];
 
@@ -135,14 +154,17 @@ for (const cat of categories) {
   const catProducts = productsByCategory.get(cat.slug) || [];
   if (catProducts.length === 0) continue;
 
+  const catWithImages = catProducts.filter(p => hasImage(p.slug)).length;
+
   lines.push('');
-  lines.push(`## ${cat.name}`);
+  lines.push(`## ${cat.name} (${catWithImages}/${catProducts.length} images)`);
   lines.push('');
-  lines.push('| Product | ASIN | Amazon Link | Image Filename |');
-  lines.push('|---|---|---|---|');
+  lines.push('| Status | Product | ASIN | Amazon Link | Image Filename |');
+  lines.push('|---|---|---|---|---|');
 
   for (const p of catProducts) {
-    lines.push(`| ${p.name} | ${p.asin} | https://www.amazon.com/dp/${p.asin} | \`${p.slug}-hero.webp\` |`);
+    const status = hasImage(p.slug) ? 'Y' : '-';
+    lines.push(`| ${status} | ${p.name} | ${p.asin} | https://www.amazon.com/dp/${p.asin} | \`${p.slug}-hero.webp\` |`);
   }
 }
 
@@ -151,7 +173,7 @@ lines.push('---');
 lines.push('');
 lines.push('## Workflow');
 lines.push('');
-lines.push('1. Click the Amazon link for each product');
+lines.push('1. Click the Amazon link for each product (focus on rows marked `-`)');
 lines.push('2. Save the main product image (right-click → Save Image)');
 lines.push('3. Rename to match the **Image Filename** column (use `.png` or `.jpg` extension for the source)');
 lines.push('4. Place source files in `public/assets/images/`');
@@ -164,6 +186,7 @@ lines.push('   # All at once');
 lines.push('   node scripts/convert-to-webp.mjs public/assets/images/*.png');
 lines.push('   ```');
 lines.push('6. The script removes white backgrounds and outputs transparent WebP + responsive variants to `public/assets/`');
+lines.push('7. Run `npm run product-links` again to update the status markers');
 lines.push('');
 lines.push('## Notes');
 lines.push('');
@@ -180,6 +203,7 @@ const output = lines.join('\n');
 console.log(`\n📋 Product Links Summary:`);
 console.log(`   Categories:  ${categories.length}`);
 console.log(`   Products:    ${products.length}`);
+console.log(`   With images: ${totalWithImages}/${products.length} (${products.length - totalWithImages} missing)`);
 console.log('');
 
 if (dryRun) {
