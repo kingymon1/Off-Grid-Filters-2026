@@ -1,5 +1,8 @@
 # Product Links — Amazon Listings
 
+> **Auto-generated from `src/lib/config.ts`** — do not edit manually.
+> Run `npm run product-links` to regenerate after adding products.
+>
 > Quick reference for sourcing product images. Save the main product image
 > from each listing, then run through the conversion script:
 > ```bash
@@ -118,5 +121,5 @@
 
 - All 58 products listed above
 - Amazon links are **without** affiliate tag (these are for your reference, not for the site)
-- The site generates affiliate links dynamically using tag `offgrid09a-20` from `config.ts`
+- The site generates affiliate links dynamically using the tag from `config.ts`
 - For products with multiple images on Amazon, grab the **first/main** image (usually front-facing product shot on white)

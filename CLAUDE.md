@@ -1407,6 +1407,20 @@ Generate an `IMAGE-GUIDE.md` at the project root that documents:
 - **When to run:** After adding `legacyUrls` to products or entries to the `redirects` array
   in `config.ts`. Always run before deploying a migration.
 
+**`scripts/generate-product-links.mjs`:**
+- Auto-generates `research/product-links.md` from the product catalog in `config.ts`
+- Parses TypeScript source directly (no ts-node dependency) via regex extraction
+- Groups products by category (ordered by `categories` array in config)
+- Each row: product name, ASIN, Amazon link, and image filename (`[slug]-hero.webp`)
+- **Dry-run mode** previews output without writing: `npm run product-links --dry-run`
+- **Usage:**
+  ```bash
+  npm run product-links      # regenerate research/product-links.md
+  ```
+- Add to package.json: `"product-links": "node scripts/generate-product-links.mjs"`
+- **When to run:** After adding products to `config.ts`. Ensures the image download
+  reference sheet stays in sync with the product catalog.
+
 ### 3.10 `.env.example`
 
 Create a `.env.example` file (committed to repo, unlike `.env`):
@@ -1684,6 +1698,7 @@ and deployed site.
 - Add `legacyUrls` if migrating from an old site with indexed URLs
 - Add to `comparisons` array if head-to-head pages are needed
 - Update `categories` if new categories are required (add `publishDate`)
+- Run `npm run product-links` to regenerate the image download reference sheet
 
 **Step 3: Create content pages**
 - One review page per product (use existing reviews as structural templates)
@@ -2032,3 +2047,4 @@ When complete, the project should contain:
 - [ ] `scripts/lib/template-reader.mjs` (reads existing pages as AI templates)
 - [ ] `scripts/lib/config-patcher.mjs` (patches config.ts and image-map.ts)
 - [ ] `scripts/generate-redirects.mjs` (URL migration — auto-generates vercel.json redirects from config)
+- [ ] `scripts/generate-product-links.mjs` (auto-generates research/product-links.md from config)
