@@ -25,7 +25,7 @@ git commit -m "Add product images for [describe which products]"
 ```
 
 **What each step does:**
-1. Removes white backgrounds, converts to WebP, creates 3 responsive variants (`-small`, `-medium`, full) in `public/assets/`
+1. Converts to WebP and creates 3 responsive variants (`-small`, `-medium`, full) in `public/assets/`
 2. Regenerates `research/product-links.md` with `Y`/`-` status markers per product
 3. Verifies the build passes — product pages should show real photos instead of SVG placeholders
 4. Stages the new WebP files and updated product-links sheet
