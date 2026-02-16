@@ -785,7 +785,11 @@ Lighthouse "Avoid non-composited animations" audit.
 - **Homepage special cases:**
   - Category browser cards: pass both `src` and `slug` (slug enables editorial mode, src provides the path)
   - Comparison cards on homepage: use `aspect="hero"` (16:9) not `aspect="wide"` (3:2) — cards need shorter images
-  - Featured picks: use product slug so they render in showcase mode
+  - Featured picks: use product slug so they render in showcase mode. Pass both
+    `slug={pick.slug}` (for showcase render mode) and `src={heroImages[\`${pick.slug}-featured\`]}`
+    (for featured image resolution via map lookup). When no featured image exists in the map,
+    `src` is undefined and ProductImage falls back to the product hero image via slug lookup —
+    no 404s, no SVG placeholders.
 
 **`ComparisonTable.astro`:**
 - Props: `products: Product[], features?: Feature[]`
@@ -890,7 +894,12 @@ The homepage is an **authority hub**, not a product landing page.
 
 **6. Popular Comparisons Section**
 - 3-4 most popular head-to-head comparison links
-- Card format: "[Product A] vs [Product B]" with thumbnail icons
+- Vertical card layout (matches review cards): ProductImage on top (aspect="hero"),
+  info section below with "Head-to-Head" eyebrow, "[Product A] vs [Product B]" title
+  (product names truncated to first 3 words), and "Read Comparison →" link
+- Do NOT use a horizontal "Product A | VS | Product B" side-by-side layout —
+  it breaks at narrow widths regardless of font/padding adjustments
+- 1 column on mobile, 2 columns on desktop (`.comparisons-grid`)
 - Links to comparison pages
 
 **7. FAQ Section**
@@ -1906,8 +1915,8 @@ Every page links to 4 related articles:
 20. **Disclose affiliate relationship** in footer on every page.
 21. **No fake urgency.** No "limited time" or "selling fast" language.
 
-### CSS Grid Overflow
-22. **Always set `min-width: 0` on CSS Grid children that contain text.** Grid items default to `min-width: auto`, which prevents them from shrinking below their content width — causing text overflow in multi-column layouts (e.g., the resource hub card grid).
+### CSS Grid & Flexbox Overflow
+22. **Always set `min-width: 0` on CSS Grid AND flexbox children that contain text.** Both Grid and flex items default to `min-width: auto`, which prevents them from shrinking below their content width — causing text overflow in multi-column layouts (e.g., resource hub card grid, comparison table product headers).
 
 ### Email Capture
 22.5. **EmailCapture component self-hides when `email.username` is empty.** Always include the
@@ -1958,7 +1967,7 @@ Every page links to 4 related articles:
 
 When complete, the project should contain:
 
-### Root (16 files)
+### Root (17 files)
 - [ ] `package.json`
 - [ ] `astro.config.mjs`
 - [ ] `tailwind.config.ts`
@@ -1975,6 +1984,7 @@ When complete, the project should contain:
 - [ ] `LAUNCH-CHECKLIST.md` (12-section sign-off checklist)
 - [ ] `GOOGLE-READINESS.md` (Google Search Console compliance guide)
 - [ ] `content-queue.yaml` (content generation queue — disabled by default)
+- [ ] `TECHNICAL-IMPROVEMENTS.md` (post-launch optimization roadmap)
 
 ### .github (2 files)
 - [ ] `.github/workflows/ci.yml`
