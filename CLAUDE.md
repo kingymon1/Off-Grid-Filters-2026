@@ -36,6 +36,32 @@ Every page should justify its existence.
 
 ---
 
+## PHASE 0: PRE-BUILD DECISIONS
+
+Before starting research or writing code, ask the user these questions:
+
+### 0.1 Legacy Product Integration
+
+> **Do you have an existing site, old product catalog, or legacy URLs to integrate into this build?**
+
+If **yes** → The build incorporates legacy products INTO the normal build process:
+- **CRITICAL: Always design the best NEW URL structure.** Never adopt or preserve old URL
+  patterns. The new site uses this template's standard URL conventions (`/reviews/[slug]/`,
+  `/best-[category]/`, `/guides/[slug]/`, etc.). Old URLs get 301 redirects TO the new
+  structure via `legacyUrls` — the new site is never built AROUND the old URLs.
+- Phase 1 research covers BOTH the new catalog from `product-brief.yaml` AND the legacy products
+- Phase 2 decisions account for the combined catalog (navigation, featured picks, categories)
+- Phase 3 builds pages for ALL products at their NEW URLs from the start
+- Phase 4.5 redirects (`legacyUrls` → new URLs) are generated as part of the build
+- Phase 4.5.7 site cohesion is applied automatically since all products are built together
+
+If **no** → Proceed with normal Phase 1-5 workflow.
+
+**The user can also trigger product integration at any time on an already-built site.**
+See Section 4.5.8 "Post-Build Product Integration" for the standalone workflow.
+
+---
+
 ## PHASE 1: RESEARCH (Do this first, before any code)
 
 ### 1.1 Product Catalog Research
@@ -1593,6 +1619,97 @@ After deploying:
 1. Test each old URL returns 301 (not 404) — `curl -I https://yourdomain.com/old-path`
 2. Request re-indexing of redirected URLs in Google Search Console
 3. Monitor Search Console for crawl errors over the next 2 weeks
+
+### 4.5.7 Site Cohesion (CRITICAL — do not skip)
+
+After products are added and redirects work, the site must feel like ONE cohesive site,
+not two merged together. Without this step, the navigation and homepage will still reflect
+only the original build — making integrated products invisible to visitors browsing the site.
+
+**Navigation (`siteConfig.navigation` in config.ts):**
+- Reviews dropdown: Feature ~7 products mixing categories proportionally. If 33 of 58
+  products are in one category, ~4 of 7 nav slots should represent that category. Pick the
+  most impressive/representative products, not just the cheapest.
+- Compare dropdown: Include comparisons from all categories that have comparison pages.
+- Guides dropdown: Add activity guides relevant to the new products (e.g., camping, hiking
+  guides when survival filters are added).
+- Best Of dropdown: Should already include new category roundups — verify.
+
+**Homepage (`src/pages/index.astro`):**
+- Featured Picks: Update to represent the full catalog breadth. Pick the most
+  impressive/representative product from each major category — not just the cheapest entry.
+- Popular Comparisons: Curate by slug (not `comparisons.slice(0, 4)`) to mix categories.
+  The first 4 by array order will all be from the original build.
+- Category Browser: Verify new categories appear (usually automatic from config).
+- Latest Reviews: Verify new products appear if published recently.
+
+**Roundup pages:**
+- Category roundup for the new products' category must include ALL products.
+- If a category exceeds ~15 products, consider curated sub-roundups by use case
+  (e.g., "Best Pump Filters", "Best Backpacking Filters" for a large survival category).
+- Curated roundups should pull from the new products where relevant.
+
+**Resource Hub (`src/pages/guides/index.astro`):**
+- Verify all new review pages appear (usually automatic from `products.map()`).
+- Verify curated roundup pages are listed.
+- Verify new comparisons appear.
+
+**Cross-linking:**
+- New review pages should have 4 related articles (2 similar products, 1 roundup, 1 guide).
+- Activity guides should recommend new products where relevant.
+- Buyer guides should reference new products in their recommendation sections.
+
+### 4.5.8 Post-Build Product Integration (Standalone Workflow)
+
+This workflow can be triggered at ANY time after the initial build to integrate new products
+into an existing site. It covers the complete process from research through site cohesion.
+
+**CRITICAL: New products are always built at the site's standard URL conventions
+(`/reviews/[slug]/`, `/best-[category]/`, `/guides/[slug]/`, etc.). Old URLs are preserved
+ONLY as 301 redirects via `legacyUrls` — never by adopting the old URL structure. The new
+site's URL architecture is designed for optimal SEO, not to match a legacy site.**
+
+**When to use:** The user says something like "add these products to the site" or "integrate
+these old products" or provides a list of products/URLs to incorporate into an already-built
+and deployed site.
+
+**Step 1: Research new products**
+- For each product: fetch Amazon page, extract specs, document pros/cons/verdict
+- Determine which category each product belongs to
+- Find ASINs if not provided
+- Document findings in `research/product-catalog-research.md` (append to existing)
+
+**Step 2: Add to config.ts**
+- Add products to the `products` array with all required fields
+- Add `legacyUrls` if migrating from an old site with indexed URLs
+- Add to `comparisons` array if head-to-head pages are needed
+- Update `categories` if new categories are required (add `publishDate`)
+
+**Step 3: Create content pages**
+- One review page per product (use existing reviews as structural templates)
+- Category roundup updates (expand existing or create new)
+- Curated roundup pages for old URL patterns that don't map to new categories
+- Comparison pages if configured
+
+**Step 4: Register images**
+- Add product slugs to `productSlugs` set in `image-map.ts`
+- Add hero image entries to `heroImages` map for all new pages
+- Run `node scripts/generate-local-images.mjs` for SVG placeholders
+
+**Step 5: Generate redirects (if migrating URLs)**
+- Run `npm run redirects:dry` to preview
+- Run `npm run redirects` to update `vercel.json`
+
+**Step 6: Site cohesion (Section 4.5.7)**
+- Update navigation, homepage, roundups, resource hub, cross-links
+- **This step is what makes integrated products feel native, not bolted on**
+
+**Step 7: Build & verify**
+- `npm run build` (0 errors)
+- `npm run checklist:auto` (0 failures)
+- Verify all old URLs redirect correctly (if applicable)
+
+**Step 8: Commit & deploy**
 
 **Configuration in `product-brief.yaml`:**
 
