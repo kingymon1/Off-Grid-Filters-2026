@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,9 +67,9 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Brita Elite (formerly known as Longlast) represents Brita's premium filtration tier, and for good reason. Where the standard Brita filter handles basic chlorine taste and odor reduction, the Elite steps up to tackle 30+ contaminants including lead, asbestos, benzene, and pharmaceuticals. At $29.78 for a 2-pack, the per-filter price is higher than Standard, but the math tells a different story when you factor in the 120-gallon lifespan — three times the capacity of Standard filters.</p>
+  <p>The Brita Elite (formerly known as Longlast) represents Brita's premium filtration tier, and for good reason. Where the standard Brita filter handles basic chlorine taste and odor reduction, the Elite steps up to tackle 30+ contaminants including lead, asbestos, benzene, and pharmaceuticals. Priced in the {getPriceTier(product.price)} range, the per-filter cost is higher than Standard, but the math tells a different story when you factor in the 120-gallon lifespan — three times the capacity of Standard filters.</p>
   <p>The Elite uses a denser activated carbon block combined with pleated media, which is fundamentally different from the granulated carbon in Standard filters. This construction is what enables the NSF 42/53/401 triple certification and the 99% lead reduction that Standard filters simply cannot match. For anyone living in a home with older plumbing, or in a municipality with known water quality concerns, this difference is not a minor upgrade — it is a necessity.</p>
-  <p>The trade-off is filtration speed. The denser media means water takes longer to pass through, which can test your patience when filling a full pitcher. But considering you are getting laboratory-certified lead removal for roughly $0.12 per gallon, the wait is a reasonable compromise for genuinely cleaner water.</p>
+  <p>The trade-off is filtration speed. The denser media means water takes longer to pass through, which can test your patience when filling a full pitcher. But considering you are getting laboratory-certified lead removal at one of the lowest per-gallon costs in the pitcher filter market, the wait is a reasonable compromise for genuinely cleaner water.</p>
 
   <div class="best-for-box">
     <strong>Best For:</strong> {product.bestFor}
@@ -111,8 +111,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $29.78 for two filters, the per-filter cost is $14.89 — significantly more than the $4.50-$6.00 range for Brita Standard filters. But the cost-per-gallon tells the real story: the Elite works out to approximately $0.12 per gallon, while Brita Standard costs roughly $0.11-0.15 per gallon. Factor in the lead reduction certification and the 30+ contaminant coverage, and the Elite is actually the better value per gallon of safely filtered water. You are paying pennies more for dramatically superior filtration.</p>
-  <p>Compared to ZeroWater (which costs $0.60-1.00 per gallon) or a countertop RO system, the Brita Elite occupies a sweet spot: it offers meaningful contaminant reduction without the extreme ongoing cost of ZeroWater or the upfront investment of a reverse osmosis system. For households that want more than basic taste improvement but are not ready for a full RO setup, the Elite is the most practical upgrade.</p>
+  <p>The per-filter cost is significantly more than Brita Standard filters, which can cause sticker shock. But the cost-per-gallon tells the real story: because each Elite filter handles 120 gallons versus Standard's 40, the Elite actually works out to a comparable or lower per-gallon cost than Standard. Factor in the lead reduction certification and the 30+ contaminant coverage, and the Elite is the better value per gallon of safely filtered water. You are paying a modest premium upfront for dramatically superior filtration that stretches further.</p>
+  <p>Compared to ZeroWater — which costs several times more per gallon — or a countertop RO system, the Brita Elite occupies a sweet spot: it offers meaningful contaminant reduction without the extreme ongoing cost of ion-exchange filters or the upfront investment of a reverse osmosis system. For households that want more than basic taste improvement but are not ready for a full RO setup, the Elite is the most practical upgrade.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

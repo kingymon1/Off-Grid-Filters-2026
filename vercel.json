@@ -146,26 +146,6 @@
       "permanent": true
     },
     {
-      "source": "/roundups/best-off-grid-water-filters",
-      "destination": "/best-off-grid-water-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/roundups/best-backpacking-water-filters",
-      "destination": "/best-backpacking-water-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/roundups/best-pump-filters",
-      "destination": "/best-pump-filters/",
-      "permanent": true
-    },
-    {
-      "source": "/roundups/bestpumpfilters",
-      "destination": "/best-pump-filters/",
-      "permanent": true
-    },
-    {
       "source": "/roundups/:path+",
       "destination": "/guides/",
       "permanent": true
@@ -188,11 +168,6 @@
     {
       "source": "/products/grayl-ultrapress-16-9oz-water-purifier-bottle",
       "destination": "/reviews/grayl-ultrapress-16-9oz-water-purifier-bottle/",
-      "permanent": true
-    },
-    {
-      "source": "/products/grayl-tap-water-filter",
-      "destination": "/reviews/grayl-tap-water-filter/",
       "permanent": true
     },
     {
@@ -266,11 +241,6 @@
       "permanent": true
     },
     {
-      "source": "/products/survivor-filter-pro-x-electric-pump",
-      "destination": "/reviews/survivor-filter-pro-x-electric-pump/",
-      "permanent": true
-    },
-    {
       "source": "/products/survivor-filter-pro-x-electric-water-filter",
       "destination": "/reviews/survivor-filter-pro-x-electric-water-filter/",
       "permanent": true
@@ -321,6 +291,26 @@
       "permanent": true
     },
     {
+      "source": "/roundups/best-off-grid-water-filters",
+      "destination": "/best-off-grid-water-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/best-backpacking-water-filters",
+      "destination": "/best-backpacking-water-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/best-pump-filters",
+      "destination": "/best-pump-filters/",
+      "permanent": true
+    },
+    {
+      "source": "/roundups/bestpumpfilters",
+      "destination": "/best-pump-filters/",
+      "permanent": true
+    },
+    {
       "source": "/roundups",
       "destination": "/guides/",
       "permanent": true
@@ -328,6 +318,26 @@
     {
       "source": "/contact",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/grayl-tap-water-filter",
+      "destination": "/reviews/grayl-geopress-24oz-water-purifier-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/products/grayl-tap-water-filter",
+      "destination": "/reviews/grayl-geopress-24oz-water-purifier-bottle/",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/survivor-filter-pro-x-electric-pump",
+      "destination": "/reviews/survivor-filter-pro-x-electric-water-filter/",
+      "permanent": true
+    },
+    {
+      "source": "/products/survivor-filter-pro-x-electric-pump",
+      "destination": "/reviews/survivor-filter-pro-x-electric-water-filter/",
       "permanent": true
     }
   ]

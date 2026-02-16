@@ -13,8 +13,8 @@ const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
   { question: 'Does the Bluevua RO100ROPOT-UV require any installation or plumbing?', answer: 'No. The RO100ROPOT-UV is a completely self-contained countertop unit. You simply fill the top tank with tap water, plug it into a standard electrical outlet, and the system filters water into the glass carafe. No plumbing connections, drilling, or tools are needed.' },
-  { question: 'How often do I need to replace the filters on the Bluevua RO100ROPOT-UV?', answer: 'The RO membrane should be replaced every 12 months, while the pre-filters (PP cotton, carbon block) and post-filters should be replaced every 6 months. The UV lamp has a long lifespan and typically only needs attention during major servicing. Expect to spend roughly $60-80 per year on replacement filters.' },
-  { question: 'What is the difference between the Bluevua RO100ROPOT-UV and the Lite UV model?', answer: 'The main differences are price ($317 vs $219), water efficiency (2:1 vs 3:1 pure-to-drain ratio), and filtration stages (6 vs 7). The premium model wastes less water and has a slightly faster flow rate. Both include UV sterilization and glass carafes. The Lite UV adds an extra filtration stage and a smart LED display.' },
+  { question: 'How often do I need to replace the filters on the Bluevua RO100ROPOT-UV?', answer: 'The RO membrane should be replaced every 12 months, while the pre-filters (PP cotton, carbon block) and post-filters should be replaced every 6 months. The UV lamp has a long lifespan and typically only needs attention during major servicing. Annual filter costs are modest and represent a small fraction of the initial system price.' },
+  { question: 'What is the difference between the Bluevua RO100ROPOT-UV and the Lite UV model?', answer: 'The premium model costs roughly 45% more than the Lite UV. In return, you get a better water efficiency ratio (2:1 vs 3:1 pure-to-drain) and a slightly faster flow rate. Both include UV sterilization and glass carafes. The Lite UV adds an extra filtration stage (7 vs 6) and a smart LED display that the premium model lacks.' },
   { question: 'Can the Bluevua RO100ROPOT-UV remove fluoride and PFAS from water?', answer: 'Yes. The reverse osmosis membrane in the RO100ROPOT-UV effectively reduces fluoride, PFAS (PFOA and PFOS), lead, and other dissolved contaminants that standard carbon filters miss. The 0.0001-micron RO membrane is one of the most thorough filtration technologies available for home use.' },
 ];
 
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Bluevua RO100ROPOT-UV is designed for people who want the purest possible drinking water without touching their plumbing. This countertop reverse osmosis system combines a 6-stage filtration process with UV-C sterilization and mineral remineralization, delivering hospital-grade purification directly on your kitchen counter. At $317, it sits at the premium end of countertop filters, but the combination of RO, UV, and a glass carafe sets it apart from everything else in this category.</p>
+  <p>The Bluevua RO100ROPOT-UV is designed for people who want the purest possible drinking water without touching their plumbing. This countertop reverse osmosis system combines a 6-stage filtration process with UV-C sterilization and mineral remineralization, delivering hospital-grade purification directly on your kitchen counter. It sits at the premium end of countertop filters, but the combination of RO, UV, and a glass carafe sets it apart from everything else in this category.</p>
   <p>What makes this unit particularly compelling is the glass carafe. Most countertop RO systems store purified water in plastic tanks, which can leach BPA or other chemicals back into the water you just spent time purifying. The RO100ROPOT-UV eliminates that concern entirely. The UV sterilization stage adds another layer of protection, killing 99.99% of bacteria and viruses that might survive the RO membrane — a genuine safety advantage for households with immunocompromised members or those on well water.</p>
   <p>The trade-off is speed and space. This unit produces about 0.75 gallons per cycle and takes up a meaningful chunk of counter real estate. If you need instant filtered water for cooking large meals, you will find the batch process limiting. But for daily drinking water, the quality is genuinely outstanding.</p>
 
@@ -116,8 +116,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $317, the RO100ROPOT-UV is a significant investment for a countertop filter. However, compared to under-sink RO systems that cost $200-500 plus installation, it offers comparable purification with zero installation expense. Annual filter costs run approximately $60-80, bringing the first-year total cost of ownership to around $380-400. Over three years, the per-gallon cost works out to roughly $0.08-0.10 — far cheaper than bottled water and competitive with under-sink RO on a per-gallon basis.</p>
-  <p>The UV sterilization and glass carafe are the two features that justify the premium over the Lite UV model at $219. If you are on well water or have specific concerns about bacteria and viruses, the UV stage alone may be worth the $98 difference. If your water source is already chlorinated municipal water, the Lite UV delivers 90% of the performance at 70% of the price.</p>
+  <p>This is a {getPriceTier(product.price)} investment for a countertop filter — there is no getting around that. However, compared to under-sink RO systems that require professional plumbing work, the RO100ROPOT-UV offers comparable purification with zero installation expense. Annual filter replacements are modest relative to the upfront cost, and over a three-year ownership period, the per-gallon cost drops well below bottled water and remains competitive with under-sink RO on a cost-per-gallon basis.</p>
+  <p>The UV sterilization and glass carafe are the two features that justify the premium over the Lite UV model. If you are on well water or have specific concerns about bacteria and viruses, the UV stage alone may be worth the price gap between the two models. If your water source is already chlorinated municipal water, the Lite UV delivers roughly 90% of the purification performance at a noticeably lower entry point — making it the smarter pick for most municipal water households.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

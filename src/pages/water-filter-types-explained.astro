@@ -45,7 +45,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -67,7 +67,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -131,7 +131,7 @@ const relatedArticles = [
   <p>Hollow fiber membrane filters use bundles of tiny hollow tubes with pore sizes typically around 0.1 microns. Water is forced through the tube walls, and anything larger than 0.1 microns is trapped. This technology is the backbone of most portable survival filters.</p>
   <p><strong>Strengths:</strong> Ultralight and packable, removes 99.9999% of bacteria and 99.99% of protozoa, no electricity needed, long life (1,000 to 4,000 liters), can be backwashed to restore flow rate, fast flow compared to ceramic.</p>
   <p><strong>Limitations:</strong> Does not remove viruses (0.1 microns is too large), does not remove chemicals, dissolved solids, or heavy metals, does not improve taste, membrane can be damaged by freezing.</p>
-  <p><strong>Best for:</strong> Hiking, backpacking, camping, emergency kits. Our top picks: <a href="/reviews/timain-filter-straw-2pack/">Timain Filter Straw</a> ($14.23 for 2-pack, best budget), <a href="/reviews/membrane-solutions-filter-straw-4pack/">Membrane Solutions 4-Pack</a> ($38.98 for family preparedness), <a href="/reviews/naturenova-filter-straw-3pack/">NatureNova 3-Pack</a> ($28.99 with included accessories).</p>
+  <p><strong>Best for:</strong> Hiking, backpacking, camping, emergency kits. Our top picks: <a href="/reviews/timain-filter-straw-2pack/">Timain Filter Straw</a> (2-pack, best budget), <a href="/reviews/membrane-solutions-filter-straw-4pack/">Membrane Solutions Straw</a> (proven reliability, family preparedness), <a href="/reviews/naturenova-filter-straw-3pack/">NatureNova Straw Kit</a> (includes water bag and backwash syringe).</p>
 
   <h2>8. Chemical Purification (Tablets)</h2>
   <p>Chemical purification uses chlorine, iodine, or chlorine dioxide compounds dissolved in water to kill biological contaminants. <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs</a> use NaDCC (sodium dichloroisocyanurate), a stable chlorine compound recommended by the WHO.</p>

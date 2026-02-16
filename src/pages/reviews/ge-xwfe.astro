@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The GE XWFE is the most technically capable refrigerator filter we have tested, with certified reduction of over 50 contaminants including PFOA, PFOS, microplastics, lead, and cysts. At $49.49, it sits at a competitive price point for OEM filters while offering the most generous capacity in its class at 300 gallons — 50% more than the everydrop Filter 1's 200 gallons. For GE refrigerator owners who want the best possible water quality from their fridge, the XWFE is the clear choice.</p>
+  <p>The GE XWFE is the most technically capable refrigerator filter we have tested, with certified reduction of over 50 contaminants including PFOA, PFOS, microplastics, lead, and cysts. Priced in the {getPriceTier(product.price)} range for OEM filters, it offers the most generous capacity in its class at 300 gallons — 50% more than the everydrop Filter 1's 200 gallons. For GE refrigerator owners who want the best possible water quality from their fridge, the XWFE is the clear choice.</p>
   <p>The embedded RFID chip is both the XWFE's greatest strength and its most controversial feature. On the positive side, it ensures your fridge always knows when a genuine, tested filter is installed and automatically resets the replacement timer. On the negative side, it creates a proprietary lock that prevents you from using cheaper aftermarket filters without dealing with persistent warning lights or, in some GE models, a completely disabled water dispenser. GE argues this ensures water quality; critics see it as planned obsolescence. The reality is somewhere in between.</p>
   <p>What is not debatable is the filtration performance. The XWFE's activated carbon block is engineered to address modern water quality concerns that did not exist when basic carbon filters were designed. Microplastics, PFAS compounds, and pharmaceutical residues are increasingly detected in municipal water supplies, and the XWFE is one of the very few refrigerator filters independently certified to reduce all of them.</p>
 
@@ -110,7 +110,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $49.49 for 300 gallons, the GE XWFE delivers the lowest cost-per-gallon of any OEM refrigerator filter in our catalog at approximately $0.165 per gallon. The everydrop Filter 1 costs $53.99 for 200 gallons ($0.27/gallon), making the XWFE roughly 40% cheaper per gallon filtered. Annual cost for the XWFE runs about $99 with twice-yearly replacement, compared to $108 for the everydrop. The XWFE's combination of lower per-gallon cost, higher capacity, and broader contaminant reduction makes it objectively the best-value OEM fridge filter.</p>
+  <p>With 300 gallons of capacity, the GE XWFE delivers the lowest cost-per-gallon of any OEM refrigerator filter in our catalog. The everydrop Filter 1 offers only 200 gallons at a higher price point, making the XWFE roughly 40% cheaper per gallon filtered. Annual costs with twice-yearly replacement are noticeably lower than competing OEM filters from Whirlpool and Samsung. The XWFE's combination of lower per-gallon cost, higher capacity, and broader contaminant reduction makes it objectively the best-value OEM fridge filter.</p>
   <p>The main cost consideration is the RFID lock. Because aftermarket filters cannot bypass the chip in newer GE models, you are committed to buying genuine GE filters for the life of your refrigerator. There is no budget alternative path. For GE owners who accept this and want the best filtration their fridge can deliver, the XWFE is an excellent investment. If the proprietary lock-in concerns you philosophically, that is a valid consideration — but on pure filtration merit and value, the XWFE is outstanding.</p>
 
   <!-- FAQ -->

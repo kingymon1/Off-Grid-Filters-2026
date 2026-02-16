@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The MSR TrailShot is a pocket-sized pump filter that challenges the assumption that backcountry water treatment requires a full-sized filter or a floppy bag-and-squeeze setup. At 5.2 ounces and $44.95, it slides into a hip-belt pocket or running vest and gives you on-demand filtered water from any stream, lake, or puddle. The dual-mode design — use it as a straw to drink directly or pump filtered water into a container — makes it one of the most versatile ultralight filters on the market.</p>
+  <p>The MSR TrailShot is a pocket-sized pump filter that challenges the assumption that backcountry water treatment requires a full-sized filter or a floppy bag-and-squeeze setup. At 5.2 ounces and a {getPriceTier(product.price)} price point, it slides into a hip-belt pocket or running vest and gives you on-demand filtered water from any stream, lake, or puddle. The dual-mode design — use it as a straw to drink directly or pump filtered water into a container — makes it one of the most versatile ultralight filters on the market.</p>
   <p>The 0.2-micron hollow fiber membrane removes bacteria at 99.9999% and protozoa at 99.9%, matching the filtration performance of filters two and three times its size. The pump mechanism is a squeezable bulb rather than a traditional piston pump, which means less mechanical complexity but also less pumping leverage. You get about 1 liter per minute with consistent squeezing — competitive for the size class, but you will feel it in your hand after filling multiple bottles. MSR designed the TrailShot for quick, low-volume use: drink at a creek crossing, top off a single bottle, and keep moving.</p>
   <p>Where the TrailShot excels is spontaneity. Traditional pump filters require you to stop, unpack, assemble hoses, and dedicate 5-10 minutes to water collection. The TrailShot lives in your pocket and deploys in seconds — drop the intake hose into moving water and start squeezing. For trail runners, fastpackers, and minimalist day hikers who cross multiple water sources, this quick-draw capability is transformative. The trade-off is that it is not designed for high-volume camp filtration — if you need to filter water for a group or for cooking, look at the MSR AutoFlow XL gravity system instead.</p>
 
@@ -111,8 +111,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $44.95, the TrailShot sits in the {getPriceTier(product.price)} tier — more expensive than a $7 Membrane Solutions filter straw but cheaper than the $90 MSR MiniWorks EX or $65 MSR AutoFlow XL. For the price, you get a pump mechanism (filter straws are suction-only), backwashable hollow fiber, and the MSR brand's quality assurance and warranty. The 2,000-liter rated life works out to $0.022 per liter — very reasonable for a branded pump filter.</p>
-  <p>The TrailShot makes financial sense as a dedicated day-hike and trail-running filter. If you already own a gravity filter for camp use, the TrailShot is an excellent pocket companion for the trail itself. It also works well as a first backcountry water filter for someone who is not ready to invest in a full pump system. Where it is harder to justify is as your only filter for multi-day trips where you need to filter large volumes daily — the hand fatigue and 1 L/min rate become limiting factors over a week. For those trips, the extra investment in a MiniWorks EX or AutoFlow XL pays for itself in convenience.</p>
+  <p>The TrailShot sits in the {getPriceTier(product.price)} tier — more expensive than bare-bones filter straws but significantly cheaper than full-sized pump filters like the MSR MiniWorks EX or gravity systems like the MSR AutoFlow XL. For the price, you get a pump mechanism (filter straws are suction-only), backwashable hollow fiber, and the MSR brand's quality assurance and warranty. The 2,000-liter rated life delivers strong per-liter value — very reasonable for a branded pump filter in this size class.</p>
+  <p>The TrailShot makes financial sense as a dedicated day-hike and trail-running filter. If you already own a gravity filter for camp use, the TrailShot is an excellent pocket companion for the trail itself. It also works well as a first backcountry water filter for someone who is not ready to invest in a full pump system. Where it is harder to justify is as your only filter for multi-day trips where you need to filter large volumes daily — the hand fatigue and 1 L/min rate become limiting factors over a week. For those trips, stepping up to a MiniWorks EX or AutoFlow XL pays for itself in convenience.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

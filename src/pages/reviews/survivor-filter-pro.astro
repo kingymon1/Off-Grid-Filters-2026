@@ -15,7 +15,7 @@ const faqs = [
   { question: 'Does the Survivor Filter Pro actually remove viruses?', answer: 'The Survivor Filter Pro has been independently tested to remove 99.99% of viruses using its 0.01-micron UF membrane. However, this testing was conducted by a third-party lab — not under EPA or NSF certification protocols. While the results are promising and the 0.01-micron pore size is physically small enough to block most viruses, the lack of formal EPA registration means you should treat virus removal as a bonus rather than a guarantee. For confirmed virus protection in high-risk areas, pair it with chemical treatment like Aquatabs.' },
   { question: 'How long does the Survivor Filter Pro last before replacement?', answer: 'The UF membrane is rated for 100,000 liters, which is enough for years of regular backcountry use. The activated carbon filter has a shorter lifespan — roughly 1,000 liters before taste improvement degrades. The cotton pre-filter should be rinsed after each use and replaced when it becomes permanently discolored or restricts flow. In practice, most users replace the carbon element annually and the pre-filter every few months of active use.' },
   { question: 'Can you backflush the Survivor Filter Pro?', answer: 'Yes, backflushing is possible and recommended for maintaining flow rate. Detach the outlet hose and push clean water backward through the UF membrane using a syringe or by attaching a clean water source to the outlet port. This dislodges sediment trapped in the membrane pores. Backflush after every trip or whenever you notice decreased flow rate. The included instructions detail the backflushing procedure, and Survivor Filter sells a dedicated backflush adapter.' },
-  { question: 'How does the Survivor Filter Pro compare to the Sawyer Squeeze?', answer: 'The Survivor Filter Pro and Sawyer Squeeze target similar use cases but differ significantly. The Sawyer Squeeze is a gravity/squeeze filter at 0.1 microns (bacteria and protozoa only) with no carbon stage and no virus claims. The Survivor Filter Pro is a pump at 0.01 microns with a carbon stage for taste and virus-testing claims. The Pro is heavier (6.8 oz vs 3 oz) and more expensive ($39.95 vs ~$35), but offers broader protection. Choose the Sawyer for ultralight simplicity; choose the Survivor Filter Pro for maximum protection at a budget price.' },
+  { question: 'How does the Survivor Filter Pro compare to the Sawyer Squeeze?', answer: 'The Survivor Filter Pro and Sawyer Squeeze target similar use cases but differ significantly. The Sawyer Squeeze is a gravity/squeeze filter at 0.1 microns (bacteria and protozoa only) with no carbon stage and no virus claims. The Survivor Filter Pro is a pump at 0.01 microns with a carbon stage for taste and virus-testing claims. The Pro is heavier (6.8 oz vs 3 oz) and slightly pricier, but offers broader protection. Choose the Sawyer for ultralight simplicity; choose the Survivor Filter Pro for maximum protection at a budget price.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Survivor Filter Pro is the most affordable pump-style purifier that claims virus removal, making it a standout in the crowded budget portable filter market. At $39.95, it delivers 3-stage filtration — cotton pre-filter, 0.01-micron UF membrane, and an activated carbon block — in a compact 6.8-ounce package. That 0.01-micron pore size is ten times finer than the 0.1-micron standard used by Sawyer and most hollow fiber competitors, theoretically blocking not just bacteria and protozoa but also many waterborne viruses.</p>
+  <p>The Survivor Filter Pro is the most affordable pump-style purifier that claims virus removal, making it a standout in the crowded budget portable filter market. Priced in the {getPriceTier(product.price)} range, it delivers 3-stage filtration — cotton pre-filter, 0.01-micron UF membrane, and an activated carbon block — in a compact 6.8-ounce package. That 0.01-micron pore size is ten times finer than the 0.1-micron standard used by Sawyer and most hollow fiber competitors, theoretically blocking not just bacteria and protozoa but also many waterborne viruses.</p>
   <p>Pump-style filters have fallen out of fashion in the ultralight backpacking community, replaced by squeeze and gravity systems that weigh less and have fewer moving parts. But pumps still excel in specific scenarios: drawing water from shallow puddles or streams where you cannot submerge a squeeze bag, filtering for a group where hands-free operation is not critical, and situations where you want precise control over intake placement. The Survivor Filter Pro threads this needle by keeping the weight under 7 ounces — lighter than classic pumps like the MSR MiniWorks (16 oz) or Katadyn Hiker Pro (11 oz).</p>
   <p>The carbon stage is the hidden advantage that sets the Pro apart from most budget filters. Sawyer Squeeze, LifeStraw, and most hollow fiber straws lack a carbon element, meaning they remove pathogens but do nothing for taste, odor, or chemical contaminants. The Pro's carbon block reduces chlorine, improves taste from tannin-heavy water sources, and provides partial heavy metal reduction. For filtering from questionable urban water sources during emergencies, that chemical reduction capability matters.</p>
 
@@ -91,7 +91,7 @@ const relatedArticles = [
 
   <p>The 3-stage design works sequentially: source water first passes through a replaceable cotton pre-filter that catches sediment, sand, and large particles — protecting the UF membrane from premature clogging. Next, the 0.01-micron UF (ultrafiltration) membrane physically blocks bacteria, protozoa, and viruses by pore size exclusion. Finally, the activated carbon block adsorbs chemical contaminants, chlorine, and taste-affecting compounds. This layered approach means each stage handles what it does best, extending the overall life of the system.</p>
 
-  <ProTip>Carry a spare cotton pre-filter on multi-day trips. The pre-filter clogs fastest — especially in silty or muddy water — and a clogged pre-filter dramatically slows flow rate. Replacing the $3 pre-filter in the field is faster and more effective than trying to clean it. Label your Pro with deployment date so you can track total liters filtered over time.</ProTip>
+  <ProTip>Carry a spare cotton pre-filter on multi-day trips. The pre-filter clogs fastest — especially in silty or muddy water — and a clogged pre-filter dramatically slows flow rate. Replacing the inexpensive pre-filter in the field is faster and more effective than trying to clean it. Label your Pro with deployment date so you can track total liters filtered over time.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -113,8 +113,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $39.95, the Survivor Filter Pro occupies a unique position: it is the cheapest pump-style purifier with virus-testing claims. The manual Sawyer Squeeze ($35) filters at 0.1 microns without virus protection or carbon. The Katadyn BeFree ($40) is a squeeze filter at 0.1 microns. The LifeStraw Personal ($18) is a basic 0.2-micron straw. None of these offer the Pro's combination of 0.01-micron filtration, carbon taste improvement, and virus-tested claims at this price. You would need to spend $60+ on the Sawyer Select S3 or $90+ on the MSR Guardian to get comparable multi-threat protection.</p>
-  <p>The trade-off is build quality. The Pro feels like a $40 product — functional but not premium. The pump mechanism will not last decades of heavy use like an MSR MiniWorks. For emergency preparedness kits that see occasional use, this is perfectly acceptable. For daily backcountry guiding or multi-month thru-hiking, you may want to invest in something more durable. The lifetime warranty does provide insurance against premature failure, and Survivor Filter's customer service receives consistently positive mentions in reviews.</p>
+  <p>The Survivor Filter Pro occupies a unique position: it is the cheapest pump-style purifier with virus-testing claims. The Sawyer Squeeze filters at 0.1 microns without virus protection or carbon at a similar price point. The Katadyn BeFree is a squeeze filter at 0.1 microns in the same range. The LifeStraw Personal costs less but is a basic 0.2-micron straw. None of these offer the Pro's combination of 0.01-micron filtration, carbon taste improvement, and virus-tested claims at this price. You would need to spend two to three times as much on a Sawyer Select S3 or MSR Guardian to get comparable multi-threat protection.</p>
+  <p>The trade-off is build quality. The Pro feels like a budget product — functional but not premium. The pump mechanism will not last decades of heavy use like an MSR MiniWorks. For emergency preparedness kits that see occasional use, this is perfectly acceptable. For daily backcountry guiding or multi-month thru-hiking, you may want to invest in something more durable. The lifetime warranty does provide insurance against premature failure, and Survivor Filter's customer service receives consistently positive mentions in reviews.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

@@ -14,6 +14,7 @@ const year = new Date().getFullYear();
 const ispring = products.find(p => p.slug === 'ispring-rcc7ak')!;
 const britaUltramax = products.find(p => p.slug === 'brita-ultramax-27-cup-dispenser')!;
 const bluevua = products.find(p => p.slug === 'bluevua-ro100ropot-uv')!;
+const bluevuaLite = products.find(p => p.slug === 'bluevua-ro100ropot-lite-uv')!;
 const waterdrop = products.find(p => p.slug === 'waterdrop-g3p600')!;
 const amazonPitcher = products.find(p => p.slug === 'amazon-basics-10-cup-pitcher')!;
 const timain = products.find(p => p.slug === 'timain-filter-straw-2pack')!;
@@ -21,10 +22,10 @@ const pentairH1200 = products.find(p => p.slug === 'pentair-everpure-h1200')!;
 
 const faqs = [
   { question: 'What is the best type of water filter for most homes?', answer: 'For most households on municipal water, a pitcher filter like the Brita UltraMax or an under-sink carbon filter provides excellent taste improvement and contaminant reduction at a reasonable cost. If you have specific concerns about lead, PFAS, or high TDS, step up to a reverse osmosis system like the iSpring RCC7AK.' },
-  { question: 'How do I know what contaminants are in my water?', answer: 'Start with your utility\'s annual Consumer Confidence Report (CCR), available online or by request. For a more detailed picture, order a home water test kit from a certified lab. Testing typically costs $20-$150 depending on how many contaminants you want screened. Well water users should test annually.' },
+  { question: 'How do I know what contaminants are in my water?', answer: 'Start with your utility\'s annual Consumer Confidence Report (CCR), available online or by request. For a more detailed picture, order a home water test kit from a certified lab. Basic kits are inexpensive, while comprehensive lab panels cost more depending on how many contaminants you want screened. Well water users should test annually.' },
   { question: 'Do I need a whole-house filter or a point-of-use filter?', answer: 'Point-of-use filters (pitchers, under-sink, countertop) treat water at one tap and are best for drinking and cooking. Whole-house filters treat every tap and protect plumbing but are primarily sediment filters. Most homes benefit from a point-of-use filter for drinking water, with a whole-house sediment pre-filter if you have well water.' },
   { question: 'How often do water filters need to be replaced?', answer: 'Replacement frequency depends on the filter type and your water usage. Pitcher filters typically last 2 months (40 gallons), while under-sink carbon filters last 6-12 months. RO membranes last 2-3 years. Always follow the manufacturer\'s recommendations and watch for signs like slower flow or taste changes.' },
-  { question: 'Are expensive water filters worth the money?', answer: 'Not always. A $24 Amazon Basics pitcher with NSF 42/53 certification removes the same basic contaminants as a $40 brand-name pitcher. However, premium systems like RO filters genuinely remove more contaminants (fluoride, TDS, PFAS) that carbon filters cannot. Match the filter\'s capabilities to your actual water quality needs.' },
+  { question: 'Are expensive water filters worth the money?', answer: 'Not always. A budget-friendly pitcher with NSF 42/53 certification removes the same basic contaminants as a brand-name pitcher at double the price. However, premium systems like RO filters genuinely remove more contaminants (fluoride, TDS, PFAS) that carbon filters cannot. Match the filter\'s capabilities to your actual water quality needs.' },
   { question: 'What does NSF certification mean on a water filter?', answer: 'NSF certification means an independent lab has verified the filter removes what it claims. Key certifications include NSF 42 (taste and odor), NSF 53 (health-related contaminants like lead), NSF 58 (reverse osmosis), and NSF 401 (emerging contaminants like pharmaceuticals). Always prioritize NSF-certified filters over uncertified alternatives.' },
   { question: 'Can a water filter remove forever chemicals (PFAS)?', answer: 'Yes, but only certain types. Reverse osmosis systems and activated carbon block filters with NSF 53 or P473 certification can reduce PFAS. Standard pitcher filters with basic carbon granules typically cannot. The iSpring RCC7AK reduces PFAS by 96-99%, while the Brita Elite pitcher filter also targets some PFAS compounds.' },
 ];
@@ -34,7 +35,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/guides/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -56,7 +57,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -67,8 +68,8 @@ const relatedArticles = [
   <h2>Step 1: Test Your Water First</h2>
   <p>Before you spend a single dollar on a filter, find out what is actually in your water. This single step prevents the most common buying mistake — purchasing a filter that does not target your real contaminants.</p>
   <p><strong>Municipal water users:</strong> Request your city's annual Consumer Confidence Report (CCR). By law, every public water system publishes one. It shows detected contaminants and whether levels exceeded EPA limits. You can also search the Environmental Working Group's Tap Water Database by ZIP code for a more detailed breakdown.</p>
-  <p><strong>Well water users:</strong> You have no utility report. Order a certified lab test — they typically cost $50-$150 and screen for bacteria, nitrates, lead, arsenic, pH, and hardness. Test annually and after any plumbing changes or flooding events.</p>
-  <p><strong>Quick home test kits</strong> ($15-$30) check for a handful of contaminants and give you a rough picture, but certified lab testing is always more accurate and comprehensive.</p>
+  <p><strong>Well water users:</strong> You have no utility report. Order a certified lab test — they screen for bacteria, nitrates, lead, arsenic, pH, and hardness. Basic panels are affordable, while comprehensive screenings cost more. Test annually and after any plumbing changes or flooding events.</p>
+  <p><strong>Quick home test kits</strong> are inexpensive and check for a handful of contaminants to give you a rough picture, but certified lab testing is always more accurate and comprehensive.</p>
 
   <ProTip>If your water report shows lead above 5 ppb or any PFAS detection, skip straight to a reverse osmosis system or an NSF 53-certified filter. Carbon-only pitcher filters will not adequately reduce these contaminants.</ProTip>
 
@@ -84,19 +85,19 @@ const relatedArticles = [
   <h3>Countertop Reverse Osmosis Systems</h3>
   <p><strong>Best for:</strong> Renters who need serious filtration, health-conscious users, apartments without under-sink access.</p>
   <p>Countertop RO systems sit on your counter and plug into a standard outlet — no plumbing required. They push water through a semi-permeable membrane that removes 93-99% of dissolved solids, including lead, fluoride, PFAS, and heavy metals.</p>
-  <p>The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV ({getPriceTier(bluevua.price)})</a> adds UV sterilization and a glass carafe, making it the top-tier countertop choice. For a more affordable option, its <a href="/reviews/bluevua-ro100ropot-lite-uv/">Lite UV sibling ($219.00)</a> delivers 90% of the performance at 70% of the price.</p>
+  <p>The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV ({getPriceTier(bluevua.price)})</a> adds UV sterilization and a glass carafe, making it the top-tier countertop choice. For a more affordable option, its <a href="/reviews/bluevua-ro100ropot-lite-uv/">Lite UV sibling ({getPriceTier(bluevuaLite.price)})</a> delivers most of the performance at a significantly lower price.</p>
   <p><strong>Limitations:</strong> Uses counter space. Produces water slowly. Creates wastewater (2:1 to 3:1 pure-to-drain ratio).</p>
 
   <h3>Under-Sink Filters</h3>
   <p><strong>Best for:</strong> Homeowners wanting permanent, high-performance filtration that stays hidden.</p>
   <p>Under-sink systems connect directly to your cold water line, either through a dedicated faucet or inline with your existing one. They offer higher flow rates and more thorough filtration than countertop options.</p>
-  <p>The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> is our best-value under-sink RO, delivering 6-stage filtration with alkaline remineralization for under $200. If you want cutting-edge tankless design with real-time TDS monitoring, the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 ({getPriceTier(waterdrop.price)})</a> is the premium choice at 600 GPD.</p>
+  <p>The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK ({getPriceTier(ispring.price)})</a> is our best-value under-sink RO, delivering 6-stage filtration with alkaline remineralization at a mid-range price point. If you want cutting-edge tankless design with real-time TDS monitoring, the <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 ({getPriceTier(waterdrop.price)})</a> is the premium choice at 600 GPD.</p>
   <p><strong>Limitations:</strong> Requires basic plumbing skills or professional installation. Takes cabinet space. RO systems waste water.</p>
 
   <h3>Portable and Survival Filters</h3>
   <p><strong>Best for:</strong> Hikers, campers, emergency preparedness, off-grid living.</p>
   <p>These lightweight filters use hollow fiber or ultrafiltration membranes to remove bacteria and protozoa from untreated water sources. They are essential for backcountry travel and disaster kits.</p>
-  <p>The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack ({getPriceTier(timain.price)})</a> is our budget pick at just $7.12 per straw. For complete water safety, pair a filter straw with <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs ($11.99)</a> to kill viruses that filters miss.</p>
+  <p>The <a href={`/reviews/${timain.slug}/`}>Timain Filter Straw 2-Pack ({getPriceTier(timain.price)})</a> is our budget pick — one of the most affordable per-straw options available. For complete water safety, pair a filter straw with <a href="/reviews/msr-aquatabs-30pack/">MSR Aquatabs</a> to kill viruses that filters miss.</p>
   <p><strong>Limitations:</strong> Do not remove chemicals, heavy metals, or TDS. Not designed for daily home use.</p>
 
   <h3>Whole-House and Sediment Filters</h3>
@@ -131,13 +132,13 @@ const relatedArticles = [
   <h2>Step 5: Set Your Budget (And Think Long-Term)</h2>
   <p>The sticker price of a water filter is only part of the equation. Replacement filter costs, energy use, and water waste all factor into the true cost of ownership.</p>
 
-  <h3>Budget Tier: Under $50</h3>
-  <p>Pitcher filters dominate this range. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher at {getPriceTier(amazonPitcher.price)}</a> is the best value entry point. Annual replacement filter costs run $20-$40. Total first-year cost: $45-$65.</p>
+  <h3>Entry Level</h3>
+  <p>Pitcher filters dominate this range. The <a href={`/reviews/${amazonPitcher.slug}/`}>Amazon Basics pitcher at {getPriceTier(amazonPitcher.price)}</a> is the best value entry point. Annual replacement filter costs are minimal, keeping the total first-year investment very low.</p>
 
-  <h3>Mid-Range: $50-$250</h3>
-  <p>This is where you get serious filtration. The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at {getPriceTier(ispring.price)}</a> delivers full reverse osmosis with alkaline remineralization. Annual filter replacement costs are roughly $40-$60. First-year total: $240-$260.</p>
+  <h3>Mid-Range</h3>
+  <p>This is where you get serious filtration. The <a href={`/reviews/${ispring.slug}/`}>iSpring RCC7AK at {getPriceTier(ispring.price)}</a> delivers full reverse osmosis with alkaline remineralization. Annual filter replacement costs are modest, and the per-gallon cost drops well below pitcher filters over time.</p>
 
-  <h3>Premium: $250-$550</h3>
+  <h3>Premium</h3>
   <p>Premium systems offer advanced features like UV sterilization, tankless design, or commercial-grade filtration. The <a href={`/reviews/${bluevua.slug}/`}>Bluevua RO100ROPOT-UV at {getPriceTier(bluevua.price)}</a> and <a href={`/reviews/${waterdrop.slug}/`}>Waterdrop G3P600 at {getPriceTier(waterdrop.price)}</a> represent the best of this tier. The <a href={`/reviews/${pentairH1200.slug}/`}>Pentair Everpure H-1200 at {getPriceTier(pentairH1200.price)}</a> brings restaurant-grade filtration to your kitchen.</p>
   <p>For a comprehensive breakdown, read our <a href="/guides/water-filter-cost-analysis/">Water Filter Cost Analysis</a>.</p>
 
@@ -178,7 +179,7 @@ const relatedArticles = [
   <ul>
     <li><strong>Best for most people:</strong> <a href={`/reviews/${britaUltramax.slug}/`}>{britaUltramax.name}</a> — {getPriceTier(britaUltramax.price)}, highly rated by thousands of buyers. Upgrade to Elite filters for lead reduction.</li>
     <li><strong>Best on a tight budget:</strong> <a href={`/reviews/${amazonPitcher.slug}/`}>{amazonPitcher.name}</a> — {getPriceTier(amazonPitcher.price)}. NSF 42/53 certified at the lowest price.</li>
-    <li><strong>Best for serious contaminants (RO):</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a> — {getPriceTier(ispring.price)}. Full 6-stage RO under $200.</li>
+    <li><strong>Best for serious contaminants (RO):</strong> <a href={`/reviews/${ispring.slug}/`}>{ispring.name}</a> — {getPriceTier(ispring.price)}. Full 6-stage RO at a mid-range price.</li>
     <li><strong>Best no-install RO:</strong> <a href={`/reviews/${bluevua.slug}/`}>{bluevua.name}</a> — {getPriceTier(bluevua.price)}. UV sterilization plus glass carafe.</li>
     <li><strong>Best premium under-sink:</strong> <a href={`/reviews/${waterdrop.slug}/`}>{waterdrop.name}</a> — {getPriceTier(waterdrop.price)}. Tankless 600 GPD with smart TDS faucet.</li>
     <li><strong>Best for emergencies:</strong> <a href={`/reviews/${timain.slug}/`}>{timain.name}</a> — {getPriceTier(timain.price)} for 2 straws. Pair with Aquatabs for complete safety.</li>

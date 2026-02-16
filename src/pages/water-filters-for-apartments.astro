@@ -21,8 +21,8 @@ const recommendedProducts = [britaUltramax, amazonPitcher, bluevua, bluevuaLite]
 
 const faqs = [
   { question: 'Can I install an under-sink filter in my apartment?', answer: 'That depends on your lease agreement. Many landlords prohibit plumbing modifications, and even those who allow it may require professional installation and reversal when you move out. If your lease allows it, an under-sink RO system like the iSpring RCC7AK is the best performing option. If not, countertop and pitcher filters require zero installation and can move with you to your next apartment.' },
-  { question: 'Which is better for an apartment — a pitcher or countertop RO?', answer: 'Pitchers are better for budget-conscious renters who want basic chlorine and taste improvement. They cost $24-35, take up only fridge space, and reduce common taste contaminants. Countertop RO systems like the Bluevua cost $219-317 but provide dramatically superior filtration — removing TDS, lead, fluoride, PFAS, bacteria, and viruses. If water quality is your priority and budget allows, countertop RO is the clear upgrade.' },
-  { question: 'How do I know if my apartment water needs filtering?', answer: 'Request your city\'s Consumer Confidence Report (CCR), which is published annually and details contaminant levels in your municipal water. You can also buy an inexpensive TDS meter ($10-15) to measure total dissolved solids. If your TDS reading is above 300 ppm, or the CCR shows lead, PFAS, or other concerning contaminants, filtration is a smart investment. Even if contaminants are within legal limits, many people prefer the taste improvement that filtration provides.' },
+  { question: 'Which is better for an apartment — a pitcher or countertop RO?', answer: 'Pitchers are better for budget-conscious renters who want basic chlorine and taste improvement. They are the most affordable filter category, take up only fridge space, and reduce common taste contaminants. Countertop RO systems like the Bluevua cost significantly more but provide dramatically superior filtration — removing TDS, lead, fluoride, PFAS, bacteria, and viruses. If water quality is your priority and budget allows, countertop RO is the clear upgrade.' },
+  { question: 'How do I know if my apartment water needs filtering?', answer: 'Request your city\'s Consumer Confidence Report (CCR), which is published annually and details contaminant levels in your municipal water. You can also buy an inexpensive TDS meter to measure total dissolved solids. If your TDS reading is above 300 ppm, or the CCR shows lead, PFAS, or other concerning contaminants, filtration is a smart investment. Even if contaminants are within legal limits, many people prefer the taste improvement that filtration provides.' },
   { question: 'How often do I need to replace pitcher filters?', answer: 'Standard pitcher filters (Brita Standard, Amazon Basics) last approximately 40 gallons or 2 months. Brita Elite filters last 120 gallons or about 6 months. Actual lifespan depends on your water quality — harder water clogs filters faster. Most pitchers have electronic or sticker-based indicators to remind you. For the best taste and contaminant reduction, replace on schedule rather than waiting until taste degrades.' },
   { question: 'Do pitcher filters remove lead?', answer: 'Not all of them. Brita Standard filters are only NSF 42 certified and do not certify for lead removal. Brita Elite filters are NSF 53 certified and reduce 99% of lead. Amazon Basics Enhanced filters are also NSF 53 certified for lead. If lead is a concern in your building (common in apartments with older plumbing), choose a filter specifically certified for lead reduction under NSF Standard 53.' },
   { question: 'Is a countertop RO system loud in a small apartment?', answer: 'Countertop RO systems produce a low humming noise during the filtration cycle, comparable to a quiet refrigerator. The Bluevua models run for approximately 15-20 minutes per fill cycle. In a studio apartment, you will notice the noise, but it is not disruptive. Most users run it during the day or while doing other activities. The noise stops completely once the cycle is finished.' },
@@ -33,7 +33,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -55,7 +55,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -66,7 +66,7 @@ const relatedArticles = [
   <h2>Why Apartment Dwellers Need Water Filtration</h2>
   <p>Apartment buildings, especially older ones, present unique water quality challenges. Even if your municipality treats water to EPA standards at the plant, that water travels through miles of aging infrastructure and your building's internal plumbing before reaching your tap. Lead from pre-1986 solder joints, copper from corroding pipes, and accumulated sediment in building risers can all degrade water quality between the treatment plant and your glass.</p>
   <p>High-rise apartments face an additional concern: rooftop water storage tanks. Many buildings store water in tanks that may not be cleaned as regularly as they should be, introducing bacteria, sediment, and even pest contamination. If your building uses a rooftop tank, point-of-use filtration is especially important.</p>
-  <p>The good news is that modern no-install filtration options deliver excellent performance without touching a single pipe. Pitcher filters provide basic improvement for under $25, while countertop RO systems match under-sink performance at a price point that is still reasonable — and everything moves with you when your lease ends.</p>
+  <p>The good news is that modern no-install filtration options deliver excellent performance without touching a single pipe. Pitcher filters provide basic improvement at entry-level prices, while countertop RO systems match under-sink performance at a price point that is still reasonable — and everything moves with you when your lease ends.</p>
 
   <h2>What to Look For in an Apartment Water Filter</h2>
   <p>Apartment-friendly filters must meet several criteria that home filters do not:</p>
@@ -79,7 +79,7 @@ const relatedArticles = [
   </ul>
 
   <ProTip title="Check Your Building's Water Quality">
-    Your city is required to publish an annual Consumer Confidence Report (CCR) detailing your municipal water quality. Search "[your city] water quality report" to find it. However, this report reflects water at the treatment plant — not at your tap. For building-specific data, consider a home water test kit or a TDS meter ($10-15 on Amazon). If your TDS reading is significantly higher than your city's reported levels, your building's plumbing is adding contaminants.
+    Your city is required to publish an annual Consumer Confidence Report (CCR) detailing your municipal water quality. Search "[your city] water quality report" to find it. However, this report reflects water at the treatment plant — not at your tap. For building-specific data, consider a home water test kit or an inexpensive TDS meter from Amazon. If your TDS reading is significantly higher than your city's reported levels, your building's plumbing is adding contaminants.
   </ProTip>
 
   <h2>Top Picks for Apartments</h2>
@@ -91,14 +91,14 @@ const relatedArticles = [
   <p><strong>Price Range:</strong> {getPriceTier(britaUltramax.price)} | <a href={`/reviews/${britaUltramax.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(britaUltramax.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>2. {amazonPitcher.name} — Best Budget Option</h3>
-  <p>For renters watching every dollar, the Amazon Basics pitcher delivers NSF 42/53 certified filtration for under $24. It reduces chlorine taste, lead, mercury, and copper using the same activated carbon and ion exchange technology found in pitchers costing 50% more. The 10-cup capacity is enough for 1-2 people, and it fits comfortably in a standard refrigerator door.</p>
+  <p>For renters watching every dollar, the Amazon Basics pitcher delivers NSF 42/53 certified filtration at {getPriceTier(amazonPitcher.price)} — one of the lowest-cost certified filters available. It reduces chlorine taste, lead, mercury, and copper using the same activated carbon and ion exchange technology found in pitchers costing 50% more. The 10-cup capacity is enough for 1-2 people, and it fits comfortably in a standard refrigerator door.</p>
   <p>The electronic filter change indicator removes the guesswork about when to swap cartridges, and the filter is compatible with Brita Standard filters — so you can use the cheapest compatible replacement from any brand. At this price point, there is no reason for any apartment dweller to drink unfiltered tap water.</p>
   <p><strong>Price Range:</strong> {getPriceTier(amazonPitcher.price)} | <a href={`/reviews/${amazonPitcher.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(amazonPitcher.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {bluevua.name} — Best Premium No-Install Option</h3>
   <p>For apartment dwellers who want the best possible water quality without any plumbing work, the Bluevua RO100ROPOT-UV is a game-changer. This countertop unit delivers 6-stage reverse osmosis with UV sterilization and remineralization — filtration performance that rivals permanently installed under-sink systems. The glass carafe ensures no plastic contact with your purified water.</p>
   <p>The UV stage is particularly valuable for apartment dwellers concerned about building plumbing quality. It kills 99.99% of bacteria and viruses, providing a level of biological protection that no pitcher filter can match. The remineralization stage adds back healthy minerals after RO strips them, resulting in water that tastes clean and slightly mineralized rather than flat.</p>
-  <p>At {getPriceTier(bluevua.price)}, it is a significant investment compared to a pitcher. But for health-conscious renters who would otherwise spend $30-50 per month on bottled water, the Bluevua pays for itself within a year while producing far less plastic waste.</p>
+  <p>At {getPriceTier(bluevua.price)}, it is a significant investment compared to a pitcher. But for health-conscious renters who would otherwise buy bottled water daily, the Bluevua pays for itself within a year while producing far less plastic waste.</p>
   <p><strong>Price Range:</strong> {getPriceTier(bluevua.price)} | <a href={`/reviews/${bluevua.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(bluevua.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>4. {bluevuaLite.name} — Best Value Countertop RO</h3>

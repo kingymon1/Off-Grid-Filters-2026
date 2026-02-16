@@ -43,7 +43,7 @@ const articleSchema = generateArticleSchema({
   description: `Brita Elite vs ZeroWater 5-Stage replacement filter comparison. We compare filtration depth, cost per gallon, filter life, taste, and overall value.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -65,13 +65,13 @@ const relatedArticles = [
   currentPage="Brita Elite vs ZeroWater"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>Brita Elite vs ZeroWater: Which Pitcher Filter Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>Brita Elite ($29.78/2-pack)</strong> is the better choice for most households — it removes 99% of lead, lasts 120 gallons per filter, and costs about $0.12/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper TDS reduction (0 ppm) and removes fluoride, but filters deplete 5-8x faster and cost roughly $0.60-1.00/gallon. Choose ZeroWater only if you need maximum TDS reduction or fluoride removal.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>Brita Elite ({getPriceTier(productA.price)})</strong> is the better choice for most households — it removes 99% of lead, lasts 120 gallons per filter, and delivers among the lowest cost-per-gallon in the pitcher category. <strong>ZeroWater ({getPriceTier(productB.price)})</strong> achieves deeper TDS reduction (0 ppm) and removes fluoride, but filters deplete 5-8x faster and running costs are dramatically higher. Choose ZeroWater only if you need maximum TDS reduction or fluoride removal.</p>
   </div>
 
   <div class="comparison-products">
@@ -109,8 +109,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Brita Elite (120 gal vs 15-25 gal per filter)</div>
 
   <h3>Cost Per Gallon</h3>
-  <p>The Brita Elite 2-pack at $29.78 yields 240 total gallons — about $0.12/gallon. The ZeroWater 4-pack at $59.99 yields 60-100 total gallons at best — roughly $0.60-1.00/gallon. Even at the optimistic end, ZeroWater costs 5x more per gallon than Brita Elite. Over a year, a family filtering 3 gallons/day would spend roughly $131 on Brita Elite versus $657-1,095 on ZeroWater. That is a substantial difference.</p>
-  <div class="winner-badge">Winner: Brita Elite ($0.12/gal vs $0.60-1.00/gal)</div>
+  <p>The Brita Elite 2-pack yields 240 total gallons, giving it one of the cheapest per-gallon costs in the pitcher category — pennies per gallon of filtered water. The ZeroWater 4-pack yields only 60-100 total gallons at best, driving per-gallon costs roughly 5-8x higher than Brita Elite. Over a year, a family filtering 3 gallons per day would spend a fraction with Brita Elite compared to ZeroWater, where annual filter costs can easily run five to eight times higher. That is a substantial, compounding difference.</p>
+  <div class="winner-badge">Winner: Brita Elite (significantly lower running costs)</div>
 
   <h3>Certifications &amp; Testing</h3>
   <p>The Brita Elite carries NSF 42/53/401 certification — the gold standard for independent testing, verified by NSF International. ZeroWater uses IAPMO certification for lead, chromium, PFOA, and PFOS. While both are legitimate certifications, NSF is more widely recognized and trusted in the water filtration industry. The Brita Elite's triple NSF certification covers a broader range of tested contaminants across three separate standards.</p>

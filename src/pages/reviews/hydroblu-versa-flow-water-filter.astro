@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The HydroBlu Versa Flow is the cheapest hollow fiber water filter you can buy at $16.95 — roughly half the price of a Sawyer Mini and less than a third of the Sawyer Squeeze. At that price, you get 0.1-micron hollow fiber membrane filtration with a 100,000-gallon rated capacity, a backflush syringe, and a multi-attachment system that works as a straw, squeeze filter, gravity filter, or inline hydration bladder filter. On paper, it matches the specs of filters costing two to three times more.</p>
+  <p>The HydroBlu Versa Flow is the cheapest hollow fiber water filter you can buy — roughly half the price of a Sawyer Mini and less than a third of the Sawyer Squeeze. At this {getPriceTier(product.price)} price point, you get 0.1-micron hollow fiber membrane filtration with a 100,000-gallon rated capacity, a backflush syringe, and a multi-attachment system that works as a straw, squeeze filter, gravity filter, or inline hydration bladder filter. On paper, it matches the specs of filters costing two to three times more.</p>
   <p>The "Versa" in Versa Flow refers to versatility, and it delivers on that promise. The included adapter set lets you configure the filter for four distinct use modes without buying additional accessories. Straw mode for direct drinking from shallow sources. Squeeze mode with any 28mm-thread bottle or the included pouch. Gravity mode by hanging a dirty-water bag above a clean container. And inline mode that integrates with hydration bladder tubing for hands-free drinking while hiking. No other filter at this price point — or even at twice this price — offers all four configurations out of the box.</p>
   <p>The trade-off for the low price is brand confidence and build refinement. HydroBlu is a smaller brand without the decades of field-testing data that Sawyer and Katadyn have accumulated. The included squeeze pouch is noticeably flimsier than Sawyer's, and the flow rate is measurably slower. These are meaningful differences for serious backcountry users who depend on their filter daily. For emergency preparedness, casual day hikes, and budget-conscious buyers building redundancy into their kits, the Versa Flow's value proposition is hard to beat.</p>
 
@@ -91,7 +91,7 @@ const relatedArticles = [
 
   <p>The 0.1-micron hollow fiber membrane is the same fundamental technology used across the portable filter industry — thousands of tiny U-shaped tubes with precisely sized pores that physically block anything larger than 0.1 microns. This provides log-6 bacteria removal (99.9999%) and log-4 protozoa removal (99.99%), meeting EPA standards for water filters. The single-stage design means no carbon element for taste improvement or chemical reduction — what you get is pure mechanical pathogen filtration, nothing more. Water passes through and pathogens are blocked. At 2 ounces and 5.5 inches long, the Versa Flow ties the Sawyer Mini as the lightest and most compact hollow fiber filter available.</p>
 
-  <ProTip>The included squeeze pouch is the Versa Flow's weakest component. Replace it immediately with a 1-liter Smartwater bottle (28mm threads, widely available) or a CNOC Vecto soft flask for a more durable squeeze experience. The Smartwater bottle trick works with the Versa Flow just as well as with Sawyer filters — fill from source, screw on filter, squeeze. At $16.95 for the filter plus $2 for a Smartwater bottle, you have a complete squeeze filtration system for under $20.</p>
+  <ProTip>The included squeeze pouch is the Versa Flow's weakest component. Replace it immediately with a 1-liter Smartwater bottle (28mm threads, widely available) or a CNOC Vecto soft flask for a more durable squeeze experience. The Smartwater bottle trick works with the Versa Flow just as well as with Sawyer filters — fill from source, screw on filter, squeeze. Pair the Versa Flow with a Smartwater bottle and you have a complete squeeze filtration system for less than many competitors charge for the filter alone.</p>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -113,8 +113,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $16.95, the HydroBlu Versa Flow delivers the lowest cost-per-gallon of any hollow fiber filter on the market. Over its 100,000-gallon rated life, that works out to $0.00017 per gallon — effectively free. The closest competitor on price is the Membrane Solutions filter straw at $9.75 per unit (in a 4-pack), but the Membrane Solutions lacks the multi-attachment versatility and backflush syringe. The Sawyer Mini at $22-25 costs 30-50% more for equivalent specs. The Sawyer Squeeze at $35 costs more than double.</p>
-  <p>The value case is strongest for three buyer profiles. Emergency preppers who want to stock multiple filters across kits — at $17 each, you can equip every go-bag and vehicle kit for the price of a single premium filter. Budget backpackers on their first few trips who want proven filtration technology without the investment. And families who need individual filters for each member rather than sharing a single expensive unit. For experienced backcountry travelers who use their filter daily and depend on it in remote settings, the Sawyer Squeeze's faster flow and proven reliability is worth the premium.</p>
+  <p>The HydroBlu Versa Flow delivers the lowest cost-per-gallon of any hollow fiber filter on the market. Over its 100,000-gallon rated life, the per-gallon cost is a fraction of a penny — effectively free. The closest competitor on price is the Membrane Solutions filter straw (available in multi-packs), but the Membrane Solutions lacks the multi-attachment versatility and backflush syringe. The Sawyer Mini costs 30-50% more for equivalent specs, and the Sawyer Squeeze costs more than double.</p>
+  <p>The value case is strongest for three buyer profiles. Emergency preppers who want to stock multiple filters across kits — at this price, you can equip every go-bag and vehicle kit for the cost of a single premium filter. Budget backpackers on their first few trips who want proven filtration technology without the investment. And families who need individual filters for each member rather than sharing a single expensive unit. For experienced backcountry travelers who use their filter daily and depend on it in remote settings, the Sawyer Squeeze's faster flow and proven reliability is worth the premium.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

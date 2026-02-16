@@ -12,10 +12,10 @@ const relatedProducts = getRelatedProducts(product);
 const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
-  { question: 'Is the Brita Standard 4-Pack a better deal than the 3-Pack?', answer: 'Yes. The 4-pack costs $18.49 ($4.62/filter) compared to the 3-pack at $17.98 ($5.99/filter). That is a 23% savings per filter for just 51 cents more. You also get 8 months of filtration instead of 6, meaning fewer reorder cycles.' },
+  { question: 'Is the Brita Standard 4-Pack a better deal than the 3-Pack?', answer: 'Yes. The 4-pack delivers roughly 23% savings per filter compared to the 3-pack, for just pennies more at checkout. You also get 8 months of filtration instead of 6, meaning fewer reorder cycles. On a per-filter basis, the 4-pack is the most economical way to buy genuine Brita Standard cartridges.' },
   { question: 'Can I use Brita Standard 4-Pack filters in a ZeroWater or PUR pitcher?', answer: 'No. Brita Standard filters are only compatible with Brita-brand pitchers and dispensers (and some third-party Brita-compatible pitchers like Amazon Basics). They will not fit ZeroWater, PUR, or other brand-specific pitchers due to different cartridge designs.' },
   { question: 'How do I know when to replace a Brita Standard filter?', answer: 'Replace every 40 gallons or approximately every 2 months. Signs it needs replacing include slower flow rate, returning chlorine taste, and the filter indicator light (on newer pitchers) turning red. If you notice off flavors before the 2-month mark, your source water may be more demanding and you should replace sooner.' },
-  { question: 'Should I upgrade to Brita Elite instead of buying the Standard 4-Pack?', answer: 'If lead, pharmaceuticals, or longer filter life matter to you, yes. Brita Elite filters cost $14.89 each but last 120 gallons (3x longer), making them about $0.12/gallon versus $0.15/gallon for Standard. Elite also adds NSF 53 and 401 certifications for lead and pharmaceutical reduction.' },
+  { question: 'Should I upgrade to Brita Elite instead of buying the Standard 4-Pack?', answer: 'If lead, pharmaceuticals, or longer filter life matter to you, yes. Brita Elite filters cost more per unit but last 120 gallons (3x longer), making them cheaper per gallon of filtered water than Standard. Elite also adds NSF 53 and 401 certifications for lead and pharmaceutical reduction.' },
 ];
 
 const productSchema = generateProductSchema(product);
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <h1>{product.name} Review ({new Date().getFullYear()})</h1>
@@ -67,10 +67,10 @@ const relatedArticles = [
 
   <h2>Overview</h2>
   <p>
-    The Brita Standard 4-Pack is identical in filtration to the 3-pack — same activated carbon and ion exchange resin, same 40-gallon capacity per filter, same NSF 42 certification. The only difference is the extra filter and the marginal price bump from $17.98 to $18.49.
+    The Brita Standard 4-Pack is identical in filtration to the 3-pack — same activated carbon and ion exchange resin, same 40-gallon capacity per filter, same NSF 42 certification. The only difference is the extra filter and a negligible price bump over the 3-pack.
   </p>
   <p>
-    That math works overwhelmingly in the 4-pack's favor. At $4.62 per filter, you are saving $1.37 per filter compared to the 3-pack. Over a year (6 filters), that adds up to over $8 in savings — essentially a free filter. For a product you will repurchase indefinitely, the 4-pack should be your default.
+    That math works overwhelmingly in the 4-pack's favor. The per-filter cost drops roughly 23% compared to the 3-pack, and over a year of replacements (about 6 filters), the savings add up to essentially a free filter. For a product you will repurchase indefinitely, the 4-pack should be your default.
   </p>
   <p>
     The caveat remains the same as for any Brita Standard filter: NSF 42 certification only covers chlorine taste and odor. If you need lead, pharmaceutical, or PFAS reduction, the Brita Elite or a different brand is the better move. But if you are buying Standard, this is the pack size to choose.
@@ -99,7 +99,7 @@ const relatedArticles = [
   </p>
 
   <ProTip title="Cost Comparison">
-    <p>Per-gallon cost breakdown: Brita Standard 4-Pack = $0.116/gal, Brita Standard 3-Pack = $0.150/gal, Amazon Basics Enhanced 3-Pack = $0.087/gal, Brita Elite 2-Pack = $0.124/gal. The Elite is actually cheaper per gallon than the Standard 3-Pack while offering far better filtration.</p>
+    <p>On a per-gallon basis, the Brita Standard 4-Pack is roughly 20% cheaper than the 3-Pack. But the Amazon Basics Enhanced 3-Pack undercuts both by a wide margin, and the Brita Elite 2-Pack — despite costing more upfront — actually filters water at a lower per-gallon rate than the Standard 3-Pack while offering far superior contaminant reduction.</p>
   </ProTip>
 
   <h2>Pros & Cons</h2>
@@ -135,10 +135,10 @@ const relatedArticles = [
 
   <h2>Value Analysis</h2>
   <p>
-    The 4-pack at $18.49 is objectively the best way to buy Brita Standard. The per-filter price of $4.62 cannot be beaten in any other Brita Standard pack size. However, the broader question is whether Brita Standard is the right filter for you at all.
+    Priced in the {getPriceTier(product.price)} range, the 4-pack is objectively the best way to buy Brita Standard. No other Brita Standard pack size matches its per-filter economics. However, the broader question is whether Brita Standard is the right filter for you at all.
   </p>
   <p>
-    The Amazon Basics Enhanced 3-Pack provides NSF 42/53/401/372 certification (versus just NSF 42 for Brita) at $10.49 — meaning better filtration for $8 less. If you are not brand-loyal, that is the better purchase. And if you are willing to spend more, the Brita Elite 2-Pack at $29.78 provides significantly better filtration at a lower cost per gallon.
+    The Amazon Basics Enhanced 3-Pack provides NSF 42/53/401/372 certification (versus just NSF 42 for Brita) at a noticeably lower price — meaning better filtration for less money. If you are not brand-loyal, that is the better purchase. And if you are willing to spend more, the Brita Elite 2-Pack provides significantly better filtration at a lower cost per gallon despite its higher sticker price.
   </p>
 
   <h2>Frequently Asked Questions</h2>

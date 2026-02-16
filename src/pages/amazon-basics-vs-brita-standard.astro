@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `Amazon Basics Enhanced vs Brita Standard replacement filter comparison. We compare certifications, contaminant removal, price, compatibility, and overall value.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="Amazon Basics vs Brita"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>Amazon Basics Enhanced vs Brita Standard: Which Pitcher Filter Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>Amazon Basics Enhanced ($10.49/3-pack)</strong> is the better value by every measurable metric — more NSF certifications (42/53/401/372 vs 42), lead reduction capability, and nearly half the price of Brita Standard. The <strong>Brita Standard ($17.98/3-pack)</strong> has the trusted brand name and 95,000+ reviews, but pays a premium for fewer certifications. For most buyers, Amazon Basics is the smarter pick.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>Amazon Basics Enhanced ({getPriceTier(productA.price)})</strong> is the better value by every measurable metric — more NSF certifications (42/53/401/372 vs 42), lead reduction capability, and roughly half the price of Brita Standard. The <strong>Brita Standard ({getPriceTier(productB.price)})</strong> has the trusted brand name and 95,000+ reviews, but commands a significant premium for fewer certifications. For most buyers, Amazon Basics is the smarter pick.</p>
   </div>
 
   <div class="comparison-products">
@@ -104,8 +104,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Amazon Basics Enhanced (NSF 42/53/401/372 vs NSF 42)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>Amazon Basics Enhanced costs $10.49 for a 3-pack — about $3.50 per filter. Brita Standard costs $17.98 for a 3-pack — about $6 per filter. Both provide 40 gallons per filter and 120 total gallons per pack. The Amazon Basics works out to $0.087/gallon versus $0.15/gallon for Brita Standard. You get 42% more value per dollar with the Amazon Basics, and it has better certifications. This is a rare case where cheaper is genuinely better.</p>
-  <div class="winner-badge">Winner: Amazon Basics Enhanced ($0.087/gal vs $0.15/gal)</div>
+  <p>Amazon Basics Enhanced costs roughly half what Brita Standard charges for the same 3-pack size, making it one of the cheapest per-gallon options in the pitcher filter category. Both provide 40 gallons per filter and 120 total gallons per pack, so the capacity is identical — the only difference is what you pay. The Amazon Basics delivers the lowest cost-per-gallon of any pitcher filter we have tested in this tier, while the Brita Standard costs nearly double per gallon for fewer certifications. This is a rare case where the budget option is genuinely better.</p>
+  <div class="winner-badge">Winner: Amazon Basics Enhanced (lowest cost per gallon)</div>
 
   <h3>Compatibility</h3>
   <p>Both filters are compatible with all Brita pitchers and dispensers except the Stream series. Amazon Basics Enhanced filters are designed as a direct drop-in replacement for Brita Standard filters using the same physical form factor. If you own a Brita pitcher, you can switch to Amazon Basics without buying any new hardware. This perfect cross-compatibility makes switching completely frictionless.</p>
@@ -124,7 +124,7 @@ const relatedArticles = [
     <div class="rec-card rec-a">
       <h3>Get the {productA.name} if...</h3>
       <ul>
-        <li>You want the best certifications per dollar — quad NSF at under $3.50/filter</li>
+        <li>You want the best certifications per dollar — quad NSF at the lowest per-filter cost in this category</li>
         <li>Lead reduction matters but you do not want to pay Brita Elite prices</li>
         <li>You already own a Brita pitcher and want to cut filter costs in half</li>
         <li>You are a value-driven buyer who trusts certifications over brand names</li>

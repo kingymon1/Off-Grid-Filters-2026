@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The everydrop Filter 1 (EDR1RXD1) is the OEM gold standard for Whirlpool-family refrigerator water filtration. Made by the same company that manufactures your Whirlpool, Maytag, KitchenAid, Amana, or JennAir refrigerator, this filter is guaranteed to fit, function, and deliver the contaminant reduction that the triple NSF 42/53/401 certification promises. At $53.99, it costs more than aftermarket alternatives, but the peace of mind of verified lead reduction (99%), pharmaceutical removal, and guaranteed compatibility is what you are paying for.</p>
+  <p>The everydrop Filter 1 (EDR1RXD1) is the OEM gold standard for Whirlpool-family refrigerator water filtration. Made by the same company that manufactures your Whirlpool, Maytag, KitchenAid, Amana, or JennAir refrigerator, this filter is guaranteed to fit, function, and deliver the contaminant reduction that the triple NSF 42/53/401 certification promises. As a {getPriceTier(product.price)} OEM filter, it costs more than aftermarket alternatives, but the peace of mind of verified lead reduction (99%), pharmaceutical removal, and guaranteed compatibility is what you are paying for.</p>
   <p>The activated carbon block technology inside the EDR1RXD1 is specifically engineered for the push-in filter compartment design used across Whirlpool's brand family. When you install it, the refrigerator recognizes the genuine filter and resets the replacement indicator automatically. This seamless integration is something aftermarket filters often struggle with — many trigger persistent "replace filter" warnings or fail to seat properly, leading to water bypass that defeats the purpose of filtration entirely.</p>
   <p>With 32,000+ Amazon reviews and a 4.6-star average, the everydrop Filter 1 has one of the largest and most consistent review histories of any refrigerator filter. The most common praise centers on water taste improvement, easy installation, and the reassurance of OEM quality. The most common complaint is the price — and honestly, that is a fair criticism. But the certification gap between this filter and budget aftermarket options is real and measurable.</p>
 
@@ -110,7 +110,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $53.99, the everydrop Filter 1 is one of the pricier refrigerator filters in our catalog. Replacing it every 6 months means an annual cost of approximately $108. By comparison, the AQUACREST UKF8001 6-pack runs $16.88 for six filters — theoretically covering 3 years for the same amount you would spend on one year of everydrop. The difference is certification: the AQUACREST carries only NSF 42, while the everydrop has NSF 42/53/401. If your water source has known lead or pharmaceutical contamination concerns, the everydrop premium is justified by measurably better filtration.</p>
+  <p>The everydrop Filter 1 is one of the pricier refrigerator filters in our catalog. With twice-yearly replacements, the annual cost is more than double what you would spend on budget aftermarket options. The AQUACREST UKF8001 3-pack, for example, covers 18 months of filter changes for less than the cost of a single everydrop cartridge. The difference is certification: the AQUACREST carries only NSF 42, while the everydrop has NSF 42/53/401. If your water source has known lead or pharmaceutical contamination concerns, the everydrop premium is justified by measurably better filtration.</p>
   <p>For homes with already-clean municipal water where lead and PFAS are not concerns, an aftermarket NSF 42 filter will provide equivalent taste improvement at a fraction of the cost. The honest recommendation: if you live in a home built before 1986 (when lead solder was banned), have older plumbing, or live in an area with known water quality issues, invest in the everydrop. If your water tests clean and you just want better-tasting water and ice, a quality aftermarket filter is a reasonable choice.</p>
 
   <!-- FAQ -->

@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `ZeroWater 5-Stage vs PUR pitcher filter comparison. We compare TDS reduction, contaminant removal, cost per gallon, and practical everyday use.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="ZeroWater vs PUR"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>ZeroWater vs PUR: Which Pitcher Filter Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ($23.22)</strong> is the practical winner for most households — solid NSF 42/53 certified filtration with lead removal at $0.145/gallon. <strong>ZeroWater ($59.99/4-pack)</strong> achieves deeper purification with 0 TDS and PFAS removal, but its 15-25 gallon filter life makes it 4-7x more expensive per gallon. Choose ZeroWater only if you have very hard water or need verified PFAS reduction.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>PUR 4-Pack ({getPriceTier(productB.price)})</strong> is the practical winner for most households — solid NSF 42/53 certified filtration with lead removal at one of the lowest per-gallon costs in the pitcher category. <strong>ZeroWater ({getPriceTier(productA.price)} for a 4-pack)</strong> achieves deeper purification with 0 TDS and PFAS removal, but its 15-25 gallon filter life makes it 4-7x more expensive per gallon. Choose ZeroWater only if you have very hard water or need verified PFAS reduction.</p>
   </div>
 
   <div class="comparison-products">
@@ -108,8 +108,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: PUR (40 gal vs 15-25 gal per filter)</div>
 
   <h3>Cost Per Gallon</h3>
-  <p>PUR's 4-pack at $23.22 yields 160 gallons total — about $0.145/gallon. ZeroWater's 4-pack at $59.99 yields 60-100 gallons — roughly $0.60-1.00/gallon. The cost gap is enormous: over a year of filtering 3 gallons daily (1,095 gallons), PUR costs approximately $159 while ZeroWater runs $657-1,095. For budget-conscious households, PUR delivers strong filtration at a fraction of ZeroWater's ongoing expense.</p>
-  <div class="winner-badge">Winner: PUR ($0.145/gal vs $0.60-1.00/gal)</div>
+  <p>PUR's 4-pack yields 160 gallons total at one of the cheapest per-gallon costs in the pitcher category. ZeroWater's 4-pack yields only 60-100 gallons — roughly 4-7x the per-gallon expense. The cost gap is enormous: over a year of filtering 3 gallons daily, PUR costs a fraction of what ZeroWater demands. For budget-conscious households, PUR delivers strong filtration at dramatically lower running costs.</p>
+  <div class="winner-badge">Winner: PUR (4-7x lower per-gallon cost)</div>
 
   <h3>PFAS &amp; Specialized Contaminant Removal</h3>
   <p>ZeroWater has a verified edge here. Its IAPMO certification covers PFOA and PFOS — the "forever chemicals" that are an increasing public health concern. PUR does not certify for PFAS removal. If you live in an area with known PFAS contamination (near military bases, industrial sites, or airports that used AFFF firefighting foam), ZeroWater's certified PFAS reduction provides meaningful protection that PUR cannot match.</p>

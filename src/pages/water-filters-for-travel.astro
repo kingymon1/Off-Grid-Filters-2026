@@ -32,7 +32,7 @@ const articleSchema = generateArticleSchema({
   description: guide.description,
   url: `/${guide.slug}/`,
   datePublished: guide.publishDate,
-  dateModified: guide.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: 'Water Filtration', url: 'https://www.wikidata.org/entity/Q842467' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -54,7 +54,7 @@ const relatedArticles = [
   currentPage={guide.title}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={guide.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${guide.slug}-hero.webp`}
 >
   <h1>{guide.title}</h1>
@@ -96,7 +96,7 @@ const relatedArticles = [
   <p><strong>Price Range:</strong> {getPriceTier(timain.price)} | <a href={`/reviews/${timain.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(timain.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 
   <h3>3. {membrane.name} — Best for Group Travel</h3>
-  <p>Traveling with family or friends? The Membrane Solutions 4-pack equips everyone with their own filter straw so no one has to share or go without. At {getPriceTier(membrane.price)} for four straws, it works out to under $10 per person for the duration of the trip.</p>
+  <p>Traveling with family or friends? The Membrane Solutions straw is affordable enough to grab one per person so no one has to share or go without. At {getPriceTier(membrane.price)} per straw, equipping your whole travel group costs less than a single airport meal.</p>
   <p>The 28mm bottle compatibility is particularly useful for travelers who buy sealed bottled water and want to refill the same bottle from filtered tap water later. Thread the straw onto the bottle opening, flip, and squeeze — filtered water on demand. Each straw's 1,500+ liter capacity far exceeds what any traveler would need on a single trip, so they can be used on future trips as well.</p>
   <p><strong>Price Range:</strong> {getPriceTier(membrane.price)} | <a href={`/reviews/${membrane.slug}/`}>Full Review</a> | <a href={getAffiliateUrl(membrane.asin)} target="_blank" rel="nofollow sponsored noopener">Check Price on Amazon</a></p>
 

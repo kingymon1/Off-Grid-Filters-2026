@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The LifeStraw Family 1.0 is a gravity-powered water purifier — not just a filter — designed for families, off-grid homes, and long-term emergency preparedness. At $64.95, its 0.02-micron ultrafiltration membrane removes viruses, bacteria, and protozoa without electricity, batteries, pumping, or chemicals. The 18,000-liter capacity is massive — enough to supply a family of four with purified drinking water for over three years. No other portable purifier in this price range comes close to that combination of protection level and longevity.</p>
+  <p>The LifeStraw Family 1.0 is a gravity-powered water purifier — not just a filter — designed for families, off-grid homes, and long-term emergency preparedness. Priced in the {getPriceTier(product.price)} range, its 0.02-micron ultrafiltration membrane removes viruses, bacteria, and protozoa without electricity, batteries, pumping, or chemicals. The 18,000-liter capacity is massive — enough to supply a family of four with purified drinking water for over three years. No other portable purifier at this price point comes close to that combination of protection level and longevity.</p>
   <p>The gravity-powered operation is the Family 1.0's most practical advantage for its intended use cases. Fill the upper reservoir with source water from any lake, river, rainwater collection, or well, hang it or place it on an elevated surface, and purified water flows from the output hose into a clean container below. There is nothing to pump, charge, or replace for 18,000 liters. This makes it ideal for situations where manual effort, power, and resupply are limited — precisely the scenarios that off-grid homesteaders and emergency preparedness planners are designing for.</p>
   <p>LifeStraw developed the Family 1.0 for deployment in developing countries where access to safe drinking water is unreliable and viral waterborne diseases are endemic. It has been used by humanitarian organizations including UNICEF, the Red Cross, and various disaster relief operations worldwide. That pedigree matters because it means the design has been field-tested at scale under conditions far harsher than the average camping trip — extreme temperatures, heavily contaminated source water, and sustained daily use over months and years. At 2 pounds and roughly the size of a large water bottle, it is portable enough to store in an emergency kit, mount in an RV, or carry to a base camp.</p>
 
@@ -113,8 +113,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $64.95 for 18,000 liters of virus-level purification, the LifeStraw Family 1.0 offers the lowest per-liter cost of any portable purifier on the market: $0.0036 per liter. Compare that to the LifeSaver Liberty at $0.055 per liter (2,000 liters for $109.99) or the GRAYL GeoPress at approximately $0.26 per liter (350 liters per $24.95 cartridge after the initial $89.95 purchase). For a family of four consuming 8 liters per day, the Family 1.0 provides over 6 years of purified water for less than the cost of a single dinner out. No other portable system comes close to this economics.</p>
-  <p>The Family 1.0 is not the right choice for every scenario. It cannot be taken backpacking (too bulky), it does not improve taste (no carbon), and it requires elevation and patience (gravity flow, not instant). But for its intended use cases — off-grid living, emergency preparedness, base camp purification, RV water treatment, and developing-world deployment — there is simply nothing that matches its combination of protection level, capacity, simplicity, and cost-effectiveness. At $64.95, it is arguably the best single investment in water security you can make for a household.</p>
+  <p>With an 18,000-liter capacity and virus-level purification, the LifeStraw Family 1.0 delivers the lowest per-liter cost of any portable purifier on the market — fractions of a penny per liter. Competing purifiers like the LifeSaver Liberty and GRAYL GeoPress cost ten to seventy times more per liter due to shorter filter lives and higher upfront prices. For a family of four consuming 8 liters per day, the Family 1.0 provides over 6 years of purified water for less than the cost of a single dinner out. No other portable system comes close to this economics.</p>
+  <p>The Family 1.0 is not the right choice for every scenario. It cannot be taken backpacking (too bulky), it does not improve taste (no carbon), and it requires elevation and patience (gravity flow, not instant). But for its intended use cases — off-grid living, emergency preparedness, base camp purification, RV water treatment, and developing-world deployment — there is simply nothing that matches its combination of protection level, capacity, simplicity, and cost-effectiveness. At {getPriceTier(product.price)} pricing, it is arguably the best single investment in water security you can make for a household.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

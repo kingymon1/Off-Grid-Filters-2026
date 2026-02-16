@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `GE XWFE vs RPWFE refrigerator filter comparison. We compare capacity, contaminant removal, certifications, and compatibility to help you choose.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="GE XWFE vs RPWFE"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>{productA.name} vs {productB.name}: Which Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>GE XWFE ($49.49)</strong> is the objectively better filter with 300-gallon capacity, 50+ contaminant reduction, and NSF 42/53/401 certification. The <strong>GE RPWFE ($49.95)</strong> has lower capacity (170 gal) and fewer certifications. However, <strong>compatibility is not optional</strong> — your GE fridge model dictates which filter you must use. Check your model number first.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>GE XWFE ({getPriceTier(productA.price)})</strong> is the objectively better filter with 300-gallon capacity, 50+ contaminant reduction, and NSF 42/53/401 certification. The <strong>GE RPWFE ({getPriceTier(productB.price)})</strong> has lower capacity (170 gal) and fewer certifications at nearly identical pricing. However, <strong>compatibility is not optional</strong> — your GE fridge model dictates which filter you must use. Check your model number first.</p>
   </div>
 
   <div class="comparison-products">
@@ -108,8 +108,8 @@ const relatedArticles = [
   <div class="winner-badge">Winner: GE XWFE (300 vs 170 gallons)</div>
 
   <h3>Price &amp; Value</h3>
-  <p>The XWFE costs $49.49 while the RPWFE is $49.95 — virtually identical pricing. But the XWFE delivers 76% more capacity and broader certifications for $0.46 less. On a per-gallon basis, the XWFE costs about $0.16/gallon while the RPWFE costs $0.29/gallon. Over a typical two-year ownership period replacing filters every six months, RPWFE owners spend roughly the same upfront but get significantly fewer filtered gallons — about 680 gallons versus 1,200 gallons for the XWFE under identical usage patterns. The XWFE is the clear value winner, but again — you can only buy the filter your fridge accepts.</p>
-  <div class="winner-badge">Winner: GE XWFE ($0.16/gal vs $0.29/gal)</div>
+  <p>These two filters carry nearly identical price tags — both land in the {getPriceTier(productA.price)} range. But the XWFE delivers 76% more capacity and broader certifications for essentially the same money. On a per-gallon basis, the XWFE costs nearly half what the RPWFE costs because it filters 300 gallons per cartridge versus just 170. Over a typical two-year ownership period replacing filters every six months, RPWFE owners spend roughly the same upfront but get significantly fewer filtered gallons — about 680 gallons versus 1,200 gallons for the XWFE under identical usage patterns. The XWFE is the clear value winner, but again — you can only buy the filter your fridge accepts.</p>
+  <div class="winner-badge">Winner: GE XWFE (nearly half the cost per gallon)</div>
 
   <h3>Compatibility</h3>
   <p>The XWFE fits GE side-by-side and select bottom-freezer models with a twist-and-lock mechanism. The RPWFE is designed specifically for GE French door refrigerators with a rear-access installation. Both use RFID chips that must be recognized by the fridge. The RPWFE wins for French door owners simply because it is the only option, but the XWFE covers a broader range of GE models overall.</p>

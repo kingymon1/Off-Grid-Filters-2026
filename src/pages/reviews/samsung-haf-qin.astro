@@ -14,7 +14,7 @@ const category = categories.find(c => c.slug === product.category);
 const faqs = [
   { question: 'Which Samsung refrigerator models use the HAF-QIN filter?', answer: 'The Samsung HAF-QIN/EXP (DA97-17376B) fits Samsung French 4-door, side-by-side, and 4-Door Flex refrigerators with internal water filter housings. Common compatible models include the RF28R7351SG, RS27T5200SR, and RF23M8570SG. Check the filter compartment inside your fridge — it is usually in the upper right corner — for the current filter part number to confirm compatibility. Samsung\'s website also offers a filter finder tool by model number.' },
   { question: 'Does the Samsung HAF-QIN filter reduce lead or PFAS?', answer: 'No. The HAF-QIN carries only NSF 42 certification, which covers chlorine taste and odor reduction and basic particulate removal. It does not have NSF 53 (lead, cysts) or NSF 401 (pharmaceuticals, PFAS) certification. If lead or PFAS reduction is important to you, the Samsung fridge filter is not sufficient on its own. Consider supplementing with an under-sink system like the iSpring RCC7AK for comprehensive contaminant reduction.' },
-  { question: 'Why is the Samsung HAF-QIN cheaper than GE and everydrop filters?', answer: 'At $37.52, the HAF-QIN is the most affordable OEM refrigerator filter in our catalog. Samsung prices its filters competitively as part of its appliance ecosystem strategy. The lower price also reflects the simpler NSF 42-only certification — the filter does not undergo the additional testing required for NSF 53 or 401, which reduces manufacturing and certification costs. You get what you pay for: excellent taste improvement, but basic contaminant reduction.' },
+  { question: 'Why is the Samsung HAF-QIN cheaper than GE and everydrop filters?', answer: 'The HAF-QIN is the most affordable OEM refrigerator filter in our catalog. Samsung prices its filters competitively as part of its appliance ecosystem strategy. The lower price also reflects the simpler NSF 42-only certification — the filter does not undergo the additional testing required for NSF 53 or 401, which reduces manufacturing and certification costs. You get what you pay for: excellent taste improvement, but basic contaminant reduction.' },
   { question: 'How do I install the Samsung HAF-QIN filter?', answer: 'The HAF-QIN uses a simple quarter-turn installation. Open the filter housing (usually in the upper right interior of the fridge), turn the existing filter counter-clockwise to unlock, pull it straight out, insert the new filter, and turn clockwise a quarter turn until it clicks. The entire process takes under 30 seconds. Run 2-3 gallons through the dispenser to flush the new filter before drinking.' },
 ];
 
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Samsung HAF-QIN is the practical, no-nonsense OEM filter for Samsung refrigerator owners. At $37.52, it is the most affordable genuine OEM refrigerator filter in our entire catalog — roughly $12 cheaper than GE filters and $16 less than the everydrop Filter 1. It does exactly one thing well: it makes your Samsung fridge water and ice taste noticeably better by removing chlorine taste, odor, and sediment. It does not pretend to be a comprehensive contaminant reduction system, and that honest positioning is actually refreshing.</p>
+  <p>The Samsung HAF-QIN is the practical, no-nonsense OEM filter for Samsung refrigerator owners. It is the most affordable genuine OEM refrigerator filter in our entire catalog — significantly less expensive than competing GE and everydrop OEM options. It does exactly one thing well: it makes your Samsung fridge water and ice taste noticeably better by removing chlorine taste, odor, and sediment. It does not pretend to be a comprehensive contaminant reduction system, and that honest positioning is actually refreshing.</p>
   <p>The carbon block filtration technology inside the HAF-QIN is straightforward and proven. Chlorine — the most common cause of unpleasant tap water taste — is effectively neutralized, and particulates are trapped before they reach your glass or ice maker. The quarter-turn installation is the simplest mechanism in the fridge filter market: twist, pull, push, twist. Done in 30 seconds, no tools required. Samsung's internal filter housing keeps the cartridge out of the way and maintains a clean fridge interior.</p>
   <p>The limitation is equally straightforward: NSF 42 is the only certification. There is no NSF 53 for lead, no NSF 401 for pharmaceuticals, and no PFAS reduction claims. If your municipal water is already clean and your primary concern is taste improvement for drinking water and ice, the HAF-QIN is perfectly adequate. If you have known water quality issues — lead from old pipes, PFAS contamination, or well water concerns — this filter should be supplemented with an under-sink system rather than relied upon as your sole filtration.</p>
 
@@ -87,7 +87,7 @@ const relatedArticles = [
 
   <p>Samsung does not prominently specify the exact gallon capacity of the HAF-QIN, which is a notable transparency gap compared to GE and Whirlpool filters that clearly state their capacity in gallons. The 6-month replacement recommendation is time-based rather than usage-based. For average households, this is a reasonable proxy, but heavy-use families (lots of ice, frequent water dispenser use) should consider replacing closer to 4-5 months. The lack of an RFID chip means no authentication lockout — aftermarket filters can be used, though some users report occasional false "replace filter" warnings.</p>
 
-  <ProTip>Unlike GE fridges with RFID locks, Samsung refrigerators generally accept aftermarket filters without disabling the water dispenser. However, we still recommend the genuine Samsung filter for reliability. The $37.52 price is low enough that the savings from aftermarket alternatives (typically $10-15 per filter) are marginal, while the risk of poor fit or leaking with a no-name filter is real. At this price point, genuine OEM is the smarter bet.</ProTip>
+  <ProTip>Unlike GE fridges with RFID locks, Samsung refrigerators generally accept aftermarket filters without disabling the water dispenser. However, we still recommend the genuine Samsung filter for reliability. The HAF-QIN is already priced low enough that the savings from aftermarket alternatives are marginal, while the risk of poor fit or leaking with a no-name filter is real. At this price point, genuine OEM is the smarter bet.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -109,7 +109,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $37.52 per filter with twice-yearly replacement, the annual cost is approximately $75 — the lowest annual OEM filter cost in our refrigerator filter category. The GE XWFE costs about $99 annually, and the everydrop Filter 1 runs $108. Samsung's pricing strategy makes the HAF-QIN an easy recommendation for Samsung fridge owners who want genuine OEM quality without overspending. The simplicity of "replace every 6 months for $38" is as straightforward as refrigerator filter ownership gets.</p>
+  <p>With twice-yearly replacement, the HAF-QIN has the lowest annual OEM filter cost in our refrigerator filter category — roughly 25% less than the GE XWFE and nearly 30% less than the everydrop Filter 1 on an annual basis. Samsung's {getPriceTier(product.price)} pricing strategy makes the HAF-QIN an easy recommendation for Samsung fridge owners who want genuine OEM quality without overspending. The simplicity of replacing every 6 months at this price point is as straightforward as refrigerator filter ownership gets.</p>
   <p>The value trade-off is clear: you pay less, you get less. The NSF 42-only certification means you are getting taste improvement without the verified lead and pharmaceutical reduction that GE and everydrop filters provide. For homes where taste is the primary concern and water quality testing shows clean source water, this trade-off is perfectly acceptable. For homes with known contaminant issues, the $37.52 Samsung filter should be paired with an under-sink system — the combined cost is still competitive with relying solely on a premium fridge filter for protection it was not designed to provide.</p>
 
   <!-- FAQ -->

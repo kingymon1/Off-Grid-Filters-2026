@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Universal 5-Micron Sediment Filter is a no-frills, standard polypropylene cartridge that does exactly one thing: trap physical sediment from your water supply. At $32.88 for a single cartridge, it is priced higher than multi-pack alternatives like the Membrane Solutions 6-pack ($4.39 per filter). For a single replacement when your current filter needs changing and you do not want to commit to a bulk purchase, it serves its purpose. But for ongoing use, the economics strongly favor multi-pack options.</p>
+  <p>The Universal 5-Micron Sediment Filter is a no-frills, standard polypropylene cartridge that does exactly one thing: trap physical sediment from your water supply. At a {getPriceTier(product.price)} price point for a single cartridge, it costs several times more per unit than multi-pack alternatives like the Membrane Solutions 6-pack. For a single replacement when your current filter needs changing and you do not want to commit to a bulk purchase, it serves its purpose. But for ongoing use, the economics strongly favor multi-pack options.</p>
   <p>The standard 10 x 2.5 inch form factor ensures compatibility across the widest range of residential filter housings. The polypropylene sediment media provides reliable 5-micron filtration, catching sand, silt, rust, scale, and general debris. As a first-stage pre-filter in a multi-stage system (before carbon or RO filters), it performs the essential function of protecting finer downstream filters from premature clogging. The universal sizing is its key attribute — if you need a single replacement and want guaranteed compatibility, the standard dimensions deliver that confidence.</p>
 
   <div class="best-for-box">
@@ -86,7 +86,7 @@ const relatedArticles = [
 
   <p>Polypropylene sediment filtration is a mature, well-understood technology. The filter works through depth filtration — water passes through multiple layers of polypropylene fibers that trap particles at various depths. The 5-micron nominal rating means the filter will catch the majority of particles 5 microns and larger. For context, a human hair is approximately 70 microns, and visible sediment in water is typically 10+ microns. The 5-micron rating is the industry-standard balance between effective sediment capture and maintaining adequate water flow.</p>
 
-  <ProTip>Before ordering, measure your existing cartridge or check your filter housing manual. While 10 x 2.5 inches is the most common residential size, some systems use 10 x 4.5 inch (big blue) or 20-inch cartridges. Also, consider buying the Membrane Solutions 6-pack instead if you plan to use this size long-term — at $4.39 per filter versus $32.88, the savings are substantial. This single-unit option makes sense only if you need an immediate one-off replacement.</ProTip>
+  <ProTip>Before ordering, measure your existing cartridge or check your filter housing manual. While 10 x 2.5 inches is the most common residential size, some systems use 10 x 4.5 inch (big blue) or 20-inch cartridges. Also, consider buying the Membrane Solutions 6-pack instead if you plan to use this size long-term — the per-filter savings are roughly 7x compared to this single-unit option. This cartridge makes sense only if you need an immediate one-off replacement.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -108,8 +108,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>This is where the Universal 5-Micron Sediment Filter struggles. At $32.88 for one filter, you could instead buy the Membrane Solutions 6-pack for $26.35 and get six filters — a per-unit cost difference of 7.5x. The only scenario where the single filter makes financial sense is if you need exactly one replacement right now, cannot wait for a multi-pack delivery, and want the simplest possible purchase. For planned maintenance, bulk packs are overwhelmingly the better value.</p>
-  <p>The generic branding also works against it from a trust perspective. Name-brand single filters from Pentek or GE cost $8-15 each with more established quality control reputations. The Universal filter sits in an awkward middle ground — more expensive than bulk generics, without the brand recognition of premium singles. Our recommendation is clear: for ongoing sediment filtration, buy the Membrane Solutions 6-pack. For a quick single replacement from a recognized brand, consider a Pentek or GE cartridge. This product serves its purpose but is not the best value at any quantity.</p>
+  <p>This is where the Universal 5-Micron Sediment Filter struggles. For the price of this single cartridge, you could buy the Membrane Solutions 6-pack and get six filters — a per-unit cost difference of roughly 7.5x. The only scenario where the single filter makes financial sense is if you need exactly one replacement right now, cannot wait for a multi-pack delivery, and want the simplest possible purchase. For planned maintenance, bulk packs are overwhelmingly the better value.</p>
+  <p>The generic branding also works against it from a trust perspective. Name-brand single filters from Pentek or GE cost significantly less per cartridge with more established quality control reputations. The Universal filter sits in an awkward middle ground — more expensive than bulk generics, without the brand recognition of premium singles. Our recommendation is clear: for ongoing sediment filtration, buy the Membrane Solutions 6-pack. For a quick single replacement from a recognized brand, consider a Pentek or GE cartridge. This product serves its purpose but is not the best value at any quantity.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

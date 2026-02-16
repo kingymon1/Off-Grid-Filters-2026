@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The MSR AutoFlow XL is a 10-liter gravity filter that eliminates the most tedious part of backcountry water treatment: pumping. Fill the bag from a lake or stream, hang it from a tree branch, and walk away. Gravity forces water through a 0.2-micron hollow fiber membrane at 3 liters per minute — the fastest flow rate of any gravity filter in its class. In the time it takes to set up your tent, you have 10 liters of clean water ready for drinking, cooking, and cleaning. At $64.95 and 10.8 ounces, it is the most efficient way to provide filtered water for groups of 2-6 people in a backcountry camp setting.</p>
+  <p>The MSR AutoFlow XL is a 10-liter gravity filter that eliminates the most tedious part of backcountry water treatment: pumping. Fill the bag from a lake or stream, hang it from a tree branch, and walk away. Gravity forces water through a 0.2-micron hollow fiber membrane at 3 liters per minute — the fastest flow rate of any gravity filter in its class. In the time it takes to set up your tent, you have 10 liters of clean water ready for drinking, cooking, and cleaning. At a {getPriceTier(product.price)} price point and just 10.8 ounces, it is the most efficient way to provide filtered water for groups of 2-6 people in a backcountry camp setting.</p>
   <p>The hands-free operation fundamentally changes the camp water routine. With pump filters, someone is always stuck at the water source for 10-20 minutes pumping while everyone else sets up camp. The AutoFlow XL turns water filtering into a background task. Hang it, fill it, and handle your other camp chores. The 10-liter capacity means fewer trips to the water source — a single fill provides enough water for four people to drink and cook dinner. The 3 L/min flow rate means the full bag filters in about 3 minutes and 20 seconds, so even refills are quick.</p>
   <p>The AutoFlow XL is purpose-built for camp use, not on-the-move hydration. At 22 inches when rolled, the empty bag takes up meaningful pack space, and the system requires a hanging point with at least 4 feet of vertical clearance. Solo ultralight hikers and trail runners should look elsewhere — the MSR TrailShot or a filter straw serves on-the-go needs far better. But for any trip involving a base camp, a group of 3 or more, or extended stays at a campsite, the AutoFlow XL converts the chore of water filtration into an effortless 3-minute wait.</p>
 
@@ -112,8 +112,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $64.95 in the {getPriceTier(product.price)} range, the AutoFlow XL offers exceptional per-liter value for group use. The 1,500-liter filter life at $64.95 works out to $0.043 per liter — comparable to the MSR MiniWorks EX but without the arm workout. For a group of 4 filtering 12 liters per day, the filter lasts approximately 125 days of use. Replacement filter cartridges run about $35, bringing the ongoing cost to $0.023 per liter after the initial purchase. No other group-sized filter in this price range matches that combination of flow rate, capacity, and hands-free operation.</p>
-  <p>The AutoFlow XL makes financial and practical sense for any trip involving two or more people at a base camp. For solo hikers on moving trips, the weight and bulk are harder to justify when a 2-ounce filter straw does the job. The sweet spot is car camping groups, base camp backpacking, scout troops, guided trips, and family camping — anywhere you camp in one spot and need large volumes of clean water without dedicating a person to pump duty. Compared to the Platypus GravityWorks (similar price but slower 1.75 L/min) and the LifeStraw Mission (cheaper but lower flow), the AutoFlow XL's 3 L/min rate justifies its price premium for serious camp use.</p>
+  <p>In the {getPriceTier(product.price)} range, the AutoFlow XL offers exceptional per-liter value for group use. The 1,500-liter filter life delivers a low cost per liter — comparable to the MSR MiniWorks EX but without the arm workout. For a group of 4 filtering 12 liters per day, the filter lasts approximately 125 days of use. Affordable replacement cartridges bring the ongoing per-liter cost even lower after the initial purchase. No other group-sized filter in this price range matches that combination of flow rate, capacity, and hands-free operation.</p>
+  <p>The AutoFlow XL makes financial and practical sense for any trip involving two or more people at a base camp. For solo hikers on moving trips, the weight and bulk are harder to justify when a 2-ounce filter straw does the job. The sweet spot is car camping groups, base camp backpacking, scout troops, guided trips, and family camping — anywhere you camp in one spot and need large volumes of clean water without dedicating a person to pump duty. Compared to similarly priced competitors like the Platypus GravityWorks (slower at 1.75 L/min) and the LifeStraw Mission (cheaper but lower flow), the AutoFlow XL's 3 L/min rate justifies its position as the top gravity filter for serious camp use.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

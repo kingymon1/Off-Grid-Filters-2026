@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Amazon Basics 10-Cup Water Filter Pitcher is the no-frills entry point into home water filtration. At just $23.64, it undercuts virtually every other NSF-certified pitcher on the market while delivering the fundamentals that most households actually need: chlorine taste and odor reduction, lead reduction, and a capacity that fits neatly in a standard refrigerator door. It will not win design awards, but it does exactly what it promises without pretending to be something it is not.</p>
+  <p>The Amazon Basics 10-Cup Water Filter Pitcher is the no-frills entry point into home water filtration. It undercuts virtually every other NSF-certified pitcher on the market while delivering the fundamentals that most households actually need: chlorine taste and odor reduction, lead reduction, and a capacity that fits neatly in a standard refrigerator door. It will not win design awards, but it does exactly what it promises without pretending to be something it is not.</p>
   <p>This pitcher is built on the same activated carbon and ion exchange technology used across the industry, and its Brita-compatible filter slot means you are not locked into a single cartridge ecosystem. You can run genuine Brita Standard or Elite filters, Amazon Basics replacements, or any number of third-party cartridges. That interchangeability alone makes it one of the most flexible pitcher options available — and it keeps long-term filter costs extremely low.</p>
   <p>The electronic filter change indicator on the lid is a genuinely useful feature at this price point. Instead of guessing whether your filter is still effective, the indicator tracks usage and tells you when it is time to swap. It is a small touch that separates this from the cheapest no-name pitchers while keeping the price firmly in budget territory.</p>
 
@@ -91,7 +91,7 @@ const relatedArticles = [
 
   <p>The 2-stage filtration process uses activated carbon to absorb chlorine taste and odor, paired with ion exchange resin to reduce heavy metals like lead, mercury, and cadmium. The NSF 42/53 dual certification means these claims have been independently verified — not just marketing copy. At 1.8 pounds empty, it is light enough to pour with one hand, though the 10-cup capacity means you will be refilling more often than users of larger dispensers.</p>
 
-  <ProTip>Since this pitcher accepts Brita-compatible filters, you can upgrade to Brita Elite cartridges for 3x the filter life (120 gallons vs 40) and NSF 401 certification for pharmaceuticals and PFAS. It is the cheapest way to get premium filtration — a $24 pitcher with a $15 Elite filter outperforms pitchers costing twice as much.</ProTip>
+  <ProTip>Since this pitcher accepts Brita-compatible filters, you can upgrade to Brita Elite cartridges for 3x the filter life (120 gallons vs 40) and NSF 401 certification for pharmaceuticals and PFAS. It is the cheapest way to get premium filtration — pairing this budget pitcher with a single Elite filter outperforms pitchers costing twice as much.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -109,11 +109,11 @@ const relatedArticles = [
   <!-- PERFORMANCE -->
   <h2>Performance &amp; Real-World Testing</h2>
   <p>Filtering speed is the most noticeable trade-off with the Amazon Basics pitcher. A full 10-cup fill takes approximately 8-10 minutes to pass through the filter, which is typical for this class but slower than gravity dispensers with wider filter contacts. The water that comes out is noticeably improved — the chlorine smell common in municipal tap water is effectively eliminated, and the metallic undertaste that plagues older plumbing is reduced substantially. For most tap water sources, the taste difference is immediately apparent.</p>
-  <p>The lid design is functional but not perfect. Several users (and our own experience) confirm that the lid can feel loose, particularly when pouring at an angle. It does not fall off, but it wobbles enough to inspire a moment of doubt. The pour spout works fine for glasses but can be imprecise when filling water bottles. These are minor ergonomic complaints that reflect the budget construction — at $24, expecting the build quality of a $45 Brita pitcher is unreasonable. The filtration itself, which is what actually matters, performs identically to Brita pitchers using the same filter technology.</p>
+  <p>The lid design is functional but not perfect. Several users (and our own experience) confirm that the lid can feel loose, particularly when pouring at an angle. It does not fall off, but it wobbles enough to inspire a moment of doubt. The pour spout works fine for glasses but can be imprecise when filling water bottles. These are minor ergonomic complaints that reflect the budget construction — at this price point, expecting the build quality of a premium Brita pitcher is unreasonable. The filtration itself, which is what actually matters, performs identically to Brita pitchers using the same filter technology.</p>
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>The Amazon Basics pitcher is the best value in home water filtration, period. At $23.64, you are getting an NSF 42/53 certified pitcher for roughly half the price of comparable Brita and PUR models. Ongoing filter costs are equally friendly: Amazon Basics replacement filters run about $3.50 each (in the 3-pack) with the same NSF certifications. A full year of filtered water — pitcher plus 6 filters — costs under $45. That is less than most people spend on bottled water in a single month.</p>
+  <p>The Amazon Basics pitcher is the best value in home water filtration, period. At a {getPriceTier(product.price)} price point, you are getting an NSF 42/53 certified pitcher for roughly half the price of comparable Brita and PUR models. Ongoing filter costs are equally friendly — Amazon Basics replacement filters in multi-packs carry the same NSF certifications at the lowest per-filter cost in the category. A full year of filtered water, including the pitcher and replacement filters, costs less than most people spend on bottled water in a single month.</p>
   <p>The real question is not whether the Amazon Basics pitcher is good enough — it clearly is. The question is whether you need more than it offers. If you are concerned about PFAS, pharmaceuticals, or want the absolute best taste, step up to a Brita UltraMax with Elite filters or consider a countertop RO system. But if your goal is simply to make your tap water taste better and reduce common contaminants like lead and chlorine, this pitcher does the job at a price that makes the decision effortless.</p>
 
   <!-- FAQ -->

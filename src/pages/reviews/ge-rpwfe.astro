@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The GE RPWFE is the designated OEM filter for GE French door refrigerators — a specific subset of GE's lineup that uses a rear-access filter housing rather than the interior-mounted design of XWFE models. At $49.95, it is priced nearly identically to the XWFE but delivers only 170 gallons of capacity compared to the XWFE's 300 gallons. That capacity gap is the RPWFE's biggest weakness, but if your GE French door fridge requires this specific filter, you do not have a realistic alternative.</p>
+  <p>The GE RPWFE is the designated OEM filter for GE French door refrigerators — a specific subset of GE's lineup that uses a rear-access filter housing rather than the interior-mounted design of XWFE models. Priced in the {getPriceTier(product.price)} range — nearly identical to the XWFE — it delivers only 170 gallons of capacity compared to the XWFE's 300 gallons. That capacity gap is the RPWFE's biggest weakness, but if your GE French door fridge requires this specific filter, you do not have a realistic alternative.</p>
   <p>Like the XWFE, the RPWFE includes an RFID chip that communicates with your refrigerator for authentication. The chip ensures filter recognition, automatic indicator resets, and in newer models, prevents water dispenser operation without a verified genuine filter. This effectively eliminates the aftermarket filter option for most RPWFE-compatible refrigerators, which is frustrating from a consumer choice perspective but does guarantee that every filter installed meets GE's quality and safety standards.</p>
   <p>The filtration technology is GE's proven activated carbon block, certified under NSF 42/53 for chlorine taste reduction and lead removal. GE also claims reduction of PFOA, PFOS, and microplastics, though the RPWFE does not carry the NSF 401 certification for emerging contaminants that the XWFE holds. For practical purposes, the filtration quality is solid — the RPWFE delivers clean, great-tasting water and ice — but the 170-gallon capacity means more frequent replacements and a higher annual cost than its XWFE sibling.</p>
 
@@ -110,7 +110,7 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>The GE RPWFE's value proposition is complicated. At $49.95 for 170 gallons, the cost per gallon is approximately $0.29 — significantly higher than the XWFE's $0.165 per gallon and the everydrop Filter 1's $0.27 per gallon. If you need to replace the RPWFE every 4-5 months in a heavy-use household, annual costs can reach $120-150. That places it among the more expensive refrigerator filter options on a per-gallon basis.</p>
+  <p>The GE RPWFE's value proposition is complicated. With only 170 gallons of capacity at a price comparable to the XWFE's 300-gallon cartridge, the cost per gallon is significantly higher — nearly double the XWFE and roughly 10% more than the everydrop Filter 1 on a per-gallon basis. If you need to replace the RPWFE every 4-5 months in a heavy-use household, annual costs add up quickly, placing it among the more expensive refrigerator filter options.</p>
   <p>The reality for GE French door owners is straightforward: if your fridge requires the RPWFE, this is your only viable option. The RFID lock prevents aftermarket alternatives, and using no filter results in unfiltered water. Within that context, the RPWFE does its job well — it filters effectively, installs easily, and integrates seamlessly with your refrigerator. The value criticism is relative to other OEM filters, not to the filter's absolute performance. If you are shopping for a new refrigerator and water filter cost matters, choosing a model compatible with the higher-capacity XWFE would be the smarter long-term decision.</p>
 
   <!-- FAQ -->

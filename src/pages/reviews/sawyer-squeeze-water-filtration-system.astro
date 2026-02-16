@@ -13,7 +13,7 @@ const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
   { question: 'How do I protect the Sawyer Squeeze from freezing?', answer: 'Freezing permanently damages hollow fiber membranes by forming ice crystals that rupture the microscopic tubes. In cold weather, sleep with the filter inside your sleeping bag to keep it above freezing. During the day, keep it in an insulated pouch or inside a jacket pocket close to your body. If you suspect the filter has frozen — even once — replace it. There is no way to visually confirm whether ice crystals have compromised the membrane, and a damaged filter will pass pathogens without any change in flow rate.' },
-  { question: 'Should I replace the included squeeze pouches?', answer: 'Yes. The 32oz pouches included with the Sawyer Squeeze are widely regarded as the weakest component of the system. The seams are prone to cracking after repeated rolling and squeezing, especially in cold weather when the plastic becomes less flexible. Most experienced hikers replace them with CNOC Vecto bags (28mm thread compatible, 2L or 3L capacity) or Evernew water bags. These aftermarket bags are more durable, hold more water, and roll up smaller when empty. Budget about $15-20 for a quality replacement bag.' },
+  { question: 'Should I replace the included squeeze pouches?', answer: 'Yes. The 32oz pouches included with the Sawyer Squeeze are widely regarded as the weakest component of the system. The seams are prone to cracking after repeated rolling and squeezing, especially in cold weather when the plastic becomes less flexible. Most experienced hikers replace them with CNOC Vecto bags (28mm thread compatible, 2L or 3L capacity) or Evernew water bags. These aftermarket bags are more durable, hold more water, and roll up smaller when empty. A quality replacement bag typically costs less than the filter itself.' },
   { question: 'How often should I backwash the Sawyer Squeeze?', answer: 'Backwash after every trip, or whenever you notice a decrease in flow rate during use. The included syringe pushes clean water backward through the filter, dislodging trapped sediment from the hollow fiber membrane. Fill the syringe with filtered or clean water, attach it to the clean-water end of the filter, and push firmly. Repeat 3-4 times. For deep cleaning after filtering particularly silty or turbid water, you can soak the filter in a mild vinegar solution (1 tablespoon white vinegar per liter of water) for 15 minutes, then backwash thoroughly. Regular backwashing maintains the 1.7 L/min flow rate and extends the effective life of the membrane.' },
   { question: 'Can I set up the Sawyer Squeeze as a gravity filter?', answer: 'Yes, and this is one of its most underrated features. Hang a filled squeeze pouch or CNOC bag from a tree branch using a carabiner, attach the Sawyer Squeeze to the outlet, and let gravity push water through the filter into a clean container below. Flow rate is slower than squeezing (roughly 0.5-0.8 L/min depending on head height), but it requires zero effort. This setup is ideal for camp — hang it when you arrive and collect clean water passively while you set up your tent. For best flow, elevate the dirty water bag at least 3-4 feet above the collection container.' },
 ];
@@ -25,7 +25,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,7 +58,7 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
@@ -67,7 +67,7 @@ const relatedArticles = [
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The Sawyer Squeeze is the most trusted portable water filter in the backcountry community, and it has earned that reputation through sheer simplicity and proven performance. At $34.97 for a filter with a 100,000-gallon rated capacity, the cost-per-liter math is essentially zero. The 0.1-micron absolute hollow fiber membrane removes 99.99999% of bacteria (log-7) and 99.9999% of protozoa (log-6), exceeding EPA standards for both categories. With 24,000+ Amazon reviews and a 4.7-star rating, this is the most field-validated portable filter you can buy.</p>
+  <p>The Sawyer Squeeze is the most trusted portable water filter in the backcountry community, and it has earned that reputation through sheer simplicity and proven performance. Priced in the {getPriceTier(product.price)} range for a filter with a 100,000-gallon rated capacity, the cost-per-liter math is essentially zero. The 0.1-micron absolute hollow fiber membrane removes 99.99999% of bacteria (log-7) and 99.9999% of protozoa (log-6), exceeding EPA standards for both categories. With 24,000+ Amazon reviews and a 4.7-star rating, this is the most field-validated portable filter you can buy.</p>
   <p>The Squeeze system works by forcing water through thousands of U-shaped hollow fiber tubes, each with precisely 0.1-micron pores. You fill the included 32oz pouch with source water, screw the filter onto the pouch opening, and squeeze water through into a clean container or directly into your mouth. The entire filter weighs 3 ounces and measures just 5 inches long — small enough to fit in a pants pocket. Unlike chemical treatments that require 30-minute wait times or UV purifiers that need batteries, the Squeeze produces clean water instantly with nothing but hand pressure.</p>
   <p>Where the Squeeze falls short is what it does not do. It is a filter, not a purifier — it removes bacteria and protozoa but not viruses, chemicals, or heavy metals. For North American backcountry use, this is fine because waterborne viruses are extremely rare in wilderness settings. For international travel or disaster scenarios with potentially sewage-contaminated water, you need a purifier like the GRAYL GeoPress or MSR Guardian instead. The other widely-known weakness is the included squeeze pouches, which tend to develop leaks at the seams after repeated use. Most experienced users replace them with sturdier CNOC Vecto bags within the first season.</p>
 
@@ -90,7 +90,7 @@ const relatedArticles = [
 
   <p>The 100,000-gallon capacity is not marketing hyperbole — it is a function of how hollow fiber membranes work. Unlike carbon filters that chemically adsorb contaminants (and saturate after a fixed volume), hollow fiber physically blocks pathogens based on pore size alone. As long as the membrane is intact, it filters. The practical limit is flow rate degradation from accumulated sediment, which backwashing addresses. Most thru-hikers report using the same Squeeze for multiple seasons and thousands of miles without replacement.</p>
 
-  <ProTip>Replace the stock pouches immediately with CNOC Vecto bags (2L or 3L). They use the same 28mm thread, hold more water, and survive thousands more squeeze cycles. The $15-20 investment eliminates the Squeeze system's only real reliability weakness. Also carry the included backwash syringe on every trip — 30 seconds of backwashing after filtering turbid water keeps flow rate near factory spec.</ProTip>
+  <ProTip>Replace the stock pouches immediately with CNOC Vecto bags (2L or 3L). They use the same 28mm thread, hold more water, and survive thousands more squeeze cycles. This modest investment eliminates the Squeeze system's only real reliability weakness. Also carry the included backwash syringe on every trip — 30 seconds of backwashing after filtering turbid water keeps flow rate near factory spec.</ProTip>
 
   <!-- PROS & CONS -->
   <h2>Pros &amp; Cons</h2>
@@ -112,8 +112,8 @@ const relatedArticles = [
 
   <!-- VALUE ANALYSIS -->
   <h2>Value Analysis</h2>
-  <p>At $34.97, the Sawyer Squeeze occupies the sweet spot between ultra-budget straw filters (Membrane Solutions at $9.75/unit, Timain at $7.12/unit) and premium purifiers (GRAYL GeoPress at $89.95, MSR Guardian at $349.95). The per-liter cost is essentially zero over the filter's lifetime — even if you only use 1% of the 100,000-gallon capacity, that is 1,000 gallons for $34.97, or $0.035 per gallon. Replacement filter cartridges are available for around $25 if you ever need one, though most users never do.</p>
-  <p>The value comparison against the Sawyer Mini ($21.99) is the most common decision point. The Mini uses identical 0.1-micron hollow fiber technology but has a noticeably slower flow rate (0.5 L/min vs 1.7 L/min) due to its smaller membrane surface area. For $13 more, the Squeeze delivers 3.4x faster filtration, includes larger 32oz pouches (vs the Mini's 16oz), and comes with a backwash syringe. The Mini makes sense as an ultralight backup or emergency kit stash; the Squeeze is the primary filter for anyone who actually hikes. If you can only buy one portable filter, this is the one.</p>
+  <p>The Sawyer Squeeze occupies the sweet spot between ultra-budget straw filters that cost under ten dollars per unit and premium purifiers that can run three to ten times more. The per-liter cost is essentially zero over the filter's lifetime — even if you only use a tiny fraction of the 100,000-gallon capacity, the cost per gallon rounds down to virtually nothing. Replacement filter cartridges are affordably priced if you ever need one, though most users never do.</p>
+  <p>The value comparison against the smaller Sawyer Mini is the most common decision point. The Mini uses identical 0.1-micron hollow fiber technology but has a noticeably slower flow rate (0.5 L/min vs 1.7 L/min) due to its smaller membrane surface area. For a modest premium, the Squeeze delivers 3.4x faster filtration, includes larger 32oz pouches (vs the Mini's 16oz), and comes with a backwash syringe. The Mini makes sense as an ultralight backup or emergency kit stash; the Squeeze is the primary filter for anyone who actually hikes. If you can only buy one portable filter, this is the one.</p>
 
   <!-- FAQ -->
   <h2>Frequently Asked Questions</h2>

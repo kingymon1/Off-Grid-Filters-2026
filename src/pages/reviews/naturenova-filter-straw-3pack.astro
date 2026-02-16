@@ -2,6 +2,7 @@
 import ContentLayout from '../../layouts/ContentLayout.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import ProTip from '../../components/ProTip.astro';
+import Callout from '../../components/Callout.astro';
 import { getProductBySlug, getAffiliateUrl, getRelatedProducts, isPublished, categories, getPriceTier } from '../../lib/config';
 import { generateProductSchema, generateFAQSchema, generateArticleSchema, combineSchemas } from '../../lib/schema';
 
@@ -12,7 +13,7 @@ const relatedProducts = getRelatedProducts(product);
 const category = categories.find(c => c.slug === product.category);
 
 const faqs = [
-  { question: 'What is included in the NatureNova filter straw kit?', answer: 'Each NatureNova 3-pack includes three filter straws, three foldable water bags (for gravity-feed or squeeze filtering), and three backwash syringes (for extending filter life by flushing the membrane). This is significantly more than competing straws that include just the filter itself. The accessories make it a field-ready kit right out of the box.' },
+  { question: 'What is included in the NatureNova filter straw kit?', answer: 'The NatureNova kit includes one filter straw, one foldable water bag (for gravity-feed or squeeze filtering), and one backwash syringe (for extending filter life by flushing the membrane). This is significantly more than competing straws that include just the filter itself. The accessories make it a field-ready kit right out of the box.' },
   { question: 'How does the backwash syringe extend filter life?', answer: 'The backwash syringe pushes clean water backward through the filter membrane, dislodging trapped sediment and particles from the pores. This restores flow rate and extends the effective life of the straw. Without backwashing, sediment gradually clogs the membrane and reduces flow to a trickle. Regular backwashing after every 50-100 liters of use can double or triple the usable life of the filter.' },
   { question: 'Is the included foldable water bag durable enough for field use?', answer: 'The foldable water bag works but is the weakest component in the kit. It is made of thin, lightweight plastic that can puncture on rough surfaces or sharp objects. For casual day hikes it is adequate. For extended backcountry trips, consider using a more durable soft bottle (like Platypus or CNOC Vecto) for collecting and squeezing water through the straw. The included bag is best treated as a lightweight backup.' },
   { question: 'Does the NatureNova straw remove heavy metals from water?', answer: 'Partially. The 4-stage filtration includes a coconut carbon stage that provides limited heavy metal reduction, but it is not certified for specific heavy metal removal. The primary function of the straw is biological filtration — removing bacteria and protozoa. For serious heavy metal concerns (lead, arsenic, mercury), you need a pitcher filter with NSF 53 certification or a reverse osmosis system. The NatureNova is designed for outdoor and emergency use, not municipal water treatment.' },
@@ -25,7 +26,7 @@ const articleSchema = generateArticleSchema({
   description: product.verdict,
   url: `/reviews/${product.slug}/`,
   datePublished: product.publishDate,
-  dateModified: product.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: product.name, url: `https://www.amazon.com/dp/${product.asin}`, type: 'Product' }],
   mentions: relatedProducts.slice(0, 3).map(p => ({ name: p.name, url: `https://www.amazon.com/dp/${p.asin}`, type: 'Product' })),
 });
@@ -58,16 +59,21 @@ const relatedArticles = [
   currentPage={product.name}
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={product.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${product.slug}-hero.webp`}
 >
   <!-- HERO -->
   <h1>{product.name} Review {new Date().getFullYear()}</h1>
+
+  <Callout type="info">
+    <strong>Product update:</strong> This review was originally written for the NatureNova 3-pack. The multi-pack has been discontinued on Amazon and we have updated this review for the single straw kit, which includes the same straw, foldable water bag, and backwash syringe. Multi-packs may return — check the Amazon listing for current options.
+  </Callout>
+
   <ProductHero product={product} />
 
   <!-- OVERVIEW -->
   <h2>Overview</h2>
-  <p>The NatureNova 3-pack distinguishes itself in the crowded filter straw market not by the straw itself — which uses the same 4-stage 0.1-micron UF membrane design found in several competitors — but by what comes in the box. Each straw ships with a foldable water bag and a backwash syringe, transforming a simple sipping straw into a complete field water purification kit. At $28.99 for three complete kits, NatureNova delivers the most accessory-rich survival filtration package we have reviewed.</p>
+  <p>The NatureNova straw distinguishes itself in the crowded filter straw market not by the straw itself — which uses the same 4-stage 0.1-micron UF membrane design found in several competitors — but by what comes in the box. Each straw ships with a foldable water bag and a backwash syringe, transforming a simple sipping straw into a complete field water purification kit. At under $15, NatureNova delivers the most accessory-rich survival filtration package in its price range.</p>
   <p>The 4-stage filtration follows the same architecture as the Timain straw: PP cotton pre-filter, coconut shell activated carbon, PP fiber, and a 0.1-micron UF membrane. This combination removes 99.9999% of bacteria and 99.99% of protozoa while the carbon stage improves taste and reduces chlorine. The backwash syringe is a genuinely useful inclusion — it pushes clean water backward through the membrane to dislodge trapped particles, effectively extending the usable life of each straw well beyond what you would get without maintenance.</p>
   <p>The foldable water bag enables gravity-feed filtering: fill the bag, attach the straw, and hang it from a branch to let gravity push water through the filter into a clean container below. This is significantly more convenient than lying on your stomach to sip from a stream. It also enables you to collect water from one location and filter it at your campsite, which is how most experienced backcountry users prefer to manage their water.</p>
 

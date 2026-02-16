@@ -30,7 +30,7 @@ const tableProducts = [productA, productB].map((p, i) => ({
 }));
 
 const faqs = [
-  { question: 'Which survival filter straw is better — Timain or Membrane Solutions?', answer: 'The Timain offers more filtration stages (4 vs 1) and a lower per-straw cost ($7.12 vs $9.75). The Membrane Solutions has a stronger track record with more reviews (8,500 vs 3,200), a higher rating (4.5 vs 4.4), a log-8 bacteria removal rate, and 28mm bottle compatibility. For pure budget, Timain wins. For reliability and group preparedness, Membrane Solutions wins with its 4-pack.' },
+  { question: 'Which survival filter straw is better — Timain or Membrane Solutions?', answer: 'The Timain offers more filtration stages (4 vs 1) and a lower per-straw cost in the 2-pack. The Membrane Solutions has a stronger track record with more reviews (8,500 vs 3,200), a higher rating (4.5 vs 4.4), a log-8 bacteria removal rate, and 28mm bottle compatibility. For pure budget, Timain wins. For proven reliability, Membrane Solutions wins.' },
   { question: 'Do either of these survival straws remove viruses?', answer: 'No. Both the Timain and Membrane Solutions straws use 0.1-micron filtration, which removes bacteria and protozoa but NOT viruses. Viruses are much smaller (0.02-0.3 microns) and pass through the filter membrane. For virus protection, pair either straw with chemical purification tablets like MSR Aquatabs.' },
   { question: 'How long do these filter straws last?', answer: 'Both are rated for approximately 1,500 liters per straw. However, actual lifespan depends heavily on source water turbidity. Clear streams will yield close to the rated capacity, while murky or sediment-heavy water will clog the filters much sooner. Always backwash (if possible) after filtering turbid water to extend filter life.' },
   { question: 'Can I use these straws with a water bottle?', answer: 'The Membrane Solutions straw fits standard 28mm water bottles, making it easy to screw onto a bottle and squeeze filtered water out. The Timain straw can be used as a direct-drink straw or with a squeeze bag (not included) but does not specifically mention 28mm bottle compatibility. For bottle-based filtering, Membrane Solutions has the advantage.' },
@@ -42,7 +42,7 @@ const articleSchema = generateArticleSchema({
   description: `Timain 4-Stage vs Membrane Solutions survival filter straw comparison. We compare filtration, price per straw, durability, and field usability.`,
   url: `/${comp.slug}/`,
   datePublished: comp.publishDate,
-  dateModified: comp.publishDate,
+  dateModified: '2026-02-15',
   about: [{ name: productA.name, url: 'https://www.amazon.com/dp/' + productA.asin, type: 'Product' }, { name: productB.name, url: 'https://www.amazon.com/dp/' + productB.asin, type: 'Product' }],
 });
 const faqSchema = generateFAQSchema(faqs);
@@ -64,13 +64,13 @@ const relatedArticles = [
   currentPage="Timain vs Membrane Solutions"
   schema={schema}
   relatedArticles={relatedArticles}
-  lastUpdated={comp.publishDate}
+  lastUpdated="2026-02-15"
   heroImage={`/assets/${comp.slug}-hero.webp`}
 >
   <h1>Timain vs Membrane Solutions Filter Straw: Which Is Better in {year}?</h1>
 
   <div class="verdict-card">
-    <p><strong>Quick Verdict:</strong> The <strong>Timain 2-Pack ($14.23)</strong> wins on per-straw value ($7.12) and offers 4-stage filtration with chlorine and odor reduction. The <strong>Membrane Solutions 4-Pack ($38.98)</strong> wins for families and group preparedness with 4 straws, a stronger review profile (4.5 stars, 8,500+ reviews), and proven 28mm bottle compatibility. Both remove 99.99%+ of bacteria and protozoa.</p>
+    <p><strong>Quick Verdict:</strong> The <strong>Timain 2-Pack</strong> wins on per-straw value and offers 4-stage filtration with chlorine and odor reduction. The <strong>Membrane Solutions</strong> wins on proven reliability with a stronger review profile (4.5 stars, 8,500+ reviews) and proven 28mm bottle compatibility. Both are under $15 and remove 99.99%+ of bacteria and protozoa.</p>
   </div>
 
   <div class="comparison-products">
@@ -108,12 +108,12 @@ const relatedArticles = [
   <div class="winner-badge">Winner: Membrane Solutions (log-8 vs log-6 bacteria removal)</div>
 
   <h3>Price Per Straw</h3>
-  <p>The Timain 2-pack at $14.23 works out to $7.12 per straw — the cheapest survival filter in our catalog. The Membrane Solutions 4-pack at $38.98 costs $9.75 per straw. While the Membrane Solutions total cost is higher, you get 4 straws versus 2. For a single person buying the cheapest possible survival filter, the Timain is the clear budget winner. For family preparedness, the Membrane Solutions 4-pack covers more people.</p>
-  <div class="winner-badge">Winner: Timain ($7.12 vs $9.75 per straw)</div>
+  <p>The Timain 2-pack delivers the lowest per-straw cost in our catalog — roughly half the price per unit compared to the Membrane Solutions single straw. Both land in the under-$15 range, making them budget-friendly, but the Timain's 2-pack structure stretches the dollar further. The Membrane Solutions straw uses proven hollow fiber technology with a log-8 bacteria removal rate, giving it an edge in filtration confidence per dollar.</p>
+  <div class="winner-badge">Winner: Timain (lower per-straw cost in 2-pack)</div>
 
   <h3>Pack Size &amp; Preparedness</h3>
-  <p>The Membrane Solutions 4-pack provides enough straws for a family of four, or allows distribution across multiple emergency kits (car, home, go-bag, office). The Timain 2-pack covers one person with a backup or two people without redundancy. For comprehensive family or group preparedness, having 4 straws readily available is a significant practical advantage. In practice, spreading straws across multiple locations means you are never more than arm's reach from clean water during an emergency, whether at home, in the car, or at the office.</p>
-  <div class="winner-badge">Winner: Membrane Solutions (4-pack for groups)</div>
+  <p>The Timain 2-pack includes two straws, letting you keep one in your pack and one in your emergency kit. The Membrane Solutions is sold as a single straw, though you can buy multiples separately. For out-of-the-box group preparedness, the Timain 2-pack provides more coverage per purchase. The Membrane Solutions' 28mm bottle compatibility adds practical versatility for everyday use.</p>
+  <div class="winner-badge">Winner: Timain (2 straws per purchase)</div>
 
   <h3>Reviews &amp; Reliability</h3>
   <p>The Membrane Solutions straw has 8,500+ reviews with a 4.5-star rating — strong social proof from a wide user base. The Timain has 3,200+ reviews with a 4.4-star rating. Both are well-regarded, but the Membrane Solutions' larger review base and higher rating give it an edge in proven reliability. The Membrane Solutions brand also has more products in the water filtration space, suggesting deeper expertise.</p>
@@ -124,7 +124,7 @@ const relatedArticles = [
     <div class="rec-card rec-a">
       <h3>Get the {productA.name} if...</h3>
       <ul>
-        <li>You want the cheapest survival filter available — $7.12 per straw</li>
+        <li>You want the cheapest survival filter available — the lowest per-straw cost in our catalog</li>
         <li>You want 4-stage filtration with chlorine and odor reduction</li>
         <li>You need a personal straw for solo hiking or as a single emergency backup</li>
         <li>Budget is your primary constraint</li>
