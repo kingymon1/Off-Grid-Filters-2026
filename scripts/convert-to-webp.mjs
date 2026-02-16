@@ -2,17 +2,17 @@
 
 /**
  * Image conversion utility
- * Converts JPG/PNG images to WebP format, removes white/near-white
- * backgrounds, and creates responsive variants.
+ * Converts JPG/PNG images to WebP format and creates responsive variants.
+ * Background removal is OFF by default (product images keep white backgrounds).
  *
  * Usage:
- *   node scripts/convert-to-webp.mjs                    # process all images in public/assets/
+ *   node scripts/convert-to-webp.mjs                    # process all images in images/ and assets/
  *   node scripts/convert-to-webp.mjs photo.png           # process a single file
- *   node scripts/convert-to-webp.mjs --no-remove-bg      # skip background removal
+ *   node scripts/convert-to-webp.mjs --remove-bg         # enable white background removal
  *   node scripts/convert-to-webp.mjs --threshold 30      # custom white threshold (default: 20)
  *
  * Creates:
- *   - [name].webp        (full size, transparent bg, quality 85)
+ *   - [name].webp        (full size, quality 85)
  *   - [name]-medium.webp (800px wide)
  *   - [name]-small.webp  (400px wide)
  */
@@ -31,7 +31,7 @@ const SIZES = [
 
 // Parse CLI flags
 const args = process.argv.slice(2);
-const removeBg = !args.includes('--no-remove-bg');
+const removeBg = args.includes('--remove-bg');
 const thresholdIdx = args.indexOf('--threshold');
 const WHITE_THRESHOLD = thresholdIdx !== -1 ? parseInt(args[thresholdIdx + 1], 10) : 20;
 const inputFiles = args.filter(a => !a.startsWith('--') && (thresholdIdx === -1 || a !== args[thresholdIdx + 1]));
