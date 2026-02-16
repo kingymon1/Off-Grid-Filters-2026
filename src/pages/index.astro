@@ -6,6 +6,7 @@ import StatCard from '../components/StatCard.astro';
 import ProductImage from '../components/ProductImage.astro';
 import EmailCapture from '../components/EmailCapture.astro';
 import { siteConfig, products, categories, comparisons, getProductBySlug, getProductsByCategory, getAffiliateUrl, isPublished, getPriceTier } from '../lib/config';
+import { heroImages } from '../lib/image-map';
 import { generateFAQSchema, generateWebSiteSchema, combineSchemas } from '../lib/schema';
 
 const year = new Date().getFullYear();
@@ -169,7 +170,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
           {featuredPicks.map((pick, i) => (
             <a href={`/reviews/${pick.product!.slug}/`} class="featured-card spotlight-card" style={`--delay: ${i * 100}ms`}>
               <div class="featured-badge">{pick.badge}</div>
-              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" src={`/assets/${pick.slug}-featured.webp`} />
+              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" src={heroImages[`${pick.slug}-featured`]} slug={pick.slug} />
               <div class="featured-info">
                 <h3 class="featured-name">{pick.product!.name}</h3>
                 <div class="featured-meta">
@@ -939,14 +940,17 @@ const schema = combineSchemas(faqSchema, websiteSchema);
 
   .comparison-vs {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 1rem;
-    padding: 1rem 1.5rem 0;
+    padding: 1rem 1.5rem;
   }
 
   .comparison-product {
     flex: 1;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .comparison-brand {
@@ -965,6 +969,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     font-weight: 700;
     color: hsl(var(--foreground));
     line-height: 1.3;
+    min-height: 2.2em;
   }
 
   .comparison-badge {
@@ -983,7 +988,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     font-weight: 600;
     color: hsl(var(--primary));
     text-align: center;
-    padding: 0 1.5rem 1.5rem;
+    padding: 0.75rem 1.5rem 1.5rem;
   }
 
   /* ── FAQ ──────────────────────────────────────────────── */
