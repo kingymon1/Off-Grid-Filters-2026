@@ -24,8 +24,8 @@ const categoryIconMap: Record<string, string> = {
 const featuredPicks = [
   { slug: 'bluevua-ro100ropot-uv', badge: 'Best Overall', icon: 'filter' as const },
   { slug: 'amazon-basics-10-cup-pitcher', badge: 'Best Value', icon: 'pitcher' as const },
-  { slug: 'ispring-rcc7ak', badge: 'Best Under-Sink', icon: 'faucet' as const },
-  { slug: 'timain-filter-straw-2pack', badge: 'Best for Survival', icon: 'straw' as const },
+  { slug: 'sawyer-squeeze-water-filtration-system', badge: 'Best Portable', icon: 'camping' as const },
+  { slug: 'grayl-geopress-24oz-water-purifier-bottle', badge: 'Best Purifier', icon: 'bottle' as const },
 ].map(pick => {
   const product = getProductBySlug(pick.slug);
   return { ...pick, product };
@@ -37,12 +37,22 @@ const publishedCategories = categories.filter(c => isPublished(c.publishDate));
 // Recent reviews — first 6 published products
 const recentReviews = products.filter(p => isPublished(p.publishDate)).slice(0, 6);
 
-// Popular comparisons — first 4 published
-const popularComparisons = comparisons.filter(c => isPublished(c.publishDate)).slice(0, 4).map(c => {
-  const a = getProductBySlug(c.productA);
-  const b = getProductBySlug(c.productB);
-  return { ...c, a, b };
-}).filter(c => c.a && c.b);
+// Popular comparisons — curated mix of home and survival filters
+const popularComparisonSlugs = [
+  'brita-standard-vs-brita-elite',
+  'timain-vs-membrane-solutions-straw',
+  'ispring-rcc7ak-vs-waterdrop-g3p600',
+  'timain-vs-naturenova-straw',
+];
+const popularComparisons = popularComparisonSlugs
+  .map(slug => comparisons.find(c => c.slug === slug))
+  .filter((c): c is NonNullable<typeof c> => !!c && isPublished(c.publishDate))
+  .map(c => {
+    const a = getProductBySlug(c.productA);
+    const b = getProductBySlug(c.productB);
+    return { ...c, a, b };
+  })
+  .filter(c => c.a && c.b);
 
 // FAQ data
 const faqs = [
