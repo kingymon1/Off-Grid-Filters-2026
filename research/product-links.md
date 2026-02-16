@@ -9,7 +9,7 @@
 > node scripts/convert-to-webp.mjs path/to/image.png
 > ```
 
-**Image status: 50 of 56 products have images** (6 missing)
+**Image status: 56 of 56 products have images** (0 missing)
 
 | Status | Meaning |
 |--------|---------|
@@ -60,7 +60,7 @@
 | Y | PUR Water Pitcher Replacement Filter (4-Pack) | B07WWB1MLN | https://www.amazon.com/dp/B07WWB1MLN | `pur-pitcher-filter-4pack-hero.webp` |
 | Y | Waterdrop WD-PF-01A Plus Replacement Filter (3-Pack) | B08C7QNSKZ | https://www.amazon.com/dp/B08C7QNSKZ | `waterdrop-wd-pf01a-plus-3pack-hero.webp` |
 
-## Survival & Portable Filters (25/31 images)
+## Survival & Portable Filters (31/31 images)
 
 | Status | Product | ASIN | Amazon Link | Image Filename |
 |---|---|---|---|---|
@@ -71,7 +71,7 @@
 | Y | Sawyer Squeeze Water Filtration System | B0DTJK394Q | https://www.amazon.com/dp/B0DTJK394Q | `sawyer-squeeze-water-filtration-system-hero.webp` |
 | Y | Sawyer Products Mini Water Filtration System | B00FA2RLX2 | https://www.amazon.com/dp/B00FA2RLX2 | `sawyer-products-mini-water-filtration-system-hero.webp` |
 | Y | GRAYL GeoPress 24oz Water Purifier Bottle | B0D3HB3V5Z | https://www.amazon.com/dp/B0D3HB3V5Z | `grayl-geopress-24oz-water-purifier-bottle-hero.webp` |
-| - | GRAYL UltraPress 16.9oz Ti Purifier Bottle | B0C2FWRDTB | https://www.amazon.com/dp/B0C2FWRDTB | `grayl-ultrapress-16-9oz-water-purifier-bottle-hero.webp` |
+| Y | GRAYL UltraPress 16.9oz Ti Purifier Bottle | B0C2FWRDTB | https://www.amazon.com/dp/B0C2FWRDTB | `grayl-ultrapress-16-9oz-water-purifier-bottle-hero.webp` |
 | Y | MSR Guardian Purifier | B0DB3RDN9H | https://www.amazon.com/dp/B0DB3RDN9H | `msr-guardian-purifier-hero.webp` |
 | Y | MSR MiniWorks EX Microfilter | B0DBXB4QXP | https://www.amazon.com/dp/B0DBXB4QXP | `msr-miniworks-ex-microfilter-hero.webp` |
 | Y | MSR TrailShot Pocket-Sized Water Filter | B01N7GC9Z6 | https://www.amazon.com/dp/B01N7GC9Z6 | `msr-trailshot-pocket-sized-water-filter-hero.webp` |
@@ -81,19 +81,19 @@
 | Y | Katadyn Hiker Pro Transparent Water Filter | B075TTTX2R | https://www.amazon.com/dp/B075TTTX2R | `katadyn-hiker-pro-transparent-filter-hero.webp` |
 | Y | Katadyn Vario Water Filter | B000KUVVY4 | https://www.amazon.com/dp/B000KUVVY4 | `katadyn-vario-water-filter-hero.webp` |
 | Y | Katadyn BeFree 1.0L Water Filter Bottle | B0BFQMMJVS | https://www.amazon.com/dp/B0BFQMMJVS | `katadyn-befree-1-0l-water-filter-bottle-hero.webp` |
-| - | LifeSaver Expedition Jerrycan Water Purifier | B019G8U952 | https://www.amazon.com/dp/B019G8U952 | `lifesaver-liberty-bottle-hero.webp` |
-| - | LifeStraw Go Series Filter Bottle | B0BY39KS2D | https://www.amazon.com/dp/B0BY39KS2D | `lifestraw-go-series-hero.webp` |
-| - | LifeStraw Peak Series Collapsible Squeeze Bottle 1L | B09SBN5QMM | https://www.amazon.com/dp/B09SBN5QMM | `lifestraw-flex-advanced-water-filter-hero.webp` |
+| Y | LifeSaver Expedition Jerrycan Water Purifier | B019G8U952 | https://www.amazon.com/dp/B019G8U952 | `lifesaver-liberty-bottle-hero.webp` |
+| Y | LifeStraw Go Series Filter Bottle | B0BY39KS2D | https://www.amazon.com/dp/B0BY39KS2D | `lifestraw-go-series-hero.webp` |
+| Y | LifeStraw Peak Series Collapsible Squeeze Bottle 1L | B09SBN5QMM | https://www.amazon.com/dp/B09SBN5QMM | `lifestraw-flex-advanced-water-filter-hero.webp` |
 | Y | LifeStraw Family 1.0 Portable Gravity Powered Water Purifier | B0BX5F7L2X | https://www.amazon.com/dp/B0BX5F7L2X | `lifestraw-family-1-0-portable-gravity-powered-water-purifier-hero.webp` |
 | Y | Survivor Filter Pro Portable Water Filter | B00QFXGSIY | https://www.amazon.com/dp/B00QFXGSIY | `survivor-filter-pro-hero.webp` |
 | Y | Survivor Filter Pro X Electric Water Filter | B07MTR4166 | https://www.amazon.com/dp/B07MTR4166 | `survivor-filter-pro-x-electric-water-filter-hero.webp` |
 | Y | Survivor Filter Squeeze Kit | B0CDJHX4YG | https://www.amazon.com/dp/B0CDJHX4YG | `survivor-filter-squeeze-kit-hero.webp` |
-| - | Sawyer Micro Squeeze Water Filtration System | B0DTJH5QH4 | https://www.amazon.com/dp/B0DTJH5QH4 | `sawyer-select-series-s3-hero.webp` |
+| Y | Sawyer Micro Squeeze Water Filtration System | B0DTJH5QH4 | https://www.amazon.com/dp/B0DTJH5QH4 | `sawyer-select-series-s3-hero.webp` |
 | Y | HydroBlu Versa Flow Water Filter System | B01CTAMKHE | https://www.amazon.com/dp/B01CTAMKHE | `hydroblu-versa-flow-water-filter-hero.webp` |
 | Y | HydroBlu Clear Flow Water Filter Bottle | B084KWCV2N | https://www.amazon.com/dp/B084KWCV2N | `hydroblu-clear-flow-bottle-hero.webp` |
 | Y | HydroBlu Sidekick 2-Stage Straw Filter | B06ZZ839JY | https://www.amazon.com/dp/B06ZZ839JY | `hydroblu-sidekick-2-stage-straw-filter-hero.webp` |
 | Y | HydroBlu Go Flow Water Gravity Bag | B076CPMG36 | https://www.amazon.com/dp/B076CPMG36 | `hydroblu-go-flow-water-gravity-bag-hero.webp` |
-| - | Platypus QuickDraw Microfilter System | B0CL827W5C | https://www.amazon.com/dp/B0CL827W5C | `platypus-quickdraw-microfilter-system-hero.webp` |
+| Y | Platypus QuickDraw Microfilter System | B0CL827W5C | https://www.amazon.com/dp/B0CL827W5C | `platypus-quickdraw-microfilter-system-hero.webp` |
 | Y | Platypus GravityWorks 4.0L Water Filter System | B00A9A2HKM | https://www.amazon.com/dp/B00A9A2HKM | `platypus-gravityworks-4-0l-water-filter-system-hero.webp` |
 
 ## Whole House & Sediment Filters (3/3 images)
