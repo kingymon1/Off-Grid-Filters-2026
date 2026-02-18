@@ -97,7 +97,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
   description="Expert water filter reviews and buying guides. We test and compare 29+ countertop, under-sink, refrigerator, and survival filters to help you find clean water."
   canonical="/"
   schema={schema}
-  preloadHero={true}
+  heroImage="/assets/bluevua-ro100ropot-uv-hero.webp"
 >
 
   <HeaderAstro />
@@ -170,7 +170,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
           {featuredPicks.map((pick, i) => (
             <a href={`/reviews/${pick.product!.slug}/`} class="featured-card spotlight-card" style={`--delay: ${i * 100}ms`}>
               <div class="featured-badge">{pick.badge}</div>
-              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" src={heroImages[`${pick.slug}-featured`]} slug={pick.slug} />
+              <ProductImage alt={pick.product!.name} icon={pick.icon} aspect="square" src={heroImages[`${pick.slug}-featured`]} slug={pick.slug} sizes="(max-width: 640px) 300px, (max-width: 1024px) 240px, 230px" />
               <div class="featured-info">
                 <h3 class="featured-name">{pick.product!.name}</h3>
                 <div class="featured-meta">
@@ -200,7 +200,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             return (
               <a href={`/best-${cat.slug}/`} class="category-card" style={`--delay: ${i * 80}ms`}>
                 <div class="category-icon">
-                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" src={`/assets/category-${cat.slug}.webp`} slug={`category-${cat.slug}`} />
+                  <ProductImage alt={cat.name} icon={(categoryIconMap[cat.slug] || 'filter') as any} aspect="square" src={`/assets/category-${cat.slug}.webp`} slug={`category-${cat.slug}`} sizes="(max-width: 640px) 140px, (max-width: 1024px) 200px, 320px" />
                 </div>
                 <h3 class="category-name">{cat.name}</h3>
                 <p class="category-count">{productCount} products reviewed</p>
@@ -224,7 +224,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
         <div class="reviews-grid stagger-grid">
           {recentReviews.map((product, i) => (
             <a href={`/reviews/${product.slug}/`} class="review-card" style={`--delay: ${i * 80}ms`}>
-              <ProductImage alt={product.name} icon={product.category === 'survival-filters' ? 'straw' : product.category === 'refrigerator-filters' ? 'fridge' : 'filter'} aspect="wide" slug={product.slug} />
+              <ProductImage alt={product.name} icon={product.category === 'survival-filters' ? 'straw' : product.category === 'refrigerator-filters' ? 'fridge' : 'filter'} aspect="wide" slug={product.slug} sizes="(max-width: 640px) 400px, (max-width: 1024px) 350px, 360px" />
               <div class="review-info">
                 <span class="review-category">{product.categoryName}</span>
                 <h3 class="review-name">{product.name}</h3>
@@ -295,7 +295,7 @@ const schema = combineSchemas(faqSchema, websiteSchema);
             {popularComparisons.map((comp, i) => (
               <a href={`/${comp.slug}/`} class="comparison-card" style={`--delay: ${i * 100}ms`}>
                 <div class="comparison-image">
-                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="hero" slug={comp.slug} />
+                  <ProductImage alt={`${comp.a!.name} vs ${comp.b!.name}`} icon="compare" aspect="hero" slug={comp.slug} sizes="(max-width: 640px) 400px, (max-width: 1024px) 350px, 540px" />
                 </div>
                 <div class="comparison-info">
                   <span class="comparison-eyebrow">Head-to-Head</span>
@@ -479,13 +479,6 @@ const schema = combineSchemas(faqSchema, websiteSchema);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    background-size: 200% auto;
-    animation: gradient-shift 6s ease-in-out infinite;
-  }
-
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% center; }
-    50% { background-position: 100% center; }
   }
 
   .hero-subtitle {
