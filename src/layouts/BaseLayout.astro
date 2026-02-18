@@ -12,6 +12,7 @@ interface Props {
   noindex?: boolean;
   schema?: object | object[];
   heroImage?: string;
+  heroImageSizes?: string;
 }
 
 const {
@@ -24,7 +25,11 @@ const {
   noindex = false,
   schema,
   heroImage,
+  heroImageSizes,
 } = Astro.props;
+
+const defaultHeroSizes = '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px';
+const resolvedHeroSizes = heroImageSizes || defaultHeroSizes;
 
 const siteUrl = siteConfig.siteUrl;
 const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${canonical}`;
@@ -44,9 +49,9 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
 
   <!-- Preload hero image for LCP optimization (per-page) -->
   {heroImage && (
-    <link rel="preload" href={heroImage} as="image" type="image/webp"
+    <link rel="preload" href={heroImage} as="image" type="image/webp" fetchpriority="high"
       imagesrcset={heroImage.endsWith('.webp') ? `${heroImage.replace('.webp', '-small.webp')} 400w, ${heroImage.replace('.webp', '-medium.webp')} 800w, ${heroImage} 1200w` : undefined}
-      imagesizes={heroImage.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined} />
+      imagesizes={heroImage.endsWith('.webp') ? resolvedHeroSizes : undefined} />
   )}
 
   <!-- DNS prefetch for Amazon (dns-prefetch only — no preconnect since we don't fetch resources from Amazon) -->
