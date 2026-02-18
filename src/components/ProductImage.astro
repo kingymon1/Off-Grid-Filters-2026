@@ -10,6 +10,7 @@ interface Props {
   priority?: boolean;
   src?: string;
   slug?: string;
+  sizes?: string;
 }
 
 const {
@@ -21,7 +22,11 @@ const {
   priority = false,
   src: srcProp,
   slug,
+  sizes: sizesProp,
 } = Astro.props;
+
+const defaultSizes = '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px';
+const imgSizes = sizesProp || defaultSizes;
 
 // Resolve image source: explicit src > static map lookup > fallback to placeholder
 let imageSrc = srcProp;
@@ -94,7 +99,7 @@ const iconSvg = icons[icon] || icons.filter;
       <img
         src={imageSrc}
         srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
-        sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
+        sizes={imageSrc?.endsWith('.webp') ? imgSizes : undefined}
         alt={alt}
         width={dims.w}
         height={dims.h}
@@ -116,7 +121,7 @@ const iconSvg = icons[icon] || icons.filter;
         <img
           src={imageSrc}
           srcset={imageSrc?.endsWith('.webp') ? `${imageSrc.replace('.webp', '-small.webp')} 400w, ${imageSrc.replace('.webp', '-medium.webp')} 800w, ${imageSrc} 1200w` : undefined}
-          sizes={imageSrc?.endsWith('.webp') ? '(max-width: 640px) 400px, (max-width: 1024px) 800px, 1200px' : undefined}
+          sizes={imageSrc?.endsWith('.webp') ? imgSizes : undefined}
           alt={alt}
           width={showcaseDims.w}
           height={showcaseDims.h}
@@ -352,48 +357,52 @@ const iconSvg = icons[icon] || icons.filter;
     font-style: italic;
   }
 
-  /* Shimmer effects */
+  /* Shimmer effects — GPU-composited via transform (no background-position animation) */
   .image-showcase::after,
   .editorial-container::after {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 100%;
     background: linear-gradient(
       105deg,
-      transparent 40%,
-      hsl(var(--primary) / 0.04) 46%,
-      hsl(var(--primary) / 0.08) 50%,
-      hsl(var(--primary) / 0.04) 54%,
-      transparent 60%
+      transparent 25%,
+      hsl(var(--primary) / 0.04) 28%,
+      hsl(var(--primary) / 0.08) 30%,
+      hsl(var(--primary) / 0.04) 32%,
+      transparent 35%
     );
-    background-size: 200% 100%;
     animation: shimmer-slow 8s ease-in-out infinite;
     pointer-events: none;
     z-index: 2;
     border-radius: 1rem;
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 30%, black 70%);
-    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, transparent 30%, black 70%);
+    will-change: transform;
   }
 
   .image-container::after {
     content: '';
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 100%;
     background: linear-gradient(
       105deg,
-      transparent 40%,
-      hsl(var(--primary) / 0.03) 45%,
-      hsl(var(--primary) / 0.06) 50%,
-      hsl(var(--primary) / 0.03) 55%,
-      transparent 60%
+      transparent 25%,
+      hsl(var(--primary) / 0.03) 28%,
+      hsl(var(--primary) / 0.06) 30%,
+      hsl(var(--primary) / 0.03) 32%,
+      transparent 35%
     );
-    background-size: 200% 100%;
     animation: shimmer-slow 8s ease-in-out infinite;
     pointer-events: none;
+    will-change: transform;
   }
 
   @keyframes shimmer-slow {
-    0% { background-position: 200% center; }
-    100% { background-position: -200% center; }
+    0% { transform: translateX(-66.67%); }
+    100% { transform: translateX(0); }
   }
 </style>
